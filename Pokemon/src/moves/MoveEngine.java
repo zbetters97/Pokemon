@@ -11,7 +11,7 @@ public enum MoveEngine {
 	EMBER ("Ember", TypeEngine.fire, 25, 60, 100),
 	WATERGUN ("Water Gun", TypeEngine.water, 25, 60, 85),
 	ROLLOUT ("Rollout", TypeEngine.rock, 20, 45, 90),
-	ROCKTHROW ("Rock Throw", TypeEngine.rock, 15, 75, 90);
+	ROCKTHROW ("Rock Throw", TypeEngine.ground, 15, 75, 90);
 	
 	private String name;
 	private TypeEngine type;

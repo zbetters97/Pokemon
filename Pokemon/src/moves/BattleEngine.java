@@ -42,7 +42,7 @@ public class BattleEngine {
 								int damageDealt = calculateDamageDealt(m, critical);								
 								int health = dealDamage(damageDealt);
 								
-								if (health <= 0) {
+								if (health == 0) {
 									
 									System.out.println(target.getName() + " fainted!");
 									target.setAlive(false);
@@ -115,7 +115,11 @@ public class BattleEngine {
 	}
 	
 	private int dealDamage(int damage) {		
-		target.setHP(target.getHP() - (int)damage);
+		
+		int result = target.getHP() - (int)damage;		
+		if (result < 0) result = 0;		
+		target.setHP(result);
+		
 		return target.getHP();
 	}
 
@@ -136,7 +140,6 @@ public class BattleEngine {
 				return result;
 			}			
 		}		
-		
 		return result;
 	}
 	

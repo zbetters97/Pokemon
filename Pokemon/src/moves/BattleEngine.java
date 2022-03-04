@@ -96,6 +96,10 @@ public class BattleEngine {
 		else if (type == .5) {
 			System.out.println("It's not very effective...");
 		}
+		else if (type == 0) {
+			System.out.println("It has no effect!");
+			return 0;
+		}
 						
 		int damageDealt = (int) ((((((2 * level) / 5) + 2) * power * (A / D)) / 50) * crit * type);
 		

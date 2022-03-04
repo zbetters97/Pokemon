@@ -6,7 +6,7 @@ import java.util.Arrays;
 import moves.MoveEngine;
 import types.TypeEngine;
 
-public class Pokemon implements PokemonBase {
+public class Pokemon {
 
 	private String name;
 	protected TypeEngine type;

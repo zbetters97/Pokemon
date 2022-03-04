@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import moves.MoveEngine;
@@ -11,9 +12,9 @@ public class Driver {
 
 	static Scanner input = new Scanner(System.in);
 	
-//	static ArrayList<Pokemon> pokemonTeam;
-	static Pokedex[] pokemonTeam;
+	static List<Pokedex> pokemonTeam;
 	static Pokedex fighter, opponent;
+	
 	static BattleEngine battle;
 	
 	public static void main(String[] args) {
@@ -54,6 +55,7 @@ public class Driver {
 					break;
 					
 				case 4:
+					clearContent();
 					System.out.println("Got away safely!");
 					System.exit(1); 
 					break;
@@ -69,18 +71,6 @@ public class Driver {
 	
 	public static void selectPokemon() {
 		
-		/*
-		Pokemon pikachu = new Pikachu(15, 35, 90, 55, 40, 50, 50);
-		Pokemon squirtle = new Squirtle(18, 44, 43, 48, 65, 50, 64);
-		Pokemon charmander = new Charmander(16, 39, 65, 52, 43, 60, 50);	
-		Pokemon geodude = new Geodude(14, 40, 20, 80, 100, 30, 30);
-		
-		Pokemon wartortle = new Pokemon("Wartortle", Pokemon.water, 36, 59, 58, 63, 80, 65, 80, 0);
-		
-		pokemonTeam = new ArrayList<>();
-		pokemonTeam.addAll(Arrays.asList(pikachu, squirtle, wartortle, charmander, geodude));
-		*/
-		
 		pokemonTeam = Pokedex.getPokedex();
 		
 		Pokedex.CHARMANDER.addMove(MoveEngine.EMBER);
@@ -95,7 +85,7 @@ public class Driver {
 			counter++;
 		}			
 		choice = input.nextInt();				
-		fighter = pokemonTeam[choice - 1];
+		fighter = pokemonTeam.get(choice - 1);
 		
 		System.out.println("PLEASE SELECT YOUR OPPONENT'S POKEMON:");			
 		counter = 1;
@@ -104,7 +94,9 @@ public class Driver {
 			counter++;
 		}			
 		choice = input.nextInt();			
-		opponent = pokemonTeam[choice - 1];
+		opponent = pokemonTeam.get(choice - 1);
+		
+		clearContent();
 		
 		battle = new BattleEngine(fighter, opponent);
 	}

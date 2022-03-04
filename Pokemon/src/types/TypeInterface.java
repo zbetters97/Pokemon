@@ -5,7 +5,9 @@ import java.util.List;
 public interface TypeInterface {
 	
 	enum Type {
-        WATER, FIRE, ELECTRIC, ROCK, NORMAL;
+		NORMAL, FIRE, WATER, ELECTRIC, GRASS, ICE, FIGHTING, 
+		POISON, GROUND, FLYING, PSYCHIC, BUG, ROCK, 
+		GHOST, DRAGON, DARK, STEEL, FAIRY
     }
 	
     public void resistantTo(Type type, Double strength);

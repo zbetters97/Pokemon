@@ -1,6 +1,11 @@
 package moves;
 
+import java.io.File;
 import java.util.Random;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import pokemon.Pokedex;
 import types.TypeEngine;
@@ -30,7 +35,10 @@ public class BattleEngine {
 						
 						if (m.getName().equals(move.getName())) {	
 							
-							System.out.println(attacker.getName() + " used " + m.getName());
+							System.out.println(attacker.getName() + " used " + m.getName() + "!");
+							
+				            try { Thread.sleep(1000); }   
+				            catch (InterruptedException e1) { e1.printStackTrace(); }
 												
 							if (isHit(move)) {
 								
@@ -53,6 +61,11 @@ public class BattleEngine {
 								}
 								else {
 									System.out.println(target.getName() + " took " + damageDealt + " damage!");
+									try {
+										Thread.sleep(2000);
+									} catch (InterruptedException e) {									
+										e.printStackTrace();
+									}
 								}
 							}					
 							else {
@@ -90,7 +103,9 @@ public class BattleEngine {
 		
 		double type = effectiveness(move.getType(), target.getType());
 		
-		if (type == 2) {
+		hitSound(type);
+		
+		if (type == 2.0) {			
 			System.out.println("It's super effective!");
 		}
 		else if (type == .5) {
@@ -146,5 +161,35 @@ public class BattleEngine {
 	private int calculateXP() {
 		int result = (int) (target.getXP() * target.getLevel() * 1.5) / 7;
 		return result;
+	}
+	
+	public void hitSound(double efftiveness) {
+		
+		String result = Double.toString(efftiveness);
+		String path = "";
+		switch (result) {
+			case "0.5":
+				path = new File("").getAbsolutePath() + "\\lib\\sounds\\hit-weak.wav";
+				break;
+			case "1.0":
+				path = new File("").getAbsolutePath() + "\\lib\\sounds\\hit-normal.wav";
+				break;
+			case "2.0":
+				path = new File("").getAbsolutePath() + "\\lib\\sounds\\hit-super.wav";
+				break;
+			default:
+				return;
+		}		
+        File sound = new File(path);
+
+        try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            Clip c = AudioSystem.getClip();
+            c.open(ais); 
+            c.start(); 
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 	}
 }

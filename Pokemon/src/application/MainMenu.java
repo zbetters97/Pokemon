@@ -1,9 +1,14 @@
 package application;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Scanner;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import moves.BattleEngine;
 import moves.MoveEngine;
@@ -27,9 +32,13 @@ public class MainMenu {
 		 * engage battle (loop until quit)
 		 */
 		
+		clearContent();
+		soundCard("battle-red");	
+		
 		// call method to select Pokemon first
 		selectPokemon();		
 	}
+	/** END MAIN METHOD **/
 	
 	/** SELECT POKEMON METHOD **/
 	public static void selectPokemon() {
@@ -59,6 +68,11 @@ public class MainMenu {
 		
 		// assign fighter to pokemon found at given index
 		fighter = pokedex.get(choice - 1);
+		soundCard("\\pokedex\\" + fighter.getName());		
+		
+		fighter.addMove(MoveEngine.EMBER);
+		fighter.addMove(MoveEngine.SCRATCH);
+		fighter.addMove(MoveEngine.THUNDERSHOCK);
 		
 		System.out.println("PLEASE SELECT YOUR OPPONENT'S POKEMON:");			
 		counter = 1;
@@ -80,6 +94,7 @@ public class MainMenu {
 		
 		// assign opponent to pokemon found at given index
 		opponent = pokedex.get(choice - 1);
+		soundCard("\\pokedex\\" + opponent.getName());
 		
 		// initialize engine to handle pokemon battle, pass in chosen pokemon
 		battle = new BattleEngine(fighter, opponent);
@@ -87,6 +102,7 @@ public class MainMenu {
 		clearContent();	
 		selectOption();
 	}
+	/** END SELECT POKEMON METHOD **/
 	
 	/** SELECT AN OPTION METHOD **/
 	public static void selectOption() {
@@ -131,8 +147,10 @@ public class MainMenu {
 				
 				// end program
 				case 4:
-					clearContent();
+					clearContent();					
 					System.out.println("Got away safely!");
+					soundCard("in-battle-run");
+					
 					System.exit(1); 
 					break;
 				
@@ -145,6 +163,7 @@ public class MainMenu {
 			}
 		}
 	}
+	/** END SELECT AN OPTION METHOD **/
 	
 	/** SELECT A MOVE METHOD **/
 	public static void selectMove (Pokedex fighter, Pokedex target) {
@@ -187,11 +206,37 @@ public class MainMenu {
 			clearContent();
 			System.out.println("Invalid choice!");
 		}
+		
+		clearContent();
 	}
+	/** END SELECT A MOVE METHOD **/
 	
-	// clear screen		
+	/** CLEAR SCREEN METHOD **/	
 	public static void clearContent() {		
 		for (int clear = 0; clear < 200; clear++) 
 			System.out.println("\n") ;
 	}
+	/** END CLEAR SCREEN METHOD **/
+
+	/** SOUND CARD METHOD **/
+	public static void soundCard(String arg) {
+		
+		try {
+			// retrieve sound file based on argument given
+			String path = new File("").getAbsolutePath() + "\\lib\\sounds\\" + arg + ".wav";	
+	        File sound = new File(path);
+	        
+            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            Clip c = AudioSystem.getClip();
+            c.open(ais); 
+            
+            // play music using built-in player
+            c.start(); 
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+	}
+	/** END SOUND CARD METHOD **/
 }
+/*** END MAIN MENU CLASS ***/

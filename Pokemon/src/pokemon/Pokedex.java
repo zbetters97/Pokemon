@@ -7,24 +7,32 @@ import java.util.List;
 import moves.MoveEngine;
 import types.TypeEngine;
 
-public enum Pokedex {
+/*** POKEDEX ENUM CLASS ***/
+public enum Pokedex implements PokedexInterface {
 	
+	/** INITIALIZE ENUMS **/
 	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16),
 	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16),
 	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36),
 	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1),
 	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30),
 	GEODUDE ("Geodude", TypeEngine.rock, 5, 40, 80, 100, 30, 30, 20, 25);
+	/** END INITIALIZE ENUMS **/
 	
+	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
-	protected TypeEngine type;
-	
+	protected TypeEngine type;	
 	private int level, xp, hp, speed, attack, defense, spAttack, spDefense, evLevel;	
 	public boolean isAlive;
+	/** END INITIALIZE VALUES **/
 	
+	// initialize arraylist to hold moves of given pokemon
 	private ArrayList<MoveEngine> moveSet;
+	
+	// initialize arraylist to hold all enums in pokemon class
 	private static List<Pokedex> POKEDEX = Arrays.asList(Pokedex.values());
 
+	/** CONSTRUCTOR **/
 	Pokedex(String name, TypeEngine type, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel) {			
 		
@@ -36,25 +44,61 @@ public enum Pokedex {
 		
 		moveSet = new ArrayList<>();
 	}
+	/** END CONSTRUCTOR **/
 	
+	/** POKEDEX ARRAYLIST GETTERS **/
+	public static Pokedex getPokemon(String name) {
+		
+		for (Pokedex p : POKEDEX) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}	
+	public static Pokedex getPokemon(int index) { 
+		return POKEDEX.get(index); 
+	}
+	
+	public static List<Pokedex> getPokedex() { 
+		return POKEDEX; 
+	}
+	public static int getPokedexSize() { 
+		return POKEDEX.size(); 
+	}	
+	/** END POKEDEX ARRAYLIST GETTERS **/
+	
+	/** EVOLVE POKEMON  METHOD **/
 	public Pokedex evolve() {
 		
+		// check if pekemon can evolve to avoid errors
 		if (this.canEvolve()) {
 			
+			// find current position of calling object in pokedex
 			int nextID = POKEDEX.indexOf(this);
+			
+			// evolved form is next position in pokedex
 			Pokedex evolvedPokemon = Pokedex.getPokemon(nextID + 1);
 			
 			return evolvedPokemon;
 		}
+		// pokemon can't evolve
 		else {
 			return null;	
 		}
 	}
+	/** END EVOLVE POKEMON METHOD **/
 	
+	/** CAN EVOLVE METHOD **/
 	public boolean canEvolve() {
+		
+		// pokemon can't evolve if evLevel is -1
 		return this.getEvLevel() != -1;
 	}
+	/** END CAN EVOLVE METHOD **/
 	
+/*--- NOT FINISHED ---*/
+	/** ADD NEW MOVE METHOD **/
 	public boolean addMove(MoveEngine move) { 
 		
 		if (this.getMoveSet().size() == 4) {
@@ -65,7 +109,10 @@ public enum Pokedex {
 			return true;
 		}
 	}
+	/** END ADD NEW MOVE METHOD **/
+/*--- END NOT FINISHED ---*/
 	
+	/** LIST MOVE SET FOR GIVEN POKEMON METHOD **/
 	public void listMoves() {			
 		
 		System.out.println("MOVESET FOR " + this.name + ":\n");
@@ -75,27 +122,9 @@ public enum Pokedex {
 					"), (PWR: " + move.getPower() + ")"	+ ", (ACC: " + move.getAccuracy() + ")");
 		}
 	}
+	/** END LIST MOVE SET METHOD **/
 	
-	public static Pokedex getPokemon(String name) {
-		
-		for (Pokedex p : POKEDEX) {
-			if (p.getName().equals(name)) {
-				return p;
-			}
-		}
-		return null;
-	}	
-	public static Pokedex getPokemon(int i) { 
-		return POKEDEX.get(i); 
-	}
-	
-	public static List<Pokedex> getPokedex() { 
-		return POKEDEX; 
-	}
-	public static int getPokedexSize() { 
-		return POKEDEX.size(); 
-	}	
-
+	/** GETTERS AND SETTERS **/
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
@@ -134,4 +163,6 @@ public enum Pokedex {
 	
 	public ArrayList<MoveEngine> getMoveSet() { return moveSet; }
 	public void setMoveSet(ArrayList<MoveEngine> moveSet) { this.moveSet = moveSet; }
+	/** END GETTERS AND SETTERS **/
 }
+/*** EDN POKEDEX ENUM CLASS ***/

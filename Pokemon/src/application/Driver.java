@@ -14,6 +14,11 @@
  * 		-Added in battle sound effects
  * 		-Added pokemon cries
  * 		-Added battle music
+ * 03/07/2022 Update:
+ * 		-Added Pikachu cry
+ * 		-Moved BattleEngine to battle package		
+ * 		-Cleaned up code in BattleEngine
+ * 		-Edited BattleEngine to swap Pokemon turn
  */
 
 package application;

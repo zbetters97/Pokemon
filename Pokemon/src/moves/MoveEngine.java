@@ -6,7 +6,7 @@ public enum MoveEngine {
 	
 	TACKLE ("Tackle", TypeEngine.normal, 35, 40, 100),
 	QUICKATTACK ("Quick Attack", TypeEngine.normal, 30, 40, 100),
-	THUNDERSHOCK ("Thunder Shock", TypeEngine.electric, 30, 60, 100),
+	THUNDERSHOCK ("Thunder Shock", TypeEngine.electric, 40, 60, 100),
 	SCRATCH ("Scratch", TypeEngine.normal, 35, 40, 100),
 	EMBER ("Ember", TypeEngine.fire, 25, 60, 100),
 	WATERGUN ("Water Gun", TypeEngine.water, 25, 60, 85),

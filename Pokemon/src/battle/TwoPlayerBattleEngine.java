@@ -12,100 +12,106 @@ import pokemon.Pokedex;
 import types.TypeEngine;
 
 /*** BATTLE ENGINE CLASS ***/
-public class BattleEngine {
+public class TwoPlayerBattleEngine {
 		
 	/** CONSTRUCTOR **/
-	public BattleEngine() {		
+	public TwoPlayerBattleEngine() {		
 	}
 	/** END CONSTRUCTOR**/
 
 	/** MOVE METHOD **/
-	public void move(Pokedex attacker, Pokedex target, MoveEngine move) {
-		
-		// if move is out of pp
-		if (move.getpp() <= 0) {
-			System.out.println("This move is out of PP and cannot be used!");
-			sleep(1000);
-		}
-		else {					
-			
-			// confirm pokemon can battle
-			if (attacker.isAlive) {		
-				
-				// confirm opponent can battle
-				if (target.isAlive) {
+	public void move(Pokedex trainer1, MoveEngine move1, Pokedex trainer2, MoveEngine move2) {
 					
-					// loop through moveset for attacking pokemon
-					for (MoveEngine m : attacker.getMoveSet()) {
-						
-						// if chosen move is found
-						if (m.getName().equals(move.getName())) {	
-							
-							System.out.println(attacker.getName() + " used " + m.getName() + "!");
-							
-							// decrease move pp
-							move.setpp(move.getpp() - 1);
-							
-				            sleep(1000);
-				            
-				            // if attack lands
-							if (isHit(move)) {
+		// confirm pokemon can battle
+		if (trainer1.isAlive) {			
+			
+			// confirm opponent can battle
+			if (trainer2.isAlive) {
+				
+				boolean trainer1Turn = (trainer1.getSpeed() >= trainer2.getSpeed());
 								
-								// play move sound
-								soundCard("\\moves\\" + move.getName());
-								
-								sleep(1000);
-								
-								double crit = isCritical();			
-								
-								// if critical hit
-								if (crit == 1.5) { System.out.println("A critical hit!"); }
-												
-								// calculate damage dealt
-								int damageDealt = calculateDamageDealt(attacker, m, crit, target);								
-								int health = dealDamage(damageDealt, target);
-								
-								// if pokemon has no hp left
-								if (health == 0) {
-									
-									System.out.println(target.getName() + " took " + damageDealt + " damage!");
-									sleep(2000);
-																		
-									target.setAlive(false);
-									System.out.println(target.getName() + " fainted!");
-									sleep(2000);
-									
-									int xp = calculateXP(target); 
-									attacker.setXP(xp);									
-									System.out.println(attacker.getName() + " earned " + xp + " xp!");
-									sleep(2000);
-								}
-								else {
-									System.out.println(target.getName() + " took " + damageDealt + " damage!");
-									sleep(2000);
-								}
-							}		
-							
-							// move missed pokemon
-							else {
-								System.out.println("The attack missed!");
-								sleep(2000);
-							}		
-						}	
-					}
+				if (trainer1Turn) {
+					startMove(trainer1, move1, trainer2);
+					startMove(trainer2, move2, trainer1);
 				}
 				else {
-					System.out.println(target.getName() + " has fainted and cannot battle!");
-					sleep(2000);
-				}
+					startMove(trainer2, move2, trainer1);
+					startMove(trainer1, move1, trainer2);					
+				}				
 			}
 			else {
-				System.out.println(attacker.getName() + " has fainted and cannot battle!");
+				System.out.println(trainer2.getName() + " has fainted and cannot battle!");
 				sleep(2000);
-			}			
+			}
 		}
+		else {
+			System.out.println(trainer1.getName() + " has fainted and cannot battle!");
+			sleep(2000);
+		}		
 	}
 	/** END MOVE METHOD **/
+	
+	private static void startMove(Pokedex attacker, MoveEngine move, Pokedex target) {
+		
+		// loop through moveset for attacking pokemon
+		for (MoveEngine m : attacker.getMoveSet()) {
+			
+			// if chosen move is found
+			if (m.getName().equals(move.getName())) {	
+				
+				System.out.println(attacker.getName() + " used " + m.getName() + "!");
+				
+				// decrease move pp
+				move.setpp(move.getpp() - 1);
+				
+	            sleep(1000);
+	            
+	            // if attack lands
+				if (isHit(move)) {
+					
+					// play move sound
+					soundCard("\\moves\\" + move.getName());
+					
+					sleep(1000);
+					
+					double crit = isCritical();			
+					
+					// if critical hit
+					if (crit == 1.5) { System.out.println("A critical hit!"); }
+									
+					// calculate damage dealt
+					int damageDealt = calculateDamageDealt(attacker, m, crit, target);								
+					int health = dealDamage(damageDealt, target);
+					
+					// if pokemon has no hp left
+					if (health == 0) {
+						
+						System.out.println(target.getName() + " took " + damageDealt + " damage!");
+						sleep(2000);
+															
+						target.setAlive(false);
+						System.out.println(target.getName() + " fainted!");
+						sleep(2000);
+						
+						int xp = calculateXP(target); 
+						attacker.setXP(xp);									
+						System.out.println(attacker.getName() + " earned " + xp + " xp!");
+						sleep(2000);
+					}
+					else {
+						System.out.println(target.getName() + " took " + damageDealt + " damage!");
+						sleep(2000);
+					}
+				}		
+				
+				// move missed pokemon
+				else {
+					System.out.println("The attack missed!");
+					sleep(2000);
+				}		
+			}	
+		}
+	}
 
 	/** IS HIT METHOD **/
 	private static boolean isHit(MoveEngine move) {
@@ -146,7 +152,7 @@ public class BattleEngine {
 	/** END CALCULATE DAMAGE DEALT METHOD **/
 	
 	/** IS CRITICAL METHOD **/
-	private double isCritical() {	
+	private static double isCritical() {	
 		
 		// 1/255 chance of landing critical hit
 		Random r = new Random();		
@@ -244,7 +250,7 @@ public class BattleEngine {
 	/** END SOUND CARD METHOD **/
 	
 	/** SLEEP METHOD **/
-	private void sleep(int time) {
+	private static void sleep(int time) {
 		try { Thread.sleep(time); } 
 		catch (InterruptedException e) { e.printStackTrace(); }
 	}

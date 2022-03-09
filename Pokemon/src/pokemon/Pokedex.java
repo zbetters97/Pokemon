@@ -11,18 +11,18 @@ import types.TypeEngine;
 public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
-	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16),
-	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16),
-	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36),
-	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1),
-	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30),
-	GEODUDE ("Geodude", TypeEngine.rock, 5, 40, 80, 100, 30, 30, 20, 25);
+	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 1),
+	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 1),
+	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 2),
+	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 3),
+	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 2),
+	GEODUDE ("Geodude", TypeEngine.rock, 5, 40, 80, 100, 30, 30, 20, 25, 1);
 	/** END INITIALIZE ENUMS **/
 	
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
 	protected TypeEngine type;	
-	private int level, xp, hp, speed, attack, defense, spAttack, spDefense, evLevel;	
+	private int level, xp, hp, speed, attack, defense, spAttack, spDefense, evLevel, ev;	
 	public boolean isAlive;
 	/** END INITIALIZE VALUES **/
 	
@@ -34,11 +34,11 @@ public enum Pokedex implements PokedexInterface {
 
 	/** CONSTRUCTOR **/
 	Pokedex(String name, TypeEngine type, int level, int hp, int attack, int defense, 
-			int spAttack, int spDefense, int speed, int evLevel) {			
+			int spAttack, int spDefense, int speed, int evLevel, int ev) {			
 		
 		this.name = name; this.type = type; this.level = level;	this.xp = 1; this.hp = hp; 
 		this.speed = speed; this.attack = attack; this.defense = defense; 
-		this.spAttack = spAttack; this.spDefense = spDefense; this.evLevel = evLevel;
+		this.spAttack = spAttack; this.spDefense = spDefense; this.evLevel = evLevel; this.ev = ev;
 		
 		this.isAlive = true;	
 		
@@ -157,6 +157,9 @@ public enum Pokedex implements PokedexInterface {
 
 	public int getEvLevel() { return evLevel; }
 	public void setEvLevel(int evLevel) { this.evLevel = evLevel; }
+	
+	public int getEV() { return ev; }
+	public void setEV(int ev) { this.ev = ev; }
 
 	public boolean isAlive() { return isAlive; }
 	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }

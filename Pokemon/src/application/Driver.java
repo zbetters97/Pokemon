@@ -21,6 +21,7 @@
  * 		-Edited BattleEngine to swap Pokemon turn
  * 03/08/2022 Update:
  * 		-Added two player mode (early version)
+ * 		-Added basic AI to CPU on One Player mode
  * 		-Modified UI formatting
  */
 
@@ -36,18 +37,7 @@ public class Driver {
 	/** MAIN METHOD **/
 	public static void main(String[] args) {
 		
-		System.out.println("PLEASE SELECT MODE:\n[1] ONE PLAYER MODE\n[2] TWO PLAYER MODE\n[3] QUIT");		
-		int choice = 0;
-				
-		try { choice = input.nextInt(); }
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-			return;
-		}
-		
-		if (choice == 1) { OnePlayer game = new OnePlayer(); game.start(); }		
-		else if (choice == 2) { TwoPlayer game = new TwoPlayer(); game.start(); }
-		else if (choice == 3) { System.exit(1); }
+		MainMenu.load();
 	}
 	/** END MAIN METHOD **/
 }

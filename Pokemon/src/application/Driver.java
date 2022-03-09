@@ -23,6 +23,12 @@
  * 		-Added two player mode (early version)
  * 		-Added basic AI to CPU on One Player mode
  * 		-Modified UI formatting
+ * 03/09/2022 Update:
+ * 		-Modified process of creating a new Pokemon instance		
+ * 		-Added moveset for each existing Pokemon
+ * 		-Improved CPU AI for One Player mode
+ * 		-Cleaned up coding to be more concise
+ * 		-Added lambda expression to Battle class for efficiency
  */
 
 package application;

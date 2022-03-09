@@ -2,7 +2,9 @@ package pokemon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import moves.MoveEngine;
 import types.TypeEngine;
@@ -18,7 +20,7 @@ public enum Pokedex implements PokedexInterface {
 	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 2),
 	GEODUDE ("Geodude", TypeEngine.rock, 5, 40, 80, 100, 30, 30, 20, 25, 1);
 	/** END INITIALIZE ENUMS **/
-	
+		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
 	protected TypeEngine type;	
@@ -43,8 +45,33 @@ public enum Pokedex implements PokedexInterface {
 		this.isAlive = true;	
 		
 		moveSet = new ArrayList<>();
+		
 	}
 	/** END CONSTRUCTOR **/
+	
+	/** CREATE POKEMON METHOD **/
+	public static Pokedex createPokemon(Pokedex pokemon) {
+		
+		// Map of pokemon and corresponding move set
+		Map<Pokedex, List<MoveEngine>> pokeMap = new HashMap<>();
+		
+		// set default moves for each pokemon
+        pokeMap.put(CHARMANDER, Arrays.asList(MoveEngine.SCRATCH, MoveEngine.QUICKATTACK, MoveEngine.EMBER));
+        pokeMap.put(SQUIRTLE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.WATERGUN));
+        pokeMap.put(WARTORTLE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, MoveEngine.WATERGUN));
+        pokeMap.put(BLASTOISE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, 
+        		MoveEngine.WATERGUN, MoveEngine.ROCKTHROW));
+        pokeMap.put(PIKACHU, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, MoveEngine.THUNDERSHOCK));
+        pokeMap.put(GEODUDE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.ROCKTHROW, MoveEngine.ROLLOUT));
+		
+        // if found in map, add each move to passed in pokemon object
+        for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {
+        	pokemon.addMove(pokeMap.get(pokemon).get(i));
+        } 
+        
+        return pokemon;
+	}
+	/** END CREATE POKEMON METHOD **/
 	
 	/** POKEDEX ARRAYLIST GETTERS **/
 	public static Pokedex getPokemon(String name) {
@@ -56,10 +83,10 @@ public enum Pokedex implements PokedexInterface {
 		}
 		return null;
 	}	
-	public static Pokedex getPokemon(int index) { 
-		return POKEDEX.get(index); 
-	}
-	
+	public static Pokedex getPokemon(int index) { 		
+		Pokedex pokemon = createPokemon(POKEDEX.get(index));
+		return pokemon; 
+	}	
 	public static List<Pokedex> getPokedex() { 
 		return POKEDEX; 
 	}
@@ -97,7 +124,6 @@ public enum Pokedex implements PokedexInterface {
 	}
 	/** END CAN EVOLVE METHOD **/
 	
-/*--- NOT FINISHED ---*/
 	/** ADD NEW MOVE METHOD **/
 	public boolean addMove(MoveEngine move) { 
 		
@@ -110,7 +136,6 @@ public enum Pokedex implements PokedexInterface {
 		}
 	}
 	/** END ADD NEW MOVE METHOD **/
-/*--- END NOT FINISHED ---*/
 	
 	/** LIST MOVE SET FOR GIVEN POKEMON METHOD **/
 	public void listMoves() {			

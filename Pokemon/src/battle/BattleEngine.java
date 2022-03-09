@@ -1,6 +1,10 @@
 package battle;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
@@ -106,7 +110,7 @@ public class BattleEngine {
 				if (isHit(move)) {
 					
 					// play move sound
-					soundCard("\\moves\\" + move.getName());
+					soundCard("//moves//" + move.getName());
 					
 					sleep(1000);
 					
@@ -117,7 +121,7 @@ public class BattleEngine {
 					if (crit == 1.5) { System.out.println("A critical hit!"); }
 									
 					// calculate damage dealt
-					int damageDealt = calculateDamageDealt(attacker, m, crit, target);								
+					int damageDealt = calculateDamage(attacker, m, crit, target);								
 					int health = dealDamage(damageDealt, target);
 					
 					// if pokemon has no hp left
@@ -138,6 +142,51 @@ public class BattleEngine {
 		}
 	}
 	/** END START MOVE METHOD **/
+	
+	/** CPU SELECT MOVE METHOD **/
+	public static MoveEngine cpuSelectMove(Pokedex attacker, Pokedex target) {
+		
+		// holds Map of Move and Damage Points
+		Map<MoveEngine, Integer> moves = new HashMap<>();
+		
+		// for each move in attacker's move set
+		for (MoveEngine move : attacker.getMoveSet()) {
+			
+			// find damage value of each move
+			int damage = cpuCalculateDamage(attacker, move, target);
+			
+			// add move and corresponding damage to list
+			moves.put(move, damage);
+		}
+		
+		// find max value in moves list based on value
+		return Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+	}
+	/** END CPU SELECT MOVE METHOD **/
+	
+	/** CPU CALCULATE DAMAGE METHOD **/
+	private static int cpuCalculateDamage(Pokedex attacker, MoveEngine move, Pokedex target) {
+		
+		// basic damage calculator for cpu to select best attack
+		
+		double level = attacker.getLevel();
+		double power = move.getPower();
+		
+		// if special move, get special attack/defense attribute
+		double A = move.getType().equals(attacker.getType()) ? attacker.getSpAttack() : attacker.getAttack();
+		double D = move.getType().equals(target.getType()) ? target.getSpDefense() : target.getDefense();
+		
+		// not effective, super effective, or regular effective
+		double type = effectiveness(move.getType(), target.getType());
+		
+		if (type == 0) { return 0; }
+						
+		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+		int damageDealt = (int) ((((((2 * level) / 5) + 2) * power * (A / D)) / 50) * type);
+		
+		return damageDealt;
+	}
+	/** END CPU CALCULATE DAMAGE **/
 
 	/** IS HIT METHOD **/
 	private static boolean isHit(MoveEngine move) {
@@ -154,7 +203,7 @@ public class BattleEngine {
 	/** END IS HIT METHOD **/
 	
 	/** CALCULATE DAMAGE DEALT METHOD **/
-	private static int calculateDamageDealt(Pokedex attacker, MoveEngine move, double crit, Pokedex target) {
+	private static int calculateDamage(Pokedex attacker, MoveEngine move, double crit, Pokedex target) {
 		
 		double level = attacker.getLevel();
 		double power = move.getPower();
@@ -165,7 +214,7 @@ public class BattleEngine {
 		
 		// not effective, super effective, or regular effective
 		double type = effectiveness(move.getType(), target.getType());		
-		hitSound(type);
+		soundCard(type);
 		
 		if (type == 2.0) { System.out.println("It's super effective!"); }
 		else if (type == .5) { System.out.println("It's not very effective..."); }
@@ -203,7 +252,7 @@ public class BattleEngine {
 	/** END DEAL DAMAGE METHOD **/
 
 	/** EFFECTIVENESS METHOD **/
-	private static double effectiveness (TypeEngine move, TypeEngine target) {
+	private static double effectiveness(TypeEngine move, TypeEngine target) {
 		
 		double result = 1.0;
 		
@@ -250,18 +299,34 @@ public class BattleEngine {
 		
 		return result;
 	}
-	/** END CALCULATE XP METHOD **/
+	/** END CALCULATE XP METHOD **/	
+	
+	/** SOUND CARD METHOD **/
+	private static void soundCard(String arg) {
+		
+		try {
+			// retrieve sound file based on argument given
+			String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
+	        File sound = new File(path);
+	        
+            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            Clip c = AudioSystem.getClip();
+            c.open(ais); c.start(); 
+        }
+        catch (Exception e) { System.out.println(e.getMessage()); }
+	}
+	/** END SOUND CARD METHOD **/
 	
 	/** HIT SOUND METHOD **/
-	private static void hitSound(double efftiveness) {
+	private static void soundCard(double efftiveness) {
 		
 		String hit = "";
 		
 		// set hit to corresponding path
 		switch (Double.toString(efftiveness)) {
-			case "0.5": hit = "\\lib\\sounds\\hit-weak.wav"; break;
-			case "1.0": hit = "\\lib\\sounds\\hit-normal.wav"; break;
-			case "2.0": hit = "\\lib\\sounds\\hit-super.wav"; break;
+			case "0.5": hit = "//lib//sounds//hit-weak.wav"; break;
+			case "1.0": hit = "//lib//sounds//hit-normal.wav"; break;
+			case "2.0": hit = "//lib//sounds//hit-super.wav"; break;
 			default: return;
 		}
 		
@@ -276,23 +341,7 @@ public class BattleEngine {
         catch (Exception e) { System.out.println(e.getMessage()); }
 	}
 	/** END HIT SOUND METHOD **/
-	
-	/** SOUND CARD METHOD **/
-	private static void soundCard(String arg) {
 		
-		try {
-			// retrieve sound file based on argument given
-			String path = new File("").getAbsolutePath() + "\\lib\\sounds\\" + arg + ".wav";	
-	        File sound = new File(path);
-	        
-            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-            Clip c = AudioSystem.getClip();
-            c.open(ais); c.start(); 
-        }
-        catch (Exception e) { System.out.println(e.getMessage()); }
-	}
-	/** END SOUND CARD METHOD **/
-	
 	/** SLEEP METHOD **/
 	private static void sleep(int time) {
 		try { Thread.sleep(time); } 

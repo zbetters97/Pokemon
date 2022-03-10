@@ -11,7 +11,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import moves.MoveEngine;
+import moves.Moves;
 import pokemon.Pokedex;
 import types.TypeEngine;
 
@@ -19,7 +19,7 @@ import types.TypeEngine;
 public class BattleEngine {
 
 	/** MOVE METHOD **/
-	public void move(Pokedex trainer1, MoveEngine move1, Pokedex trainer2, MoveEngine move2) {
+	public void move(Pokedex trainer1, Moves move1, Pokedex trainer2, Moves move2) {
 					
 		// confirm trainer1 can battle
 		if (trainer1.isAlive) {			
@@ -70,7 +70,7 @@ public class BattleEngine {
 	/** END MOVE METHOD **/	
 	
 	/** GET TURN METHOD **/
-	private static boolean getTurn(Pokedex trainer1, MoveEngine move1, Pokedex trainer2, MoveEngine move2) {
+	private static boolean getTurn(Pokedex trainer1, Moves move1, Pokedex trainer2, Moves move2) {
 		
 		// if both moves go first (EX: Quick Attack)
 		if (move1.getGoFirst() && move2.getGoFirst()) {			
@@ -90,11 +90,32 @@ public class BattleEngine {
 	}
 	/** END GET TURN METHOD **/
 	
+	/** CPU SELECT MOVE METHOD **/
+	public static Moves cpuSelectMove(Pokedex attacker, Pokedex target) {
+		
+		// holds Map of Move and Damage Points
+		Map<Moves, Integer> moves = new HashMap<>();
+		
+		// for each move in attacker's move set
+		for (Moves move : attacker.getMoveSet()) {
+			
+			// find damage value of each move
+			int damage = calculateDamage(attacker, move, 1, target, true);
+			
+			// add move and corresponding damage to list
+			moves.put(move, damage);
+		}
+		
+		// find max value in moves list based on value
+		return Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+	}
+	/** END CPU SELECT MOVE METHOD **/
+	
 	/** START MOVE METHOD **/
-	private static void startMove(Pokedex attacker, MoveEngine move, Pokedex target) {
+	private static void startMove(Pokedex attacker, Moves move, Pokedex target) {
 		
 		// loop through moveset for attacking pokemon
-		for (MoveEngine m : attacker.getMoveSet()) {
+		for (Moves m : attacker.getMoveSet()) {
 			
 			// if chosen move is found
 			if (m.getName().equals(move.getName())) {	
@@ -121,7 +142,7 @@ public class BattleEngine {
 					if (crit == 1.5) { System.out.println("A critical hit!"); }
 									
 					// calculate damage dealt
-					int damageDealt = calculateDamage(attacker, m, crit, target);								
+					int damageDealt = calculateDamage(attacker, m, crit, target, false);								
 					int health = dealDamage(damageDealt, target);
 					
 					// if pokemon has no hp left
@@ -142,54 +163,9 @@ public class BattleEngine {
 		}
 	}
 	/** END START MOVE METHOD **/
-	
-	/** CPU SELECT MOVE METHOD **/
-	public static MoveEngine cpuSelectMove(Pokedex attacker, Pokedex target) {
-		
-		// holds Map of Move and Damage Points
-		Map<MoveEngine, Integer> moves = new HashMap<>();
-		
-		// for each move in attacker's move set
-		for (MoveEngine move : attacker.getMoveSet()) {
-			
-			// find damage value of each move
-			int damage = cpuCalculateDamage(attacker, move, target);
-			
-			// add move and corresponding damage to list
-			moves.put(move, damage);
-		}
-		
-		// find max value in moves list based on value
-		return Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
-	}
-	/** END CPU SELECT MOVE METHOD **/
-	
-	/** CPU CALCULATE DAMAGE METHOD **/
-	private static int cpuCalculateDamage(Pokedex attacker, MoveEngine move, Pokedex target) {
-		
-		// basic damage calculator for cpu to select best attack
-		
-		double level = attacker.getLevel();
-		double power = move.getPower();
-		
-		// if special move, get special attack/defense attribute
-		double A = move.getType().equals(attacker.getType()) ? attacker.getSpAttack() : attacker.getAttack();
-		double D = move.getType().equals(target.getType()) ? target.getSpDefense() : target.getDefense();
-		
-		// not effective, super effective, or regular effective
-		double type = effectiveness(move.getType(), target.getType());
-		
-		if (type == 0) { return 0; }
-						
-		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int) ((((((2 * level) / 5) + 2) * power * (A / D)) / 50) * type);
-		
-		return damageDealt;
-	}
-	/** END CPU CALCULATE DAMAGE **/
 
 	/** IS HIT METHOD **/
-	private static boolean isHit(MoveEngine move) {
+	private static boolean isHit(Moves move) {
 		
 		// if move never misses, return true
 		if (move.getAccuracy() == -1) { return true; }
@@ -201,27 +177,57 @@ public class BattleEngine {
 		return (chance <= ((float) move.getAccuracy() / 100)) ? true : false;
 	}
 	/** END IS HIT METHOD **/
-	
+		
 	/** CALCULATE DAMAGE DEALT METHOD **/
-	private static int calculateDamage(Pokedex attacker, MoveEngine move, double crit, Pokedex target) {
+	private static int calculateDamage(Pokedex attacker, Moves move, double crit, Pokedex target, boolean cpu) {
 		
 		double level = attacker.getLevel();
 		double power = move.getPower();
 		
-		// if special move, get special attack/defense attribute
-		double A = move.getType().equals(attacker.getType()) ? attacker.getSpAttack() : attacker.getAttack();
-		double D = move.getType().equals(target.getType()) ? target.getSpDefense() : target.getDefense();
+		double A, D, type = 1.0;
 		
-		// not effective, super effective, or regular effective
-		double type = effectiveness(move.getType(), target.getType());		
+		if (attacker.getTypes() != null) {			
+			for (TypeEngine t : attacker.getTypes()) {
+				
+				if (t.equals(move.getType())) 
+					A = attacker.getSpAttack();
+			}
+			A = attacker.getAttack();
+		}
+		else
+			A = move.getType().equals(attacker.getType()) ? attacker.getSpAttack() : attacker.getAttack();
+		
+		if (target.getTypes() != null) {			
+			for (TypeEngine t : target.getTypes()) {
+				
+				if (t.equals(move.getType()))
+					D = target.getSpAttack(); 
+			}
+			D = target.getDefense();
+			
+			for (TypeEngine t : target.getTypes()) {
+				if (effectiveness(move.getType(), t) == 2.0) {
+					type = effectiveness(move.getType(), t);
+					break;
+				}
+				type = effectiveness(move.getType(), t);
+			}
+		}
+		else {
+			D = move.getType().equals(target.getType()) ? target.getSpDefense() : target.getDefense();			
+			type = effectiveness(move.getType(), target.getType());
+		}
+						
+		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+		int damageDealt = (int) ((((((2 * level) / 5) + 2) * power * (A / D)) / 50) * crit * type);
+		
+		if (cpu) return damageDealt;
+		
 		soundCard(type);
 		
 		if (type == 2.0) { System.out.println("It's super effective!"); }
 		else if (type == .5) { System.out.println("It's not very effective..."); }
 		else if (type == 0) { System.out.println("It has no effect!"); return 0; }
-						
-		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int) ((((((2 * level) / 5) + 2) * power * (A / D)) / 50) * crit * type);
 		
 		return damageDealt;
 	}
@@ -286,18 +292,19 @@ public class BattleEngine {
 		System.out.println(target.getName() + " fainted!");
 		sleep(2000);
 		
-		int xp = calculateXP(target); 
-		attacker.setXP(xp);									
-		System.out.println(attacker.getName() + " earned " + xp + " xp!");
+		int exp = calculateXP(target); 
+		attacker.setXP(exp);				
+		
+		System.out.println(attacker.getName() + " earned " + exp + " xp!");
 		sleep(2000);
 	}
 	/** END SET WIN METHOD **/
 	
 	/** CALCULATE XP METHOD **/
 	private static int calculateXP(Pokedex target) {
-		int result = (int) (1.5 * target.getXP() * target.getLevel() * target.getEV()) / 7;
+		int exp = (int) (1.5 * target.getXP() * target.getLevel() * target.getEV()) / 7;
 		
-		return result;
+		return exp;
 	}
 	/** END CALCULATE XP METHOD **/	
 	

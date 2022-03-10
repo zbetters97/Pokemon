@@ -6,46 +6,80 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import moves.MoveEngine;
+import moves.Moves;
 import types.TypeEngine;
 
 /*** POKEDEX ENUM CLASS ***/
 public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
-	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 1),
-	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 1),
-	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 2),
-	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 3),
-	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 2),
-	GEODUDE ("Geodude", TypeEngine.rock, 5, 40, 80, 100, 30, 30, 20, 25, 1);
+	BULBASAUR ("Bulbasaur", TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
+	IVYSAUR ("Ivysaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
+	VENUSAUR ("Venusaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
+	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
+	CHARMELEON ("Charmeleon", TypeEngine.fire, 16, 58, 64, 58, 80, 65, 80, 36, 142, 2),
+	CHARIZARD ("Charizard", Arrays.asList(TypeEngine.fire, TypeEngine.flying, TypeEngine.dragon), 36, 78, 84, 78, 109, 85, 100, -1, 209, 3),
+	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 66, 1),
+	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 143, 2),
+	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 210, 3),
+	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 82, 2),
+	RAICHU ("Raichu", TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3);
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
-	protected TypeEngine type;	
+	protected TypeEngine type;
+	private List<TypeEngine> types;
 	private int level, xp, hp, speed, attack, defense, spAttack, spDefense, evLevel, ev;	
 	public boolean isAlive;
 	/** END INITIALIZE VALUES **/
 	
 	// initialize arraylist to hold moves of given pokemon
-	private ArrayList<MoveEngine> moveSet;
+	private ArrayList<Moves> moveSet;
 	
 	// initialize arraylist to hold all enums in pokemon class
 	private static List<Pokedex> POKEDEX = Arrays.asList(Pokedex.values());
 
 	/** CONSTRUCTOR **/
 	Pokedex(String name, TypeEngine type, int level, int hp, int attack, int defense, 
-			int spAttack, int spDefense, int speed, int evLevel, int ev) {			
+			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
 		
-		this.name = name; this.type = type; this.level = level;	this.xp = 1; this.hp = hp; 
-		this.speed = speed; this.attack = attack; this.defense = defense; 
-		this.spAttack = spAttack; this.spDefense = spDefense; this.evLevel = evLevel; this.ev = ev;
+		this.name = name; this.type = type; this.level = level;
+		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
+		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		
+		Calculate getStat = (stat, IV, EV, lev) -> {
+			return (int)(Math.floor(0.01 * (2 * stat + IV + Math.floor(EV / 4)) * lev)) + 5;
+		};
+		
+		this.speed = getStat.compute(speed, iv, ev, level);
+		this.attack = getStat.compute(attack, iv, ev, level); this.defense = getStat.compute(defense, iv, ev, level);		
+		this.spAttack = getStat.compute(spAttack, iv, ev, level); this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		
+		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.types = null;		
 		this.isAlive = true;	
 		
 		moveSet = new ArrayList<>();
+	}
+	Pokedex(String name, List<TypeEngine> types, int level, int hp, int attack, int defense, 
+			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
 		
+		this.name = name; this.types = types; this.level = level;
+		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
+		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
+		
+		Calculate getStat = (stat, IV, EV, lev) -> {
+			return (int)(Math.floor(0.01 * (2 * stat + IV + Math.floor(EV / 4)) * lev)) + 5;
+		};
+		
+		this.speed = getStat.compute(speed, iv, ev, level);
+		this.attack = getStat.compute(attack, iv, ev, level); this.defense = getStat.compute(defense, iv, ev, level);		
+		this.spAttack = getStat.compute(spAttack, iv, ev, level); this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		
+		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.type = null;		
+		this.isAlive = true;	
+		
+		moveSet = new ArrayList<>();		
 	}
 	/** END CONSTRUCTOR **/
 	
@@ -53,17 +87,27 @@ public enum Pokedex implements PokedexInterface {
 	public static Pokedex createPokemon(Pokedex pokemon) {
 		
 		// Map of pokemon and corresponding move set
-		Map<Pokedex, List<MoveEngine>> pokeMap = new HashMap<>();
+		Map<Pokedex, List<Moves>> pokeMap = new HashMap<>();
 		
 		// set default moves for each pokemon
-        pokeMap.put(CHARMANDER, Arrays.asList(MoveEngine.SCRATCH, MoveEngine.QUICKATTACK, MoveEngine.EMBER));
-        pokeMap.put(SQUIRTLE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.WATERGUN));
-        pokeMap.put(WARTORTLE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, MoveEngine.WATERGUN));
-        pokeMap.put(BLASTOISE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, 
-        		MoveEngine.WATERGUN, MoveEngine.ROCKTHROW));
-        pokeMap.put(PIKACHU, Arrays.asList(MoveEngine.TACKLE, MoveEngine.QUICKATTACK, MoveEngine.THUNDERSHOCK));
-        pokeMap.put(GEODUDE, Arrays.asList(MoveEngine.TACKLE, MoveEngine.ROCKTHROW, MoveEngine.ROLLOUT));
-		
+        pokeMap.put(BULBASAUR, Arrays.asList(Moves.TACKLE, Moves.VINEWHIP));
+        pokeMap.put(IVYSAUR, Arrays.asList(Moves.TACKLE, Moves.VINEWHIP, Moves.RAZORLEAF));
+		pokeMap.put(VENUSAUR, Arrays.asList(Moves.TAKEDOWN, Moves.DOUBLEEDGE, Moves.PETALBLIZZARD,
+				Moves.SOLARBEAM));
+        pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.QUICKATTACK, Moves.EMBER));
+		pokeMap.put(CHARMELEON, Arrays.asList(Moves.SLASH, Moves.QUICKATTACK, Moves.EMBER, 
+				Moves.FIREFANG));
+        pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONCLAW, Moves.DRAGONBREATH, Moves.FLAMETHROWER,
+        	Moves.FLAREBLITZ));
+		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN));
+        pokeMap.put(WARTORTLE, Arrays.asList(Moves.SHELLSMASH, Moves.QUICKATTACK, Moves.WATERGUN,
+        		Moves.WATERPULSE));
+        pokeMap.put(BLASTOISE, Arrays.asList(Moves.SHELLSMASH, Moves.AQUATAIL, 
+        		Moves.WATERPULSE, Moves.HYDROPUMP));
+        pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERSHOCK));
+        pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.THUNDERPUNCH, Moves.SLAM, 
+        		Moves.THUNDERBOLT));
+        
         // if found in map, add each move to passed in pokemon object
         for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {
         	pokemon.addMove(pokeMap.get(pokemon).get(i));
@@ -125,7 +169,7 @@ public enum Pokedex implements PokedexInterface {
 	/** END CAN EVOLVE METHOD **/
 	
 	/** ADD NEW MOVE METHOD **/
-	public boolean addMove(MoveEngine move) { 
+	public boolean addMove(Moves move) { 
 		
 		if (this.getMoveSet().size() == 4) {
 			return false;
@@ -142,7 +186,7 @@ public enum Pokedex implements PokedexInterface {
 		
 		System.out.println("MOVESET FOR " + this.name + ":\n");
 		
-		for (MoveEngine move : moveSet) {
+		for (Moves move : moveSet) {
 			System.out.println(move.getName() + " : (TYPE: " + move.getType()  + "), (PP: " + move.getpp() + 
 					"), (PWR: " + move.getPower() + ")"	+ ", (ACC: " + move.getAccuracy() + ")");
 		}
@@ -155,6 +199,9 @@ public enum Pokedex implements PokedexInterface {
 
 	public TypeEngine getType() { return type; }
 	public void setType(TypeEngine type) { this.type = type; }
+	
+	public List<TypeEngine> getTypes() { return types; }
+	public void setTypes(List<TypeEngine> types) { this.types = types; }
 
 	public int getLevel() {	return level; }
 	public void setLevel(int level) { this.level = level; }
@@ -189,8 +236,15 @@ public enum Pokedex implements PokedexInterface {
 	public boolean isAlive() { return isAlive; }
 	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }
 	
-	public ArrayList<MoveEngine> getMoveSet() { return moveSet; }
-	public void setMoveSet(ArrayList<MoveEngine> moveSet) { this.moveSet = moveSet; }
+	public ArrayList<Moves> getMoveSet() { return moveSet; }
+	public void setMoveSet(ArrayList<Moves> moveSet) { this.moveSet = moveSet; }
 	/** END GETTERS AND SETTERS **/
 }
 /*** EDN POKEDEX ENUM CLASS ***/
+
+
+
+@FunctionalInterface
+interface Calculate {
+	public int compute(int j, int k, int l, int m);
+}

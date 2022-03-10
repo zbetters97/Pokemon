@@ -29,13 +29,23 @@
  * 		-Improved CPU AI for One Player mode
  * 		-Cleaned up coding to be more concise
  * 		-Added lambda expression to Battle class for efficiency
+ * 03/10/2022 Update:
+ * 		-Added exception handlers for user input
+ * 		-Simplified class names
+ * 		-Added multi-type feature for Pokemon
+ * 		-Modified all Pokemon attributes assignment to be more accurate
+ * 		-Added Ivysaur, Venasaur, Charmeleon, Charizard, and Raichu
+ * 		-Removed Geodude
+ * 		-Added more moves
+ * 		-Cleaned up UI elements
+ * 		-Added sounds for all new moves/Pokemon
  */
 
 package application;
 
 import java.util.Scanner;
 
-/*** DRIVER CLASS ***/
+/*** APPLICATION CLASS ***/
 public class Driver {
 	
 	static Scanner input = new Scanner(System.in);

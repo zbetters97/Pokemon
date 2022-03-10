@@ -1,11 +1,11 @@
 package pokemon;
 
-import moves.MoveEngine;
+import moves.Moves;
 
 public interface PokedexInterface {
 	
 	Pokedex evolve();
 	boolean canEvolve();
-	boolean addMove(MoveEngine move);
+	boolean addMove(Moves move);
 	void listMoves();
 }

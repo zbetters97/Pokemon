@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -133,8 +134,6 @@ public class BattleEngine {
 					// play move sound
 					soundCard("//moves//" + move.getName());
 					
-					sleep(1000);
-					
 					// get critical damage (if applicable)
 					double crit = isCritical();			
 					
@@ -151,7 +150,7 @@ public class BattleEngine {
 					}
 					else {
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
-						sleep(2000);
+						sleep(1700);
 					}
 				}						
 				// move missed pokemon
@@ -317,8 +316,10 @@ public class BattleEngine {
 	        File sound = new File(path);
 	        
             AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
             Clip c = AudioSystem.getClip();
             c.open(ais); c.start(); 
+            sleep(duration);
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
 	}
@@ -342,16 +343,19 @@ public class BattleEngine {
 
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
             Clip c = AudioSystem.getClip();
             c.open(ais); c.start(); 
+            sleep(duration);
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
 	}
 	/** END HIT SOUND METHOD **/
 		
 	/** SLEEP METHOD **/
-	private static void sleep(int time) {
-		try { Thread.sleep(time); } 
+	private static void sleep(double time) {
+		
+		try { Thread.sleep((int) time); } 
 		catch (InterruptedException e) { e.printStackTrace(); }
 	}
 	/** END SLEEP METHOD **/

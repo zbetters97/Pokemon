@@ -39,6 +39,8 @@
  * 		-Added more moves
  * 		-Cleaned up UI elements
  * 		-Added sounds for all new moves/Pokemon
+ * 03/12/2022 Update:
+ * 		-Modified sleep timer to be same duration as source file
  */
 
 package application;

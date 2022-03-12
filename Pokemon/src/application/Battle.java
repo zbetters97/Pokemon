@@ -35,7 +35,7 @@ public class Battle {
 	/** MAIN MENU METHOD **/
 	public void start() {		
 		clearContent();		
-		soundCard("battle-red");
+		//soundCard("battle-red");
 		selectPokemon();		
 	}
 	/** END MAIN METHOD **/

@@ -1,18 +1,12 @@
 package application;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 import battle.BattleEngine;
 import moves.Moves;
 import pokemon.Pokedex;
-
 
 /*** BATTLE CLASS ***/
 public class Battle {
@@ -25,17 +19,18 @@ public class Battle {
 	
 	public Battle(int numPlayers) {
 		
-		// prevent errors upon startup by confirming numPlayers is valid
-		if (numPlayers > 2) numPlayers = 2;
-		else if (numPlayers < 1) numPlayers = 1;
-		
+		// prevent errors upon startup by setting numPlayers to either 1 or 2
+		if (numPlayers > 2) 
+			numPlayers = 2;
+		else if (numPlayers < 1) 
+			numPlayers = 1;
+
 		this.numPlayers = numPlayers;
 	}
 	
 	/** MAIN MENU METHOD **/
 	public void start() {		
-		clearContent();		
-		//soundCard("battle-red");
+		clearContent();				
 		selectPokemon();		
 	}
 	/** END MAIN METHOD **/
@@ -43,48 +38,49 @@ public class Battle {
 	/** SELECT POKEMON METHOD **/
 	private void selectPokemon() {
 		
-		// lambda method to use for both trainers
+		// lambda method to get pokemon selection
 		SelectionGrabber getInput = (trainerNum) -> {
 			
 			System.out.println("TRAINER " + trainerNum + ", PLEASE SELECT YOUR POKEMON:");
 			
 			int counter = 0;
-			for (Pokedex p : Pokedex.getPokedex()) {
-				System.out.println("[" + ++counter + "] " + p.getName());	
-			}	
+			for (Pokedex p : Pokedex.getPokedex())
+				System.out.println("[" + ++counter + "] " + p.getName());
 			
-			while (true) {
-				
+			while (true) {				
 				try { 
 					int choice = input.nextInt(); 
 					
-					if (0 < choice && choice <= counter) return choice;
-					else System.out.println("This is not a valid selection");
+					// choice must be a number from 0 to last element in list
+					if (0 < choice && choice <= counter) 
+						return choice;
+					else 
+						System.out.println("This is not a valid selection");
 				}
 				catch (Exception e) {
-					System.out.println("Input must be a number"  + 1);
+					System.out.println("ERROR! Input must be a number!");
 					input.next();
 				}
 			}
 		};
 		
 		// assign fighter to pokemon found at given index
-		trainer1 = Pokedex.getPokemon(getInput.get(1) - 1);
-		
-		// play pokemon cry
-		soundCard("//pokedex//" + trainer1.getName());	
+		trainer1 = Pokedex.getPokemon(getInput.get(1) - 1);	
 
+		// play pokemon cry
+		SoundCard.play("//pokedex//" + trainer1.getName());	
 		clearContent();
 		
-		trainer2 = Pokedex.getPokemon(getInput.get(2) - 1);
+		// assign fighter to pokemon found at given index
+		trainer2 = Pokedex.getPokemon(getInput.get(2) - 1);		
 		
 		// play pokemon cry
-		soundCard("//pokedex//" + trainer2.getName());	
+		SoundCard.play("//pokedex//" + trainer2.getName());	
+		clearContent();	
 		
 		// initialize engine to handle pokemon battle
-		battle = new BattleEngine();
+		battle = new BattleEngine(trainer1, trainer2);		
 		
-		clearContent();	
 		selectOption();
 	}
 	/** END SELECT POKEMON METHOD **/
@@ -95,7 +91,7 @@ public class Battle {
 		// lambda method to use for both trainers
 		MoveGrabber selectMove = (fighter) -> {
 			
-			System.out.println("What move will " + fighter.getName() + " do?\n");
+			System.out.println("What will " + fighter.getName() + " do?\n");
 			
 			while (true) {
 				
@@ -109,8 +105,10 @@ public class Battle {
 					int choice = input.nextInt();
 					
 					// if choice is a valid move option
-					if (0 < choice && choice <= counter) return getMove(choice, fighter.getMoveSet());
-					else System.out.println("This is not a move"); 		
+					if (0 < choice && choice <= counter) 
+						return getMove(choice, fighter.getMoveSet());
+					else 
+						System.out.println("This is not a move"); 		
 				}
 				catch (InputMismatchException e) { 
 					System.out.println("Input must be a number");
@@ -133,7 +131,6 @@ public class Battle {
 			try { 
 				int choice = input.nextInt();
 				
-				// switch-case on given input
 				switch (choice) {
 				
 					case 1: 
@@ -142,10 +139,20 @@ public class Battle {
 						// if one player mode
 						if (numPlayers == 1) {
 							move1 = selectMove.get(trainer1);
-							move2 = BattleEngine.cpuSelectMove(trainer2, trainer1);
-							battle.move(trainer1, move1, trainer2, move2);
+							move2 = battle.cpuSelectMove();
+							battle.move(move1, move2);
 							
 							clearContent();
+							
+							if (battle.getWinner() == 1) {
+								announceWinner(1, battle.getMoney());							
+								return;
+							}
+							else if (battle.getWinner() == 2) {
+								announceWinner(2, battle.getMoney());		
+								return;
+							}
+							
 							break;
 						}					
 						// if two player mode
@@ -156,11 +163,22 @@ public class Battle {
 							}
 							else if (turn == 2){
 								move2 = selectMove.get(trainer2);							
-								battle.move(trainer1, move1, trainer2, move2);
+								battle.move(move1, move2);																								
 								turn = 1;
 								
 								clearContent();
 							}	
+							
+							if (battle.getWinner() == 1) {
+								announceWinner(1, battle.getMoney());						
+								return;
+							}
+							else if (battle.getWinner() == 2) {								
+								announceWinner(2, battle.getMoney());	
+								return;
+							}
+							
+							// break out of switch-case and begin while-loop again
 							break;
 						}
 						// catch error if player mode is not 1 or 2
@@ -177,7 +195,7 @@ public class Battle {
 					
 					case 3: 
 						clearContent();	
-						soundCard("in-battle-run");
+						SoundCard.play("in-battle-run");
 						System.out.println("Got away safely!"); 					 
 						System.exit(1); 
 						break;
@@ -199,7 +217,7 @@ public class Battle {
 	/** END SELECT AN OPTION METHOD **/
 
 	/** DISPLAY HP METHOD **/
-	public static void displayHP() {
+	private void displayHP() {
 		System.out.println(
 				"\nTRAINER 1: [ " + trainer1.getName() + " HP: " +trainer1.getHP() + " ]" +
 				"\nTRAINER 2: [ " + trainer2.getName() + " HP: " + trainer2.getHP() + " ]\n"
@@ -218,29 +236,16 @@ public class Battle {
 		
 	}
 	/** END GET MOVE METHOD **/
-
-	/** SOUND CARD METHOD **/
-	public static void soundCard(String arg) {
-		
-		try {
-			// retrieve sound file based on argument given
-			String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
-	        
-            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
-            Clip c = AudioSystem.getClip();
-            c.open(ais); 
-            
-            // play music using built-in player
-            c.start(); 
-        }
-        catch (Exception e) { System.out.println(e.getMessage()); }
+	
+	private void announceWinner(int winner, int money) {
+		SoundCard.play("in-battle-victory");
+		System.out.println("Player defeated, Pokemon Trainer " + winner + "!");
+		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
 	}
-	/** END SOUND CARD METHOD **/
 
 	/** CLEAR SCREEN METHOD **/	
-	public static void clearContent() {		
-		for (int clear = 0; clear < 200; clear++) 
-			System.out.println("\n") ;
+	private static void clearContent() {		
+		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/
 }

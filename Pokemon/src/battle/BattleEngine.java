@@ -1,138 +1,190 @@
 package battle;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
+import application.Sleeper;
+import application.SoundCard;
 import moves.Moves;
 import pokemon.Pokedex;
 import types.TypeEngine;
 
 /*** BATTLE ENGINE CLASS ***/
 public class BattleEngine {
+	
+	Pokedex pokemon1, pokemon2;
+	private int winningPokemon;
+	
+	// establish pokemon in battle
+	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
+		this.pokemon1 = pokemon1;
+		this.pokemon2 = pokemon2;
+	}
+	
+	public void swapTrainer(Pokedex newTrainer, int trainerNum) {
+		
+		if (trainerNum == 1) {
+			if (pokemon1 != null)
+				pokemon1 = newTrainer;
+		}			
+		else if (trainerNum == 2) {
+			if (pokemon2 != null) 
+				pokemon2 = newTrainer;
+		}		
+		else 
+			System.out.println("INTERNAL ERROR! Cannot swap Pokemon!");
+	}
 
 	/** MOVE METHOD **/
-	public void move(Pokedex trainer1, Moves move1, Pokedex trainer2, Moves move2) {
-					
-		// confirm trainer1 can battle
-		if (trainer1.isAlive) {			
+	public void move(Moves move1, Moves move2) {
+				
+		if (canTurn(1)) {
+				
+			// returns true if pokemon1 goes first, false if pokemon2
+			int upNext = getTurn(move1, move2);
 			
-			// confirm trainer2 can battle
-			if (trainer2.isAlive) {
+			// pokemon1 move
+			if (upNext == 1) {
+				startMove(1, move1);
 				
-				// returns true if trainer1 goes first, false if trainer2
-				boolean trainer1Turn = getTurn(trainer1, move1, trainer2, move2);
-				
-				// trainer1 is the attacker
-				if (trainer1Turn) {
-					startMove(trainer1, move1, trainer2);
-					
-					// trainer2 becomes attacker if not fainted
-					if (trainer2.isAlive) 
-						startMove(trainer2, move2, trainer1);
-					else {
-						System.out.println(trainer2.getName() + " has fainted and cannot battle!");
-						sleep(2000);
-					}
+				// pokemon2 becomes attacker if not fainted
+				if (canTurn(1)) {
+					startMove(2, move2);
 				}
-				// trainer 2 is the attacker
-				else {
-					startMove(trainer2, move2, trainer1);
-					
-					// trainer1 becomes attacker if not fainted
-					if (trainer1.isAlive) 
-						startMove(trainer1, move1, trainer2);
-					else {
-						System.out.println(trainer1.getName() + " has fainted and cannot battle!");
-						sleep(2000);
-					}			
-				}				
 			}
-			// if trainer2 can't battle, the fight is over
+			// pokemon2 move
+			else if (upNext == 2) {
+				startMove(2, move2);
+				
+				// pokemon1 becomes attacker if not fainted
+				if (canTurn(2)) {
+					startMove(1, move1);
+				}
+			}	
 			else {
-				return;
+				System.out.println("INTERNAL ERROR! Cannot find next turn!");
 			}
+		}	
+	}
+	/** END MOVE METHOD **/
+	
+	/** CAN TURN METHOD **/ 
+	// return false if either trainer cannot battle //
+	private boolean canTurn(int upNext) {
+		
+		Pokedex attacker, target;
+		
+		if (upNext == 1) {
+			attacker = pokemon1; 
+			target = pokemon2;
+		}			
+		else {
+			attacker = pokemon2; 
+			target = pokemon1;
 		}
 		
-		// if trainer1 can't battle
+		// pokemon1 can battle
+		if (attacker.isAlive) {
+			
+			// trainer 2 can battle
+			if (target.isAlive) {
+				return true;
+			}			
+			//pokemon2 cannot battle
+			else {
+				//System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
+				Sleeper.pause(2000);
+				return false;
+			}
+		}		
+		//pokemon1 cannot battle
 		else {
-			System.out.println(trainer1.getName() + " has fainted and cannot battle!");
-			sleep(2000);
+			System.out.println(attacker.getName() + " has fainted and cannot battle!");
+			Sleeper.pause(2000);
+			return false;	
 		}		
 	}
-	/** END MOVE METHOD **/	
 	
 	/** GET TURN METHOD **/
-	private static boolean getTurn(Pokedex trainer1, Moves move1, Pokedex trainer2, Moves move2) {
+	private int getTurn(Moves move1, Moves move2) {
 		
 		// if both moves go first (EX: Quick Attack)
 		if (move1.getGoFirst() && move2.getGoFirst()) {			
-			// if trainer1 is faster (if equal, trainer1 has advantage)
-			if (trainer1.getSpeed() >= trainer2.getSpeed()) { return true; }
-			else { return false; }
+			// if pokemon1 is faster (if equal, pokemon1 has advantage)
+			if (pokemon1.getSpeed() >= pokemon2.getSpeed()) { return 1; }
+			else { return 2; }
 		}
-		// if only move1 goes first (EX: Qukck Attack)
-		else if (move1.getGoFirst()) { return true; }
-		// if only move2 goes first (EX: Qukck Attack)
-		else if (move2.getGoFirst()) { return false; }
+		// if only move1 goes first (EX: Quick Attack)
+		else if (move1.getGoFirst()) { return 1; }
+		// if only move2 goes first (EX: Quick Attack)
+		else if (move2.getGoFirst()) { return 2; }
 		else {
-			// if trainer1 is faster (if equal, trainer1 has advantage)
-			if (trainer1.getSpeed() >= trainer2.getSpeed()) { return true; }
-			else { return false; }
+			// if pokemon1 is faster (if equal, pokemon1 has advantage)
+			if (pokemon1.getSpeed() >= pokemon2.getSpeed()) { return 1; }
+			else { return 1; }
 		}
 	}
 	/** END GET TURN METHOD **/
 	
 	/** CPU SELECT MOVE METHOD **/
-	public static Moves cpuSelectMove(Pokedex attacker, Pokedex target) {
+	// returns move with max damage //
+	public Moves cpuSelectMove() {
 		
 		// holds Map of Move and Damage Points
 		Map<Moves, Integer> moves = new HashMap<>();
 		
 		// for each move in attacker's move set
-		for (Moves move : attacker.getMoveSet()) {
+		for (Moves move : pokemon2.getMoveSet()) {
 			
 			// find damage value of each move
-			int damage = calculateDamage(attacker, move, 1, target, true);
+			int damage = calculateDamage(2, move, 1.0, true);
 			
 			// add move and corresponding damage to list
 			moves.put(move, damage);
 		}
 		
 		// find max value in moves list based on value
-		return Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+		Moves bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 
+				
+		return bestMove;
 	}
 	/** END CPU SELECT MOVE METHOD **/
 	
 	/** START MOVE METHOD **/
-	private static void startMove(Pokedex attacker, Moves move, Pokedex target) {
+	private void startMove(int upNext, Moves givenMove) {
+		
+		Pokedex attacker, target;
+		
+		if (upNext == 1) {
+			attacker = pokemon1; 
+			target = pokemon2;
+		}			
+		else {
+			attacker = pokemon2; 
+			target = pokemon1;
+		}
 		
 		// loop through moveset for attacking pokemon
-		for (Moves m : attacker.getMoveSet()) {
+		for (Moves move : attacker.getMoveSet()) {
 			
 			// if chosen move is found
-			if (m.getName().equals(move.getName())) {	
+			if (move.getName().equals(givenMove.getName())) {	
 				
-				System.out.println(attacker.getName() + " used " + m.getName() + "!");
+				System.out.println(attacker.getName() + " used " + move.getName() + "!");
 				
 				// decrease move pp
 				move.setpp(move.getpp() - 1);
 				
-	            sleep(1000);
+				Sleeper.pause(1000);
 	            
 	            // if attack lands
 				if (isHit(move)) {
 					
 					// play move sound
-					soundCard("//moves//" + move.getName());
+					SoundCard.play("//moves//" + move.getName(), true);
 					
 					// get critical damage (if applicable)
 					double crit = isCritical();			
@@ -141,22 +193,21 @@ public class BattleEngine {
 					if (crit == 1.5) { System.out.println("A critical hit!"); }
 									
 					// calculate damage dealt
-					int damageDealt = calculateDamage(attacker, m, crit, target, false);								
+					int damageDealt = calculateDamage(upNext, move, crit, false);								
 					int health = dealDamage(damageDealt, target);
 					
-					// if pokemon has no hp left
-					if (health == 0) {
-						setWin(attacker, target, damageDealt);						
-					}
+					if (health == 0) 
+						setWin(upNext, damageDealt);
+					
 					else {
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
-						sleep(1700);
+						Sleeper.pause(1700);
 					}
 				}						
-				// move missed pokemon
+				// move missed
 				else {
 					System.out.println("The attack missed!");
-					sleep(2000);
+					Sleeper.pause(2000);
 				}		
 			}	
 		}
@@ -178,7 +229,18 @@ public class BattleEngine {
 	/** END IS HIT METHOD **/
 		
 	/** CALCULATE DAMAGE DEALT METHOD **/
-	private static int calculateDamage(Pokedex attacker, Moves move, double crit, Pokedex target, boolean cpu) {
+	private int calculateDamage(int upNext, Moves move, double crit, boolean cpu) {
+		
+		Pokedex attacker, target;
+		
+		if (upNext == 1) {
+			attacker = pokemon1; 
+			target = pokemon2;
+		}			
+		else {
+			attacker = pokemon2; 
+			target = pokemon1;
+		}
 		
 		double level = attacker.getLevel();
 		double power = move.getPower();
@@ -222,18 +284,14 @@ public class BattleEngine {
 		
 		if (cpu) return damageDealt;
 		
-		soundCard(type);
-		
-		if (type == 2.0) { System.out.println("It's super effective!"); }
-		else if (type == .5) { System.out.println("It's not very effective..."); }
-		else if (type == 0) { System.out.println("It has no effect!"); return 0; }
+		SoundCard.play(type);
 		
 		return damageDealt;
 	}
 	/** END CALCULATE DAMAGE DEALT METHOD **/
 	
 	/** IS CRITICAL METHOD **/
-	private static double isCritical() {	
+	private double isCritical() {	
 		
 		// 1/255 chance of landing critical hit
 		Random r = new Random();		
@@ -283,81 +341,69 @@ public class BattleEngine {
 	/** END EFFECTIVENESS METHOD **/
 	
 	/** SET WIN METHOD **/
-	private static void setWin(Pokedex attacker, Pokedex target, int damageDealt) {
+	private void setWin(int winner, int damageDealt) {
+		
+		Pokedex attacker, target;
+		
+		if (winner == 1) {
+			attacker = pokemon1; 
+			target = pokemon2;
+		}			
+		else {
+			attacker = pokemon2; 
+			target = pokemon1;
+		}
+		
 		System.out.println(target.getName() + " took " + damageDealt + " damage!");
-		sleep(2000);
+		Sleeper.pause(2000);
 											
 		target.setAlive(false);
 		System.out.println(target.getName() + " fainted!");
-		sleep(2000);
 		
-		int exp = calculateXP(target); 
-		attacker.setXP(exp);				
+		int xp = calculateXP(winner); 
+		attacker.setXP(xp);				
 		
-		System.out.println(attacker.getName() + " earned " + exp + " xp!");
-		sleep(2000);
+		System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");
+		
+		winningPokemon = winner;
 	}
 	/** END SET WIN METHOD **/
 	
 	/** CALCULATE XP METHOD **/
-	private static int calculateXP(Pokedex target) {
+	private int calculateXP(int winner) {
+		
+		Pokedex target;
+		
+		if (winner == 1) 
+			target = pokemon2; 		
+		else 
+			target = pokemon1;
+		
 		int exp = (int) (1.5 * target.getXP() * target.getLevel() * target.getEV()) / 7;
 		
 		return exp;
 	}
 	/** END CALCULATE XP METHOD **/	
 	
-	/** SOUND CARD METHOD **/
-	private static void soundCard(String arg) {
-		
-		try {
-			// retrieve sound file based on argument given
-			String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
-	        File sound = new File(path);
-	        
-            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
-            Clip c = AudioSystem.getClip();
-            c.open(ais); c.start(); 
-            sleep(duration);
-        }
-        catch (Exception e) { System.out.println(e.getMessage()); }
+	public int getWinner() {
+		if (winningPokemon == 1)
+			return 1;
+		else if (winningPokemon  == 2)
+			return 2;
+		else
+			return -1;
 	}
-	/** END SOUND CARD METHOD **/
 	
-	/** HIT SOUND METHOD **/
-	private static void soundCard(double efftiveness) {
+	public int getMoney() {
 		
-		String hit = "";
+		int money = 1;
 		
-		// set hit to corresponding path
-		switch (Double.toString(efftiveness)) {
-			case "0.5": hit = "//lib//sounds//hit-weak.wav"; break;
-			case "1.0": hit = "//lib//sounds//hit-normal.wav"; break;
-			case "2.0": hit = "//lib//sounds//hit-super.wav"; break;
-			default: return;
-		}
+		if (winningPokemon == 1) 
+			money = 24 * pokemon2.getLevel();	
+		else 
+			money = 24 * pokemon1.getLevel();	
 		
-		String path = new File("").getAbsolutePath() + hit;		
-        File sound = new File(path);
-
-        try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
-            Clip c = AudioSystem.getClip();
-            c.open(ais); c.start(); 
-            sleep(duration);
-        }
-        catch (Exception e) { System.out.println(e.getMessage()); }
+		return money;
 	}
-	/** END HIT SOUND METHOD **/
-		
-	/** SLEEP METHOD **/
-	private static void sleep(double time) {
-		
-		try { Thread.sleep((int) time); } 
-		catch (InterruptedException e) { e.printStackTrace(); }
-	}
-	/** END SLEEP METHOD **/
 }
 /*** END BATTLE ENGINE CLASS ***/

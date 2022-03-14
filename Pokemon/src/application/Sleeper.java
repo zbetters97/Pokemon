@@ -1,5 +1,6 @@
 package application;
 
+/*** SLEEPER CLASS ***/
 public class Sleeper {
 	
 	/** SLEEP METHOD **/
@@ -9,3 +10,4 @@ public class Sleeper {
 	}
 	/** END SLEEP METHOD **/
 }
+/*** END SLEEPER CLASS ***/

@@ -11,30 +11,32 @@ public class SoundCard {
 	
 	private Clip music;
 	
+	/** CONSTRUCTOR **/
 	public SoundCard(String soundfile) {
-		try {
+		
+		try {			
 			// retrieve sound file based on argument given
 			String path = new File("").getAbsolutePath() + "//lib//sounds//" + soundfile + ".wav";	
 		    AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
             
 		    music = AudioSystem.getClip();
-            
+		    
+		    // prepare music file
 		    music.open(ais); 
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
 	}
+	/** END CONSTRUCTOR **/
 	
-	/** SOUND CARD METHOD **/
-	// optional parameter to wait until finished playing //
+	/** PLAY/STOP MUSIC METHODS **/
 	public void playMusic() {
 		music.start();
 		//c.loop(Clip.LOOP_CONTINUOUSLY);
-	}		
-	/** END PLAY MUSIC METHOD **/	
-	
+	}			
 	public void stopMusic() {
 		music.stop();
 	}
+	/** END PLAY/STOP MUSIC METHODS **/
 	
 	/** SOUND CARD METHOD **/
 	// optional parameter to wait until finished playing //
@@ -45,10 +47,10 @@ public class SoundCard {
 			String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
             AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
             
-            Clip c = AudioSystem.getClip();
-            c.open(ais); 
-            c.start(); 
+            Clip c = AudioSystem.getClip();            
+            c.open(ais); c.start(); 
             
+            // wait until sound file has finished playing
             if (hold.length >= 1) {
             	int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 	
             	Sleeper.pause(duration);
@@ -65,24 +67,30 @@ public class SoundCard {
 		
 		// set hit to corresponding path
 		switch (Double.toString(effectiveness)) {
-			case "0.5": hit = "//lib//sounds//hit-weak.wav"; break;
-			case "1.0": hit = "//lib//sounds//hit-normal.wav"; break;
-			case "2.0": hit = "//lib//sounds//hit-super.wav"; break;
+			case "0.5": hit = "//lib//sounds//in-battle//hit-weak.wav"; break;
+			case "1.0": hit = "//lib//sounds//in-battle//hit-normal.wav"; break;
+			case "2.0": hit = "//lib//sounds//in-battle//hit-super.wav"; break;
 			default: return;
 		}
 		
 		String path = new File("").getAbsolutePath() + hit;		
         File sound = new File(path);
         
-        if (effectiveness == 2.0) { System.out.println("It's super effective!"); }
-		else if (effectiveness == .5) { System.out.println("It's not very effective..."); }
-		else if (effectiveness == 0) { System.out.println("It has no effect!"); }
+        if (effectiveness == 2.0) 
+        	System.out.println("It's super effective!");
+		else if (effectiveness == .5)
+			System.out.println("It's not very effective...");
+		else if (effectiveness == 0) 
+			System.out.println("It has no effect!");
 
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            
             int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
+            
             Clip c = AudioSystem.getClip();
             c.open(ais); c.start(); 
+            
             Sleeper.pause(duration);
         }
         catch (Exception e) { System.out.println(e.getMessage()); }

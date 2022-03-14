@@ -14,16 +14,15 @@ public class Battle {
 	// create static scanner to receive user input	
 	static Scanner input = new Scanner(System.in);	
 	private int numPlayers;
-	static Pokedex trainer1, trainer2;	
+	private static Moves move1, move2;
+	static Pokedex pokemon1, pokemon2;	
 	static BattleEngine battle;	
 	
 	public Battle(int numPlayers) {
 		
 		// prevent errors upon startup by setting numPlayers to either 1 or 2
-		if (numPlayers > 2) 
-			numPlayers = 2;
-		else if (numPlayers < 1) 
-			numPlayers = 1;
+		if (numPlayers > 2) numPlayers = 2;
+		else if (numPlayers < 1) numPlayers = 1;
 
 		this.numPlayers = numPlayers;
 	}
@@ -31,7 +30,8 @@ public class Battle {
 	/** MAIN MENU METHOD **/
 	public void start() {		
 		clearContent();				
-		selectPokemon();		
+		selectPokemon();	
+		selectMove();
 	}
 	/** END MAIN METHOD **/
 	
@@ -65,163 +65,131 @@ public class Battle {
 		};
 		
 		// assign fighter to pokemon found at given index
-		trainer1 = Pokedex.getPokemon(getInput.get(1) - 1);	
+		pokemon1 = Pokedex.getPokemon(getInput.get(1) - 1);	
 
 		// play pokemon cry
-		SoundCard.play("//pokedex//" + trainer1.getName());	
+		SoundCard.play("//pokedex//" + pokemon1.getName());	
 		clearContent();
 		
 		// assign fighter to pokemon found at given index
-		trainer2 = Pokedex.getPokemon(getInput.get(2) - 1);		
+		pokemon2 = Pokedex.getPokemon(getInput.get(2) - 1);		
 		
 		// play pokemon cry
-		SoundCard.play("//pokedex//" + trainer2.getName());	
+		SoundCard.play("//pokedex//" + pokemon2.getName());	
 		clearContent();	
 		
 		// initialize engine to handle pokemon battle
-		battle = new BattleEngine(trainer1, trainer2);		
-		
-		selectOption();
+		battle = new BattleEngine(pokemon1, pokemon2);		
 	}
 	/** END SELECT POKEMON METHOD **/
-	
-	/** SELECT AN OPTION METHOD **/
-	private void selectOption() {
 		
-		// lambda method to use for both trainers
-		MoveGrabber selectMove = (fighter) -> {
+	private void selectMove() {
+		
+		while (true) {
 			
-			System.out.println("What will " + fighter.getName() + " do?\n");
+			clearContent();
 			
-			while (true) {
+			if (numPlayers == 1) {
 				
-				int counter = 0;
+				move1 = getMove(pokemon1);
+				move2 = battle.cpuSelectMove();
+				battle.move(move1, move2);
 				
-				// display all moves				
-				for (Moves m : fighter.getMoveSet())
-					System.out.println("[" + ++counter + "] " + m.getName());
-								
-				try { 
-					int choice = input.nextInt();
-					
-					// if choice is a valid move option
-					if (0 < choice && choice <= counter) 
-						return getMove(choice, fighter.getMoveSet());
-					else 
-						System.out.println("This is not a move"); 		
+				clearContent();
+				
+				if (battle.getWinner() == 1) {
+					announceWinner(1, battle.getMoney());							
+					return;
 				}
-				catch (InputMismatchException e) { 
-					System.out.println("Input must be a number");
-					input.next();
+				else if (battle.getWinner() == 2) {
+					announceWinner(2, battle.getMoney());		
+					return;
+				}
+			}					
+			else if (numPlayers == 2) {
+				
+				move1 = getMove(pokemon1);		
+				
+				clearContent();
+				move2 = getMove(pokemon2);	
+				
+				battle.move(move1, move2);
+				
+				if (battle.getWinner() == 1) {
+					announceWinner(1, battle.getMoney());						
+					return;
+				}
+				else if (battle.getWinner() == 2) {								
+					announceWinner(2, battle.getMoney());	
+					return;
 				}
 			}
-		};
+			else { 
+				System.out.println("ERROR! Internal error!"); 
+				System.exit(-1); 
+			}		
+		}
+	}
+	
+	private Moves getMove(Pokedex fighter) {
 		
-		Moves move1 = null, move2 = null;
+		displayHP();
 		
-		// tracks which trainer is selecting the move
-		int turn = 1;
+		System.out.println("What will " + fighter.getName() + " do?\n");
 		
-		// loop until manual exit
-		while (true) { 		
+		while (true) {
 			
-			displayHP();
-			System.out.println("[1] SELECT MOVE\n[2] LIST MOVES\n[3] RUN");
+			int counter = 0;
+			
+			// display all moves				
+			for (Moves m : fighter.getMoveSet())
+				System.out.println("[" + ++counter + "] " + m.getName());
+			System.out.println("[" + ++counter + "] RUN");
 			
 			try { 
 				int choice = input.nextInt();
 				
-				switch (choice) {
-				
-					case 1: 
-						clearContent(); 
-						
-						// if one player mode
-						if (numPlayers == 1) {
-							move1 = selectMove.get(trainer1);
-							move2 = battle.cpuSelectMove();
-							battle.move(move1, move2);
-							
-							clearContent();
-							
-							if (battle.getWinner() == 1) {
-								announceWinner(1, battle.getMoney());							
-								return;
-							}
-							else if (battle.getWinner() == 2) {
-								announceWinner(2, battle.getMoney());		
-								return;
-							}
-							
-							break;
-						}					
-						// if two player mode
-						else if (numPlayers == 2) {
-							if (turn == 1) {
-								move1 = selectMove.get(trainer1);							
-								turn = 2;
-							}
-							else if (turn == 2){
-								move2 = selectMove.get(trainer2);							
-								battle.move(move1, move2);																								
-								turn = 1;
-								
-								clearContent();
-							}	
-							
-							if (battle.getWinner() == 1) {
-								announceWinner(1, battle.getMoney());						
-								return;
-							}
-							else if (battle.getWinner() == 2) {								
-								announceWinner(2, battle.getMoney());	
-								return;
-							}
-							
-							// break out of switch-case and begin while-loop again
-							break;
-						}
-						// catch error if player mode is not 1 or 2
-						else { System.out.println("Internal error!"); System.exit(1); break; }
-						
-					case 2: 
-						clearContent(); 
-						if (turn == 1) trainer1.listMoves(); 
-						else if (turn == 2) trainer2.listMoves();
-						else { System.out.println("Internal error!"); System.exit(1); break; }
-						
-						// points back to beginning of switch-case
-						continue;
-					
-					case 3: 
-						clearContent();	
-						SoundCard.play("in-battle-run");
-						System.out.println("Got away safely!"); 					 
-						System.exit(1); 
-						break;
-					
-					// not a valid option handler
-					default: 
-						clearContent();
-						System.out.println("Input is not valid");
-						break;
+				// if choice is a valid move option
+				if (0 < choice && choice < counter) 
+					return getMove(choice, fighter.getMoveSet());
+				else if (choice == counter) {
+					clearContent();	
+					SoundCard.play("\\in-battle\\in-battle-run");
+					System.out.println("Got away safely!"); 					 
+					System.exit(1);
 				}
+				else
+					System.out.println("This is not a move"); 		
 			}
-			catch (Exception e) {
-				clearContent();
-				System.out.println("Input must be a number" + 2);
+			catch (InputMismatchException e) { 
+				System.out.println("Input must be a number");
 				input.next();
-			}		
+			}
 		}
 	}
-	/** END SELECT AN OPTION METHOD **/
-
+	
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
-		System.out.println(
-				"\nTRAINER 1: [ " + trainer1.getName() + " HP: " +trainer1.getHP() + " ]" +
-				"\nTRAINER 2: [ " + trainer2.getName() + " HP: " + trainer2.getHP() + " ]\n"
-		);
+		
+		System.out.print("\nTRAINER 1: " + pokemon1.getName() + " HP:");
+		
+		for (int i = 0; i < pokemon1.getHP(); i++) {
+			if (i % 60 == 0)
+				System.out.println();
+			
+			System.out.print("*");
+		}
+		
+		System.out.print("\nTRAINER 2: " + pokemon2.getName() + " HP:");
+		
+		for (int i = 0; i < pokemon2.getHP(); i++) {
+			if (i % 60 == 0)
+				System.out.println();
+			
+			System.out.print("*");
+		}
+		
+		System.out.println("\n");
 	}
 	/** END DISPLAY HP METHOD **/
 	
@@ -238,7 +206,7 @@ public class Battle {
 	/** END GET MOVE METHOD **/
 	
 	private void announceWinner(int winner, int money) {
-		SoundCard.play("in-battle-victory");
+		SoundCard.play("//in-battle//in-battle-victory");
 		System.out.println("Player defeated, Pokemon Trainer " + winner + "!");
 		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
 	}

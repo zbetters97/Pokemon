@@ -202,12 +202,14 @@ public class BattleEngine {
 					else {
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
 						Sleeper.pause(1700);
+						System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 					}
 				}						
 				// move missed
 				else {
 					System.out.println("The attack missed!");
 					Sleeper.pause(2000);
+					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 				}		
 			}	
 		}
@@ -356,14 +358,21 @@ public class BattleEngine {
 		
 		System.out.println(target.getName() + " took " + damageDealt + " damage!");
 		Sleeper.pause(2000);
+		
+		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 											
 		target.setAlive(false);
 		System.out.println(target.getName() + " fainted!");
 		
+		Sleeper.pause(2000);
+		
 		int xp = calculateXP(winner); 
 		attacker.setXP(xp);				
 		
-		System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");
+		System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
+		Sleeper.pause(2000);
+		
+		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 		
 		winningPokemon = winner;
 	}

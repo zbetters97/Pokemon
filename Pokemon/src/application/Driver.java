@@ -49,6 +49,9 @@
  * 		-Added Sleeper class to handle wait times
  * 		-Added money earned
  * 		-Added victory music
+ * 		-Added more comments
+ * 		-Added option select battle music before start
+ * 		-Modified health bar UI
  */
 
 package application;
@@ -61,8 +64,7 @@ public class Driver {
 	static Scanner input = new Scanner(System.in);
 	
 	/** MAIN METHOD **/
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) {		
 		MainMenu.load();
 	}
 	/** END MAIN METHOD **/

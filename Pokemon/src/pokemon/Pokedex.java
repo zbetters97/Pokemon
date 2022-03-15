@@ -24,14 +24,17 @@ public enum Pokedex implements PokedexInterface {
 	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 143, 2),
 	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 210, 3),
 	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 82, 2),
-	RAICHU ("Raichu", TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3);
+	RAICHU ("Raichu", TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3),
+	ABRA ("Abra", TypeEngine.psychic, 5, 25, 20, 15, 105, 55, 90, 16, 62, 1),
+	KADABRA ("Kadabra", TypeEngine.psychic, 16, 40, 35, 30, 120, 70, 105, 36, 140, 2),
+	ALAKAZAM ("Alakazam", TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3);
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
 	protected TypeEngine type;
 	private List<TypeEngine> types;
-	private int level, xp, hp, speed, attack, defense, spAttack, spDefense, evLevel, ev;	
+	private int level, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
 	public boolean isAlive;
 	/** END INITIALIZE VALUES **/
 	
@@ -107,7 +110,11 @@ public enum Pokedex implements PokedexInterface {
         		Moves.WATERPULSE, Moves.HYDROPUMP));
         pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERSHOCK));
         pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.THUNDERPUNCH, Moves.SLAM, 
-        		Moves.THUNDERBOLT));
+        		Moves.THUNDERBOLT));        
+        pokeMap.put(ABRA, Arrays.asList(Moves.TELEPORT));
+        pokeMap.put(KADABRA, Arrays.asList(Moves.TELEPORT, Moves.CONFUSION, Moves.PSYBEAM));
+        pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
+        		Moves.PSYBEAM));        
         
         // if found in map, add each move to passed in pokemon object
         for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {

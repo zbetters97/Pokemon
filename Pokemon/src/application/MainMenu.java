@@ -19,7 +19,7 @@ public class MainMenu {
 		int players = selectMode();
 		
 		clearContent();		
-		//selectMusic();
+		selectMusic();
 		
 		startGame(players);
 	}

@@ -106,11 +106,11 @@ public class Battle {
 				clearContent();
 				
 				if (battle.getWinner() == 1) {
-					announceWinner(1, battle.getMoney());							
+					announceWinner(1, 2, battle.getMoney());							
 					return;
 				}
 				else if (battle.getWinner() == 2) {
-					announceWinner(2, battle.getMoney());		
+					announceWinner(2, 1, battle.getMoney());		
 					return;
 				}
 			}				
@@ -129,11 +129,11 @@ public class Battle {
 				clearContent();
 				
 				if (battle.getWinner() == 1) {
-					announceWinner(1, battle.getMoney());						
+					announceWinner(1, 2, battle.getMoney());						
 					return;
 				}
 				else if (battle.getWinner() == 2) {								
-					announceWinner(2, battle.getMoney());	
+					announceWinner(2, 1, battle.getMoney());	
 					return;
 				}
 			}
@@ -224,9 +224,17 @@ public class Battle {
 	/** END GET MOVE METHOD **/
 	
 	/** ANNOUNCE WINNER METHOD **/
-	private void announceWinner(int winner, int money) {		
+	private void announceWinner(int winner, int loser, int money) {		
 		SoundCard.play("//in-battle//in-battle-victory");
-		System.out.println("Player defeated, Pokemon Trainer " + winner + "!");
+		System.out.println("Player defeated, Pokemon Trainer " + loser + "!");
+		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
+	}
+	/** END ANNOUNCE WINNER METHOD **/
+	
+	/** ANNOUNCE WINNER METHOD **/
+	private void announceWinner(String winner, String loser, int money) {		
+		SoundCard.play("//in-battle//in-battle-victory");
+		System.out.println("Player defeated, Pokemon Trainer " + loser + "!");
 		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
 	}
 	/** END ANNOUNCE WINNER METHOD **/

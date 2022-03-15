@@ -57,6 +57,10 @@
  * 		-Modified damage formula
  * 		-Modified exp formula
  * 		-Cleaned up coding to be more concise
+ * 03/15/2022:
+ * 		-Patched misc errors
+ * 		-Added Abra, Kadabra, and Alakazam (with corresponding moves)
+ * 		-Added code to prepare for custom name input
  */
 
 package application;

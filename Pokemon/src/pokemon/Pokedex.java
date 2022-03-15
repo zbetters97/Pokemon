@@ -13,6 +13,7 @@ import types.TypeEngine;
 public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
+	// xp values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
 	BULBASAUR ("Bulbasaur", TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
 	IVYSAUR ("Ivysaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
 	VENUSAUR ("Venusaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),

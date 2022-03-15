@@ -31,7 +31,7 @@ public class SoundCard {
 	/** PLAY/STOP MUSIC METHODS **/
 	public void playMusic() {
 		music.start();
-		//c.loop(Clip.LOOP_CONTINUOUSLY);
+		music.loop(Clip.LOOP_CONTINUOUSLY);
 	}			
 	public void stopMusic() {
 		music.stop();

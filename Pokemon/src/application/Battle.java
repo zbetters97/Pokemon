@@ -12,12 +12,12 @@ import pokemon.Pokedex;
 public class Battle {
 	
 	// create static scanner to receive user input	
-	static Scanner input = new Scanner(System.in);	
+	private static Scanner input = new Scanner(System.in);	
 	private int numPlayers;
-	private static Moves move1, move2;
-	static Pokedex pokemon1, pokemon2;	
-	static BattleEngine battle;	
+	private static Pokedex pokemon1, pokemon2;	
+	private static BattleEngine battle;	
 	
+	/** CONSTRUCTOR **/
 	public Battle(int numPlayers) {
 		
 		// prevent errors upon startup by setting numPlayers to either 1 or 2
@@ -26,6 +26,7 @@ public class Battle {
 
 		this.numPlayers = numPlayers;
 	}
+	/** END CONSTRUCTOR **/
 	
 	/** MAIN MENU METHOD **/
 	public void start() {		
@@ -38,7 +39,7 @@ public class Battle {
 	/** SELECT POKEMON METHOD **/
 	private void selectPokemon() {
 		
-		// lambda method to get pokemon selection
+		/** LAMBDA METHOD TO GET POKEMON SELECTION **/
 		SelectionGrabber getInput = (trainerNum) -> {
 			
 			System.out.println("TRAINER " + trainerNum + ", PLEASE SELECT YOUR POKEMON:");
@@ -63,6 +64,7 @@ public class Battle {
 				}
 			}
 		};
+		/** END LAMBDA METHOD **/
 		
 		// assign fighter to pokemon found at given index
 		pokemon1 = Pokedex.getPokemon(getInput.get(1) - 1);	
@@ -83,18 +85,24 @@ public class Battle {
 	}
 	/** END SELECT POKEMON METHOD **/
 		
+	/** SELECT MOVE METHOD **/
 	private void selectMove() {
+		
+		Moves move1, move2;
 		
 		while (true) {
 			
 			clearContent();
 			
+			// 1 player mode
 			if (numPlayers == 1) {
 				
-				move1 = getMove(pokemon1);
-				move2 = battle.cpuSelectMove();
-				battle.move(move1, move2);
+				displayHP();
+				move1 = displayMoves(1);
+				move2 = battle.cpuSelectMove();				
+				clearContent();
 				
+				battle.move(move1, move2);				
 				clearContent();
 				
 				if (battle.getWinner() == 1) {
@@ -105,15 +113,20 @@ public class Battle {
 					announceWinner(2, battle.getMoney());		
 					return;
 				}
-			}					
+			}				
+			// 2 player mode
 			else if (numPlayers == 2) {
 				
-				move1 = getMove(pokemon1);		
-				
+				displayHP();
+				move1 = displayMoves(1);					
 				clearContent();
-				move2 = getMove(pokemon2);	
 				
-				battle.move(move1, move2);
+				displayHP();
+				move2 = displayMoves(2);	
+				clearContent();
+				
+				battle.move(move1, move2);				
+				clearContent();
 				
 				if (battle.getWinner() == 1) {
 					announceWinner(1, battle.getMoney());						
@@ -130,10 +143,42 @@ public class Battle {
 			}		
 		}
 	}
+	/** END SELECT MOVE METHOD **/
 	
-	private Moves getMove(Pokedex fighter) {
+	/** DISPLAY HP METHOD **/
+	private void displayHP() {
 		
-		displayHP();
+		System.out.print("\nTRAINER 1: " + pokemon1.getName() + " HP:");
+		
+		for (int i = 0; i < pokemon1.getHP(); i++) {
+			if (i % 50 == 0)
+				System.out.println();
+			
+			System.out.print("*");
+		}
+		
+		System.out.print("\nTRAINER 2: " + pokemon2.getName() + " HP:");
+		
+		for (int i = 0; i < pokemon2.getHP(); i++) {
+			if (i % 50 == 0)
+				System.out.println();
+			
+			System.out.print("*");
+		}
+		
+		System.out.println("\n");
+	}
+	/** END DISPLAY HP METHOD **/
+	
+	/** DISPLAY MOVES METHOD **/
+	private Moves displayMoves(int num) {
+					
+		Pokedex fighter;
+		
+		if (num == 1) 
+			fighter = pokemon1;
+		else 
+			fighter = pokemon2;
 		
 		System.out.println("What will " + fighter.getName() + " do?\n");
 		
@@ -167,37 +212,10 @@ public class Battle {
 			}
 		}
 	}
-	
-	/** DISPLAY HP METHOD **/
-	private void displayHP() {
-		
-		System.out.print("\nTRAINER 1: " + pokemon1.getName() + " HP:");
-		
-		for (int i = 0; i < pokemon1.getHP(); i++) {
-			if (i % 60 == 0)
-				System.out.println();
-			
-			System.out.print("*");
-		}
-		
-		System.out.print("\nTRAINER 2: " + pokemon2.getName() + " HP:");
-		
-		for (int i = 0; i < pokemon2.getHP(); i++) {
-			if (i % 60 == 0)
-				System.out.println();
-			
-			System.out.print("*");
-		}
-		
-		System.out.println("\n");
-	}
-	/** END DISPLAY HP METHOD **/
+	/** END DISPLAY MOVE METHOD **/
 	
 	/** GET MOVE METHOD **/
-	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {
-		
-		clearContent();
-		
+	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {		
 		// if move has pp
 		if (moveSet.get(choice - 1).getpp() > 0) { return moveSet.get(choice - 1); }
 		else { System.out.println("This move is out of PP and cannot be used!"); return null; }
@@ -205,11 +223,13 @@ public class Battle {
 	}
 	/** END GET MOVE METHOD **/
 	
-	private void announceWinner(int winner, int money) {
+	/** ANNOUNCE WINNER METHOD **/
+	private void announceWinner(int winner, int money) {		
 		SoundCard.play("//in-battle//in-battle-victory");
 		System.out.println("Player defeated, Pokemon Trainer " + winner + "!");
 		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
 	}
+	/** END ANNOUNCE WINNER METHOD **/
 
 	/** CLEAR SCREEN METHOD **/	
 	private static void clearContent() {		
@@ -224,10 +244,5 @@ public class Battle {
 @FunctionalInterface
 interface SelectionGrabber {
 	public int get(int trainerNum);
-}
-
-@FunctionalInterface
-interface MoveGrabber {
-	public Moves get(Pokedex fighter);
 }
 /*** END LAMBDA INTERFACE ***/

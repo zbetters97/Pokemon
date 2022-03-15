@@ -52,6 +52,11 @@
  * 		-Added more comments
  * 		-Added option select battle music before start
  * 		-Modified health bar UI
+ * 03/14/2022:
+ * 		-Added more music options
+ * 		-Modified damage formula
+ * 		-Modified exp formula
+ * 		-Cleaned up coding to be more concise
  */
 
 package application;

@@ -98,7 +98,9 @@ public class MainMenu {
 				+ "[7] HG/SS: GYM (JOHTO)\n"
 				+ "[8] HG/SS: GYM (KANTO)\n"
 				+ "[9] HG/SS: RED\n\n"
-				+ "[10] D/P: DIALGA\n"
+				+ "[10] D/P: DIALGA\n\n"
+				+ "[11] NONE"
+				
 		);
 		
 		while (true) {
@@ -117,6 +119,8 @@ public class MainMenu {
 					System.out.println("Turning off..."); 
 					System.exit(0);
 				}
+				else if (choice == musicList.size() + 1)
+					return;
 				else
 					System.out.println("ERROR! Input must be a valid selection!");
 			}

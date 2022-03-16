@@ -46,7 +46,7 @@ public class Battle {
 			
 			int counter = 0;
 			for (Pokedex p : Pokedex.getPokedex())
-				System.out.println("[" + ++counter + "] " + p.getName());
+				System.out.println("[" + ++counter + "] " + p.getName() + " (LVL: " + p.getLevel() + ")");
 			
 			while (true) {				
 				try { 
@@ -106,11 +106,11 @@ public class Battle {
 				clearContent();
 				
 				if (battle.getWinner() == 1) {
-					announceWinner(1, 2, battle.getMoney());							
+					announceWinner("1", "2", battle.getMoney());							
 					return;
 				}
 				else if (battle.getWinner() == 2) {
-					announceWinner(2, 1, battle.getMoney());		
+					announceWinner("2", "1", battle.getMoney());		
 					return;
 				}
 			}				
@@ -129,11 +129,11 @@ public class Battle {
 				clearContent();
 				
 				if (battle.getWinner() == 1) {
-					announceWinner(1, 2, battle.getMoney());						
+					announceWinner("1", "2", battle.getMoney());						
 					return;
 				}
 				else if (battle.getWinner() == 2) {								
-					announceWinner(2, 1, battle.getMoney());	
+					announceWinner("2", "1", battle.getMoney());	
 					return;
 				}
 			}
@@ -147,8 +147,9 @@ public class Battle {
 	
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
-		
-		System.out.print("\nTRAINER 1: " + pokemon1.getName() + " HP:");
+						
+		System.out.print("\nTRAINER 1: " + pokemon1.getName() + 
+				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]:");
 		
 		for (int i = 0; i < pokemon1.getHP(); i++) {
 			if (i % 50 == 0)
@@ -157,7 +158,8 @@ public class Battle {
 			System.out.print("*");
 		}
 		
-		System.out.print("\nTRAINER 2: " + pokemon2.getName() + " HP:");
+		System.out.print("\nTRAINER 2: " + pokemon2.getName() + 
+				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]:");
 		
 		for (int i = 0; i < pokemon2.getHP(); i++) {
 			if (i % 50 == 0)
@@ -187,8 +189,10 @@ public class Battle {
 			int counter = 0;
 			
 			// display all moves				
-			for (Moves m : fighter.getMoveSet())
-				System.out.println("[" + ++counter + "] " + m.getName());
+			for (Moves m : fighter.getMoveSet()) {
+				System.out.println("[" + ++counter + "] " + m.getName() + 
+						" (PP: " + m.getpp() + ", PWR: " + m.getPower() + ", ACC: " + m.getAccuracy() + ")");
+			}			
 			System.out.println("[" + ++counter + "] RUN");
 			
 			try { 
@@ -222,14 +226,6 @@ public class Battle {
 		
 	}
 	/** END GET MOVE METHOD **/
-	
-	/** ANNOUNCE WINNER METHOD **/
-	private void announceWinner(int winner, int loser, int money) {		
-		SoundCard.play("//in-battle//in-battle-victory");
-		System.out.println("Player defeated, Pokemon Trainer " + loser + "!");
-		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
-	}
-	/** END ANNOUNCE WINNER METHOD **/
 	
 	/** ANNOUNCE WINNER METHOD **/
 	private void announceWinner(String winner, String loser, int money) {		

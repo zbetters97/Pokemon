@@ -27,14 +27,15 @@ public enum Pokedex implements PokedexInterface {
 	RAICHU ("Raichu", TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3),
 	ABRA ("Abra", TypeEngine.psychic, 5, 25, 20, 15, 105, 55, 90, 16, 62, 1),
 	KADABRA ("Kadabra", TypeEngine.psychic, 16, 40, 35, 30, 120, 70, 105, 36, 140, 2),
-	ALAKAZAM ("Alakazam", TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3);
+	ALAKAZAM ("Alakazam", TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3),
+	GEODUDE ("Geodude", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1);
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
 	protected TypeEngine type;
 	private List<TypeEngine> types;
-	private int level, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
+	private int level, bhp, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
 	public boolean isAlive;
 	/** END INITIALIZE VALUES **/
 	
@@ -51,14 +52,17 @@ public enum Pokedex implements PokedexInterface {
 		this.name = name; this.type = type; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
+		this.bhp = this.hp;
 		
 		Calculate getStat = (stat, IV, EV, lev) -> {
 			return (int)(Math.floor(0.01 * (2 * stat + IV + Math.floor(EV / 4)) * lev)) + 5;
 		};
 		
 		this.speed = getStat.compute(speed, iv, ev, level);
-		this.attack = getStat.compute(attack, iv, ev, level); this.defense = getStat.compute(defense, iv, ev, level);		
-		this.spAttack = getStat.compute(spAttack, iv, ev, level); this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		this.attack = getStat.compute(attack, iv, ev, level); 
+		this.defense = getStat.compute(defense, iv, ev, level);		
+		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
+		this.spDefense = getStat.compute(spDefense, iv, ev, level);
 		
 		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.types = null;		
 		this.isAlive = true;	
@@ -71,6 +75,7 @@ public enum Pokedex implements PokedexInterface {
 		this.name = name; this.types = types; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
+		this.bhp = this.hp;
 		
 		Calculate getStat = (stat, IV, EV, lev) -> {
 			return (int)(Math.floor(0.01 * (2 * stat + IV + Math.floor(EV / 4)) * lev)) + 5;
@@ -104,9 +109,8 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONCLAW, Moves.DRAGONBREATH, Moves.FLAMETHROWER,
         	Moves.FLAREBLITZ));
 		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN));
-        pokeMap.put(WARTORTLE, Arrays.asList(Moves.SHELLSMASH, Moves.QUICKATTACK, Moves.WATERGUN,
-        		Moves.WATERPULSE));
-        pokeMap.put(BLASTOISE, Arrays.asList(Moves.SHELLSMASH, Moves.AQUATAIL, 
+        pokeMap.put(WARTORTLE, Arrays.asList(Moves.QUICKATTACK, Moves.WATERGUN, Moves.WATERPULSE));
+        pokeMap.put(BLASTOISE, Arrays.asList(Moves.FLASHCANNON, Moves.AQUATAIL, 
         		Moves.WATERPULSE, Moves.HYDROPUMP));
         pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERSHOCK));
         pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.THUNDERPUNCH, Moves.SLAM, 
@@ -114,7 +118,8 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(ABRA, Arrays.asList(Moves.TELEPORT));
         pokeMap.put(KADABRA, Arrays.asList(Moves.TELEPORT, Moves.CONFUSION, Moves.PSYBEAM));
         pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
-        		Moves.PSYBEAM));        
+        		Moves.PSYBEAM));     
+        pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT));
         
         // if found in map, add each move to passed in pokemon object
         for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {
@@ -219,6 +224,9 @@ public enum Pokedex implements PokedexInterface {
 
 	public int getHP() { return hp; }
 	public void setHP(int hp) {	this.hp = hp; }
+	
+	public int getBHP() { return bhp; }
+	public void setBHP(int bhp) {	this.bhp = bhp; }
 
 	public int getSpeed() { return speed; }
 	public void setSpeed(int speed) { this.speed = speed; }

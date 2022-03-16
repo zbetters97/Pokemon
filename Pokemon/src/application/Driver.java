@@ -59,8 +59,12 @@
  * 		-Cleaned up coding to be more concise
  * 03/15/2022:
  * 		-Patched misc errors
- * 		-Added Abra, Kadabra, and Alakazam (with corresponding moves)
+ * 		-Added Abra, Kadabra, Alakazam and Geodude (with corresponding moves)
  * 		-Added code to prepare for custom name input
+ * 		-Added move type parameter (Physical, Special, Status) to move constructor
+ * 		-Modified damage formula to utilize the move type variable
+ * 		-Added option to select no music
+ * 		-Added base HP stat to Pokedex for tracking total HP
  */
 
 package application;

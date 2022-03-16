@@ -192,25 +192,33 @@ public class BattleEngine {
 					if (crit == 1.5) { System.out.println("A critical hit!"); }
 									
 					// calculate damage dealt
-					int damageDealt = calculateDamage(numTurn, move, crit, false);								
-					int health = dealDamage(damageDealt, target);
+					int damageDealt = calculateDamage(numTurn, move, crit, false);
 					
-					System.out.println(target.getName() + " took " + damageDealt + " damage!");
-					Sleeper.pause(1700);
-					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
-					
-					// pokemon fainted
-					if (health == 0) {
-						int xp = setWin(numTurn, damageDealt);	
-						
-						System.out.println(target.getName() + " fainted!");		
-						Sleeper.pause(2000);
-						
-						System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
-						Sleeper.pause(2000);						
+					// no damage dealt
+					if (damageDealt == 0) {
+						System.out.println("It had no effect!");
+						Sleeper.pause(1700);
 						System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 					}
+					else {
+						int health = dealDamage(damageDealt, target);
 						
+						System.out.println(target.getName() + " took " + damageDealt + " damage!");
+						Sleeper.pause(1700);
+						System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						
+						// pokemon fainted
+						if (health == 0) {
+							int xp = setWin(numTurn, damageDealt);	
+							
+							System.out.println(target.getName() + " fainted!");		
+							Sleeper.pause(2000);
+							
+							System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
+							Sleeper.pause(2000);						
+							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						}
+					}
 				}						
 				// attack missed
 				else {
@@ -248,44 +256,40 @@ public class BattleEngine {
 		double level = attacker.getLevel();
 		double power = move.getPower();
 		
-		double A, D, type = 1.0;
-		
-		if (attacker.getTypes() != null) {			
-			for (TypeEngine t : attacker.getTypes()) {
-				
-				if (t.equals(move.getType())) 
-					A = attacker.getSpAttack();
-			}
-			A = attacker.getAttack();
+		double A = 1.0; double D = 1.0; 
+		double type = 1.0;
+
+		if (move.getMType().equals("Special")) {
+			A = attacker.getSpAttack();
+			D = target.getSpDefense();
 		}
-		else
-			A = move.getType().equals(attacker.getType()) ? attacker.getSpAttack() : attacker.getAttack();
+		else if (move.getMType().equals("Physical")) {
+			A = attacker.getAttack();
+			D = target.getDefense();
+		}
 		
-		if (target.getTypes() != null) {			
+		// if target has more than 1 type
+		if (target.getTypes() != null) {	
+			
+			// cycle through each type of target
 			for (TypeEngine t : target.getTypes()) {
 				
-				if (t.equals(move.getType()))
-					D = target.getSpAttack(); 
-			}
-			D = target.getDefense();
-			
-			for (TypeEngine t : target.getTypes()) {
+				// if super effective
 				if (effectiveness(move.getType(), t) == 2.0) {
-					type = effectiveness(move.getType(), t);
+					type = 2.0;
 					break;
 				}
 				type = effectiveness(move.getType(), t);
 			}
 		}
-		else {
-			D = move.getType().equals(target.getType()) ? target.getSpDefense() : target.getDefense();			
+		else {		
 			type = effectiveness(move.getType(), target.getType());
 		}
 		
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int)((((((
-				(2 * level) / 5) + 2) * power * (A / D)) / 50) + 2) * crit * type);
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * type);
 		
+		// don't play sound if cpu is calling method
 		if (cpu) return damageDealt;
 		
 		SoundCard.play(type);

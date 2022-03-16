@@ -28,7 +28,10 @@ public enum Pokedex implements PokedexInterface {
 	ABRA ("Abra", TypeEngine.psychic, 5, 25, 20, 15, 105, 55, 90, 16, 62, 1),
 	KADABRA ("Kadabra", TypeEngine.psychic, 16, 40, 35, 30, 120, 70, 105, 36, 140, 2),
 	ALAKAZAM ("Alakazam", TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3),
-	GEODUDE ("Geodude", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1);
+	GEODUDE ("Geodude", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1),
+	GASTLY ("Gastly", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 5, 30, 35, 30, 100, 35, 80, 25, 62, 1),
+	HAUNTER ("Haunter", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 25, 45, 50, 45, 115, 55, 96, 40, 142, 2),
+	GENGAR ("Gengar", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3);
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
@@ -120,6 +123,10 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
         		Moves.PSYBEAM));     
         pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT));
+        pokeMap.put(GASTLY, Arrays.asList(Moves.LICK, Moves.PAYBACK));   
+        pokeMap.put(HAUNTER, Arrays.asList(Moves.PAYBACK, Moves.HEX, Moves.DARKPULSE));   
+        pokeMap.put(GENGAR, Arrays.asList(Moves.HEX, Moves.DARKPULSE, Moves.SHADOWBALL, 
+        		Moves.SHADOWPUNCH)); 
         
         // if found in map, add each move to passed in pokemon object
         for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {

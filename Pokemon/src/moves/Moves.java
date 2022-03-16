@@ -33,6 +33,12 @@ public enum Moves {
 	PSYCHIC ("Psychic", "Special", TypeEngine.psychic, 10, 135, 100),
 	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90),
 	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.ground, 15, 75, 90),
+	LICK ("Lick", "Physical", TypeEngine.ghost, 30, 45, 100),
+	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100),
+	HEX ("Hex", "Special", TypeEngine.ghost, 10, 95, 100),
+	SHADOWPUNCH ("Shadow Punch", "Physical", TypeEngine.ghost, 20, 90, -1),
+	DARKPULSE ("Dark Pulse", "Special", TypeEngine.dark, 15, 80, 100),
+	SHADOWBALL ("Shadow Ball", "Special", TypeEngine.ghost, 15, 120, 100),
 	FLASHCANNON ("Flash Cannon", "Special", TypeEngine.steel, 10, 80, 100),
 	DRAGONBREATH ("Dragon Breath", "Special", TypeEngine.dragon, 20, 60, 100),
 	DRAGONCLAW ("Dragon Claw", "Physical", TypeEngine.dragon, 15, 80, 100);

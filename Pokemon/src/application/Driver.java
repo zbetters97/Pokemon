@@ -65,6 +65,8 @@
  * 		-Modified damage formula to utilize the move type variable
  * 		-Added option to select no music
  * 		-Added base HP stat to Pokedex for tracking total HP
+ * 03/16/2022:
+ * 		-Added Gastly, Haunter, and Gengar
  */
 
 package application;

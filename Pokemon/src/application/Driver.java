@@ -67,6 +67,10 @@
  * 		-Added base HP stat to Pokedex for tracking total HP
  * 03/16/2022:
  * 		-Added Gastly, Haunter, and Gengar
+ * 03/19/2022:
+ * 		-Added status effects (paralyze, poison, confuse, burn, freeze)
+ * 		-Added limited functionality to paralyze, poison, and confuse
+ * 		-Added Thunder Wave, Poison Powder, and Confuse Ray
  */
 
 package application;

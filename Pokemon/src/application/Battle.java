@@ -149,7 +149,10 @@ public class Battle {
 	private void displayHP() {
 						
 		System.out.print("\nTRAINER 1: " + pokemon1.getName() + 
-				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]:");
+				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]: ");
+		
+		if (pokemon1.getStatus() != null)
+			System.out.println(pokemon1.getStatus().getName());
 		
 		for (int i = 0; i < pokemon1.getHP(); i++) {
 			if (i % 50 == 0)
@@ -159,7 +162,10 @@ public class Battle {
 		}
 		
 		System.out.print("\nTRAINER 2: " + pokemon2.getName() + 
-				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]:");
+				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]: ");
+		
+		if (pokemon2.getStatus() != null)
+			System.out.println(pokemon2.getStatus().getName());
 		
 		for (int i = 0; i < pokemon2.getHP(); i++) {
 			if (i % 50 == 0)

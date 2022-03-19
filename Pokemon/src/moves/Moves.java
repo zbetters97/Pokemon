@@ -1,9 +1,10 @@
 package moves;
-
+import status.StatusEngine;
 import types.TypeEngine;
 
 public enum Moves {
 	
+	CONFUSE ("Confuse", "Physical", TypeEngine.normal, 1, 40, -1),
 	TACKLE ("Tackle", "Physical", TypeEngine.normal, 35, 40, 100),
 	QUICKATTACK ("Quick Attack", "Physical", TypeEngine.normal, 30, 40, 100, true),
 	SCRATCH ("Scratch", "Physical", TypeEngine.normal, 35, 40, 100),
@@ -15,6 +16,7 @@ public enum Moves {
 	RAZORLEAF ("Razor Leaf", "Physical", TypeEngine.grass, 25, 80, 95),
 	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100),
 	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100),
+	POISONPOWDER ("Poison Powder", "Status", TypeEngine.poison, StatusEngine.poison, 45, 75),
 	EMBER ("Ember", "Special", TypeEngine.fire, 25, 60, 100),
 	FIREFANG ("Fire Fang", "Physical", TypeEngine.fire, 15, 95, 95),
 	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, 15, 135, 100),
@@ -23,6 +25,7 @@ public enum Moves {
 	WATERPULSE ("Water Pulse", "Special", TypeEngine.water, 20, 90, 100),
 	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90),
 	HYDROPUMP ("Hydro Pump", "Special", TypeEngine.water, 5, 165, 80),
+	THUNDERWAVE ("Thunder Wave", "Status", TypeEngine.electric, StatusEngine.paralyze, 20, 90),
 	THUNDERSHOCK ("Thunder Shock", "Special", TypeEngine.electric, 40, 60, 100),
 	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, 15, 110, 100),
 	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, 15, 135, 100),
@@ -33,6 +36,7 @@ public enum Moves {
 	PSYCHIC ("Psychic", "Special", TypeEngine.psychic, 10, 135, 100),
 	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90),
 	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.ground, 15, 75, 90),
+	CONFUSERAY ("Confuse Ray", "Status", TypeEngine.ghost, StatusEngine.confuse, 10, 100),
 	LICK ("Lick", "Physical", TypeEngine.ghost, 30, 45, 100),
 	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100),
 	HEX ("Hex", "Special", TypeEngine.ghost, 10, 95, 100),
@@ -46,6 +50,7 @@ public enum Moves {
 	private String name;
 	private String mtype;
 	private TypeEngine type;
+	private StatusEngine effect;
 	
 	private int pp;
 	private int accuracy;
@@ -70,6 +75,15 @@ public enum Moves {
 		this.accuracy = accuracy;
 		this.power = power;
 	}
+	
+	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.effect = effect;
+		this.pp = pp;
+		this.accuracy = accuracy;
+	}
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
@@ -91,4 +105,8 @@ public enum Moves {
 	
 	public boolean getGoFirst() { return goFirst; }
 	public void setGoFirst(boolean goFirst) { this.goFirst = goFirst; }
+
+	public StatusEngine getEffect() { return effect; }
+
+	public void setEffect(StatusEngine effect) { this.effect = effect; }
 }

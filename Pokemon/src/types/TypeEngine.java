@@ -158,7 +158,7 @@ public class TypeEngine implements TypeInterface {
 				TypeEngine.Type.POISON, TypeEngine.Type.STEEL)), 2.0);
 	}
 	
-	public ArrayList<TypeEngine> getTypeEngine(String type) {		
+	public ArrayList<TypeEngine> getTypeEngine() {		
 		return types;
 	}
     

@@ -42,69 +42,166 @@ public class BattleEngine {
 	/** MOVE METHOD **/
 	public void move(Moves move1, Moves move2) {
 				
-		// check if good to move
-		if (canTurn(1)) {
+		// both pokemon can turn
+		if (pokemon1.isAlive && pokemon2.isAlive) {
+				
+			// returns 1 if pokemon1 goes first, 2 if pokemon2
+			int numTurn = getTurn(move1, move2);
 			
-			if (canTurn(2)) {
+			// pokemon1 move
+			if (numTurn == 1) {
 				
-				// returns 1 if pokemon1 goes first, 2 if pokemon2
-				int numTurn = getTurn(move1, move2);
-				
-				// pokemon1 move
-				if (numTurn == 1) {
+				// pokemon1 has no status effects
+				if (canTurn(1)) 
 					startMove(1, move1);
+				
+				// pokemon2 becomes attacker if not fainted
+				if (pokemon2.isAlive) {
+					if (canTurn(2))
+						startMove(2, move2);					
 					
-					// pokemon2 becomes attacker if not fainted
-					if (canTurn(1))
-						startMove(2, move2);
+					isPoisoned(pokemon1);
+					isPoisoned(pokemon2);					
 				}
-				// pokemon2 move
-				else if (numTurn == 2) {
+				else {
+					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
+					Sleeper.pause(2000);
+				}					
+			}
+			// pokemon2 move
+			else if (numTurn == 2) {
+				
+				// pokemon2 has no status effects
+				if (canTurn(2)) 
 					startMove(2, move2);
-					
-					// pokemon1 becomes attacker if not fainted
+				
+				// pokemon1 becomes attacker if not fainted
+				if (pokemon2.isAlive) {
 					if (canTurn(2))
 						startMove(1, move1);
-				}	
-				else 
-					System.out.println("INTERNAL ERROR! Cannot find next turn!");
-			}
-			else {
-				System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
-				Sleeper.pause(2000);
-			}
-		}
-		else {
-			System.out.println(pokemon1.getName() + " has fainted and cannot battle!");
-			Sleeper.pause(2000);
+					
+					isPoisoned(pokemon1);
+					isPoisoned(pokemon2);	
+				}
+				else {
+					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
+					Sleeper.pause(2000);
+				}
+			}			
+			
 		}
 	}
 	/** END MOVE METHOD **/
 	
+	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
+	private void isPoisoned(Pokedex pokemon) {
+		
+		if (pokemon.getStatus() != null) {
+			
+			if (pokemon.getStatus().getName().equals("PSN")) {
+				
+				int newHP = pokemon.getHP() - (int) (pokemon.getHP() * 0.16);
+				
+				if (newHP < 0) 
+					newHP = 0;
+				
+				pokemon.setHP(newHP);				
+				
+				System.out.println(pokemon.getName() + " is hurt from the poison!");
+				SoundCard.play(-1.0);
+				Sleeper.pause(1700);
+				System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+			}
+		}
+	}
+	
 	/** CAN TURN METHOD **/ 
-	// returns false if either trainer cannot battle //
+	// returns false if given pokemon cannot move due to status //
 	private boolean canTurn(int numTurn) {
 		
-		Pokedex attacker, target;
+		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
 		
-		if (numTurn == 1) { attacker = pokemon1; target = pokemon2; }			
-		else { attacker = pokemon2; target = pokemon1; }
-		
-		// pokemon1 can battle
-		if (attacker.isAlive) {
+		if (attacker.getStatus() != null) {
+							
+			int val = 1;
 			
-			// trainer 2 can battle
-			if (target.isAlive) 
-				return true;			
-			//pokemon2 cannot battle
-			else 				
-				return false;
-		}		
-		//pokemon1 cannot battle
-		else 
-			return false;			
+			// check pokemon status
+			switch (attacker.getStatus().getName()) {
+			
+				case "PRZ":		
+					
+					val = 1 + (int)(Math.random() * ((4 - 1) + 1));
+					if (val == 1) {						
+						System.out.println(attacker.getName() + " is paralyzed and unable to move!");
+						Sleeper.pause(1700);
+						System.out.println(new String(new char[70]).replace("\0", "\r\n"));						
+						return false;
+					} 
+					else { 
+						return true;
+					}				
+					
+				case "SLP":
+					System.out.println(attacker.getName() + " is currently asleep!");
+					Sleeper.pause(1700);
+					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+					return false;	
+					
+				case "FZN":
+					System.out.println(attacker.getName() + " is frozen solid and unable to move!");
+					Sleeper.pause(1700);
+					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+					return false;
+					
+				case "CNF":
+					
+					System.out.println(attacker.getName() + " is confused!");							
+					SoundCard.play(-2.0);
+					Sleeper.pause(1700);
+					
+					val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
+					if (val == 1) {						
+						int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
+						if (newHP < 0) newHP = 0;	
+						
+						attacker.setHP(newHP);
+						
+						System.out.println(attacker.getName() + " hurt itself in confusion!");
+						Sleeper.pause(1700);
+						System.out.println(new String(new char[70]).replace("\0", "\r\n"));						
+						return false;
+					}
+					else {
+						return true;
+					}							
+				default:
+					return true;
+			}
+		}	
+		else {
+			return true;
+		}
 	}
 	/** END GET TURN METHOD **/
+	
+	/** CALCULATE CONFUSION DAMAGE DEALT METHOD **/
+	// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status) //
+	private int calculateConfusionDamage(Pokedex pokemon) {
+		
+		double level = pokemon.getLevel();
+		double power = Moves.CONFUSE.getPower();
+		
+		double A = pokemon.getAttack();
+		double D = pokemon.getDefense();
+				
+		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
+				
+		SoundCard.play(1.0);
+		
+		return damageDealt;
+	}
+	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/
 	
 	/** GET TURN METHOD **/
 	// returns 1 if pokemon1 goes first, 2 if pokemon2 goes first //
@@ -181,9 +278,27 @@ public class BattleEngine {
 	            
 	            // if attack lands
 				if (isHit(move)) {
-					
+															
 					// play move sound
 					SoundCard.play("//moves//" + move.getName(), true);
+					
+					if (move.getMType().equals("Status")) {	
+						
+						if (target.getStatus() == null) {
+							target.setStatus(move.getEffect());						
+							System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");
+							
+							Sleeper.pause(1700);
+							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						}
+						else {
+							System.out.println(target.getName() + " is already " + target.getStatus().getCondition() + "!");
+							
+							Sleeper.pause(1700);
+							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						}
+						return;
+					}
 					
 					// get critical damage (if applicable)
 					double crit = isCritical();			

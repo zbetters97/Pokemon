@@ -109,7 +109,6 @@ public class MainMenu {
 				int choice = input.nextInt(); 
 				
 				if (0 < choice && choice <= musicList.size()) {
-					System.out.println(musicList.size());
 					bgmusic = new SoundCard("\\music\\" + musicList.get(choice - 1));
 					bgmusic.playMusic();
 					return;

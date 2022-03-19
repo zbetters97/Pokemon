@@ -67,13 +67,15 @@ public class SoundCard {
 		
 		// set hit to corresponding path
 		switch (Double.toString(effectiveness)) {
-			case "0.5": hit = "//lib//sounds//in-battle//hit-weak.wav"; break;
-			case "1.0": hit = "//lib//sounds//in-battle//hit-normal.wav"; break;
-			case "2.0": hit = "//lib//sounds//in-battle//hit-super.wav"; break;
+			case "0.5": hit = "hit-weak.wav"; break;
+			case "1.0": hit = "hit-normal.wav"; break;
+			case "2.0": hit = "hit-super.wav"; break;
+			case "-1.0": hit = "poison.wav"; break;
+			case "-2.0": hit = "confused.wav"; break;
 			default: return;
 		}
 		
-		String path = new File("").getAbsolutePath() + hit;		
+		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
         File sound = new File(path);
         
         if (effectiveness == 2.0) 

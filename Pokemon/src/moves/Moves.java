@@ -30,6 +30,7 @@ public enum Moves {
 	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, 15, 110, 100),
 	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, 15, 135, 100),
 	TELEPORT ("Teleport", "Status", TypeEngine.psychic, 20, 0, -1),
+	HYPNOSIS ("Hypnosis", "Status", TypeEngine.psychic, StatusEngine.sleep, 20, 60),
 	CONFUSION ("Confusion", "Special", TypeEngine.psychic, 25, 75, 100),
 	PSYBEAM ("Psybeam", "Special", TypeEngine.psychic, 20, 95, 100),
 	PSYCHOCUT ("Psycho Cut", "Physical", TypeEngine.psychic, 20, 105, 100),

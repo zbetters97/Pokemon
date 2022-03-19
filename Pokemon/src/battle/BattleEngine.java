@@ -16,16 +16,22 @@ import types.TypeEngine;
 public class BattleEngine {
 	
 	Pokedex pokemon1, pokemon2;
+	private int statusCounter1, statusCounter2;
+	private int sleepCounter1, sleepCounter2;
 	private int winningPokemon;
 	
 	/** CONSTRUCTOR **/
 	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
 		this.pokemon1 = pokemon1;
 		this.pokemon2 = pokemon2;
+		
+		statusCounter1 = 0;
+		statusCounter2 = 0;
 	}
 	/** END CONSTRUCTOR **/
 	
-	public void swapPokemon(Pokedex newPokemon, int trainerNum) {
+	/** SWAP POKEMON METHOD **/
+	public void swapPokemon(int trainerNum, Pokedex newPokemon) {
 		
 		if (trainerNum == 1) {
 			if (pokemon1 != null)
@@ -35,33 +41,68 @@ public class BattleEngine {
 			if (pokemon2 != null) 
 				pokemon2 = newPokemon;
 		}		
-		else 
-			System.out.println("INTERNAL ERROR! Cannot swap Pokemon!");
 	}
-
+	/** END SWAP POKEMON METHOD **/
+	
+	/** CPU SELECT MOVE METHOD **/
+	// returns move with max damage //
+	public Moves cpuSelectMove() {
+		
+		Moves bestMove;
+		
+		// holds Map of Move and Damage Points
+		Map<Moves, Integer> moves = new HashMap<>();
+		
+		// for each move in attacker's move set
+		for (Moves move : pokemon2.getMoveSet()) {
+			
+			if (!move.getMType().equals("Status")) {
+				
+				// find damage value of each move
+				int damage = calculateDamage(2, move, 1.0, true);
+				
+				// add move and corresponding damage to list
+				moves.put(move, damage);	
+			}			
+		}
+		
+		if (!moves.isEmpty()) {
+			// find max value in moves list based on value
+			bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
+		}	
+		else {
+			bestMove = pokemon2.getMoveSet().get(0);
+		}
+				
+		return bestMove;
+	}
+	/** END CPU SELECT MOVE METHOD **/
+	
 	/** MOVE METHOD **/
 	public void move(Moves move1, Moves move2) {
 				
-		// both pokemon can turn
+		// if both pokemon are alive
 		if (pokemon1.isAlive && pokemon2.isAlive) {
 				
-			// returns 1 if pokemon1 goes first, 2 if pokemon2
+			// returns 1 if pokemon1 goes first, returns 2 if pokemon2 goes first
 			int numTurn = getTurn(move1, move2);
 			
-			// pokemon1 move
+			// if pokemon1 moves first
 			if (numTurn == 1) {
 				
-				// pokemon1 has no status effects
+				// if pokemon1 has no status effects
 				if (canTurn(1)) 
 					startMove(1, move1);
 				
 				// pokemon2 becomes attacker if not fainted
 				if (pokemon2.isAlive) {
+					
+					// if pokemon2 has no status effects
 					if (canTurn(2))
 						startMove(2, move2);					
 					
-					isPoisoned(pokemon1);
-					isPoisoned(pokemon2);					
+					// check if either pokemon is poisoned
+					isPoisoned();				
 				}
 				else {
 					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
@@ -80,8 +121,7 @@ public class BattleEngine {
 					if (canTurn(2))
 						startMove(1, move1);
 					
-					isPoisoned(pokemon1);
-					isPoisoned(pokemon2);	
+					isPoisoned();
 				}
 				else {
 					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
@@ -93,27 +133,80 @@ public class BattleEngine {
 	}
 	/** END MOVE METHOD **/
 	
-	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
-	private void isPoisoned(Pokedex pokemon) {
+	/**  GET SLEEP METHOD **/
+	private boolean getSleep(int numTurn) {
 		
-		if (pokemon.getStatus() != null) {
-			
-			if (pokemon.getStatus().getName().equals("PSN")) {
-				
-				int newHP = pokemon.getHP() - (int) (pokemon.getHP() * 0.16);
-				
-				if (newHP < 0) 
-					newHP = 0;
-				
-				pokemon.setHP(newHP);				
-				
-				System.out.println(pokemon.getName() + " is hurt from the poison!");
-				SoundCard.play(-1.0);
+		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
+		
+		if (numTurn == 1) {
+			if (sleepCounter1 == 0) {
+				sleepCounter1 = 2 + (int)(Math.random() * ((5 - 2) + 2));
+				statusCounter1++;
+					
+				System.out.println(attacker.getName() + " is fast asleep!");
 				Sleeper.pause(1700);
-				System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+				clearContent();		
+				
+				return false;
+			}
+			else {				
+				if (statusCounter1 >= sleepCounter1) {
+					System.out.println(attacker.getName() + " woke up!");
+					Sleeper.pause(1700);
+					clearContent();	
+					
+					statusCounter1 = 0; sleepCounter1 = 0;
+					attacker.setStatus(null);
+					
+					return true;
+				}
+				else {
+					statusCounter1++;
+					
+					System.out.println(attacker.getName() + " is fast asleep!");
+					Sleeper.pause(1700);
+					clearContent();	
+					
+					return false;
+				}
+			}
+		}
+		
+		else {
+			if (sleepCounter2 == 0) {
+				sleepCounter2 = 2 + (int)(Math.random() * ((5 - 2) + 2));
+				statusCounter2++;
+					
+				System.out.println(attacker.getName() + " is fast asleep!");
+				Sleeper.pause(1700);
+				clearContent();		
+				
+				return false;
+			}
+			else {						
+				if (statusCounter2 >= sleepCounter2) {
+					System.out.println(attacker.getName() + " woke up!");
+					Sleeper.pause(1700);
+					clearContent();	
+					
+					statusCounter2 = 0; sleepCounter2 = 0;
+					attacker.setStatus(null);
+					
+					return true;
+				}
+				else {
+					statusCounter2++;
+					
+					System.out.println(attacker.getName() + " is fast asleep!");
+					Sleeper.pause(1700);
+					clearContent();											
+					
+					return false;
+				}
 			}
 		}
 	}
+	/**  END GET SLEEP METHOD **/
 	
 	/** CAN TURN METHOD **/ 
 	// returns false if given pokemon cannot move due to status //
@@ -134,7 +227,8 @@ public class BattleEngine {
 					if (val == 1) {						
 						System.out.println(attacker.getName() + " is paralyzed and unable to move!");
 						Sleeper.pause(1700);
-						System.out.println(new String(new char[70]).replace("\0", "\r\n"));						
+						clearContent();
+						
 						return false;
 					} 
 					else { 
@@ -142,15 +236,13 @@ public class BattleEngine {
 					}				
 					
 				case "SLP":
-					System.out.println(attacker.getName() + " is currently asleep!");
-					Sleeper.pause(1700);
-					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
-					return false;	
+					return getSleep(numTurn);					
 					
 				case "FZN":
 					System.out.println(attacker.getName() + " is frozen solid and unable to move!");
 					Sleeper.pause(1700);
-					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+					clearContent();
+					
 					return false;
 					
 				case "CNF":
@@ -168,7 +260,8 @@ public class BattleEngine {
 						
 						System.out.println(attacker.getName() + " hurt itself in confusion!");
 						Sleeper.pause(1700);
-						System.out.println(new String(new char[70]).replace("\0", "\r\n"));						
+						clearContent();
+						
 						return false;
 					}
 					else {
@@ -182,26 +275,7 @@ public class BattleEngine {
 			return true;
 		}
 	}
-	/** END GET TURN METHOD **/
-	
-	/** CALCULATE CONFUSION DAMAGE DEALT METHOD **/
-	// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status) //
-	private int calculateConfusionDamage(Pokedex pokemon) {
-		
-		double level = pokemon.getLevel();
-		double power = Moves.CONFUSE.getPower();
-		
-		double A = pokemon.getAttack();
-		double D = pokemon.getDefense();
-				
-		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
-				
-		SoundCard.play(1.0);
-		
-		return damageDealt;
-	}
-	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/
+	/** END CAN TURN METHOD **/	
 	
 	/** GET TURN METHOD **/
 	// returns 1 if pokemon1 goes first, 2 if pokemon2 goes first //
@@ -231,29 +305,52 @@ public class BattleEngine {
 	}
 	/** END GET TURN METHOD **/
 	
-	/** CPU SELECT MOVE METHOD **/
-	// returns move with max damage //
-	public Moves cpuSelectMove() {
+	/** CALCULATE CONFUSION DAMAGE DEALT METHOD **/
+	// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status) //
+	private int calculateConfusionDamage(Pokedex pokemon) {
 		
-		// holds Map of Move and Damage Points
-		Map<Moves, Integer> moves = new HashMap<>();
+		double level = pokemon.getLevel();
+		double power = Moves.CONFUSE.getPower();
 		
-		// for each move in attacker's move set
-		for (Moves move : pokemon2.getMoveSet()) {
-			
-			// find damage value of each move
-			int damage = calculateDamage(2, move, 1.0, true);
-			
-			// add move and corresponding damage to list
-			moves.put(move, damage);
-		}
-		
-		// find max value in moves list based on value
-		Moves bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 
+		double A = pokemon.getAttack();
+		double D = pokemon.getDefense();
 				
-		return bestMove;
+		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
+				
+		SoundCard.play(1.0);
+		
+		return damageDealt;
 	}
-	/** END CPU SELECT MOVE METHOD **/
+	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/
+	
+	/** IS POISONED METHOD **/
+	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
+	private void isPoisoned() {
+		
+		Poison poison = (Pokedex p) -> {
+			
+			if (p.getStatus() != null) {				
+				
+				if (p.getStatus().getName().equals("PSN")) {	
+					
+					int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
+					if (newHP < 0) newHP = 0;
+					
+					p.setHP(newHP);				
+					
+					System.out.println(p.getName() + " is hurt from the poison!");
+					SoundCard.play(-1.0);
+					Sleeper.pause(1700);
+					clearContent();
+				}
+			}
+		};
+		
+		poison.dealDamage(pokemon1);
+		poison.dealDamage(pokemon2);
+	}
+	/** END IS POISONED METHOD **/
 	
 	/** START MOVE METHOD **/
 	private void startMove(int numTurn, Moves givenMove) {
@@ -289,13 +386,13 @@ public class BattleEngine {
 							System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");
 							
 							Sleeper.pause(1700);
-							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+							clearContent();
 						}
 						else {
 							System.out.println(target.getName() + " is already " + target.getStatus().getCondition() + "!");
 							
 							Sleeper.pause(1700);
-							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+							clearContent();
 						}
 						return;
 					}
@@ -313,14 +410,14 @@ public class BattleEngine {
 					if (damageDealt == 0) {
 						System.out.println("It had no effect!");
 						Sleeper.pause(1700);
-						System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						clearContent();
 					}
 					else {
 						int health = dealDamage(damageDealt, target);
 						
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
 						Sleeper.pause(1700);
-						System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+						clearContent();
 						
 						// pokemon fainted
 						if (health == 0) {
@@ -331,7 +428,7 @@ public class BattleEngine {
 							
 							System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
 							Sleeper.pause(2000);						
-							System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+							clearContent();
 						}
 					}
 				}						
@@ -339,7 +436,7 @@ public class BattleEngine {
 				else {
 					System.out.println("The attack missed!");
 					Sleeper.pause(2000);
-					System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+					clearContent();
 				}		
 			}	
 		}
@@ -520,5 +617,21 @@ public class BattleEngine {
 		return money;
 	}
 	/** END GET MONEY METHOD **/
+	
+	/** CLEAR SCREEN METHOD **/	
+	private static void clearContent() {		
+		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+	}
+	/** END CLEAR SCREEN METHOD **/
 }
 /*** END BATTLE ENGINE CLASS ***/
+
+@FunctionalInterface
+interface Poison {
+	public void dealDamage(Pokedex pokemon);
+}
+
+@FunctionalInterface
+interface Sleep {
+	public boolean trackSleep(int counter, int limit);
+}

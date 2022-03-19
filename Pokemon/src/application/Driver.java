@@ -70,7 +70,7 @@
  * 03/19/2022:
  * 		-Added status effects (paralyze, poison, confuse, burn, freeze)
  * 		-Added limited functionality to paralyze, poison, and confuse
- * 		-Added Thunder Wave, Poison Powder, and Confuse Ray
+ * 		-Added Thunder Wave, Poison Powder, Confuse Ray, and Hypnosis
  */
 
 package application;

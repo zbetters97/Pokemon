@@ -494,7 +494,7 @@ public class BattleEngine {
 	}
 	/** END EFFECTIVENESS METHOD **/
 
-	/** IS POISONED METHOD **/
+	/** STATUS DAMAGE METHOD **/
 	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
 	private void statusDamage() {
 		
@@ -525,7 +525,7 @@ public class BattleEngine {
 		condition.dealDamage(pokemon1);
 		condition.dealDamage(pokemon2);
 	}
-	/** END IS POISONED METHOD **/
+	/** END STATUS DAMAGE METHOD **/
 	
 	/** SET WIN METHOD **/
 	private int setWin(int winner, int damageDealt) {

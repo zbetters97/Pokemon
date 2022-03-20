@@ -42,6 +42,8 @@ public enum Pokedex implements PokedexInterface {
 	private int level, bhp, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
 	private StatusEngine status;
 	public boolean isAlive;
+
+	private int statusCounter, statusLimit;
 	/** END INITIALIZE VALUES **/
 	
 	// initialize arraylist to hold moves of given pokemon
@@ -73,6 +75,9 @@ public enum Pokedex implements PokedexInterface {
 		this.status = null;
 		this.isAlive = true;	
 		
+		this.statusCounter = 0;
+		this.statusLimit = 0;
+		
 		moveSet = new ArrayList<>();
 	}
 	Pokedex(String name, List<TypeEngine> types, int level, int hp, int attack, int defense, 
@@ -95,6 +100,9 @@ public enum Pokedex implements PokedexInterface {
 		this.status = null;
 		this.isAlive = true;	
 		
+		this.statusCounter = 0;
+		this.statusLimit = 0;
+		
 		moveSet = new ArrayList<>();		
 	}
 	/** END CONSTRUCTOR **/
@@ -106,8 +114,9 @@ public enum Pokedex implements PokedexInterface {
 		Map<Pokedex, List<Moves>> pokeMap = new HashMap<>();
 		
 		// set default moves for each pokemon
-        pokeMap.put(BULBASAUR, Arrays.asList(Moves.TACKLE, Moves.VINEWHIP, Moves.POISONPOWDER));
-        pokeMap.put(IVYSAUR, Arrays.asList(Moves.TACKLE, Moves.VINEWHIP, Moves.RAZORLEAF));
+        pokeMap.put(BULBASAUR, Arrays.asList(Moves.TACKLE, Moves.POISONPOWDER, Moves.VINEWHIP));
+        pokeMap.put(IVYSAUR, Arrays.asList(Moves.TACKLE, Moves.POISONPOWDER, Moves.VINEWHIP, 
+        		Moves.RAZORLEAF));
 		pokeMap.put(VENUSAUR, Arrays.asList(Moves.TAKEDOWN, Moves.DOUBLEEDGE, Moves.PETALBLIZZARD,
 				Moves.SOLARBEAM));
         pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.QUICKATTACK, Moves.EMBER));
@@ -119,17 +128,17 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(WARTORTLE, Arrays.asList(Moves.QUICKATTACK, Moves.WATERGUN, Moves.WATERPULSE));
         pokeMap.put(BLASTOISE, Arrays.asList(Moves.FLASHCANNON, Moves.AQUATAIL, 
         		Moves.WATERPULSE, Moves.HYDROPUMP));
-        pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERSHOCK, Moves.THUNDERWAVE));
-        pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.THUNDERPUNCH, Moves.SLAM, 
+        pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERWAVE, Moves.THUNDERSHOCK));
+        pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.SLAM, Moves.THUNDERPUNCH,  
         		Moves.THUNDERBOLT));        
         pokeMap.put(ABRA, Arrays.asList(Moves.TELEPORT));
         pokeMap.put(KADABRA, Arrays.asList(Moves.TELEPORT, Moves.CONFUSION, Moves.PSYBEAM));
         pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
         		Moves.PSYBEAM));     
         pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT));
-        pokeMap.put(GASTLY, Arrays.asList(Moves.LICK, Moves.PAYBACK, Moves.HYPNOSIS,
-        		Moves.CONFUSERAY));   
-        pokeMap.put(HAUNTER, Arrays.asList(Moves.PAYBACK, Moves.HEX, Moves.DARKPULSE));   
+        pokeMap.put(GASTLY, Arrays.asList(Moves.LICK, Moves.PAYBACK, Moves.HYPNOSIS));   
+        pokeMap.put(HAUNTER, Arrays.asList(Moves.PAYBACK, Moves.HEX, Moves.CONFUSERAY,
+        		Moves.DARKPULSE));   
         pokeMap.put(GENGAR, Arrays.asList(Moves.HEX, Moves.DARKPULSE, Moves.SHADOWBALL, 
         		Moves.SHADOWPUNCH)); 
         
@@ -266,6 +275,12 @@ public enum Pokedex implements PokedexInterface {
 
 	public boolean isAlive() { return isAlive; }
 	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }
+	
+	public int getStatusCounter() { return statusCounter; }
+	public void setStatusCounter(int statusCounter) { this.statusCounter = statusCounter; }
+	
+	public int getStatusLimit() { return statusLimit; }
+	public void setStatusLimit(int statusLimit) { this.statusLimit = statusLimit; }
 	
 	public ArrayList<Moves> getMoveSet() { return moveSet; }
 	public void setMoveSet(ArrayList<Moves> moveSet) { this.moveSet = moveSet; }

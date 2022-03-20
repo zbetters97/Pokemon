@@ -70,8 +70,13 @@ public class SoundCard {
 			case "0.5": hit = "hit-weak.wav"; break;
 			case "1.0": hit = "hit-normal.wav"; break;
 			case "2.0": hit = "hit-super.wav"; break;
-			case "-1.0": hit = "poison.wav"; break;
-			case "-2.0": hit = "confused.wav"; break;
+			case "-1.0": hit = "paralyzed.wav"; break;
+			case "-2.0": hit = "poison.wav"; break;
+			case "-3.0": hit = "confused.wav"; break;
+			case "-4.0": hit = "burned.wav"; break;
+			case "-5.0": hit = "frozen.wav"; break;
+			case "-6.0": hit = "asleep.wav"; break;
+			
 			default: return;
 		}
 		

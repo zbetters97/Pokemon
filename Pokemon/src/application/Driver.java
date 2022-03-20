@@ -71,6 +71,9 @@
  * 		-Added status effects (paralyze, poison, confuse, burn, freeze)
  * 		-Added limited functionality to paralyze, poison, and confuse
  * 		-Added Thunder Wave, Poison Powder, Confuse Ray, and Hypnosis
+ * 		-Cleaned up getEffect method
+ * 		-Added all status sound effects
+ * 		-Added limited functionality to burn, frozen, and sleep
  */
 
 package application;

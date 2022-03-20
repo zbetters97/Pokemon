@@ -16,17 +16,12 @@ import types.TypeEngine;
 public class BattleEngine {
 	
 	Pokedex pokemon1, pokemon2;
-	private int statusCounter1, statusCounter2;
-	private int sleepCounter1, sleepCounter2;
 	private int winningPokemon;
 	
 	/** CONSTRUCTOR **/
 	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
 		this.pokemon1 = pokemon1;
 		this.pokemon2 = pokemon2;
-		
-		statusCounter1 = 0;
-		statusCounter2 = 0;
 	}
 	/** END CONSTRUCTOR **/
 	
@@ -102,7 +97,7 @@ public class BattleEngine {
 						startMove(2, move2);					
 					
 					// check if either pokemon is poisoned
-					isPoisoned();				
+					statusDamage();				
 				}
 				else {
 					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
@@ -121,7 +116,7 @@ public class BattleEngine {
 					if (canTurn(2))
 						startMove(1, move1);
 					
-					isPoisoned();
+					statusDamage();
 				}
 				else {
 					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
@@ -132,81 +127,6 @@ public class BattleEngine {
 		}
 	}
 	/** END MOVE METHOD **/
-	
-	/**  GET SLEEP METHOD **/
-	private boolean getSleep(int numTurn) {
-		
-		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
-		
-		if (numTurn == 1) {
-			if (sleepCounter1 == 0) {
-				sleepCounter1 = 2 + (int)(Math.random() * ((5 - 2) + 2));
-				statusCounter1++;
-					
-				System.out.println(attacker.getName() + " is fast asleep!");
-				Sleeper.pause(1700);
-				clearContent();		
-				
-				return false;
-			}
-			else {				
-				if (statusCounter1 >= sleepCounter1) {
-					System.out.println(attacker.getName() + " woke up!");
-					Sleeper.pause(1700);
-					clearContent();	
-					
-					statusCounter1 = 0; sleepCounter1 = 0;
-					attacker.setStatus(null);
-					
-					return true;
-				}
-				else {
-					statusCounter1++;
-					
-					System.out.println(attacker.getName() + " is fast asleep!");
-					Sleeper.pause(1700);
-					clearContent();	
-					
-					return false;
-				}
-			}
-		}
-		
-		else {
-			if (sleepCounter2 == 0) {
-				sleepCounter2 = 2 + (int)(Math.random() * ((5 - 2) + 2));
-				statusCounter2++;
-					
-				System.out.println(attacker.getName() + " is fast asleep!");
-				Sleeper.pause(1700);
-				clearContent();		
-				
-				return false;
-			}
-			else {						
-				if (statusCounter2 >= sleepCounter2) {
-					System.out.println(attacker.getName() + " woke up!");
-					Sleeper.pause(1700);
-					clearContent();	
-					
-					statusCounter2 = 0; sleepCounter2 = 0;
-					attacker.setStatus(null);
-					
-					return true;
-				}
-				else {
-					statusCounter2++;
-					
-					System.out.println(attacker.getName() + " is fast asleep!");
-					Sleeper.pause(1700);
-					clearContent();											
-					
-					return false;
-				}
-			}
-		}
-	}
-	/**  END GET SLEEP METHOD **/
 	
 	/** CAN TURN METHOD **/ 
 	// returns false if given pokemon cannot move due to status //
@@ -221,11 +141,11 @@ public class BattleEngine {
 			// check pokemon status
 			switch (attacker.getStatus().getName()) {
 			
-				case "PRZ":		
-					
+				case "PRZ":						
 					val = 1 + (int)(Math.random() * ((4 - 1) + 1));
 					if (val == 1) {						
 						System.out.println(attacker.getName() + " is paralyzed and unable to move!");
+						SoundCard.play(-1.0);
 						Sleeper.pause(1700);
 						clearContent();
 						
@@ -233,40 +153,22 @@ public class BattleEngine {
 					} 
 					else { 
 						return true;
-					}				
-					
-				case "SLP":
-					return getSleep(numTurn);					
+					}					
 					
 				case "FZN":
 					System.out.println(attacker.getName() + " is frozen solid and unable to move!");
+					SoundCard.play(-5.0);
 					Sleeper.pause(1700);
 					clearContent();
 					
 					return false;
 					
+				case "SLP":
+					return getEffect(numTurn);		
+					
 				case "CNF":
+					return getEffect(numTurn);
 					
-					System.out.println(attacker.getName() + " is confused!");							
-					SoundCard.play(-2.0);
-					Sleeper.pause(1700);
-					
-					val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
-					if (val == 1) {						
-						int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
-						if (newHP < 0) newHP = 0;	
-						
-						attacker.setHP(newHP);
-						
-						System.out.println(attacker.getName() + " hurt itself in confusion!");
-						Sleeper.pause(1700);
-						clearContent();
-						
-						return false;
-					}
-					else {
-						return true;
-					}							
 				default:
 					return true;
 			}
@@ -276,6 +178,66 @@ public class BattleEngine {
 		}
 	}
 	/** END CAN TURN METHOD **/	
+	
+	/**  GET EFFECT METHOD **/
+	private boolean getEffect(int numTurn) {
+		
+		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
+		String status = attacker.getStatus().getName();		
+		
+		if (attacker.getStatusLimit() == 0) 
+			attacker.setStatusLimit(2 + (int)(Math.random() * ((5 - 2) + 2)));	
+		
+		if (attacker.getStatusCounter() >= attacker.getStatusLimit()) {
+			
+			if (status.equals("SLP")) 
+				System.out.println(attacker.getName() + " woke up!");				
+			else if (status.equals("CNF")) 
+				System.out.println(attacker.getName() + " snapped out of confusion!");						
+							
+			Sleeper.pause(1700);
+			
+			attacker.setStatusCounter(0); attacker.setStatusLimit(0);
+			attacker.setStatus(null);
+			
+			return true;
+		}
+		else {
+			attacker.setStatusCounter(attacker.getStatusCounter() + 1);
+			
+			if (status.equals("SLP")) {				
+				System.out.println(attacker.getName() + " is fast asleep!");
+				SoundCard.play(-6.0);
+				Sleeper.pause(1700);
+				clearContent();	
+				return false;
+			}
+			else if (status.equals("CNF")) {				
+				System.out.println(attacker.getName() + " is confused!");							
+				SoundCard.play(-3.0);
+				Sleeper.pause(1700);
+				
+				int val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
+				if (val == 1) {						
+					int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
+					if (newHP < 0) newHP = 0;	
+					
+					attacker.setHP(newHP);
+					
+					System.out.println(attacker.getName() + " hurt itself in confusion!");
+					Sleeper.pause(1700);
+					clearContent();
+					
+					return false;	
+				}
+				else {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	/**  END GET EFFECT METHOD **/
 	
 	/** GET TURN METHOD **/
 	// returns 1 if pokemon1 goes first, 2 if pokemon2 goes first //
@@ -323,34 +285,6 @@ public class BattleEngine {
 		return damageDealt;
 	}
 	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/
-	
-	/** IS POISONED METHOD **/
-	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
-	private void isPoisoned() {
-		
-		Poison poison = (Pokedex p) -> {
-			
-			if (p.getStatus() != null) {				
-				
-				if (p.getStatus().getName().equals("PSN")) {	
-					
-					int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
-					if (newHP < 0) newHP = 0;
-					
-					p.setHP(newHP);				
-					
-					System.out.println(p.getName() + " is hurt from the poison!");
-					SoundCard.play(-1.0);
-					Sleeper.pause(1700);
-					clearContent();
-				}
-			}
-		};
-		
-		poison.dealDamage(pokemon1);
-		poison.dealDamage(pokemon2);
-	}
-	/** END IS POISONED METHOD **/
 	
 	/** START MOVE METHOD **/
 	private void startMove(int numTurn, Moves givenMove) {
@@ -559,6 +493,39 @@ public class BattleEngine {
 		return result;
 	}
 	/** END EFFECTIVENESS METHOD **/
+
+	/** IS POISONED METHOD **/
+	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
+	private void statusDamage() {
+		
+		StatusEffect condition = (Pokedex p) -> {
+			
+			if (p.getStatus() != null) {				
+				
+				int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
+				if (newHP < 0) newHP = 0;
+				
+				p.setHP(newHP);			
+					
+				if (p.getStatus().getName().equals("PSN")) {					
+					System.out.println(p.getName() + " is hurt from the poison!");
+					SoundCard.play(-2.0);
+					Sleeper.pause(1700);
+					clearContent();
+				}
+				else if (p.getStatus().getName().equals("BRN")) {					
+					System.out.println(p.getName() + " is badly burned!");
+					SoundCard.play(-4.0);
+					Sleeper.pause(1700);
+					clearContent();
+				}
+			}
+		};
+		
+		condition.dealDamage(pokemon1);
+		condition.dealDamage(pokemon2);
+	}
+	/** END IS POISONED METHOD **/
 	
 	/** SET WIN METHOD **/
 	private int setWin(int winner, int damageDealt) {
@@ -627,7 +594,7 @@ public class BattleEngine {
 /*** END BATTLE ENGINE CLASS ***/
 
 @FunctionalInterface
-interface Poison {
+interface StatusEffect {
 	public void dealDamage(Pokedex pokemon);
 }
 

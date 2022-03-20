@@ -17,18 +17,18 @@ public enum Moves {
 	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100),
 	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100),
 	POISONPOWDER ("Poison Powder", "Status", TypeEngine.poison, StatusEngine.poison, 45, 75),
-	EMBER ("Ember", "Special", TypeEngine.fire, 25, 60, 100),
-	FIREFANG ("Fire Fang", "Physical", TypeEngine.fire, 15, 95, 95),
-	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, 15, 135, 100),
-	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, 15, 180, 100),
+	EMBER ("Ember", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 25, 60, 100),
+	FIREFANG ("Fire Fang", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 95, 95),
+	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 135, 100),
+	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 180, 100),
 	WATERGUN ("Water Gun", "Special", TypeEngine.water, 25, 60, 100),
 	WATERPULSE ("Water Pulse", "Special", TypeEngine.water, 20, 90, 100),
 	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90),
 	HYDROPUMP ("Hydro Pump", "Special", TypeEngine.water, 5, 165, 80),
 	THUNDERWAVE ("Thunder Wave", "Status", TypeEngine.electric, StatusEngine.paralyze, 20, 90),
-	THUNDERSHOCK ("Thunder Shock", "Special", TypeEngine.electric, 40, 60, 100),
-	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, 15, 110, 100),
-	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, 15, 135, 100),
+	THUNDERSHOCK ("Thunder Shock", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 40, 60, 100),
+	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 110, 100),
+	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 135, 100),
 	TELEPORT ("Teleport", "Status", TypeEngine.psychic, 20, 0, -1),
 	HYPNOSIS ("Hypnosis", "Status", TypeEngine.psychic, StatusEngine.sleep, 20, 60),
 	CONFUSION ("Confusion", "Special", TypeEngine.psychic, 25, 75, 100),
@@ -52,6 +52,7 @@ public enum Moves {
 	private String mtype;
 	private TypeEngine type;
 	private StatusEngine effect;
+	private Double probability;
 	
 	private int pp;
 	private int accuracy;
@@ -62,9 +63,9 @@ public enum Moves {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
-		this.pp = pp;
-		this.accuracy = accuracy;
+		this.pp = pp;		
 		this.power = power;
+		this.accuracy = accuracy;
 		this.goFirst = goFirst;
 	}
 	
@@ -75,6 +76,17 @@ public enum Moves {
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
+	}
+	
+	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.effect = effect;
+		this.setProbability(probability);
+		this.pp = pp;
+		this.power = power;
+		this.accuracy = accuracy;		
 	}
 	
 	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy) {
@@ -95,6 +107,12 @@ public enum Moves {
 	public TypeEngine getType() { return type; }
 	public void setType(TypeEngine type) { this.type = type; }
 
+	public StatusEngine getEffect() { return effect; }
+	public void setEffect(StatusEngine effect) { this.effect = effect; }
+	
+	public Double getProbability() { return probability; }
+	public void setProbability(Double probability) { this.probability = probability; }	
+
 	public int getpp() { return pp; }
 	public void setpp(int pp) {	this.pp = pp; }
 
@@ -106,8 +124,4 @@ public enum Moves {
 	
 	public boolean getGoFirst() { return goFirst; }
 	public void setGoFirst(boolean goFirst) { this.goFirst = goFirst; }
-
-	public StatusEngine getEffect() { return effect; }
-
-	public void setEffect(StatusEngine effect) { this.effect = effect; }
 }

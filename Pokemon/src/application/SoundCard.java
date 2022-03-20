@@ -70,12 +70,6 @@ public class SoundCard {
 			case "0.5": hit = "hit-weak.wav"; break;
 			case "1.0": hit = "hit-normal.wav"; break;
 			case "2.0": hit = "hit-super.wav"; break;
-			case "-1.0": hit = "paralyzed.wav"; break;
-			case "-2.0": hit = "poison.wav"; break;
-			case "-3.0": hit = "confused.wav"; break;
-			case "-4.0": hit = "burned.wav"; break;
-			case "-5.0": hit = "frozen.wav"; break;
-			case "-6.0": hit = "asleep.wav"; break;
 			
 			default: return;
 		}
@@ -103,5 +97,39 @@ public class SoundCard {
         catch (Exception e) { System.out.println(e.getMessage()); }
 	}
 	/** END HIT SOUND METHOD **/
+	
+	/** STATUS SOUND METHOD **/
+	public static void playStatus(String status) {
+		
+		String hit = "";
+		
+		// set hit to corresponding path
+		switch (status) {
+			case "PRZ": hit = "paralyzed.wav"; break;
+			case "PSN": hit = "poison.wav"; break;
+			case "CNF": hit = "confused.wav"; break;
+			case "BRN": hit = "burned.wav"; break;
+			case "FRZ": hit = "frozen.wav"; break;
+			case "SLP": hit = "asleep.wav"; break;
+			
+			default: return;
+		}
+		
+		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
+        File sound = new File(path);
+        
+        try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+            
+            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
+            
+            Clip c = AudioSystem.getClip();
+            c.open(ais); c.start(); 
+            
+            Sleeper.pause(duration);
+        }
+        catch (Exception e) { System.out.println(e.getMessage()); }
+	}
+	/** END STATUS SOUND METHOD **/
 }
 /*** END SOUND CARD CLASS ***/

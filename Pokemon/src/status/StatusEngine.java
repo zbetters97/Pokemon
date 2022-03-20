@@ -5,10 +5,12 @@ public class StatusEngine implements StatusInterface {
 	public static StatusEngine paralyze, poison, confuse, burn, freeze, sleep;
 
     private String condition, name;
+    private StatusInterface.Status effect;
     
-    public StatusEngine(StatusInterface.Status status, String condition, String name) {    
+    public StatusEngine(StatusInterface.Status effect, String condition, String name) {    
+    	this.effect = effect;
     	this.condition = condition;        
-    	this.name = name;
+    	this.name = name;    	
     }
 
 	static {		
@@ -22,6 +24,7 @@ public class StatusEngine implements StatusInterface {
 		sleep = new StatusEngine(StatusEngine.Status.SLEEP, "asleep", "SLP");
 	}
 	
+	public String getEffect() { return this.effect.toString(); }
 	public String getCondition() { return this.condition; }
 	public String getName() { return this.name; }
 }

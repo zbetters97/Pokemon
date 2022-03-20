@@ -145,7 +145,7 @@ public class BattleEngine {
 					val = 1 + (int)(Math.random() * ((4 - 1) + 1));
 					if (val == 1) {						
 						System.out.println(attacker.getName() + " is paralyzed and unable to move!");
-						SoundCard.play(-1.0);
+						SoundCard.playStatus(attacker.getStatus().getName());
 						Sleeper.pause(1700);
 						clearContent();
 						
@@ -157,7 +157,7 @@ public class BattleEngine {
 					
 				case "FZN":
 					System.out.println(attacker.getName() + " is frozen solid and unable to move!");
-					SoundCard.play(-5.0);
+					SoundCard.playStatus(attacker.getStatus().getName());
 					Sleeper.pause(1700);
 					clearContent();
 					
@@ -207,24 +207,24 @@ public class BattleEngine {
 			
 			if (status.equals("SLP")) {				
 				System.out.println(attacker.getName() + " is fast asleep!");
-				SoundCard.play(-6.0);
+				SoundCard.playStatus(attacker.getStatus().getName());
 				Sleeper.pause(1700);
 				clearContent();	
 				return false;
 			}
 			else if (status.equals("CNF")) {				
 				System.out.println(attacker.getName() + " is confused!");							
-				SoundCard.play(-3.0);
+				SoundCard.playStatus(attacker.getStatus().getName());
 				Sleeper.pause(1700);
 				
 				int val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
-				if (val == 1) {						
-					int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
-					if (newHP < 0) newHP = 0;	
+				if (val == 1) {														
+					System.out.println(attacker.getName() + " hurt itself in confusion!");
 					
+					int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
+					if (newHP < 0) newHP = 0;						
 					attacker.setHP(newHP);
 					
-					System.out.println(attacker.getName() + " hurt itself in confusion!");
 					Sleeper.pause(1700);
 					clearContent();
 					
@@ -317,7 +317,7 @@ public class BattleEngine {
 						
 						if (target.getStatus() == null) {
 							target.setStatus(move.getEffect());						
-							System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");
+							System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");	
 							
 							Sleeper.pause(1700);
 							clearContent();
@@ -351,7 +351,20 @@ public class BattleEngine {
 						
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
 						Sleeper.pause(1700);
-						clearContent();
+												
+						if (move.getProbability() != null) {
+							
+							if (new Random().nextDouble() <= move.getProbability()) {
+								target.setStatus(move.getEffect());
+								
+								System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");							
+								Sleeper.pause(1700);
+								clearContent();
+							}
+						}
+						else {
+							clearContent();
+						}
 						
 						// pokemon fainted
 						if (health == 0) {
@@ -506,19 +519,11 @@ public class BattleEngine {
 				if (newHP < 0) newHP = 0;
 				
 				p.setHP(newHP);			
-					
-				if (p.getStatus().getName().equals("PSN")) {					
-					System.out.println(p.getName() + " is hurt from the poison!");
-					SoundCard.play(-2.0);
-					Sleeper.pause(1700);
-					clearContent();
-				}
-				else if (p.getStatus().getName().equals("BRN")) {					
-					System.out.println(p.getName() + " is badly burned!");
-					SoundCard.play(-4.0);
-					Sleeper.pause(1700);
-					clearContent();
-				}
+				
+				System.out.println(p.getName() + " is hurt from the " + p.getStatus().getEffect().toLowerCase() + "!");
+				SoundCard.playStatus(p.getStatus().getName());
+				Sleeper.pause(1700);
+				clearContent();
 			}
 		};
 		

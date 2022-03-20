@@ -74,6 +74,10 @@
  * 		-Cleaned up getEffect method
  * 		-Added all status sound effects
  * 		-Added limited functionality to burn, frozen, and sleep
+ * 3/20/2022:
+ * 		-Improved SoundCard method for status effects
+ * 		-Cleaned up coding to be more concise
+ * 		-Added chance of status effect in related moves (Ember, Thunderbolt...)
  */
 
 package application;

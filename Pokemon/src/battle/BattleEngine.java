@@ -94,15 +94,8 @@ public class BattleEngine {
 					
 					// if pokemon2 has no status effects
 					if (canTurn(2))
-						startMove(2, move2);					
-					
-					// check if either pokemon is poisoned
-					statusDamage();				
-				}
-				else {
-					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
-					Sleeper.pause(2000);
-				}					
+						startMove(2, move2);			
+				}				
 			}
 			// pokemon2 move
 			else if (numTurn == 2) {
@@ -115,15 +108,11 @@ public class BattleEngine {
 				if (pokemon2.isAlive) {
 					if (canTurn(2))
 						startMove(1, move1);
-					
-					statusDamage();
-				}
-				else {
-					System.out.println(pokemon2.getName() + " has fainted and cannot battle!");
-					Sleeper.pause(2000);
-				}
-			}			
+				}				
+			}
 			
+			// check if either pokemon has status damage
+			statusDamage();	
 		}
 	}
 	/** END MOVE METHOD **/
@@ -350,21 +339,7 @@ public class BattleEngine {
 						int health = dealDamage(damageDealt, target);
 						
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
-						Sleeper.pause(1700);
-												
-						if (move.getProbability() != null) {
-							
-							if (new Random().nextDouble() <= move.getProbability()) {
-								target.setStatus(move.getEffect());
-								
-								System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");							
-								Sleeper.pause(1700);
-								clearContent();
-							}
-						}
-						else {
-							clearContent();
-						}
+						Sleeper.pause(1700);	
 						
 						// pokemon fainted
 						if (health == 0) {
@@ -374,9 +349,20 @@ public class BattleEngine {
 							Sleeper.pause(2000);
 							
 							System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
-							Sleeper.pause(2000);						
-							clearContent();
+							Sleeper.pause(2000);	
 						}
+						else {
+							if (move.getProbability() != null) {
+								
+								if (new Random().nextDouble() <= move.getProbability()) {
+									target.setStatus(move.getEffect());
+									
+									System.out.println(target.getName() + " is " + target.getStatus().getCondition() + "!");							
+									Sleeper.pause(1700);
+								}
+							}
+						}						
+						clearContent();
 					}
 				}						
 				// attack missed
@@ -413,7 +399,12 @@ public class BattleEngine {
 		else { attacker = pokemon2; target = pokemon1; }
 		
 		double level = attacker.getLevel();
-		double power = move.getPower();
+		
+		double power;
+		if (move.getPower() == -1) 
+			power = level;		
+		else 
+			power = move.getPower();		
 		
 		double A = 1.0; double D = 1.0; 
 		double type = 1.0;
@@ -515,20 +506,26 @@ public class BattleEngine {
 			
 			if (p.getStatus() != null) {				
 				
-				int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
-				if (newHP < 0) newHP = 0;
-				
-				p.setHP(newHP);			
-				
-				System.out.println(p.getName() + " is hurt from the " + p.getStatus().getEffect().toLowerCase() + "!");
-				SoundCard.playStatus(p.getStatus().getName());
-				Sleeper.pause(1700);
-				clearContent();
+				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
+					int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
+					if (newHP < 0) newHP = 0;
+					
+					p.setHP(newHP);			
+					
+					System.out.println(p.getName() + " is hurt from the " + p.getStatus().getEffect().toLowerCase() + "!");
+					SoundCard.playStatus(p.getStatus().getName());
+					Sleeper.pause(1700);
+					clearContent();	
+				}							
 			}
 		};
 		
-		condition.dealDamage(pokemon1);
-		condition.dealDamage(pokemon2);
+		if (pokemon1.isAlive) {
+			condition.dealDamage(pokemon1);	
+		}
+		if (pokemon2.isAlive) {
+			condition.dealDamage(pokemon2);	
+		}		
 	}
 	/** END STATUS DAMAGE METHOD **/
 	

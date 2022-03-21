@@ -78,6 +78,8 @@
  * 		-Improved SoundCard method for status effects
  * 		-Cleaned up coding to be more concise
  * 		-Added chance of status effect in related moves (Ember, Thunderbolt...)
+ * 		-Added Machop, Machamp, and Machoke, and related moves
+ * 		-Cleaned up status effect coding
  */
 
 package application;

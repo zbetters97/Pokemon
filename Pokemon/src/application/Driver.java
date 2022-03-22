@@ -80,6 +80,9 @@
  * 		-Added chance of status effect in related moves (Ember, Thunderbolt...)
  * 		-Added Machop, Machamp, and Machoke, and related moves
  * 		-Cleaned up status effect coding
+ * 3/21/2022:
+ * 		-Added limited functionality to attribute change moves
+ * 		-Added Calm Mind (Alakazam)
  */
 
 package application;

@@ -1,4 +1,7 @@
 package moves;
+import java.util.Arrays;
+import java.util.List;
+
 import status.StatusEngine;
 import types.TypeEngine;
 
@@ -35,6 +38,7 @@ public enum Moves {
 	PSYBEAM ("Psybeam", "Special", TypeEngine.psychic, 20, 95, 100),
 	PSYCHOCUT ("Psycho Cut", "Physical", TypeEngine.psychic, 20, 105, 100),
 	PSYCHIC ("Psychic", "Special", TypeEngine.psychic, 10, 135, 100),
+	CALMMIND ("Calm Mind", "Attribute", TypeEngine.psychic, true, 20, -1, 1, Arrays.asList("sp. attack", "sp. defense")),
 	LOWKICK ("Low Kick", "Physical", TypeEngine.fighting, 20, 40, 100),
 	LOWSWEEP ("Low Sweep", "Physical", TypeEngine.fighting, 20, 95, 100),
 	KNOCKOFF ("Knock Off", "Physical", TypeEngine.dark, 20, 65, 100),
@@ -61,9 +65,12 @@ public enum Moves {
 	private StatusEngine effect;
 	private Double probability;
 	
+	private boolean toSelf;
 	private int pp;
 	private int accuracy;
 	private int power;
+	private int level;
+	private List<String> stats;
 	private boolean goFirst;
 	
 	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst) {
@@ -74,8 +81,7 @@ public enum Moves {
 		this.power = power;
 		this.accuracy = accuracy;
 		this.goFirst = goFirst;
-	}
-	
+	}	
 	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy) {
 		this.name = name;
 		this.mtype = mtype;
@@ -83,19 +89,17 @@ public enum Moves {
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
-	}
-	
+	}	
 	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
 		this.effect = effect;
-		this.setProbability(probability);
+		this.probability = probability;
 		this.pp = pp;
 		this.power = power;
 		this.accuracy = accuracy;		
-	}
-	
+	}	
 	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy) {
 		this.name = name;
 		this.mtype = mtype;
@@ -103,6 +107,16 @@ public enum Moves {
 		this.effect = effect;
 		this.pp = pp;
 		this.accuracy = accuracy;
+	}	
+	Moves (String name, String mtype, TypeEngine type, boolean toSelf, int pp, int accuracy, int level, List<String> stats) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.toSelf = toSelf;
+		this.pp = pp;
+		this.accuracy = accuracy;
+		this.level = level;
+		this.stats = stats;
 	}
 
 	public String getName() { return name; }
@@ -119,7 +133,10 @@ public enum Moves {
 	
 	public Double getProbability() { return probability; }
 	public void setProbability(Double probability) { this.probability = probability; }	
-
+	
+	public boolean isToSelf() { return toSelf; }
+	public void setToSelf(boolean toSelf) { this.toSelf = toSelf; }
+	
 	public int getpp() { return pp; }
 	public void setpp(int pp) {	this.pp = pp; }
 
@@ -131,4 +148,10 @@ public enum Moves {
 	
 	public boolean getGoFirst() { return goFirst; }
 	public void setGoFirst(boolean goFirst) { this.goFirst = goFirst; }
+	
+	public int getLevel() { return level; }
+	public void setLevel(int level) { this.level = level; }
+	
+	public List<String> getStats() { return stats; }
+	public void setStats(List<String> stats) { this.stats = stats; }
 }

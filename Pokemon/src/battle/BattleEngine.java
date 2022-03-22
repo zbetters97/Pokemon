@@ -319,6 +319,25 @@ public class BattleEngine {
 						}
 						return;
 					}
+					else if (move.getMType().equals("Attribute")) {		
+						
+						if (move.isToSelf()) {
+							for (String stat : move.getStats()) 
+								attacker.changeStat(stat, move.getLevel());	
+						}
+						else {
+							for (String stat : move.getStats()) 
+								target.changeStat(stat, move.getLevel());							
+						}
+						
+						if (move.getLevel() > 0) SoundCard.play("//in-battle//stat-up", true);
+						else SoundCard.play("//in-battle//stat-down", true);
+						
+						Sleeper.pause(1700);						
+						clearContent();
+						
+						return;
+					}
 					
 					// get critical damage (if applicable)
 					double crit = isCritical();			

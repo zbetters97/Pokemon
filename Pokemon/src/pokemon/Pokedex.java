@@ -43,6 +43,7 @@ public enum Pokedex implements PokedexInterface {
 	protected TypeEngine type;
 	private List<TypeEngine> types;
 	private int level, bhp, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
+	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg;
 	private StatusEngine status;
 	public boolean isAlive;
 
@@ -74,6 +75,12 @@ public enum Pokedex implements PokedexInterface {
 		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
 		this.spDefense = getStat.compute(spDefense, iv, ev, level);
 		
+		this.speedStg = 0;
+		this.attackStg = 0;
+		this.defenseStg = 0;
+		this.spAttackStg= 0;
+		this.spDefenseStg = 0;
+		
 		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.types = null;	
 		this.status = null;
 		this.isAlive = true;	
@@ -96,8 +103,16 @@ public enum Pokedex implements PokedexInterface {
 		};
 		
 		this.speed = getStat.compute(speed, iv, ev, level);
-		this.attack = getStat.compute(attack, iv, ev, level); this.defense = getStat.compute(defense, iv, ev, level);		
-		this.spAttack = getStat.compute(spAttack, iv, ev, level); this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		this.attack = getStat.compute(attack, iv, ev, level); 
+		this.defense = getStat.compute(defense, iv, ev, level);		
+		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
+		this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		
+		this.speedStg = 0;
+		this.attackStg = 0;
+		this.defenseStg = 0;
+		this.spAttackStg= 0;
+		this.spDefenseStg = 0;
 		
 		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.type = null;
 		this.status = null;
@@ -122,22 +137,27 @@ public enum Pokedex implements PokedexInterface {
         		Moves.RAZORLEAF));
 		pokeMap.put(VENUSAUR, Arrays.asList(Moves.TAKEDOWN, Moves.DOUBLEEDGE, Moves.PETALBLIZZARD,
 				Moves.SOLARBEAM));
+		
         pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.QUICKATTACK, Moves.EMBER));
 		pokeMap.put(CHARMELEON, Arrays.asList(Moves.SLASH, Moves.QUICKATTACK, Moves.EMBER, 
 				Moves.FIREFANG));
         pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONCLAW, Moves.DRAGONBREATH, Moves.FLAMETHROWER,
         	Moves.FLAREBLITZ));
+        
 		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN));
         pokeMap.put(WARTORTLE, Arrays.asList(Moves.QUICKATTACK, Moves.WATERGUN, Moves.WATERPULSE));
         pokeMap.put(BLASTOISE, Arrays.asList(Moves.FLASHCANNON, Moves.AQUATAIL, 
         		Moves.WATERPULSE, Moves.HYDROPUMP));
+        
         pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERWAVE, Moves.THUNDERSHOCK));
         pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.SLAM, Moves.THUNDERPUNCH,  
-        		Moves.THUNDERBOLT));        
+        		Moves.THUNDERBOLT));    
+        
         pokeMap.put(ABRA, Arrays.asList(Moves.TELEPORT));
         pokeMap.put(KADABRA, Arrays.asList(Moves.TELEPORT, Moves.CONFUSION, Moves.PSYBEAM));
         pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
-        		Moves.PSYBEAM));     
+        		Moves.CALMMIND));     
+        
         pokeMap.put(MACHOP, Arrays.asList(Moves.LOWKICK, Moves.LOWSWEEP, Moves.KNOCKOFF)); 
         pokeMap.put(MACHOKE, Arrays.asList(Moves.LOWKICK, Moves.LOWSWEEP, Moves.VITALTHROW, 
         		Moves.SEISMICTOSS)); 
@@ -273,6 +293,17 @@ public enum Pokedex implements PokedexInterface {
 	public int getSpDefense() {	return spDefense; }
 	public void setSpDefense(int spDefense) { this.spDefense = spDefense; }
 
+	public int getSpeedStg() { return speedStg; }
+	public void setSpeedStg(int speedStg) { this.speedStg = speedStg; }
+	public int getAttackStg() { return attackStg; }
+	public void setAttackStg(int attackStg) { this.attackStg = attackStg; }
+	public int getDefenseStg() { return defenseStg; }
+	public void setDefenseStg(int defenseStg) { this.defenseStg = defenseStg; }
+	public int getSpAttackStg() { return spAttackStg; }
+	public void setSpAttackStg(int spAttackStg) { this.spAttackStg = spAttackStg; }
+	public int getSpDefenseStg() { return spDefenseStg; }
+	public void setSpDefenseStg(int spDefenseStg) { this.spDefenseStg = spDefenseStg; }
+
 	public int getEvLevel() { return evLevel; }
 	public void setEvLevel(int evLevel) { this.evLevel = evLevel; }
 	
@@ -293,7 +324,104 @@ public enum Pokedex implements PokedexInterface {
 	
 	public ArrayList<Moves> getMoveSet() { return moveSet; }
 	public void setMoveSet(ArrayList<Moves> moveSet) { this.moveSet = moveSet; }
+	
+	public void changeStat(String stat, int level) {	
+		
+		switch (stat) {
+			case "attack":
+				if (this.attackStg + level > 6 || this.attackStg + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s attack won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s attack won't go any lower!");
+					return;
+				}
+				else {	
+					this.attackStg += level;
+					this.attack *= Math.max(2, 2 + (double) this.attackStg) / Math.max(2, 2 - (double) this.attackStg);	
+		
+					outputChange(stat, level);
+				}	
+				break;
+			case "sp. attack":
+				if (this.spAttackStg + level > 6 || this.spAttackStg + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s sp. attack won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s sp. attack won't go any lower!");
+					return;
+				}
+				else {	
+					this.spAttackStg += level;
+					this.spAttack *= Math.max(2, 2 + (double) this.spAttackStg) / Math.max(2, 2 - (double) this.spAttackStg);	
+					
+					outputChange(stat, level);
+				}
+				break;
+			case "defense":
+				if (this.defenseStg + level > 6 || this.defenseStg + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s defense won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s defense won't go any lower!");
+					return;
+				}
+				else {	
+					this.defenseStg += level;
+					this.defense *= Math.max(2, 2 + (double) this.defenseStg) / Math.max(2, 2 - (double) this.defenseStg);
+					
+					outputChange(stat, level);
+				}	
+				break;
+			case "sp. defense":
+				if (this.spDefenseStg + level > 6 || this.spDefenseStg  + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s sp. defense won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s sp. defense won't go any lower!");
+					return;
+				}
+				else {	
+					this.spDefenseStg  += level;
+					this.spDefense *= Math.max(2, 2 + (double) this.spDefenseStg ) / Math.max(2, 2 - (double) this.spDefenseStg);	
+					
+					outputChange(stat, level);
+				}	
+				break;
+			case "speed":
+				if (this.speedStg + level > 6 || this.speedStg + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s speed won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s speed won't go any lower!");
+					return;
+				}
+				else {	
+					this.speedStg += level;
+					this.speed *= Math.max(2, 2 + (double) this.speedStg) / Math.max(2, 2 - (double) this.speedStg);	
+					
+					outputChange(stat, level);
+				}	
+				break;
+		}
+	}
 	/** END GETTERS AND SETTERS **/
+	
+	private void outputChange(String stat, int level) {
+		
+		if (level == 1)
+			System.out.println(this.name + "'s " + stat + " rose!");
+		else if (level == 2) 
+			System.out.println(this.name + "'s " + stat + " greatly rose!");
+		else if (level >= 3)
+			System.out.println(this.name + "'s " + stat + " drastically!");
+		else if (level == -1)
+			System.out.println(this.name + "'s " + stat + " fell!");
+		else if (level == -2)
+			System.out.println(this.name + "'s " + stat + " greatly fell!");
+		else if (level <= -3)
+			System.out.println(this.name + "'s " + stat + " severely fell!");
+	}
 }
 /*** EDN POKEDEX ENUM CLASS ***/
 

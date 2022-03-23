@@ -15,33 +15,11 @@ import types.TypeEngine;
 /*** BATTLE ENGINE CLASS ***/
 public class BattleEngine {
 	
-	Pokedex pokemon1, pokemon2;
-	private int winningPokemon;
-	
-	/** CONSTRUCTOR **/
-	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
-		this.pokemon1 = pokemon1;
-		this.pokemon2 = pokemon2;
-	}
-	/** END CONSTRUCTOR **/
-	
-	/** SWAP POKEMON METHOD **/
-	public void swapPokemon(int trainerNum, Pokedex newPokemon) {
-		
-		if (trainerNum == 1) {
-			if (pokemon1 != null)
-				pokemon1 = newPokemon;
-		}			
-		else if (trainerNum == 2) {
-			if (pokemon2 != null) 
-				pokemon2 = newPokemon;
-		}		
-	}
-	/** END SWAP POKEMON METHOD **/
+	private Pokedex winningPokemon, losingPokemon;
 	
 	/** CPU SELECT MOVE METHOD **/
 	// returns move with max damage //
-	public Moves cpuSelectMove() {
+	public Moves cpuSelectMove(Pokedex cpupokemon, Pokedex target) {
 		
 		Moves bestMove;
 		
@@ -49,12 +27,12 @@ public class BattleEngine {
 		Map<Moves, Integer> moves = new HashMap<>();
 		
 		// for each move in attacker's move set
-		for (Moves move : pokemon2.getMoveSet()) {
+		for (Moves move : cpupokemon.getMoveSet()) {
 			
 			if (!move.getMType().equals("Status")) {
 				
 				// find damage value of each move
-				int damage = calculateDamage(2, move, 1.0, true);
+				int damage = calculateDamage(cpupokemon, target, move, 1.0, true);
 				
 				// add move and corresponding damage to list
 				moves.put(move, damage);	
@@ -66,7 +44,7 @@ public class BattleEngine {
 			bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
 		}	
 		else {
-			bestMove = pokemon2.getMoveSet().get(0);
+			bestMove = cpupokemon.getMoveSet().get(0);
 		}
 				
 		return bestMove;
@@ -74,57 +52,55 @@ public class BattleEngine {
 	/** END CPU SELECT MOVE METHOD **/
 	
 	/** MOVE METHOD **/
-	public void move(Moves move1, Moves move2) {
+	public void move(Pokedex pokemon1, Pokedex pokemon2, Moves move1, Moves move2) {
 				
 		// if both pokemon are alive
 		if (pokemon1.isAlive && pokemon2.isAlive) {
 				
 			// returns 1 if pokemon1 goes first, returns 2 if pokemon2 goes first
-			int numTurn = getTurn(move1, move2);
+			int numTurn = getTurn(pokemon1, pokemon2, move1, move2);
 			
 			// if pokemon1 moves first
 			if (numTurn == 1) {
 				
 				// if pokemon1 has no status effects
-				if (canTurn(1)) 
-					startMove(1, move1);
+				if (canTurn(pokemon1, pokemon2)) 
+					startMove(pokemon1, pokemon2, move1);
 				
 				// pokemon2 becomes attacker if not fainted
 				if (pokemon1.isAlive && pokemon2.isAlive) {
 					
 					// if pokemon2 has no status effects
-					if (canTurn(2))
-						startMove(2, move2);			
+					if (canTurn(pokemon2, pokemon1)) 
+						startMove(pokemon2, pokemon1, move2);			
 				}				
 			}
 			// pokemon2 move
 			else if (numTurn == 2) {
 				
 				// pokemon2 has no status effects
-				if (canTurn(2)) 
-					startMove(2, move2);
+				if (canTurn(pokemon2, pokemon1)) 
+					startMove(pokemon2, pokemon1, move2);
 				
 				// pokemon1 becomes attacker if not fainted
 				if (pokemon1.isAlive && pokemon2.isAlive) {
-					if (canTurn(2))
-						startMove(1, move1);
+					if (canTurn(pokemon1, pokemon2))
+						startMove(pokemon1, pokemon2, move1);
 				}				
 			}
-			
+									
 			// check if either pokemon has status damage
-			statusDamage();	
+			statusDamage(pokemon1, pokemon2);
 		}
 	}
 	/** END MOVE METHOD **/
 	
 	/** CAN TURN METHOD **/ 
 	// returns false if given pokemon cannot move due to status //
-	private boolean canTurn(int numTurn) {
-		
-		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
+	private boolean canTurn(Pokedex attacker, Pokedex target) {
 		
 		if (attacker.getStatus() != null) {
-							
+			
 			int val = 1;
 			
 			// check pokemon status
@@ -153,10 +129,10 @@ public class BattleEngine {
 					return false;
 					
 				case "SLP":
-					return getEffect(numTurn);		
+					return getEffect(attacker, target);		
 					
 				case "CNF":
-					return getEffect(numTurn);
+					return getEffect(attacker, target);
 					
 				default:
 					return true;
@@ -169,9 +145,8 @@ public class BattleEngine {
 	/** END CAN TURN METHOD **/	
 	
 	/**  GET EFFECT METHOD **/
-	private boolean getEffect(int numTurn) {
+	private boolean getEffect(Pokedex attacker, Pokedex target) {
 		
-		Pokedex attacker = (numTurn == 1) ? pokemon1 : pokemon2;
 		String status = attacker.getStatus().getName();		
 		
 		if (attacker.getStatusLimit() == 0) 
@@ -206,22 +181,10 @@ public class BattleEngine {
 				SoundCard.playStatus(attacker.getStatus().getName());
 				Sleeper.pause(1700);
 				
-				int val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
-				if (val == 1) {														
-					System.out.println(attacker.getName() + " hurt itself in confusion!");
-					
-					int newHP = attacker.getHP() - calculateConfusionDamage(attacker);
-					if (newHP < 0) newHP = 0;						
-					attacker.setHP(newHP);
-					
-					Sleeper.pause(1700);
-					clearContent();
-					
-					return false;	
-				}
-				else {
-					return true;
-				}
+				if (isConfused(attacker, target))
+					return false;
+				else
+					return true;				
 			}
 			return false;
 		}
@@ -230,7 +193,7 @@ public class BattleEngine {
 	
 	/** GET TURN METHOD **/
 	// returns 1 if pokemon1 goes first, 2 if pokemon2 goes first //
-	private int getTurn(Moves move1, Moves move2) {
+	private int getTurn(Pokedex pokemon1, Pokedex pokemon2, Moves move1, Moves move2) {
 		
 		// if both moves go first (EX: Quick Attack)
 		if (move1.getGoFirst() && move2.getGoFirst()) {			
@@ -258,31 +221,47 @@ public class BattleEngine {
 	
 	/** CALCULATE CONFUSION DAMAGE DEALT METHOD **/
 	// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status) //
-	private int calculateConfusionDamage(Pokedex pokemon) {
+	private boolean isConfused(Pokedex attacker, Pokedex target) {
 		
-		double level = pokemon.getLevel();
-		double power = Moves.CONFUSE.getPower();
+		int val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
+		if (val == 1) {					
+			
+			double level = attacker.getLevel();
+			double power = Moves.CONFUSE.getPower();
+			
+			double A = attacker.getAttack();
+			double D = attacker.getDefense();
+					
+			// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+			int damage = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
 		
-		double A = pokemon.getAttack();
-		double D = pokemon.getDefense();
-				
-		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
-				
-		SoundCard.play(1.0);
+			System.out.println(attacker.getName() + " hurt itself in confusion!");
+			SoundCard.play(1.0);			
+			Sleeper.pause(1700);
+			clearContent();
+			
+			int newHP = attacker.getHP() - damage;
+			
+			if (newHP <= 0) {
+				newHP = 0;			
+				attacker.setHP(newHP);
+				attacker.setAlive(false);
+				defeated(target, attacker, damage);				
+				return true;
+			}
+			
+			attacker.setHP(newHP);
+			
+			return true;
+		}
 		
-		return damageDealt;
+		return false;
 	}
 	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/
 	
 	/** START MOVE METHOD **/
-	private void startMove(int numTurn, Moves givenMove) {
-		
-		Pokedex attacker, target;
-		
-		if (numTurn == 1) { attacker = pokemon1; target = pokemon2; }			
-		else { attacker = pokemon2; target = pokemon1; }
-		
+	private void startMove(Pokedex attacker, Pokedex target, Moves givenMove) {
+				
 		// loop through moveset for attacking pokemon
 		for (Moves move : attacker.getMoveSet()) {
 			
@@ -297,7 +276,7 @@ public class BattleEngine {
 				Sleeper.pause(1000);
 	            
 	            // if attack lands
-				if (isHit(move, numTurn)) {
+				if (isHit(attacker, move)) {
 															
 					// play move sound
 					SoundCard.play("//moves//" + move.getName(), true);
@@ -346,7 +325,7 @@ public class BattleEngine {
 					if (crit == 1.5) { System.out.println("A critical hit!"); }
 									
 					// calculate damage dealt
-					int damageDealt = calculateDamage(numTurn, move, crit, false);
+					int damageDealt = calculateDamage(attacker, target, move, crit, false);
 					
 					if (damageDealt > target.getHP())
 						damageDealt = target.getHP();
@@ -358,20 +337,14 @@ public class BattleEngine {
 						clearContent();
 					}
 					else {
-						int health = dealDamage(damageDealt, target);
+						int health = dealDamage(target, damageDealt);
 						
 						System.out.println(target.getName() + " took " + damageDealt + " damage!");
 						Sleeper.pause(1700);	
 						
 						// pokemon fainted
 						if (health == 0) {
-							int xp = setWin(numTurn, damageDealt);	
-							
-							System.out.println(target.getName() + " fainted!");		
-							Sleeper.pause(2000);
-							
-							System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
-							Sleeper.pause(2000);	
+							defeated(attacker, target, damageDealt);
 						}
 						else {
 							if (move.getProbability() != null) {
@@ -399,13 +372,8 @@ public class BattleEngine {
 	/** END START MOVE METHOD **/
 
 	/** IS HIT METHOD **/
-	private boolean isHit(Moves move, int numTurn) {
-		
-		Pokedex attacker;
-		
-		if (numTurn == 1) { attacker = pokemon1;}			
-		else { attacker = pokemon2; }
-		
+	private boolean isHit(Pokedex attacker, Moves move) {
+				
 		// if move never misses, return true
 		if (move.getAccuracy() == -1) { return true; }
 		
@@ -420,12 +388,7 @@ public class BattleEngine {
 	/** END IS HIT METHOD **/
 		
 	/** CALCULATE DAMAGE DEALT METHOD **/
-	private int calculateDamage(int numTurn, Moves move, double crit, boolean cpu) {
-		
-		Pokedex attacker, target;
-		
-		if (numTurn == 1) { attacker = pokemon1; target = pokemon2; }			
-		else { attacker = pokemon2; target = pokemon1; }
+	private int calculateDamage(Pokedex attacker, Pokedex target, Moves move, double crit, boolean cpu) {
 		
 		double level = attacker.getLevel();
 		
@@ -487,7 +450,7 @@ public class BattleEngine {
 	/** END IS CRITICAL METHOD **/
 	
 	/** DEAL DAMAGE METHOD **/
-	private static int dealDamage(int damage, Pokedex target) {		
+	private static int dealDamage(Pokedex target, int damage) {		
 		
 		// subtract damage dealt from total hp
 		int result = target.getHP() - (int)damage;		
@@ -529,15 +492,22 @@ public class BattleEngine {
 
 	/** STATUS DAMAGE METHOD **/
 	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
-	private void statusDamage() {
+	private void statusDamage(Pokedex pokemon1, Pokedex pokemon2) {
 		
 		StatusEffect condition = (Pokedex p) -> {
 			
 			if (p.getStatus() != null) {				
 				
 				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
-					int newHP = p.getHP() - (int) (p.getHP() * 0.16);					
-					if (newHP < 0) newHP = 0;
+					
+					int damage = (int) (p.getHP() * 0.16);
+					int newHP = p.getHP() - damage;		
+					
+					if (newHP <= 0) {
+						newHP = 0;
+						p.setHP(newHP);
+						p.setAlive(false);
+					}
 					
 					p.setHP(newHP);			
 					
@@ -545,45 +515,57 @@ public class BattleEngine {
 					SoundCard.playStatus(p.getStatus().getName());
 					Sleeper.pause(1700);
 					clearContent();	
+										
+					return damage;
 				}							
 			}
+			return 0;
 		};
 		
 		if (pokemon1.isAlive) {
-			condition.dealDamage(pokemon1);	
+			int damage = condition.dealDamage(pokemon1);
+			
+			if (!pokemon1.isAlive)
+				defeated(pokemon1, pokemon2, damage);
 		}
+		
 		if (pokemon2.isAlive) {
-			condition.dealDamage(pokemon2);	
+			int damage = condition.dealDamage(pokemon2);
+			
+			if (!pokemon2.isAlive)
+				defeated(pokemon2, pokemon1, damage);
 		}		
 	}
 	/** END STATUS DAMAGE METHOD **/
 	
+	private void defeated(Pokedex attacker, Pokedex target, int damageDealt) {
+				
+		int xp = setWin(attacker, target, damageDealt);	
+		
+		System.out.println(target.getName() + " fainted!");		
+		Sleeper.pause(2000);
+		
+		System.out.println(attacker.getName() + " gained " + xp + " Exp. Points!");		
+		Sleeper.pause(2000);	
+	}
+	
 	/** SET WIN METHOD **/
-	private int setWin(int winner, int damageDealt) {
-		
-		Pokedex attacker, target;
-		
-		if (winner == 1) { attacker = pokemon1; target = pokemon2; }			
-		else { attacker = pokemon2; target = pokemon1; }
+	private int setWin(Pokedex winner, Pokedex loser, int damageDealt) {
 											
-		target.setAlive(false);
+		loser.setAlive(false);
 						
-		int xp = calculateXP(winner); 
-		attacker.setXP(xp);				
+		int xp = calculateXP(loser); 
+		winner.setXP(xp);				
 		
 		winningPokemon = winner;
+		losingPokemon = loser;
 		return xp;
 	}
 	/** END SET WIN METHOD **/
 	
 	/** CALCULATE XP METHOD **/
-	private int calculateXP(int winner) {
-		
-		Pokedex target;
-		
-		if (winner == 1) target = pokemon2; 		
-		else target = pokemon1;
-		
+	private int calculateXP(Pokedex target) {
+				
 		// exp formula reference: https://bulbapedia.bulbagarden.net/wiki/Experience
 		int exp = (int) (1.5 * 1 * target.getXP() * 1 * target.getLevel() * 1 * 1 * 1) / 7;
 		
@@ -592,26 +574,17 @@ public class BattleEngine {
 	/** END CALCULATE XP METHOD **/	
 	
 	/** GET WINNER METHOD **/
-	public int getWinner() {
-		if (winningPokemon == 1)
-			return 1;
-		else if (winningPokemon  == 2)
-			return 2;
+	public Pokedex getWinner() {
+		if (winningPokemon != null)
+			return winningPokemon;
 		else
-			return -1;
+			return null;
 	}
 	/** END GET WINNER METHOD **/
 	
 	/** GET MONEY METHOD **/
-	public int getMoney() {
-		
-		int money = 1;
-		
-		if (winningPokemon == 1) 
-			money = 24 * pokemon2.getLevel();	
-		else 
-			money = 24 * pokemon1.getLevel();	
-		
+	public int getMoney() {		
+		int money = 24 * losingPokemon.getLevel();			
 		return money;
 	}
 	/** END GET MONEY METHOD **/
@@ -626,7 +599,7 @@ public class BattleEngine {
 
 @FunctionalInterface
 interface StatusEffect {
-	public void dealDamage(Pokedex pokemon);
+	public int dealDamage(Pokedex pokemon);
 }
 
 @FunctionalInterface

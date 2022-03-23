@@ -90,6 +90,11 @@
  * 		-Fixed stat modifier logic to be more precise
  * 		-Added Graveler and Geodude
  * 		-Added Defense Curl, Earthquake, and Heavy Slam
+ * 3/23/2022:
+ * 		-Added Super Smash Bros. music
+ * 		-Overhauled BattleEngine class
+ * 		-Fixed isAlive checkers at the end of every turn
+ * 		-Modified SoundCard class to sleep for full duration
  */
 
 package application;

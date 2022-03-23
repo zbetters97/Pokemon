@@ -15,7 +15,6 @@ public class Battle {
 	private static Scanner input = new Scanner(System.in);	
 	private int numPlayers;
 	private static Pokedex pokemon1, pokemon2;	
-	private static BattleEngine battle;	
 	
 	/** CONSTRUCTOR **/
 	public Battle(int numPlayers) {
@@ -32,7 +31,6 @@ public class Battle {
 	public void start() {		
 		clearContent();				
 		selectPokemon();	
-		selectMove();
 	}
 	/** END MAIN METHOD **/
 	
@@ -79,14 +77,15 @@ public class Battle {
 		// play pokemon cry
 		SoundCard.play("//pokedex//" + pokemon2.getName());	
 		clearContent();	
-		
-		// initialize engine to handle pokemon battle
-		battle = new BattleEngine(pokemon1, pokemon2);		
+
+		selectMove(pokemon1, pokemon2);
 	}
 	/** END SELECT POKEMON METHOD **/
 		
 	/** SELECT MOVE METHOD **/
-	private void selectMove() {
+	private void selectMove(Pokedex pokemon1, Pokedex pokemon2) {
+		
+		BattleEngine battle = new BattleEngine();
 		
 		Moves move1, move2;
 		
@@ -98,19 +97,15 @@ public class Battle {
 			if (numPlayers == 1) {
 				
 				displayHP();
-				move1 = displayMoves(1);
-				move2 = battle.cpuSelectMove();				
+				move1 = displayMoves(pokemon1);
+				move2 = battle.cpuSelectMove(pokemon1, pokemon2);				
 				clearContent();
 				
-				battle.move(move1, move2);				
+				battle.move(pokemon1, pokemon2, move1, move2);				
 				clearContent();
 				
-				if (battle.getWinner() == 1) {
+				if (battle.getWinner() != null) {
 					announceWinner("1", "2", battle.getMoney());							
-					return;
-				}
-				else if (battle.getWinner() == 2) {
-					announceWinner("2", "1", battle.getMoney());		
 					return;
 				}
 			}				
@@ -118,24 +113,26 @@ public class Battle {
 			else if (numPlayers == 2) {
 				
 				displayHP();
-				move1 = displayMoves(1);					
+				move1 = displayMoves(pokemon1);					
 				clearContent();
 				
 				displayHP();
-				move2 = displayMoves(2);	
+				move2 = displayMoves(pokemon2);	
 				clearContent();
 				
-				battle.move(move1, move2);				
+				battle.move(pokemon1, pokemon2, move1, move2);				
 				clearContent();
 				
-				if (battle.getWinner() == 1) {
-					announceWinner("1", "2", battle.getMoney());						
-					return;
-				}
-				else if (battle.getWinner() == 2) {								
-					announceWinner("2", "1", battle.getMoney());	
-					return;
-				}
+				if (battle.getWinner() != null) {
+					if (battle.getWinner().getName().equals(pokemon1.getName())) {
+						announceWinner("1", "2", battle.getMoney());						
+						return;
+					}
+					else if (battle.getWinner().getName().equals(pokemon2.getName())) {								
+						announceWinner("2", "1", battle.getMoney());	
+						return;
+					}	
+				}				
 			}
 			else { 
 				System.out.println("ERROR! Internal error!"); 
@@ -178,14 +175,7 @@ public class Battle {
 	/** END DISPLAY HP METHOD **/
 	
 	/** DISPLAY MOVES METHOD **/
-	private Moves displayMoves(int num) {
-					
-		Pokedex fighter;
-		
-		if (num == 1) 
-			fighter = pokemon1;
-		else 
-			fighter = pokemon2;
+	private Moves displayMoves(Pokedex fighter) {
 		
 		System.out.println("What will " + fighter.getName() + " do?\n");
 		

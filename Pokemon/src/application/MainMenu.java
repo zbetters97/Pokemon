@@ -78,6 +78,10 @@ public class MainMenu {
 		String btlPCfirst = "battle-pc-first";
 		String btlPCnormal = "battle-pc-normal";
 		
+		String btlSSB64 = "battle-ssb-64";
+		String btlSSBred = "battle-ssb-red";
+		String btlSSBfloats = "battle-ssb-floats";
+		
 		// list to hold music files
 		ArrayList<String> musicList = new ArrayList<>();
 		
@@ -85,7 +89,7 @@ public class MainMenu {
 		musicList.addAll(Arrays.asList(
 				btlRStrainer, btlRSgym, btlRSchampion, btlRSlegendary,								
 				btlHStrainerjohto, btlHStrainerkanto, btlHSgymjohto, btlHSgymkanto, btlHSred,				
-				btlDPdialga, btlPCfirst, btlPCnormal
+				btlDPdialga, btlPCfirst, btlPCnormal, btlSSB64, btlSSBred, btlSSBfloats
 		));
 
 		bgmusic = null;	
@@ -104,7 +108,10 @@ public class MainMenu {
 				+ "[10] D/P: DIALGA\n\n"
 				+ "[11] COL: FIRST\n"
 				+ "[12] COL: NORMAL\n\n"
-				+ "[13] NONE"				
+				+ "[13] SSB: 64\n"
+				+ "[14] SSB: RED\n"
+				+ "[15] SSB: FLOATS\n\n"
+				+ "[16] NONE"				
 		);
 		
 		while (true) {

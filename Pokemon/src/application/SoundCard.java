@@ -52,7 +52,7 @@ public class SoundCard {
             
             // wait until sound file has finished playing
             if (hold.length >= 1) {
-            	int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 	
+            	int duration = (int) Math.ceil(((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000); 
             	Sleeper.pause(duration);
             }
         }
@@ -87,8 +87,7 @@ public class SoundCard {
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
             
-            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
-            
+            int duration = (int) Math.ceil(((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000); 
             Clip c = AudioSystem.getClip();
             c.open(ais); c.start(); 
             
@@ -121,7 +120,7 @@ public class SoundCard {
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
             
-            int duration = (int) ((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000; 
+            int duration = (int) Math.ceil(((ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate()) * 1000);
             
             Clip c = AudioSystem.getClip();
             c.open(ais); c.start(); 

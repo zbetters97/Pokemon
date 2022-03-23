@@ -33,6 +33,8 @@ public enum Pokedex implements PokedexInterface {
 	MACHOKE ("Machoke", TypeEngine.fighting, 28, 80, 100, 70, 50, 60, 45, 40, 142, 2),
 	MACHAMP ("Machamp", TypeEngine.fighting, 40, 90, 130, 80, 65, 85, 55, -1, 253, 3),
 	GEODUDE ("Geodude", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1),
+	GRAVELER ("Graveler", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 25, 55, 95, 115, 45, 45, 35, 40, 137, 2),
+	GOLEM ("Golem", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 40, 80, 120, 130, 55, 65, 45, -1, 248, 3),
 	GASTLY ("Gastly", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 5, 30, 35, 30, 100, 35, 80, 25, 62, 1),
 	HAUNTER ("Haunter", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 25, 45, 50, 45, 115, 55, 96, 40, 142, 2),
 	GENGAR ("Gengar", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3);
@@ -170,7 +172,12 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(MACHAMP, Arrays.asList(Moves.VITALTHROW, Moves.SEISMICTOSS, Moves.DYNAMICPUNCH, 
         		Moves.CROSSCHOP)); 
         
-        pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT));
+        pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.DEFENSECURL));
+        pokeMap.put(GRAVELER, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT, 
+        		Moves.DEFENSECURL));
+        pokeMap.put(GOLEM, Arrays.asList(Moves.ROLLOUT, Moves.HEAVYSLAM, Moves.EARTHQUAKE,
+        		Moves.DOUBLEEDGE));
+        
         pokeMap.put(GASTLY, Arrays.asList(Moves.LICK, Moves.PAYBACK, Moves.HYPNOSIS));   
         pokeMap.put(HAUNTER, Arrays.asList(Moves.PAYBACK, Moves.HEX, Moves.CONFUSERAY,
         		Moves.DARKPULSE));   

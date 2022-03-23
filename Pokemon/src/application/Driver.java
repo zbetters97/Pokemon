@@ -88,6 +88,8 @@
  * 		-Fixed bug where battle continues despite fainted Pokemon
  * 		-Added more status moves (Growl, Tail Whip, Play Nice, Kinesis)
  * 		-Fixed stat modifier logic to be more precise
+ * 		-Added Graveler and Geodude
+ * 		-Added Defense Curl, Earthquake, and Heavy Slam
  */
 
 package application;

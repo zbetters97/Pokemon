@@ -83,6 +83,11 @@
  * 3/21/2022:
  * 		-Added limited functionality to attribute change moves
  * 		-Added Calm Mind (Alakazam)
+ * 3/22/2022:
+ * 		-Added Pokemon Colosseum battle music
+ * 		-Fixed bug where battle continues despite fainted Pokemon
+ * 		-Added more status moves (Growl, Tail Whip, Play Nice, Kinesis)
+ * 		-Fixed stat modifier logic to be more precise
  */
 
 package application;

@@ -173,7 +173,6 @@ public class Battle {
 			
 			System.out.print("*");
 		}
-		
 		System.out.println("\n");
 	}
 	/** END DISPLAY HP METHOD **/

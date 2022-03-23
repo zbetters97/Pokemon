@@ -75,6 +75,9 @@ public class MainMenu {
 		
 		String btlDPdialga = "battle-dp-dialga";
 		
+		String btlPCfirst = "battle-pc-first";
+		String btlPCnormal = "battle-pc-normal";
+		
 		// list to hold music files
 		ArrayList<String> musicList = new ArrayList<>();
 		
@@ -82,7 +85,7 @@ public class MainMenu {
 		musicList.addAll(Arrays.asList(
 				btlRStrainer, btlRSgym, btlRSchampion, btlRSlegendary,								
 				btlHStrainerjohto, btlHStrainerkanto, btlHSgymjohto, btlHSgymkanto, btlHSred,				
-				btlDPdialga
+				btlDPdialga, btlPCfirst, btlPCnormal
 		));
 
 		bgmusic = null;	
@@ -99,8 +102,9 @@ public class MainMenu {
 				+ "[8] HG/SS: GYM (KANTO)\n"
 				+ "[9] HG/SS: RED\n\n"
 				+ "[10] D/P: DIALGA\n\n"
-				+ "[11] NONE"
-				
+				+ "[11] COL: FIRST\n"
+				+ "[12] COL: NORMAL\n\n"
+				+ "[13] NONE"				
 		);
 		
 		while (true) {

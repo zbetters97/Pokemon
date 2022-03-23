@@ -42,8 +42,9 @@ public enum Pokedex implements PokedexInterface {
 	private String name;
 	protected TypeEngine type;
 	private List<TypeEngine> types;
-	private int level, bhp, hp, speed, attack, defense, spAttack, spDefense, evLevel, xp, ev;	
-	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg;
+	private int level, bhp, hp, evLevel, xp, ev;
+	private double speed, attack, defense, spAttack, spDefense, accuracy;	
+	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg, accuracyStg;
 	private StatusEngine status;
 	public boolean isAlive;
 
@@ -74,12 +75,14 @@ public enum Pokedex implements PokedexInterface {
 		this.defense = getStat.compute(defense, iv, ev, level);		
 		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
 		this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		this.accuracy = 1;
 		
 		this.speedStg = 0;
 		this.attackStg = 0;
 		this.defenseStg = 0;
 		this.spAttackStg= 0;
 		this.spDefenseStg = 0;
+		this.accuracyStg = 0;
 		
 		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.types = null;	
 		this.status = null;
@@ -107,12 +110,14 @@ public enum Pokedex implements PokedexInterface {
 		this.defense = getStat.compute(defense, iv, ev, level);		
 		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
 		this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		this.accuracy = 1;
 		
 		this.speedStg = 0;
 		this.attackStg = 0;
 		this.defenseStg = 0;
 		this.spAttackStg= 0;
 		this.spDefenseStg = 0;
+		this.accuracyStg = 0;
 		
 		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.type = null;
 		this.status = null;
@@ -132,29 +137,30 @@ public enum Pokedex implements PokedexInterface {
 		Map<Pokedex, List<Moves>> pokeMap = new HashMap<>();
 		
 		// set default moves for each pokemon
-        pokeMap.put(BULBASAUR, Arrays.asList(Moves.TACKLE, Moves.POISONPOWDER, Moves.VINEWHIP));
+        pokeMap.put(BULBASAUR, Arrays.asList(Moves.TACKLE, Moves.VINEWHIP, Moves.GROWL));
         pokeMap.put(IVYSAUR, Arrays.asList(Moves.TACKLE, Moves.POISONPOWDER, Moves.VINEWHIP, 
         		Moves.RAZORLEAF));
 		pokeMap.put(VENUSAUR, Arrays.asList(Moves.TAKEDOWN, Moves.DOUBLEEDGE, Moves.PETALBLIZZARD,
 				Moves.SOLARBEAM));
 		
-        pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.QUICKATTACK, Moves.EMBER));
+        pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.EMBER, Moves.GROWL));
 		pokeMap.put(CHARMELEON, Arrays.asList(Moves.SLASH, Moves.QUICKATTACK, Moves.EMBER, 
 				Moves.FIREFANG));
         pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONCLAW, Moves.DRAGONBREATH, Moves.FLAMETHROWER,
         	Moves.FLAREBLITZ));
         
-		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN));
+		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.TAILWHIP));
         pokeMap.put(WARTORTLE, Arrays.asList(Moves.QUICKATTACK, Moves.WATERGUN, Moves.WATERPULSE));
         pokeMap.put(BLASTOISE, Arrays.asList(Moves.FLASHCANNON, Moves.AQUATAIL, 
         		Moves.WATERPULSE, Moves.HYDROPUMP));
         
-        pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.QUICKATTACK, Moves.THUNDERWAVE, Moves.THUNDERSHOCK));
+        pokeMap.put(PIKACHU, Arrays.asList(Moves.TACKLE, Moves.THUNDERWAVE, Moves.THUNDERSHOCK, 
+        		Moves.PLAYNICE));
         pokeMap.put(RAICHU, Arrays.asList(Moves.QUICKATTACK, Moves.SLAM, Moves.THUNDERPUNCH,  
         		Moves.THUNDERBOLT));    
         
         pokeMap.put(ABRA, Arrays.asList(Moves.TELEPORT));
-        pokeMap.put(KADABRA, Arrays.asList(Moves.TELEPORT, Moves.CONFUSION, Moves.PSYBEAM));
+        pokeMap.put(KADABRA, Arrays.asList(Moves.CONFUSION, Moves.PSYBEAM, Moves.KINESIS));
         pokeMap.put(ALAKAZAM, Arrays.asList(Moves.PSYCHIC, Moves.CONFUSION, Moves.PSYCHOCUT, 
         		Moves.CALMMIND));     
         
@@ -278,20 +284,23 @@ public enum Pokedex implements PokedexInterface {
 	public int getBHP() { return bhp; }
 	public void setBHP(int bhp) {	this.bhp = bhp; }
 
-	public int getSpeed() { return speed; }
+	public double getSpeed() { return speed; }
 	public void setSpeed(int speed) { this.speed = speed; }
 
-	public int getAttack() { return attack; }
+	public double getAttack() { return attack; }
 	public void setAttack(int attack) {	this.attack = attack; }
 
-	public int getDefense() { return defense; }
+	public double getDefense() { return defense; }
 	public void setDefense(int defense) { this.defense = defense; }
 
-	public int getSpAttack() { return spAttack; }
+	public double getSpAttack() { return spAttack; }
 	public void setSpAttack(int spAttack) { this.spAttack = spAttack; }
 
-	public int getSpDefense() {	return spDefense; }
+	public double getSpDefense() {	return spDefense; }
 	public void setSpDefense(int spDefense) { this.spDefense = spDefense; }
+	
+	public double getAccuracy() { return accuracy; }
+	public void setAccuracy(int accuracy) { this.accuracy = accuracy; }
 
 	public int getSpeedStg() { return speedStg; }
 	public void setSpeedStg(int speedStg) { this.speedStg = speedStg; }
@@ -303,7 +312,9 @@ public enum Pokedex implements PokedexInterface {
 	public void setSpAttackStg(int spAttackStg) { this.spAttackStg = spAttackStg; }
 	public int getSpDefenseStg() { return spDefenseStg; }
 	public void setSpDefenseStg(int spDefenseStg) { this.spDefenseStg = spDefenseStg; }
-
+	public int getAccuracyStg() { return accuracyStg; }
+	public void setAccuracyStg(int accuracyStg) { this.accuracyStg = accuracyStg; }
+	
 	public int getEvLevel() { return evLevel; }
 	public void setEvLevel(int evLevel) { this.evLevel = evLevel; }
 	
@@ -399,6 +410,21 @@ public enum Pokedex implements PokedexInterface {
 				else {	
 					this.speedStg += level;
 					this.speed *= Math.max(2, 2 + (double) this.speedStg) / Math.max(2, 2 - (double) this.speedStg);	
+					
+					outputChange(stat, level);
+				}	
+				break;
+			case "accuracy":
+				if (this.accuracyStg + level > 6 || this.accuracyStg + level < -6) {
+					if (level >= 1) 
+						System.out.println(this.name + "'s accuracy won't go any higher!");
+					else if (level <= -1) 
+						System.out.println(this.name + "'s accuracy won't go any lower!");
+					return;
+				}
+				else {	
+					this.accuracyStg += level;
+					this.accuracy = Math.max(3, 3 + (double) this.accuracyStg) / Math.max(3, 3 - (double) this.accuracyStg);	
 					
 					outputChange(stat, level);
 				}	

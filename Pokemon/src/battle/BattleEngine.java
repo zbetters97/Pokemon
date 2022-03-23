@@ -90,7 +90,7 @@ public class BattleEngine {
 					startMove(1, move1);
 				
 				// pokemon2 becomes attacker if not fainted
-				if (pokemon2.isAlive) {
+				if (pokemon1.isAlive && pokemon2.isAlive) {
 					
 					// if pokemon2 has no status effects
 					if (canTurn(2))
@@ -105,7 +105,7 @@ public class BattleEngine {
 					startMove(2, move2);
 				
 				// pokemon1 becomes attacker if not fainted
-				if (pokemon2.isAlive) {
+				if (pokemon1.isAlive && pokemon2.isAlive) {
 					if (canTurn(2))
 						startMove(1, move1);
 				}				
@@ -297,7 +297,7 @@ public class BattleEngine {
 				Sleeper.pause(1000);
 	            
 	            // if attack lands
-				if (isHit(move)) {
+				if (isHit(move, numTurn)) {
 															
 					// play move sound
 					SoundCard.play("//moves//" + move.getName(), true);
@@ -348,6 +348,9 @@ public class BattleEngine {
 					// calculate damage dealt
 					int damageDealt = calculateDamage(numTurn, move, crit, false);
 					
+					if (damageDealt > target.getHP())
+						damageDealt = target.getHP();
+					
 					// no damage dealt
 					if (damageDealt == 0) {
 						System.out.println("It had no effect!");
@@ -396,16 +399,23 @@ public class BattleEngine {
 	/** END START MOVE METHOD **/
 
 	/** IS HIT METHOD **/
-	private static boolean isHit(Moves move) {
+	private boolean isHit(Moves move, int numTurn) {
+		
+		Pokedex attacker;
+		
+		if (numTurn == 1) { attacker = pokemon1;}			
+		else { attacker = pokemon2; }
 		
 		// if move never misses, return true
 		if (move.getAccuracy() == -1) { return true; }
+		
+		double accuracy = move.getAccuracy() * attacker.getAccuracy();
 		
 		Random r = new Random();
 		float chance = r.nextFloat();
 		
 		// chance of missing is accuracy value / 100
-		return (chance <= ((float) move.getAccuracy() / 100)) ? true : false;
+		return (chance <= ((float) accuracy / 100)) ? true : false;
 	}
 	/** END IS HIT METHOD **/
 		

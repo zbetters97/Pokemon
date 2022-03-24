@@ -23,11 +23,15 @@ public class BattleEngine {
 	public void setWinningPokemon(Pokedex winningPokemon) { this.winningPokemon = winningPokemon; }
 	/** END GETTERS AND SETTERS **/
 	
+	/** CONSTRUCTOR **/
 	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
+		
+		// array to hold fighting pokemon
 		pokemon = new Pokedex[2];
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
 	}
+	/** END CONSTRUCTOR **/
 
 	/** SWAP POKEMON METHOD **/
 	public void swapPokemon(Pokedex newPokemon, int spot) {
@@ -41,43 +45,36 @@ public class BattleEngine {
 		// if both pokemon are alive
 		if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
 				
-			// returns 1 if pokemon1 goes first, returns 2 if pokemon2 goes first
+			// 1 if pokemon1 moves first, 2 if pokemon2 moves first
 			int numTurn = getTurn(move1, move2);
 			
-			// if pokemon1 moves first
-			if (numTurn == 1) {
-				
-				// if pokemon1 has no status effects
-				if (canTurn(0)) 
-					startMove(0, 1, move1);
-				
-				// pokemon2 becomes attacker if not fainted
-				if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
-					
-					// if pokemon2 has no status effects
-					if (canTurn(1)) 
-						startMove(1, 0, move2);			
-				}				
-			}
-			// pokemon2 move
-			else if (numTurn == 2) {
-				
-				// pokemon2 has no status effects
-				if (canTurn(1)) 
-					startMove(1, 0, move2);
-				
-				// pokemon1 becomes attacker if not fainted
-				if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
-					if (canTurn(0))
-						startMove(0, 1, move1);
-				}				
-			}
-									
-			// check if either pokemon has status damage
+			if (numTurn == 1) 
+				turn(0, move1, move2);	
+			else if (numTurn == 2) 			
+				turn(1, move2, move1);	
+												
+			// check if either fighter has status damage
 			statusDamage(0, 1);
 		}
 	}
 	/** END MOVE METHOD **/
+	
+	private void turn(int pk1, Moves move1, Moves move2) {
+		
+		int pk2 = (pk1 == 0) ? 1 : 0;
+		
+		// if attacker can fight
+		if (canTurn(pk1)) 
+			attack(pk1, pk2, move1);
+		
+		// target becomes attacker if battle not over
+		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
+			
+			// if target can fight
+			if (canTurn(pk2)) 
+				attack(pk2, pk1, move2);			
+		}		
+	}
 	
 	/** CPU SELECT MOVE METHOD **/
 	// returns move with max damage //
@@ -199,16 +196,15 @@ public class BattleEngine {
 		
 		if (pokemon[pkm].getStatusCounter() >= pokemon[pkm].getStatusLimit()) {
 			
+			pokemon[pkm].setStatusCounter(0); pokemon[pkm].setStatusLimit(0);
+			pokemon[pkm].setStatus(null);
+			
 			if (status.equals("SLP")) 
 				System.out.println(pokemon[pkm].getName() + " woke up!");				
 			else if (status.equals("CNF")) 
 				System.out.println(pokemon[pkm].getName() + " snapped out of confusion!");						
 							
-			Sleeper.pause(1700);
-			
-			pokemon[pkm].setStatusCounter(0); pokemon[pkm].setStatusLimit(0);
-			pokemon[pkm].setStatus(null);
-			
+			Sleeper.pause(1700);			
 			return true;
 		}
 		else {
@@ -259,17 +255,17 @@ public class BattleEngine {
 			Sleeper.pause(1700);
 			clearContent();
 			
-			int newHP = pokemon[atk].getHP() - damage;
+			int hp = pokemon[atk].getHP() - damage;
 			
-			if (newHP <= 0) {
-				newHP = 0;			
-				pokemon[atk].setHP(newHP);
+			if (hp <= 0) {
+				hp = 0;			
+				pokemon[atk].setHP(hp);
 				pokemon[atk].setAlive(false);
 				defeated(trg, atk, damage);				
 				return true;
 			}
 			else {
-				pokemon[atk].setHP(newHP);				
+				pokemon[atk].setHP(hp);				
 				return true;	
 			}
 		}
@@ -279,114 +275,132 @@ public class BattleEngine {
 	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/	
 	
 	/** START MOVE METHOD **/
-	private void startMove(int atk, int trg, Moves givenMove) {
+	private void attack(int atk, int trg, Moves slcMove) {
 				
-		// loop through moveset for attacking pokemon
-		for (Moves move : pokemon[atk].getMoveSet()) {
+		Moves move = null;
+		
+		// loop through fighter's moveset
+		for (Moves m : pokemon[atk].getMoveSet()) {
 			
 			// if chosen move is found
-			if (move.getName().equals(givenMove.getName())) {	
+			if (m.getName().equals(slcMove.getName())) {
 				
-				System.out.println(pokemon[atk].getName() + " used " + move.getName() + "!");
-				
-				// decrease move pp
-				move.setpp(move.getpp() - 1);
-				
-				Sleeper.pause(1000);
-	            
-	            // if attack lands
-				if (isHit(atk, move)) {
-															
-					// play move sound
-					SoundCard.play("//moves//" + move.getName(), true);
+				// assign it to move
+				move = m;
+				break;
+			}
+		}
+		
+		if (move != null) {
+			
+			// decrease move pp
+			move.setpp(move.getpp() - 1);
+			
+			System.out.println(pokemon[atk].getName() + " used " + move.getName() + "!");
+			Sleeper.pause(1000);			
+			SoundCard.play("//moves//" + move.getName(), true);
+				        
+	        // if attack lands
+			if (isHit(atk, move)) {
+												
+				if (move.getMType().equals("Status")) {	
 					
-					if (move.getMType().equals("Status")) {	
+					// if pokemon does not already have status affect
+					if (pokemon[trg].getStatus() == null) {
 						
-						if (pokemon[trg].getStatus() == null) {
-							pokemon[trg].setStatus(move.getEffect());						
-							System.out.println(pokemon[trg].getName() + " is " + pokemon[trg].getStatus().getCondition() + "!");	
-							
-							Sleeper.pause(1700);
-							clearContent();
-						}
-						else {
-							System.out.println(pokemon[trg].getName() + " is already " + pokemon[trg].getStatus().getCondition() + "!");
-							
-							Sleeper.pause(1700);
-							clearContent();
-						}
-						return;
-					}
-					else if (move.getMType().equals("Attribute")) {		
+						pokemon[trg].setStatus(move.getEffect());				
 						
-						if (move.isToSelf()) {
-							for (String stat : move.getStats()) 
-								pokemon[atk].changeStat(stat, move.getLevel());	
-						}
-						else {
-							for (String stat : move.getStats()) 
-								pokemon[trg].changeStat(stat, move.getLevel());							
-						}
+						System.out.println(pokemon[trg].getName() + " is " + pokemon[trg].getStatus().getCondition() + "!");						
+						Sleeper.pause(1700);
 						
-						if (move.getLevel() > 0) SoundCard.play("//in-battle//stat-up", true);
-						else SoundCard.play("//in-battle//stat-down", true);
-						
-						Sleeper.pause(1700);						
 						clearContent();
+					}
+					// pokemon already has status affect
+					else {
+						System.out.println(pokemon[trg].getName() + " is already " + pokemon[trg].getStatus().getCondition() + "!");						
+						Sleeper.pause(1700);
 						
-						return;
+						clearContent();
+					}
+				}
+				else if (move.getMType().equals("Attribute")) {		
+					
+					// if move changes self attributes
+					if (move.isToSelf()) {
+						
+						// loop through each specified attribute to be changed
+						for (String stat : move.getStats()) 
+							pokemon[atk].changeStat(stat, move.getLevel());	
+					}
+					// if move changes target attributes
+					else {
+						
+						// loop through each specified attribute to be changed
+						for (String stat : move.getStats()) 
+							pokemon[trg].changeStat(stat, move.getLevel());							
 					}
 					
-					// get critical damage (if applicable)
+					// attributes raised
+					if (move.getLevel() > 0) 
+						SoundCard.play("//in-battle//stat-up", true);
+					// attributes lowered
+					else 
+						SoundCard.play("//in-battle//stat-down", true);
+					
+					Sleeper.pause(1700);						
+					clearContent();
+				}
+				// move is fighting
+				else {
+					// get critical damage (1/255 chance)
 					double crit = isCritical();			
 					
 					// if critical hit
-					if (crit == 1.5) { System.out.println("A critical hit!"); }
+					if (crit == 1.5) 
+						System.out.println("A critical hit!");
 									
-					// calculate damage dealt
-					int damageDealt = calculateDamage(atk, trg, move, crit, false);
-					
-					if (damageDealt > pokemon[trg].getHP())
-						damageDealt = pokemon[trg].getHP();
-					
+					// calculate damage to be dealt
+					int damage = calculateDamage(atk, trg, move, crit, false);
+							
 					// no damage dealt
-					if (damageDealt == 0) {
+					if (damage == 0) {
 						System.out.println("It had no effect!");
 						Sleeper.pause(1700);
 						clearContent();
 					}
-					else {
-						int health = dealDamage(trg, damageDealt);
+					else {																		
+						dealDamage(trg, damage);
 						
-						System.out.println(pokemon[trg].getName() + " took " + damageDealt + " damage!");
-						Sleeper.pause(1700);	
-						
-						// pokemon fainted
-						if (health == 0) {
-							defeated(atk, trg, damageDealt);
-						}
+						System.out.println(pokemon[trg].getName() + " took " + damage + " damage!");
+						Sleeper.pause(1700);						
+
+						// damage is fatal
+						if (damage >= pokemon[trg].getHP()) 
+							defeated(atk, trg, damage);	
 						else {
+							// move causes status effect
 							if (move.getProbability() != null) {
 								
+								// chance for status effect
 								if (new Random().nextDouble() <= move.getProbability()) {
 									pokemon[trg].setStatus(move.getEffect());
 									
 									System.out.println(pokemon[trg].getName() + " is " + pokemon[trg].getStatus().getCondition() + "!");							
 									Sleeper.pause(1700);
-								}
-							}
-						}						
-						clearContent();
-					}
-				}						
-				// attack missed
-				else {
-					System.out.println("The attack missed!");
-					Sleeper.pause(2000);
-					clearContent();
-				}		
-			}	
-		}
+								}							
+							}						
+							clearContent();
+						}
+					}	
+				}				
+			}
+			// attack missed
+			else {
+				System.out.println("The attack missed!");
+				Sleeper.pause(2000);
+				clearContent();
+			}				
+		}		
 	}
 	/** END START MOVE METHOD **/
 
@@ -494,17 +508,16 @@ public class BattleEngine {
 	/** END CALCULATE DAMAGE DEALT METHOD **/
 
 	/** DEAL DAMAGE METHOD **/
-	private int dealDamage(int trg, int damage) {		
+	private void dealDamage(int trg, int damage) {		
 		
 		// subtract damage dealt from total hp
 		int result = pokemon[trg].getHP() - (int)damage;		
 		
 		// set HP to 0 if below 0
-		if (result < 0) { result = 0; }	
+		if (result < 0)
+			result = 0;
 		
 		pokemon[trg].setHP(result);
-		
-		return pokemon[trg].getHP();
 	}
 	/** END DEAL DAMAGE METHOD **/
 

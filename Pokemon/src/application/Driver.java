@@ -95,7 +95,9 @@
  * 		-Overhauled BattleEngine class
  * 		-Fixed isAlive checkers at the end of every turn
  * 		-Modified SoundCard class to sleep for full duration
- * 		-Implemented Array variable in BattleEngine class to track pokemon in battle
+ * 		-Implemented Array variable in BattleEngine class to track Pokemon in battle
+ * 3/24/2022:
+ * 		-Cleaned up BattleEngine class to be more concise
  */
 
 package application;

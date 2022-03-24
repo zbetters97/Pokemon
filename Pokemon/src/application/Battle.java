@@ -15,6 +15,7 @@ public class Battle {
 	private static Scanner input = new Scanner(System.in);	
 	private int numPlayers;
 	private static Pokedex pokemon1, pokemon2;	
+	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
 	public Battle(int numPlayers) {
@@ -30,7 +31,8 @@ public class Battle {
 	/** MAIN MENU METHOD **/
 	public void start() {		
 		clearContent();				
-		selectPokemon();	
+		selectPokemon();
+		selectMove();
 	}
 	/** END MAIN METHOD **/
 	
@@ -77,15 +79,13 @@ public class Battle {
 		// play pokemon cry
 		SoundCard.play("//pokedex//" + pokemon2.getName());	
 		clearContent();	
-
-		selectMove(pokemon1, pokemon2);
+		
+		battle = new BattleEngine(pokemon1, pokemon2);
 	}
 	/** END SELECT POKEMON METHOD **/
 		
 	/** SELECT MOVE METHOD **/
-	private void selectMove(Pokedex pokemon1, Pokedex pokemon2) {
-		
-		BattleEngine battle = new BattleEngine();
+	private void selectMove() {
 		
 		Moves move1, move2;
 		
@@ -98,15 +98,21 @@ public class Battle {
 				
 				displayHP();
 				move1 = displayMoves(pokemon1);
-				move2 = battle.cpuSelectMove(pokemon1, pokemon2);				
+				move2 = battle.cpuSelectMove();				
 				clearContent();
 				
-				battle.move(pokemon1, pokemon2, move1, move2);				
+				battle.move(move1, move2);				
 				clearContent();
 				
-				if (battle.getWinner() != null) {
-					announceWinner("1", "2", battle.getMoney());							
-					return;
+				if (battle.hasWinner()) {
+					if (battle.getWinningPokemon().getName().equals(pokemon1.getName())) {
+						announceWinner("1", "2", battle.getMoney(1));						
+						return;
+					}
+					else if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {								
+						announceWinner("2", "1", battle.getMoney(0));	
+						return;
+					}	
 				}
 			}				
 			// 2 player mode
@@ -120,24 +126,20 @@ public class Battle {
 				move2 = displayMoves(pokemon2);	
 				clearContent();
 				
-				battle.move(pokemon1, pokemon2, move1, move2);				
+				battle.move(move1, move2);				
 				clearContent();
 				
-				if (battle.getWinner() != null) {
-					if (battle.getWinner().getName().equals(pokemon1.getName())) {
-						announceWinner("1", "2", battle.getMoney());						
+				if (battle.hasWinner()) {
+					if (battle.getWinningPokemon().getName().equals(pokemon1.getName())) {
+						announceWinner("1", "2", battle.getMoney(1));						
 						return;
 					}
-					else if (battle.getWinner().getName().equals(pokemon2.getName())) {								
-						announceWinner("2", "1", battle.getMoney());	
+					else if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {								
+						announceWinner("2", "1", battle.getMoney(0));	
 						return;
 					}	
 				}				
-			}
-			else { 
-				System.out.println("ERROR! Internal error!"); 
-				System.exit(-1); 
-			}		
+			}	
 		}
 	}
 	/** END SELECT MOVE METHOD **/

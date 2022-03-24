@@ -48,7 +48,7 @@ public enum Pokedex implements PokedexInterface {
 	private double speed, attack, defense, spAttack, spDefense, accuracy;	
 	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg, accuracyStg;
 	private StatusEngine status;
-	public boolean isAlive;
+	private boolean isAlive;
 
 	private int statusCounter, statusLimit;
 	/** END INITIALIZE VALUES **/

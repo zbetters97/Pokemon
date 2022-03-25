@@ -1,8 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 /*** MAIN MENU CLASS ***/
@@ -61,66 +62,51 @@ public class MainMenu {
 	/** SELECT MUSIC METHOD **/
 	private static void selectMusic() {
 		
-		// music files //
-		String btlRStrainer = "battle-rs-trainer";
-		String btlRSgym = "battle-rs-gym";
-		String btlRSchampion = "battle-rs-champion";
-		String btlRSlegendary = "battle-rs-legendary";
-						
-		String btlHStrainerjohto = "battle-hs-trainer-johto";
-		String btlHStrainerkanto = "battle-hs-trainer-kanto";		
-		String btlHSgymjohto = "battle-hs-gym-johto";
-		String btlHSgymkanto = "battle-hs-gym-kanto";		
-		String btlHSred = "battle-hs-red";
-		
-		String btlDPdialga = "battle-dp-dialga";
-		
-		String btlPCfirst = "battle-pc-first";
-		String btlPCnormal = "battle-pc-normal";
-		
-		String btlSSB64 = "battle-ssb-64";
-		String btlSSBred = "battle-ssb-red";
-		String btlSSBfloats = "battle-ssb-floats";
-		
-		// list to hold music files
+		// arraylist to hold music String
 		ArrayList<String> musicList = new ArrayList<>();
 		
-		// add all files to music list
-		musicList.addAll(Arrays.asList(
-				btlRStrainer, btlRSgym, btlRSchampion, btlRSlegendary,								
-				btlHStrainerjohto, btlHStrainerkanto, btlHSgymjohto, btlHSgymkanto, btlHSred,				
-				btlDPdialga, btlPCfirst, btlPCnormal, btlSSB64, btlSSBred, btlSSBfloats
-		));
-
-		bgmusic = null;	
+		// hashmap to hold music file and corrosponding index
+		LinkedHashMap<Integer, String> musicDict = new LinkedHashMap<>();
 		
-		System.out.println("PLEASE SELECT MUSIC:\n\n"
-				+ "[0] QUIT\n\n"
-				+ "[1] R/S: TRAINER\n"
-				+ "[2] R/S: GYM\n"
-				+ "[3] R/S: CHAMPION\n"
-				+ "[4] R/S: LEGENDARY\n\n"
-				+ "[5] HG/SS: TRAINER (JOHTO)\n"
-				+ "[6] HG/SS: TRAINER (KANTO)\n"
-				+ "[7] HG/SS: GYM (JOHTO)\n"
-				+ "[8] HG/SS: GYM (KANTO)\n"
-				+ "[9] HG/SS: RED\n\n"
-				+ "[10] D/P: DIALGA\n\n"
-				+ "[11] COL: FIRST\n"
-				+ "[12] COL: NORMAL\n\n"
-				+ "[13] SSB: 64\n"
-				+ "[14] SSB: RED\n"
-				+ "[15] SSB: FLOATS\n\n"
-				+ "[16] NONE"				
-		);
+		// get all songs from music folder
+		String path = new File("").getAbsolutePath() + "//lib//sounds//music";
+		File directoryPath = new File(path);
+		
+		// store all music files into array
+		File filesList[] = directoryPath.listFiles();
+		
+		for (int i = 0; i < filesList.length; i++) {			
+			
+			String music = filesList[i].getName();
+			musicDict.put(i, music);
+			
+			// format music
+			String song = filesList[i].getName()
+					.replace("battle-", "")
+					.replace(".wav", "")
+					.replace("-", ": ")
+					.replace("_", ", ")
+					.toUpperCase();
+			
+			// add to arraylist
+			musicList.add(song);			
+		}		
+		
+		System.out.println("PLEASE SELECT MUSIC:\n\n[0] QUIT\n");
+		for (int i = 0; i < musicList.size(); i++) {
+			int c = i + 1;
+			System.out.println("[" + c + "] " + musicList.get(i));
+		}
 		
 		while (true) {
 			
 			try { 				
 				int choice = input.nextInt(); 
 				
-				if (0 < choice && choice <= musicList.size()) {
-					bgmusic = new SoundCard("\\music\\" + musicList.get(choice - 1));
+				if (0 < choice && choice <= musicDict.size()) {
+					String file = musicDict.get(choice - 1).replace(".wav", "");
+					
+					bgmusic = new SoundCard("\\music\\" + file);
 					bgmusic.playMusic();
 					return;
 				}					
@@ -129,13 +115,12 @@ public class MainMenu {
 					System.out.println("Turning off..."); 
 					System.exit(0);
 				}
-				else if (choice == musicList.size() + 1)
-					return;
 				else
 					System.out.println("ERROR! Input must be a valid selection!");
 			}
 			catch (Exception e) {
 				System.out.println("ERROR! Input must be a number!");
+				System.out.println(e);
 				input.next();
 			}
 		}

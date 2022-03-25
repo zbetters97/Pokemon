@@ -98,6 +98,9 @@
  * 		-Implemented Array variable in BattleEngine class to track Pokemon in battle
  * 3/24/2022:
  * 		-Cleaned up BattleEngine class to be more concise
+ * 3/25/2022:
+ * 		-Modified background music coding to pull from music folder
+ * 		-Modified Sleeper and SoundCard class to more accurately hold for sound file
  */
 
 package application;

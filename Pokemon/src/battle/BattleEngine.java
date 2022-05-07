@@ -369,15 +369,17 @@ public class BattleEngine {
 						clearContent();
 					}
 					else {																		
-						dealDamage(trg, damage);
-						
 						System.out.println(pokemon[trg].getName() + " took " + damage + " damage!");
-						Sleeper.pause(1700);						
-
+						Sleeper.pause(1700);										
+						
 						// damage is fatal
-						if (damage >= pokemon[trg].getHP()) 
+						if (damage >= pokemon[trg].getHP()) {
+							dealDamage(trg, damage);
 							defeated(atk, trg, damage);	
+						}							
 						else {
+							dealDamage(trg, damage);
+							
 							// move causes status effect
 							if (move.getProbability() != null) {
 								
@@ -467,6 +469,7 @@ public class BattleEngine {
 			power = move.getPower();		
 		
 		double A = 1.0; double D = 1.0; 
+		double STAB = 1.0;
 		double type = 1.0;
 
 		if (move.getMType().equals("Special")) {
@@ -493,11 +496,27 @@ public class BattleEngine {
 			}
 		}
 		else 	
-			type = effectiveness(move.getType(), pokemon[trg].getType());		
+			type = effectiveness(move.getType(), pokemon[trg].getType());	
+				
+		// if attacker has more than 1 type
+		if (pokemon[atk].getTypes() != null) {	
+			
+			// cycle through each type of attacker
+			for (TypeEngine t : pokemon[atk].getTypes()) {
+				
+				// if same type move
+				if (move.getType() == t) {
+					STAB = 1.5;
+					break;
+				}
+			}
+		}
+		else
+			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
 		
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
-		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * type);
-		
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);
+
 		// don't play sound if cpu is calling method
 		if (cpu) return damageDealt;
 		

@@ -92,9 +92,9 @@ public class MainMenu {
 			musicList.add(song);			
 		}		
 		
-		System.out.println("PLEASE SELECT MUSIC:\n\n[0] QUIT\n");
+		System.out.println("PLEASE SELECT MUSIC:\n\n[0] QUIT\n[1] NONE");
 		for (int i = 0; i < musicList.size(); i++) {
-			int c = i + 1;
+			int c = i + 2;
 			System.out.println("[" + c + "] " + musicList.get(i));
 		}
 		
@@ -103,7 +103,7 @@ public class MainMenu {
 			try { 				
 				int choice = input.nextInt(); 
 				
-				if (0 < choice && choice <= musicDict.size()) {
+				if (1 < choice && choice <= musicDict.size()) {
 					String file = musicDict.get(choice - 1).replace(".wav", "");
 					
 					bgmusic = new SoundCard("\\music\\" + file);
@@ -114,6 +114,9 @@ public class MainMenu {
 					clearContent();
 					System.out.println("Turning off..."); 
 					System.exit(0);
+				}
+				else if (choice == 1) {
+					return;
 				}
 				else
 					System.out.println("ERROR! Input must be a valid selection!");

@@ -38,26 +38,26 @@ public class TypeEngine implements TypeInterface {
 		normal.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.ROCK, TypeEngine.Type.STEEL)), 0.5);		
 		normal.resistantTo(TypeEngine.Type.GHOST, 0.0);		
-		normal.vulnerableTo(TypeEngine.Type.FIGHTING, 2.0);
+		normal.vulnerableTo(TypeEngine.Type.FIGHTING, 1.5);
 		
 		fire = new TypeEngine(TypeEngine.Type.FIRE, 0.5); 	
 		fire.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.GRASS, TypeEngine.Type.ICE, 
 				TypeEngine.Type.BUG, TypeEngine.Type.STEEL, TypeEngine.Type.FAIRY)), 0.5); 	
 		fire.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.WATER, TypeEngine.Type.GROUND, TypeEngine.Type.ROCK)), 2.0);
+				TypeEngine.Type.WATER, TypeEngine.Type.GROUND, TypeEngine.Type.ROCK)), 1.5);
 		
 		water = new TypeEngine(TypeEngine.Type.WATER, 0.5); 
 		water.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.WATER, TypeEngine.Type.ICE, 
 				TypeEngine.Type.STEEL)), 0.5);		
 		water.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.ELECTRIC, TypeEngine.Type.GRASS)), 2.0);
+				TypeEngine.Type.ELECTRIC, TypeEngine.Type.GRASS)), 1.5);
 		
 		electric = new TypeEngine(TypeEngine.Type.ELECTRIC, 0.5); 
 		electric.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.ELECTRIC, TypeEngine.Type.FLYING, TypeEngine.Type.STEEL)), 0.5);
-		electric.vulnerableTo(TypeEngine.Type.GROUND, 2.0);
+		electric.vulnerableTo(TypeEngine.Type.GROUND, 1.5);
 		
 		grass = new TypeEngine(TypeEngine.Type.GRASS, 0.5); 
 		grass.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
@@ -65,26 +65,26 @@ public class TypeEngine implements TypeInterface {
 				TypeEngine.Type.GROUND)), 0.5);
 		grass.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.ICE, TypeEngine.Type.POISON, 
-				TypeEngine.Type.FLYING, TypeEngine.Type.BUG)), 2.0);
+				TypeEngine.Type.FLYING, TypeEngine.Type.BUG)), 1.5);
 		
 		ice = new TypeEngine(TypeEngine.Type.ICE, 0.5); 
 		ice.resistantTo(TypeEngine.Type.ICE, 0.5);		
 		ice.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.FIGHTING, TypeEngine.Type.ROCK, 
-				TypeEngine.Type.STEEL)), 2.0);
+				TypeEngine.Type.STEEL)), 1.5);
 		
 		fighting = new TypeEngine(TypeEngine.Type.FIGHTING, 0.5); 
 		fighting.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.BUG, TypeEngine.Type.ROCK, TypeEngine.Type.DARK)), 0.5);
 		fighting.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.FLYING, TypeEngine.Type.PSYCHIC, TypeEngine.Type.FAIRY)), 2.0);
+				TypeEngine.Type.FLYING, TypeEngine.Type.PSYCHIC, TypeEngine.Type.FAIRY)), 1.5);
 		
 		poison = new TypeEngine(TypeEngine.Type.POISON, 0.5); 
 		poison.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.GRASS, TypeEngine.Type.FIGHTING, TypeEngine.Type.POISON, 
 				TypeEngine.Type.BUG, TypeEngine.Type.FAIRY)), 0.5);
 		poison.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.GROUND, TypeEngine.Type.PSYCHIC)), 2.0);
+				TypeEngine.Type.GROUND, TypeEngine.Type.PSYCHIC)), 1.5);
 		
 		ground = new TypeEngine(TypeEngine.Type.GROUND, 0.5); 
 		ground.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
@@ -96,19 +96,19 @@ public class TypeEngine implements TypeInterface {
 				TypeEngine.Type.GRASS, TypeEngine.Type.FIGHTING, TypeEngine.Type.BUG)), 0.5);
 		flying.resistantTo(TypeEngine.Type.GROUND, 0.0);
 		flying.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.ELECTRIC, TypeEngine.Type.ICE, TypeEngine.Type.ROCK)), 2.0);
+				TypeEngine.Type.ELECTRIC, TypeEngine.Type.ICE, TypeEngine.Type.ROCK)), 1.5);
 		
 		psychic = new TypeEngine(TypeEngine.Type.PSYCHIC, 0.5); 
 		psychic.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIGHTING, TypeEngine.Type.PSYCHIC)), 0.5);
 		psychic.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.BUG, TypeEngine.Type.GHOST, TypeEngine.Type.DARK)), 2.0);
+				TypeEngine.Type.BUG, TypeEngine.Type.GHOST, TypeEngine.Type.DARK)), 1.5);
 		
 		bug = new TypeEngine(TypeEngine.Type.BUG, 0.5); 
 		bug.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.GRASS, TypeEngine.Type.FIGHTING, TypeEngine.Type.GROUND)), 0.5);
 		bug.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.FIRE, TypeEngine.Type.FLYING, TypeEngine.Type.ROCK)), 2.0);
+				TypeEngine.Type.FIRE, TypeEngine.Type.FLYING, TypeEngine.Type.ROCK)), 1.5);
 		
 		rock = new TypeEngine(TypeEngine.Type.ROCK, 0.5); 
 		rock.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
@@ -116,7 +116,7 @@ public class TypeEngine implements TypeInterface {
 				TypeEngine.Type.FLYING)), 0.5);		
 		rock.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.WATER, TypeEngine.Type.GRASS, TypeEngine.Type.FIGHTING, 
-				TypeEngine.Type.GROUND, TypeEngine.Type.STEEL)), 2.0);
+				TypeEngine.Type.GROUND, TypeEngine.Type.STEEL)), 1.5);
 		
 		ghost = new TypeEngine(TypeEngine.Type.GHOST, 0.5); 
 		ghost.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
@@ -124,21 +124,21 @@ public class TypeEngine implements TypeInterface {
 		ghost.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.NORMAL, TypeEngine.Type.FIGHTING)), 0.0);		
 		ghost.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.GHOST, TypeEngine.Type.DARK)), 2.0);
+				TypeEngine.Type.GHOST, TypeEngine.Type.DARK)), 1.5);
 		
 		dragon = new TypeEngine(TypeEngine.Type.DRAGON, 0.5);
 		dragon.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.WATER, TypeEngine.Type.ELECTRIC, 
 				TypeEngine.Type.GRASS)), 0.5);		
 		dragon.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.ICE, TypeEngine.Type.DRAGON, TypeEngine.Type.FAIRY)), 2.0);
+				TypeEngine.Type.ICE, TypeEngine.Type.DRAGON, TypeEngine.Type.FAIRY)), 1.5);
 		
 		dark = new TypeEngine(TypeEngine.Type.DARK, 0.5); 
 		dark.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.GHOST, TypeEngine.Type.DARK)), 0.5);		
 		dark.resistantTo(TypeEngine.Type.PSYCHIC, 0.0);
 		dark.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.FIGHTING, TypeEngine.Type.BUG, TypeEngine.Type.FAIRY)), 2.0);
+				TypeEngine.Type.FIGHTING, TypeEngine.Type.BUG, TypeEngine.Type.FAIRY)), 1.5);
 		
 		steel = new TypeEngine(TypeEngine.Type.STEEL, 0.5); 
 		steel.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
@@ -148,14 +148,14 @@ public class TypeEngine implements TypeInterface {
 				TypeEngine.Type.FAIRY)), 0.5);	
 		steel.resistantTo(TypeEngine.Type.POISON, 0.0);
 		steel.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.FIRE, TypeEngine.Type.FIGHTING, TypeEngine.Type.GROUND)), 2.0);
+				TypeEngine.Type.FIRE, TypeEngine.Type.FIGHTING, TypeEngine.Type.GROUND)), 1.5);
 		
 		fairy = new TypeEngine(TypeEngine.Type.FAIRY, 0.5); 
 		fairy.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIGHTING, TypeEngine.Type.BUG, TypeEngine.Type.DARK)), 0.5);		
 		fairy.resistantTo(TypeEngine.Type.DRAGON, 0.0);
 		fairy.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
-				TypeEngine.Type.POISON, TypeEngine.Type.STEEL)), 2.0);
+				TypeEngine.Type.POISON, TypeEngine.Type.STEEL)), 1.5);
 	}
 	
 	public ArrayList<TypeEngine> getTypeEngine() {		

@@ -53,7 +53,7 @@ public enum Moves {
 	DYNAMICPUNCH ("Dynamic Punch", "Physical", TypeEngine.fighting, StatusEngine.confuse, 1.0, 5, 150, 50),
 	CROSSCHOP ("Cross Chop", "Physical", TypeEngine.fighting, 5, 150, 80),
 	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90),
-	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.ground, 15, 75, 90),
+	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.rock, 15, 75, 90),
 	EARTHQUAKE ("Earthquake", "Physical", TypeEngine.ground, 10, 150, 100),
 	CONFUSERAY ("Confuse Ray", "Status", TypeEngine.ghost, StatusEngine.confuse, 10, 100),
 	LICK ("Lick", "Physical", TypeEngine.ghost, 30, 45, 100),

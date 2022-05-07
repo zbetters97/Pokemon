@@ -101,6 +101,11 @@
  * 3/25/2022:
  * 		-Modified background music coding to pull from music folder
  * 		-Modified Sleeper and SoundCard class to more accurately hold for sound file
+ * 5/7/2022:
+ * 		-Modified deal damage logic to be more accurate
+ * 		-Changed type of Rock Throw from Ground to Rock
+ * 		-Weakened super effective damage from 2.0 to 1.5
+ * 		-Added STAB multiplier for damage formula
  */
 
 package application;

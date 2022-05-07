@@ -69,7 +69,7 @@ public class SoundCard {
 		switch (Double.toString(effectiveness)) {
 			case "0.5": hit = "hit-weak.wav"; break;
 			case "1.0": hit = "hit-normal.wav"; break;
-			case "2.0": hit = "hit-super.wav"; break;
+			case "1.5": hit = "hit-super.wav"; break;
 			
 			default: return;
 		}
@@ -77,7 +77,7 @@ public class SoundCard {
 		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
         File sound = new File(path);
         
-        if (effectiveness == 2.0) 
+        if (effectiveness == 1.5) 
         	System.out.println("It's super effective!");
 		else if (effectiveness == .5)
 			System.out.println("It's not very effective...");

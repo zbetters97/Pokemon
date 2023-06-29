@@ -14,24 +14,44 @@ public class Battle {
 	// create static scanner to receive user input	
 	private static Scanner input = new Scanner(System.in);	
 	private int numPlayers;
-	private static Pokedex pokemon1, pokemon2;	
+	private int partySize;
+	private ArrayList<Pokedex> pokemonParty1;
+	private ArrayList<Pokedex> pokemonParty2;
+	private static Pokedex pokemon1, pokemon2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
-	public Battle(int numPlayers) {
+	public Battle(int numPlayers, int partySize) {
 		
-		// prevent errors upon startup by setting numPlayers to either 1 or 2
-		if (numPlayers > 2) numPlayers = 2;
-		else if (numPlayers < 1) numPlayers = 1;
-
+		// prevent errors upon startup by setting variables expected values
+		if (numPlayers < 1) numPlayers = 1;
+		else if (numPlayers > 2) numPlayers = 2;		
+		
+		if (partySize < 1) partySize = 1;
+		if (partySize > 6) partySize = 6;
+		
 		this.numPlayers = numPlayers;
+		this.partySize = partySize;
+		
+		pokemonParty1 = new ArrayList<Pokedex>();
+		pokemonParty2 = new ArrayList<Pokedex>();
 	}
 	/** END CONSTRUCTOR **/
 	
 	/** MAIN MENU METHOD **/
 	public void start() {		
-		clearContent();				
-		selectPokemon();
+		clearContent();	
+		
+		//selectPokemon();
+		
+		selectParty(1);
+		selectParty(2);
+		
+		pokemon1 = pokemonParty1.get(0);
+		pokemon2 = pokemonParty2.get(0);
+		
+		battle = new BattleEngine(pokemon1, pokemon2);
+				
 		selectMove();
 	}
 	/** END MAIN METHOD **/
@@ -83,6 +103,103 @@ public class Battle {
 		battle = new BattleEngine(pokemon1, pokemon2);
 	}
 	/** END SELECT POKEMON METHOD **/
+	
+	/** SELECT PARTY METHOD **/
+	private void selectParty(int player) {
+				
+		int party = 0;		
+		
+		while (party < partySize) {
+		
+			/** LAMBDA METHOD TO GET POKEMON SELECTION **/
+			SelectionGrabber getInput = (trainerNum) -> {				
+				
+				int counter = 0;
+				
+				for (Pokedex p : Pokedex.getPokedex()) {
+					
+					// don't display Pokemon who are already chosen					
+					if (pokemonParty1.contains(Pokedex.getPokemon(counter)) || 
+							pokemonParty2.contains(Pokedex.getPokemon(counter))) {
+						counter++;
+						continue;
+					}			
+					System.out.println("[" + ++counter + "] " + p.getName() + " (LVL: " + p.getLevel() + ")");	
+				}			
+				
+				while (true) {				
+					try { 
+						int choice = input.nextInt(); 
+						
+						// choice must be a number from 0 to last element in list
+						if (0 < choice && choice <= counter) {
+							
+							// chosen Pokemon must not have already been selected by either trainer
+							if (pokemonParty1.contains(Pokedex.getPokemon(choice - 1)) || 
+									pokemonParty2.contains(Pokedex.getPokemon(choice - 1))) 						
+								System.out.println("This Pokemon has already been chosen!");							
+							else						
+								return choice;
+						}
+						else 
+							System.out.println("This is not a valid selection");
+					}
+					catch (Exception e) {
+						System.out.println("ERROR! Input must be a number!");
+						input.next();
+					}
+				}
+			};							
+			/** END LAMBDA METHOD **/
+			
+			System.out.println("TRAINER " + player + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
+			
+			// assign fighter to pokemon found at given index
+			if (player == 1) {	
+				
+				System.out.print("TRAINER 1 PARTY: ");
+				
+				if (!pokemonParty1.isEmpty()) {
+					for (Pokedex p : pokemonParty1)
+						System.out.print(p.getName() + " ");
+				}
+				System.out.print("\nTRAINER 2 PARTY:\n\n");
+				
+				pokemonParty1.add(Pokedex.getPokemon(getInput.get(1) - 1));
+								
+				// play pokemon cry
+				SoundCard.play("//pokedex//" + pokemonParty1.get(party).getName());	
+				clearContent();
+				party++;
+			}				
+			else if (player == 2) {
+				
+				if (!pokemonParty1.isEmpty()) {
+					System.out.print("TRAINER 1 PARTY: ");
+					for (Pokedex p : pokemonParty1)
+						System.out.print(p.getName() + " ");
+				}
+				
+				if (!pokemonParty2.isEmpty()) {
+					System.out.print("\nTRAINER 2 PARTY: ");
+					for (Pokedex p : pokemonParty2)
+						System.out.print(p.getName() + " ");
+				}
+				else
+					System.out.print("\nTRAINER 2 PARTY: ");
+				
+				System.out.print("\n\n");
+				
+				pokemonParty2.add(Pokedex.getPokemon(getInput.get(1) - 1));
+				
+				// play pokemon cry
+				SoundCard.play("//pokedex//" + pokemonParty2.get(party).getName());	
+				clearContent();
+				party++;
+			}
+		}
+	}
+	/** END SELECT PARTY METHOD **/
 		
 	/** SELECT MOVE METHOD **/
 	private void selectMove() {
@@ -96,7 +213,7 @@ public class Battle {
 			// 1 player mode
 			if (numPlayers == 1) {
 				
-				displayHP();
+				displayParty(); displayHP();
 				move1 = displayMoves(pokemon1);
 				move2 = battle.cpuSelectMove();				
 				clearContent();
@@ -105,49 +222,92 @@ public class Battle {
 				clearContent();
 				
 				if (battle.hasWinner()) {
-					if (battle.getWinningPokemon().getName().equals(pokemon1.getName())) {
-						announceWinner("1", "2", battle.getMoney(1));						
-						return;
+						
+					// if player 2 defeated player 1
+					if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {
+						
+						// remove from party 1
+						pokemonParty1.remove(0);
+						
+						// if no pokemon left
+						if (pokemonParty1.isEmpty()) {
+							announceWinner("1", "2", battle.getMoney(1));	
+							return;
+						}
+						else {			
+							// reset winner
+							battle.setWinningPokemon(null);
+							
+							// get next pokemon in party and swap out battle
+							pokemon1 = pokemonParty1.get(0);
+							battle.swapPokemon(pokemon1, 0);
+							
+							System.out.println("GO, " + pokemon1.getName() + "!");
+							SoundCard.play("//pokedex//" + pokemon1.getName());
+							Sleeper.pause(1700);	
+							clearContent();
+						}
 					}
-					else if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {								
-						announceWinner("2", "1", battle.getMoney(0));	
-						return;
-					}	
+					// if player 1 defeated player 2
+					else {				
+						// remove from party 2
+						pokemonParty2.remove(0);
+						
+						// if no pokemon left
+						if (pokemonParty2.isEmpty()) {
+							announceWinner("1", "2", battle.getMoney(0));	
+							return;
+						}
+						else {			
+							// reset winner
+							battle.setWinningPokemon(null);
+							
+							// get next pokemon in party and swap out battle
+							pokemon2 = pokemonParty2.get(0);
+							battle.swapPokemon(pokemon2, 1);
+							
+							System.out.println("GO, " + pokemon2.getName() + "!");
+							SoundCard.play("//pokedex//" + pokemon2.getName());
+							Sleeper.pause(1700);	
+							clearContent();
+						}					
+					}
 				}
 			}				
 			// 2 player mode
 			else if (numPlayers == 2) {
 				
-				displayHP();
+				displayParty(); displayHP();
 				move1 = displayMoves(pokemon1);					
 				clearContent();
 				
-				displayHP();
+				displayParty(); displayHP();
 				move2 = displayMoves(pokemon2);	
 				clearContent();
 				
 				battle.move(move1, move2);				
-				clearContent();
-				
-				if (battle.hasWinner()) {
-					if (battle.getWinningPokemon().getName().equals(pokemon1.getName())) {
-						announceWinner("1", "2", battle.getMoney(1));						
-						return;
-					}
-					else if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {								
-						announceWinner("2", "1", battle.getMoney(0));	
-						return;
-					}	
-				}				
+				clearContent();			
 			}	
 		}
 	}
 	/** END SELECT MOVE METHOD **/
 	
+	private void displayParty() {
+		
+		System.out.print("TRAINER 1 PARTY: ");
+		for (Pokedex p : pokemonParty1)
+			System.out.print(p.getName() + " ");
+		
+		System.out.print("\nTRAINER 2 PARTY: ");
+		
+		for (Pokedex p : pokemonParty2)
+			System.out.print(p.getName() + " ");
+	}
+	
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
 						
-		System.out.print("\nTRAINER 1: " + pokemon1.getName() + 
+		System.out.print("\n\nTRAINER 1: " + pokemon1.getName() + 
 				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]: ");
 		
 		if (pokemon1.getStatus() != null)
@@ -189,15 +349,20 @@ public class Battle {
 			for (Moves m : fighter.getMoveSet()) {
 				System.out.println("[" + ++counter + "] " + m.getName() + 
 						" (PP: " + m.getpp() + ", PWR: " + m.getPower() + ", ACC: " + m.getAccuracy() + ")");
-			}			
+			}
+			System.out.println("[" + ++counter + "] INFO");
 			System.out.println("[" + ++counter + "] RUN");
 			
 			try { 
 				int choice = input.nextInt();
 				
 				// if choice is a valid move option
-				if (0 < choice && choice < counter) 
-					return getMove(choice, fighter.getMoveSet());
+				if (0 < choice && choice < counter - 1)
+					return getMove(choice, fighter.getMoveSet());				
+				else if (choice == counter - 1) {
+					clearContent();
+					displayInfo(fighter);		
+				}
 				else if (choice == counter) {
 					clearContent();	
 					SoundCard.play("\\in-battle\\in-battle-run");
@@ -214,7 +379,35 @@ public class Battle {
 		}
 	}
 	/** END DISPLAY MOVE METHOD **/
-	
+		
+	/** GET MOVE INFO METHOD **/
+	private void displayInfo(Pokedex fighter) {	
+				
+		for (Moves m : fighter.getMoveSet())
+			System.out.println(m.getName() + " : " + m.getInfo() + "");
+		
+		System.out.println("\n[0] BACK");
+		
+		try { 
+			int choice = input.nextInt();
+			
+			// if choice is a valid move option
+			if (choice == 0) {
+				clearContent();	
+				displayHP();
+				System.out.println("What will " + fighter.getName() + " do?\n");
+				return;
+			}
+			else
+				System.out.println("This is not a valid selection");
+		}
+		catch (InputMismatchException e) { 
+			System.out.println("Input must be a number");
+			input.next();
+		}		
+	}
+	/** END GET MOVE INFO METHOD **/	
+
 	/** GET MOVE METHOD **/
 	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {		
 		// if move has pp

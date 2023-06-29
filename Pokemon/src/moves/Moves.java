@@ -7,70 +7,74 @@ import types.TypeEngine;
 
 public enum Moves {
 	
-	CONFUSE ("Confuse", "Physical", TypeEngine.normal, 1, 40, -1),
-	TACKLE ("Tackle", "Physical", TypeEngine.normal, 35, 40, 100),
-	QUICKATTACK ("Quick Attack", "Physical", TypeEngine.normal, 30, 40, 100, true),
-	SCRATCH ("Scratch", "Physical", TypeEngine.normal, 35, 40, 100),
-	SLASH ("Slash", "Physical", TypeEngine.normal, 20, 70, 100),
-	SLAM ("Slam", "Physical", TypeEngine.normal, 20, 80, 75),
-	HEAVYSLAM ("Heavy Slam", "Physical", TypeEngine.normal, 20, 80, 75),
-	DOUBLEEDGE ("Double Edge", "Physical", TypeEngine.steel, 10, 80, 100),
-	TAKEDOWN ("Take Down", "Physical", TypeEngine.normal, 20, 90, 85),
-	TAILWHIP ("Tail Whip", "Attribute", TypeEngine.normal, false, 30, 100, -1, Arrays.asList("defense")),
-	GROWL ("Growl", "Attribute", TypeEngine.normal, false, 40, 100, -1, Arrays.asList("attack")),
-	DEFENSECURL ("Defense Curl", "Attribute", TypeEngine.normal, true, 40, -1, 1, Arrays.asList("defense")),
-	PLAYNICE ("Play Nice", "Attribute", TypeEngine.normal, false, 20, -1, -1, Arrays.asList("attack")),
-	VINEWHIP ("Vine Whip", "Physical", TypeEngine.grass, 25, 65, 100),
-	RAZORLEAF ("Razor Leaf", "Physical", TypeEngine.grass, 25, 80, 95),
-	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100),
-	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100),
-	POISONPOWDER ("Poison Powder", "Status", TypeEngine.poison, StatusEngine.poison, 45, 75),
-	EMBER ("Ember", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 25, 60, 100),
-	FIREFANG ("Fire Fang", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 95, 95),
-	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 135, 100),
-	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 180, 100),
-	WATERGUN ("Water Gun", "Special", TypeEngine.water, 25, 60, 100),
-	WATERPULSE ("Water Pulse", "Special", TypeEngine.water, 20, 90, 100),
-	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90),
-	HYDROPUMP ("Hydro Pump", "Special", TypeEngine.water, 5, 165, 80),
-	THUNDERWAVE ("Thunder Wave", "Status", TypeEngine.electric, StatusEngine.paralyze, 20, 90),
-	THUNDERSHOCK ("Thunder Shock", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 40, 60, 100),
-	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 110, 100),
-	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 135, 100),
-	TELEPORT ("Teleport", "Status", TypeEngine.psychic, 20, 0, -1),
-	HYPNOSIS ("Hypnosis", "Status", TypeEngine.psychic, StatusEngine.sleep, 20, 60),
-	KINESIS ("Kinesis", "Attribute", TypeEngine.psychic, false, 15, 80, -1, Arrays.asList("accuracy")),
-	CONFUSION ("Confusion", "Special", TypeEngine.psychic, 25, 75, 100),
-	PSYBEAM ("Psybeam", "Special", TypeEngine.psychic, 20, 95, 100),
-	PSYCHOCUT ("Psycho Cut", "Physical", TypeEngine.psychic, 20, 105, 100),
-	PSYCHIC ("Psychic", "Special", TypeEngine.psychic, 10, 135, 100),
-	CALMMIND ("Calm Mind", "Attribute", TypeEngine.psychic, true, 20, -1, 1, Arrays.asList("sp. attack", "sp. defense")),
-	LOWKICK ("Low Kick", "Physical", TypeEngine.fighting, 20, 40, 100),
-	LOWSWEEP ("Low Sweep", "Physical", TypeEngine.fighting, 20, 95, 100),
-	KNOCKOFF ("Knock Off", "Physical", TypeEngine.dark, 20, 65, 100),
-	VITALTHROW ("Vital Throw", "Physical", TypeEngine.fighting, 10, 105, -1),
-	SEISMICTOSS ("Seismic Toss", "Physical", TypeEngine.fighting, 20, -1, 100),
-	DYNAMICPUNCH ("Dynamic Punch", "Physical", TypeEngine.fighting, StatusEngine.confuse, 1.0, 5, 150, 50),
-	CROSSCHOP ("Cross Chop", "Physical", TypeEngine.fighting, 5, 150, 80),
-	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90),
-	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.rock, 15, 75, 90),
-	EARTHQUAKE ("Earthquake", "Physical", TypeEngine.ground, 10, 150, 100),
-	CONFUSERAY ("Confuse Ray", "Status", TypeEngine.ghost, StatusEngine.confuse, 10, 100),
-	LICK ("Lick", "Physical", TypeEngine.ghost, 30, 45, 100),
-	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100),
-	HEX ("Hex", "Special", TypeEngine.ghost, 10, 95, 100),
-	SHADOWPUNCH ("Shadow Punch", "Physical", TypeEngine.ghost, 20, 90, -1),
-	DARKPULSE ("Dark Pulse", "Special", TypeEngine.dark, 15, 80, 100),
-	SHADOWBALL ("Shadow Ball", "Special", TypeEngine.ghost, 15, 120, 100),
-	FLASHCANNON ("Flash Cannon", "Special", TypeEngine.steel, 10, 80, 100),
-	DRAGONBREATH ("Dragon Breath", "Special", TypeEngine.dragon, 20, 60, 100),
-	DRAGONCLAW ("Dragon Claw", "Physical", TypeEngine.dragon, 15, 80, 100);
 	
+	// attack descriptions reference: https://www.serebii.net/attackdex-dp/ (Gen IV Dex)
+	CONFUSE("Confuse", "Physical", TypeEngine.normal, 1, 40, -1, null),
+	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm."),
+	CALMMIND ("Calm Mind", "Attribute", TypeEngine.psychic, true, 20, -1, 1, Arrays.asList("sp. attack", "sp. defense"), "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats."),
+	CONFUSERAY ("Confuse Ray", "Status", TypeEngine.ghost, StatusEngine.confuse, 10, 100, "The foe is exposed to a sinister ray that triggers confusion."),
+	CONFUSION ("Confusion", "Special", TypeEngine.psychic, 25, 75, 100, "The foe is hit by a weak telekinetic force. It may also leave the foe confused."),
+	CROSSCHOP ("Cross Chop", "Physical", TypeEngine.fighting, 5, 150, 80, "The user delivers a double chop with its forearms crossed. It has a high critical-hit ratio."),
+	DARKPULSE ("Dark Pulse", "Special", TypeEngine.dark, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
+	DEFENSECURL ("Defense Curl", "Attribute", TypeEngine.normal, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
+	DOUBLEEDGE ("Double Edge", "Physical", TypeEngine.steel, 10, 80, 100, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
+	DRAGONBREATH ("Dragonbreath", "Special", TypeEngine.dragon, 20, 60, 100, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target."),
+	DRAGONCLAW ("Dragon Claw", "Physical", TypeEngine.dragon, 15, 80, 100, "The user slashes the foe with huge, sharp claws."),
+	DYNAMICPUNCH ("Dynamic Punch", "Physical", TypeEngine.fighting, StatusEngine.confuse, 1.0, 5, 150, 50, "The foe is punched with the user's full, concentrated power. It confuses the foe if it hits."),
+	EARTHQUAKE ("Earthquake", "Physical", TypeEngine.ground, 10, 150, 100, "The user sets off an earthquake that hits all the Pokémon in the battle."),
+	EMBER ("Ember", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 25, 60, 100, "The foe is attacked with small flames. The target may also be left with a burn."),
+	FIREFANG ("Fire Fang", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 95, 95, "The user bites with flame-cloaked fangs. It may also make the foe flinch or sustain a burn."),
+	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 135, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
+	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 180, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
+	FLASHCANNON ("Flash Cannon", "Special", TypeEngine.steel, 10, 80, 100, "The user gathers all its light energy and releases it at once."),
+	GROWL ("Growl", "Attribute", TypeEngine.normal, false, 40, 100, -1, Arrays.asList("attack"), "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered."),
+	HEAVYSLAM ("Heavy Slam", "Physical", TypeEngine.normal, 20, 80, 75, "The user slams into the target with its heavy body."),
+	HEX ("Hex", "Special", TypeEngine.ghost, 10, 95, 100, "This relentless attack does massive damage to a target affected by status conditions."),
+	HYDROPUMP ("Hydro Pump", "Special", TypeEngine.water, 5, 165, 80, "The foe is blasted by a huge volume of water launched under great pressure."),
+	HYPNOSIS ("Hypnosis", "Status", TypeEngine.psychic, StatusEngine.sleep, 20, 60, "The user employs hypnotic suggestion to make the target fall into a deep sleep."),
+	KINESIS ("Kinesis", "Attribute", TypeEngine.psychic, false, 15, 80, -1, Arrays.asList("accuracy"), "The user distracts the foe by bending a spoon. It may lower the target's accuracy."),
+	KNOCKOFF ("Knock Off", "Physical", TypeEngine.dark, 20, 65, 100, "The user slaps down the target's held item, preventing that item from being used in the battle."),
+	LICK ("Lick", "Physical", TypeEngine.ghost, StatusEngine.paralyze, 0.10, 30, 45, 100, "The foe is licked with a long tongue, causing damage. It may also paralyze the target."),
+	LOWKICK ("Low Kick", "Physical", TypeEngine.fighting, 20, 40, 100, "A powerful low kick that makes the foe fall over. It inflicts greater damage on heavier foes."),
+	LOWSWEEP ("Low Sweep", "Physical", TypeEngine.fighting, 20, 95, 100, "The user makes a swift attack on the target's legs."),
+	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100, "If the user can use this attack after the foe attacks, its power is doubled."),
+	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100, "The user stirs up a violent petal blizzard and attacks everything around it."),
+	PLAYNICE ("Play Nice", "Attribute", TypeEngine.normal, false, 20, -1, -1, Arrays.asList("attack"), "The user and the target become friends, and the target loses its will to fight. This lowers the target's Attack stat."),
+	POISONPOWDER ("Poison Powder", "Status", TypeEngine.poison, StatusEngine.poison, 45, 75, "A cloud of poisonous dust is scattered on the foe. It may poison the target."),
+	PSYBEAM ("Psybeam", "Special", TypeEngine.psychic, StatusEngine.confuse, 1.0, 20, 95, 100, "The foe is attacked with a peculiar ray. It may also leave the target confused."),
+	PSYCHIC ("Psychic", "Special", TypeEngine.psychic, 10, 135, 100, "The foe is hit by a strong telekinetic force."),
+	PSYCHOCUT ("Psycho Cut", "Physical", TypeEngine.psychic, 20, 105, 100, "The user tears at the foe with blades formed by psychic power."),
+	QUICKATTACK ("Quick Attack", "Physical", TypeEngine.normal, 30, 40, 100, true, "The user lunges at the foe at a speed that makes it almost invisible. It is sure to strike first."),
+	RAZORLEAF ("Razor Leaf", "Physical", TypeEngine.grass, 25, 80, 95, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio."),
+	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.rock, 15, 75, 90, "The user picks up and throws a small rock at the foe to attack."),
+	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90, "The user continually rolls into the foe over five turns."),
+	SCRATCH ("Scratch", "Physical", TypeEngine.normal, 35, 40, 100, "Hard, pointed, and sharp claws rake the foe to inflict damage."),
+	SEISMICTOSS ("Seismic Toss", "Physical", TypeEngine.fighting, 20, -1, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
+	SHADOWBALL ("Shadow Ball", "Special", TypeEngine.ghost, 15, 120, 100, "The user hurls a shadowy blob at the foe."),
+	SHADOWPUNCH ("Shadow Punch", "Physical", TypeEngine.ghost, 20, 90, -1, "The user throws a punch at the foe from the shadows. The punch lands without fail."),
+	SLAM ("Slam", "Physical", TypeEngine.normal, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
+	SLASH ("Slash", "Physical", TypeEngine.normal, 20, 70, 100, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
+	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
+	TACKLE ("Tackle", "Physical", TypeEngine.normal, 35, 40, 100, "A physical attack in which the user charges and slams into the foe with its whole body."),
+	TAILWHIP ("Tail Whip", "Attribute", TypeEngine.normal, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),
+	TAKEDOWN ("Take Down", "Physical", TypeEngine.normal, 20, 90, 85, "A reckless, full-body charge attack for slamming into the foe. It also damages the user a little."),
+	TELEPORT ("Teleport", "Status", TypeEngine.psychic, 20, 0, -1, "Use it to flee from any wild Pokémon."),
+	THUNDERBOLT ("Thunder Bolt", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 135, 100, "A strong electric blast is loosed at the foe. It may also leave the foe paralyzed."),
+	THUNDERPUNCH ("Thunder Punch", "Physical", TypeEngine.electric, StatusEngine.paralyze, 0.10, 15, 110, 100, "The foe is punched with an electrified fist. It may leave the target with paralysis."),
+	THUNDERSHOCK ("Thunder Shock", "Special", TypeEngine.electric, StatusEngine.paralyze, 0.10, 40, 60, 100, "A jolt of electricity is hurled at the foe to inflict damage. It may also leave the foe paralyzed."),
+	THUNDERWAVE ("Thunder Wave", "Status", TypeEngine.electric, StatusEngine.paralyze, 20, 90, "A weak electric charge is launched at the foe. It causes paralysis if it hits."),
+	VINEWHIP ("Vine Whip", "Physical", TypeEngine.grass, 25, 65, 100, "The foe is struck with slender, whiplike vines to inflict damage."),
+	VITALTHROW ("Vital Throw", "Physical", TypeEngine.fighting, 10, 105, -1, "The user allows the foe to attack first. In return, this throw move is guaranteed not to miss."),
+	WATERGUN ("Water Gun", "Special", TypeEngine.water, 25, 60, 100, "The foe is blasted with a forceful shot of water."),
+	WATERPULSE ("Water Pulse", "Special", TypeEngine.water, 20, 90, 100, "The user attacks the foe with a pulsing blast of water. It may also confuse the foe.");
+
 	private String name;
 	private String mtype;
 	private TypeEngine type;
 	private StatusEngine effect;
 	private Double probability;
+	
+	private String info;
 	
 	private boolean toSelf;
 	private int pp;
@@ -80,7 +84,7 @@ public enum Moves {
 	private List<String> stats;
 	private boolean goFirst;
 	
-	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst) {
+	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
@@ -88,16 +92,18 @@ public enum Moves {
 		this.power = power;
 		this.accuracy = accuracy;
 		this.goFirst = goFirst;
+		this.info = info;
 	}	
-	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy) {
+	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
+		this.info = info;
 	}	
-	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy) {
+	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
@@ -105,17 +111,19 @@ public enum Moves {
 		this.probability = probability;
 		this.pp = pp;
 		this.power = power;
-		this.accuracy = accuracy;		
+		this.accuracy = accuracy;
+		this.info = info;
 	}	
-	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy) {
+	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
 		this.effect = effect;
 		this.pp = pp;
 		this.accuracy = accuracy;
+		this.info = info;
 	}	
-	Moves (String name, String mtype, TypeEngine type, boolean toSelf, int pp, int accuracy, int level, List<String> stats) {
+	Moves (String name, String mtype, TypeEngine type, boolean toSelf, int pp, int accuracy, int level, List<String> stats, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
@@ -124,6 +132,7 @@ public enum Moves {
 		this.accuracy = accuracy;
 		this.level = level;
 		this.stats = stats;
+		this.info = info;
 	}
 
 	public String getName() { return name; }
@@ -147,11 +156,19 @@ public enum Moves {
 	public int getpp() { return pp; }
 	public void setpp(int pp) {	this.pp = pp; }
 
-	public int getAccuracy() { return accuracy; }
+	public int getAccuracy() { 
+		if (accuracy == -1)
+			return 100;
+		else
+			return accuracy; 
+	}
 	public void setAccuracy(int accuracy) { this.accuracy = accuracy; }
 
 	public int getPower() {	return power; }
 	public void setPower(int power) { this.power = power; }
+	
+	public String getInfo() {	return info; }
+	public void setInfo(String info) { this.info = info; }
 	
 	public boolean getGoFirst() { return goFirst; }
 	public void setGoFirst(boolean goFirst) { this.goFirst = goFirst; }

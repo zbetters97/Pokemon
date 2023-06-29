@@ -17,17 +17,20 @@ public class MainMenu {
 	public static void load() {
 
 		clearContent();		
-		int players = selectMode();
+		int players = selectPlayers();
+		
+		clearContent();
+		int partySize = selectPartySize();
 		
 		clearContent();		
 		selectMusic();
 		
-		startGame(players);
+		startGame(players, partySize);
 	}
 	/** END LOAD METHOD **/
 	
-	/** SELECT MODE METHOD **/
-	private static int selectMode() {
+	/** SELECT PLAYERS METHOD **/
+	private static int selectPlayers() {
 				
 		System.out.println("PLEASE SELECT MODE:\n"
 				+ "[1] ONE PLAYER\n"
@@ -40,9 +43,7 @@ public class MainMenu {
 			try { 
 				int choice = input.nextInt(); 
 				
-				if (choice == 1)
-					return choice;
-				else if (choice == 2)
+				if (choice == 1 || choice == 2)
 					return choice;
 				else if (choice == 3) { 
 					System.out.println("Turning off..."); 
@@ -57,7 +58,35 @@ public class MainMenu {
 			}
 		}
 	}
-	/** END SELECT MODE METHOD **/
+	/** END SELECT PLAYERS METHOD **/
+	
+	/** SELECT PARTY SIZE METHOD **/
+	private static int selectPartySize() {
+				
+		System.out.println("PLEASE SELECT PARTY SIZE (1-6):");
+		
+		// loop until Quit is selected
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				
+				if (1 <= choice && choice <= 6)
+					return choice;
+				else if (choice == 7) { 
+					System.out.println("Turning off..."); 
+					System.exit(0); 
+				}	
+				else 
+					System.out.println("ERROR! Input must be a valid selection!"); 
+			}
+			catch (Exception e) {
+				System.out.println("ERROR! Input must be a number!");
+				input.next();
+			}
+		}
+	}
+	/** END SELECT PARTY SIZE METHOD **/
 	
 	/** SELECT MUSIC METHOD **/
 	private static void selectMusic() {
@@ -101,21 +130,21 @@ public class MainMenu {
 		while (true) {
 			
 			try { 				
-				int choice = input.nextInt(); 
+				int choice = input.nextInt() - 1; 
 				
-				if (1 < choice && choice <= musicDict.size()) {
+				if (0 < choice && choice <= musicDict.size()) {
 					String file = musicDict.get(choice - 1).replace(".wav", "");
 					
 					bgmusic = new SoundCard("\\music\\" + file);
 					bgmusic.playMusic();
 					return;
 				}					
-				else if (choice == 0) {
+				else if (choice == -1) {
 					clearContent();
 					System.out.println("Turning off..."); 
 					System.exit(0);
 				}
-				else if (choice == 1) {
+				else if (choice == 0) {
 					return;
 				}
 				else
@@ -131,9 +160,9 @@ public class MainMenu {
 	/** END SELECT MUSIC METHOD **/
 	
 	/** START GAME METHOD **/
-	private static void startGame(int players) {
+	private static void startGame(int players, int partySize) {
 		
-		Battle game = new Battle(players);
+		Battle game = new Battle(players, partySize);
 		game.start();
 		
 		// when battle is over, stopMusic will be called

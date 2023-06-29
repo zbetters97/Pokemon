@@ -441,7 +441,7 @@ public class BattleEngine {
 			if (type.toString().equals(move.toString())) {
 				result = type.getStrength();
 				return result;
-			}			
+			}
 		}
 		
 		// if resistant, retrieve and return resistance value
@@ -488,8 +488,8 @@ public class BattleEngine {
 			for (TypeEngine t : pokemon[trg].getTypes()) {
 				
 				// if super effective
-				if (effectiveness(move.getType(), t) == 2.0) {
-					type = 2.0;
+				if (effectiveness(move.getType(), t) == 1.5) {
+					type = 1.5;
 					break;
 				}
 				type = effectiveness(move.getType(), t);
@@ -517,6 +517,10 @@ public class BattleEngine {
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
 		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);
 
+		// keep damage dealt less than or equal to remaining HP
+		if (damageDealt > pokemon[trg].getHP())
+			damageDealt = pokemon[trg].getHP();
+		
 		// don't play sound if cpu is calling method
 		if (cpu) return damageDealt;
 		
@@ -636,7 +640,7 @@ public class BattleEngine {
 	
 	/** GET MONEY METHOD **/
 	public int getMoney(int lsr) {		
-		int money = 24 * pokemon[lsr].getLevel();			
+		int money = 24 * pokemon[lsr].getLevel();		
 		return money;
 	}
 	/** END GET MONEY METHOD **/

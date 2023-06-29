@@ -4,34 +4,34 @@
  *
  * --- UPDATES ---
  * 
- * 03/03/2022:
+ * 3/03/2022:
  * 		-Completed efficiency chart for move types
  * 		-Added comments
  * 		-Cleaned up code to be more concise
  * 		-Included MainMenu class for Driver to call
- * 03/05/2022:
+ * 3/05/2022:
  * 		-Added more comments
  * 		-Created interface for Pokedex class
- * 03/06/2022:
+ * 3/06/2022:
  * 		-Added in battle sound effects
  * 		-Added pokemon cries
  * 		-Added battle music
- * 03/07/2022:
+ * 3/07/2022:
  * 		-Added Pikachu cry
  * 		-Moved BattleEngine to battle package		
  * 		-Cleaned up code in BattleEngine
  * 		-Edited BattleEngine to swap Pokemon turn
- * 03/08/2022:
+ * 3/08/2022:
  * 		-Added two player mode (early version)
  * 		-Added basic AI to CPU on One Player mode
  * 		-Modified UI formatting
- * 03/09/2022:
+ * 3/09/2022:
  * 		-Modified process of creating a new Pokemon instance		
  * 		-Added moveset for each existing Pokemon
  * 		-Improved CPU AI for One Player mode
  * 		-Cleaned up coding to be more concise
  * 		-Added lambda expression to Battle class for efficiency
- * 03/10/2022:
+ * 3/10/2022:
  * 		-Added exception handlers for user input
  * 		-Simplified class names
  * 		-Added multi-type feature for Pokemon
@@ -41,9 +41,9 @@
  * 		-Added more moves
  * 		-Cleaned up UI elements
  * 		-Added sounds for all new moves/Pokemon
- * 03/12/2022:
+ * 3/12/2022:
  * 		-Modified sleep timer to be same duration as source file
- * 03/13/2022:
+ * 3/13/2022:
  * 		-Cleaned up coding to be more concise
  * 		-Added SoundCard class to handle audio files
  * 		-Added Sleeper class to handle wait times
@@ -52,12 +52,12 @@
  * 		-Added more comments
  * 		-Added option select battle music before start
  * 		-Modified health bar UI
- * 03/14/2022:
+ * 3/14/2022:
  * 		-Added more music options
  * 		-Modified damage formula
  * 		-Modified exp formula
  * 		-Cleaned up coding to be more concise
- * 03/15/2022:
+ * 3/15/2022:
  * 		-Patched misc errors
  * 		-Added Abra, Kadabra, Alakazam and Geodude (with corresponding moves)
  * 		-Added code to prepare for custom name input
@@ -65,9 +65,9 @@
  * 		-Modified damage formula to utilize the move type variable
  * 		-Added option to select no music
  * 		-Added base HP stat to Pokedex for tracking total HP
- * 03/16/2022:
+ * 3/16/2022:
  * 		-Added Gastly, Haunter, and Gengar
- * 03/19/2022:
+ * 3/19/2022:
  * 		-Added status effects (paralyze, poison, confuse, burn, freeze)
  * 		-Added limited functionality to paralyze, poison, and confuse
  * 		-Added Thunder Wave, Poison Powder, Confuse Ray, and Hypnosis
@@ -106,6 +106,16 @@
  * 		-Changed type of Rock Throw from Ground to Rock
  * 		-Weakened super effective damage from 2.0 to 1.5
  * 		-Added STAB multiplier for damage formula
+ * 6/28/2023:
+ * 		-Fixed bug in music selection menu	
+ * 		-Sorted moves list
+ * 		-Added moves descriptions and option to view in battle
+ * 		-Added limited functionality for Pokemon party battles (1-6)
+ * 		-Added Pokedex index value to each Pokemon
+ * 6/29/2023:
+ * 		-Fixed bug that gave every Pokemon 4 moves 	
+ * 		-Fixed bug where super effective moves were not applying
+ * 		-Fixed bug where pokemon swap without fainting
  */
 
 package application;

@@ -15,33 +15,34 @@ public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
 	// xp values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
-	BULBASAUR ("Bulbasaur", TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
-	IVYSAUR ("Ivysaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
-	VENUSAUR ("Venusaur", Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
-	CHARMANDER ("Charmander", TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
-	CHARMELEON ("Charmeleon", TypeEngine.fire, 16, 58, 64, 58, 80, 65, 80, 36, 142, 2),
-	CHARIZARD ("Charizard", Arrays.asList(TypeEngine.fire, TypeEngine.flying, TypeEngine.dragon), 36, 78, 84, 78, 109, 85, 100, -1, 209, 3),
-	SQUIRTLE ("Squirtle", TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 66, 1),
-	WARTORTLE ("Wartortle", TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 143, 2),
-	BLASTOISE ("Blastoise", TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 210, 3),
-	PIKACHU ("Pikachu", TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 82, 2),
-	RAICHU ("Raichu", TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3),
-	ABRA ("Abra", TypeEngine.psychic, 5, 25, 20, 15, 105, 55, 90, 16, 62, 1),
-	KADABRA ("Kadabra", TypeEngine.psychic, 16, 40, 35, 30, 120, 70, 105, 36, 140, 2),
-	ALAKAZAM ("Alakazam", TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3),
-	MACHOP ("Machop", TypeEngine.fighting, 5, 70, 80, 50, 35, 35, 35, 28, 61, 1),
-	MACHOKE ("Machoke", TypeEngine.fighting, 28, 80, 100, 70, 50, 60, 45, 40, 142, 2),
-	MACHAMP ("Machamp", TypeEngine.fighting, 40, 90, 130, 80, 65, 85, 55, -1, 253, 3),
-	GEODUDE ("Geodude", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1),
-	GRAVELER ("Graveler", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 25, 55, 95, 115, 45, 45, 35, 40, 137, 2),
-	GOLEM ("Golem", Arrays.asList(TypeEngine.rock, TypeEngine.ground), 40, 80, 120, 130, 55, 65, 45, -1, 248, 3),
-	GASTLY ("Gastly", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 5, 30, 35, 30, 100, 35, 80, 25, 62, 1),
-	HAUNTER ("Haunter", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 25, 45, 50, 45, 115, 55, 96, 40, 142, 2),
-	GENGAR ("Gengar", Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3);
+	BULBASAUR ("Bulbasaur", 1, TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
+	IVYSAUR ("Ivysaur", 2, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
+	VENUSAUR ("Venusaur", 3, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
+	CHARMANDER ("Charmander", 4, TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
+	CHARMELEON ("Charmeleon", 5, TypeEngine.fire, 16, 58, 64, 58, 80, 65, 80, 36, 142, 2),
+	CHARIZARD ("Charizard", 6, Arrays.asList(TypeEngine.fire, TypeEngine.flying, TypeEngine.dragon), 36, 78, 84, 78, 109, 85, 100, -1, 209, 3),
+	SQUIRTLE ("Squirtle", 7, TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 66, 1),
+	WARTORTLE ("Wartortle", 8, TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 143, 2),
+	BLASTOISE ("Blastoise", 9, TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 210, 3),
+	PIKACHU ("Pikachu", 25, TypeEngine.electric, 5, 55, 55, 40, 50, 50, 90, 30, 82, 2),
+	RAICHU ("Raichu", 26, TypeEngine.electric, 30, 60, 90, 55, 90, 80, 110, -1, 122, 3),
+	ABRA ("Abra", 63, TypeEngine.psychic, 5, 25, 20, 15, 105, 55, 90, 16, 62, 1),
+	KADABRA ("Kadabra", 64, TypeEngine.psychic, 16, 40, 35, 30, 120, 70, 105, 36, 140, 2),
+	ALAKAZAM ("Alakazam", 65, TypeEngine.psychic, 36, 55, 50, 45, 135, 95, 120, -1, 250, 3),
+	MACHOP ("Machop", 66, TypeEngine.fighting, 5, 70, 80, 50, 35, 35, 35, 28, 61, 1),
+	MACHOKE ("Machoke", 67, TypeEngine.fighting, 28, 80, 100, 70, 50, 60, 45, 40, 142, 2),
+	MACHAMP ("Machamp", 68, TypeEngine.fighting, 40, 90, 130, 80, 65, 85, 55, -1, 253, 3),
+	GEODUDE ("Geodude", 74, Arrays.asList(TypeEngine.rock, TypeEngine.ground), 5, 40, 80, 100, 30, 30, 20, 25, 60, 1),
+	GRAVELER ("Graveler", 75, Arrays.asList(TypeEngine.rock, TypeEngine.ground), 25, 55, 95, 115, 45, 45, 35, 40, 137, 2),
+	GOLEM ("Golem", 76, Arrays.asList(TypeEngine.rock, TypeEngine.ground), 40, 80, 120, 130, 55, 65, 45, -1, 248, 3),
+	GASTLY ("Gastly", 92, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 5, 30, 35, 30, 100, 35, 80, 25, 62, 1),
+	HAUNTER ("Haunter", 93, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 25, 45, 50, 45, 115, 55, 96, 40, 142, 2),
+	GENGAR ("Gengar", 94, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3);
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
 	private String name;
+	private int index;
 	protected TypeEngine type;
 	private List<TypeEngine> types;
 	private int level, bhp, hp, evLevel, xp, ev;
@@ -59,11 +60,12 @@ public enum Pokedex implements PokedexInterface {
 	// initialize arraylist to hold all enums in pokemon class
 	private static List<Pokedex> POKEDEX = Arrays.asList(Pokedex.values());
 
-	/** CONSTRUCTOR **/
-	Pokedex(String name, TypeEngine type, int level, int hp, int attack, int defense, 
+	/** CONSTRUCTOR 
+	 * @param index **/
+	Pokedex(String name, int index, TypeEngine type, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
 		
-		this.name = name; this.type = type; this.level = level;
+		this.name = name; this.index = index; this.type = type; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -95,10 +97,10 @@ public enum Pokedex implements PokedexInterface {
 		
 		moveSet = new ArrayList<>();
 	}
-	Pokedex(String name, List<TypeEngine> types, int level, int hp, int attack, int defense, 
+	Pokedex(String name, int index, List<TypeEngine> types, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
 		
-		this.name = name; this.types = types; this.level = level;
+		this.name = name; this.index = index; this.types = types; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -132,10 +134,10 @@ public enum Pokedex implements PokedexInterface {
 	}
 	/** END CONSTRUCTOR **/
 	
-	/** CREATE POKEMON METHOD **/
-	public static Pokedex createPokemon(Pokedex pokemon) {
+	/** MAP MOVES POKEMON METHOD **/
+	public static Pokedex mapMoves(Pokedex pokemon) {
 		
-		// Map of pokemon and corresponding move set
+		// map of pokemon and corresponding move set
 		Map<Pokedex, List<Moves>> pokeMap = new HashMap<>();
 		
 		// set default moves for each pokemon
@@ -184,28 +186,31 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(GENGAR, Arrays.asList(Moves.HEX, Moves.DARKPULSE, Moves.SHADOWBALL, 
         		Moves.SHADOWPUNCH)); 
         
-        // if found in map, add each move to passed in pokemon object
-        for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {
-        	pokemon.addMove(pokeMap.get(pokemon).get(i));
-        } 
+        if (pokemon.getMoveSet().isEmpty()) {
+        	// if found in map, add each move to passed in pokemon object
+            for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {        	
+            	pokemon.addMove(pokeMap.get(pokemon).get(i));
+            } 	
+        }
         
         return pokemon;
 	}
-	/** END CREATE POKEMON METHOD **/
+	/** END MAP MOVES METHOD **/
+		
+	public static Pokedex getPokemon(int index) { 		
+		Pokedex pokemon = mapMoves(POKEDEX.get(index));
+		return pokemon; 
+	}	
 	
 	/** POKEDEX ARRAYLIST GETTERS **/
 	public static Pokedex getPokemon(String name) {
 		
-		for (Pokedex p : POKEDEX) {
-			if (p.getName().equals(name)) {
-				return p;
+		for (Pokedex pokemon : POKEDEX) {
+			if (pokemon.getName().equals(name)) {
+				return pokemon;
 			}
 		}
 		return null;
-	}	
-	public static Pokedex getPokemon(int index) { 		
-		Pokedex pokemon = createPokemon(POKEDEX.get(index));
-		return pokemon; 
 	}	
 	public static List<Pokedex> getPokedex() { 
 		return POKEDEX; 
@@ -272,6 +277,9 @@ public enum Pokedex implements PokedexInterface {
 	/** GETTERS AND SETTERS **/
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
+	
+	public int getIndex() {	return index; }
+	public void setIndex(int index) { this.index = index; }
 
 	public TypeEngine getType() { return type; }
 	public void setType(TypeEngine type) { this.type = type; }

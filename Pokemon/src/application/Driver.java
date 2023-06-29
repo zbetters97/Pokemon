@@ -14,7 +14,7 @@
  * 		-Created interface for Pokedex class
  * 3/06/2022:
  * 		-Added in battle sound effects
- * 		-Added pokemon cries
+ * 		-Added Pokemon cries
  * 		-Added battle music
  * 3/07/2022:
  * 		-Added Pikachu cry
@@ -115,7 +115,12 @@
  * 6/29/2023:
  * 		-Fixed bug that gave every Pokemon 4 moves 	
  * 		-Fixed bug where super effective moves were not applying
- * 		-Fixed bug where pokemon swap without fainting
+ * 		-Fixed bug where Pokemon swap without fainting
+ * 6/29/2023 (cont.):
+ * 		-Added Type description in select Pokemon menu
+ * 		-Organized the music list
+ * 		-Fixed bug where Pokemon don't swap during two player mode
+ * 		-Fixed bug where incorrect winner is announced
  */
 
 package application;

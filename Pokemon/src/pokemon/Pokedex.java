@@ -14,8 +14,9 @@ import types.TypeEngine;
 public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
+	// stat reference: https://www.serebii.net/
 	// xp values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
-	BULBASAUR ("Bulbasaur", 1, TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
+	BULBASAUR ("Bulbasaur", 1, TypeEngine.grass, 05, 45, 49, 49, 65, 65, 45, 16, 64, 1),
 	IVYSAUR ("Ivysaur", 2, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
 	VENUSAUR ("Venusaur", 3, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
 	CHARMANDER ("Charmander", 4, TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
@@ -186,8 +187,9 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(GENGAR, Arrays.asList(Moves.HEX, Moves.DARKPULSE, Moves.SHADOWBALL, 
         		Moves.SHADOWPUNCH)); 
         
+        // if pokemon not already mapped to moveset
         if (pokemon.getMoveSet().isEmpty()) {
-        	// if found in map, add each move to passed in pokemon object
+        	// add each move to passed in pokemon object
             for (int i = 0; i < pokeMap.get(pokemon).size(); i++) {        	
             	pokemon.addMove(pokeMap.get(pokemon).get(i));
             } 	

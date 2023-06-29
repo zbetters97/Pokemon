@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -117,15 +118,19 @@ public class MainMenu {
 					.replace("_", ", ")
 					.toUpperCase();
 			
+			// add space after song index
+			StringBuilder nSong = new StringBuilder(song);
+			nSong.insert(2, ']'); nSong.insert(3, ' ');	
+			
 			// add to arraylist
-			musicList.add(song);			
+			musicList.add(nSong.toString());
+			Collections.sort(musicList);
 		}		
 		
 		System.out.println("PLEASE SELECT MUSIC:\n\n[0] QUIT\n[1] NONE");
-		for (int i = 0; i < musicList.size(); i++) {
-			int c = i + 2;
-			System.out.println("[" + c + "] " + musicList.get(i));
-		}
+		
+		for (int i = 0; i < musicList.size(); i++) 
+			System.out.println("[" + musicList.get(i));
 		
 		while (true) {
 			

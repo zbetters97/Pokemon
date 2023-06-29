@@ -75,11 +75,11 @@ public enum Pokedex implements PokedexInterface {
 			return (int)(Math.floor(0.01 * (2 * stat + IV + Math.floor(EV / 4)) * lev)) + 5;
 		};
 		
-		this.speed = getStat.compute(speed, iv, ev, level);
-		this.attack = getStat.compute(attack, iv, ev, level); 
-		this.defense = getStat.compute(defense, iv, ev, level);		
-		this.spAttack = getStat.compute(spAttack, iv, ev, level); 
-		this.spDefense = getStat.compute(spDefense, iv, ev, level);
+		this.speed = getStat.compute(speed, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level);
+		this.attack = getStat.compute(attack, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level); 
+		this.defense = getStat.compute(defense, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level);		
+		this.spAttack = getStat.compute(spAttack, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level); 
+		this.spDefense = getStat.compute(spDefense, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level);
 		this.accuracy = 1;
 		
 		this.speedStg = 0;

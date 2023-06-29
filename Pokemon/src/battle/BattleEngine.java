@@ -59,20 +59,20 @@ public class BattleEngine {
 	}
 	/** END MOVE METHOD **/
 	
-	private void turn(int pk1, Moves move1, Moves move2) {
+	private void turn(int pokemon1, Moves move1, Moves move2) {
 		
-		int pk2 = (pk1 == 0) ? 1 : 0;
+		int pokemon2 = (pokemon1 == 0) ? 1 : 0;
 		
 		// if attacker can fight
-		if (canTurn(pk1)) 
-			attack(pk1, pk2, move1);
+		if (canTurn(pokemon1)) 
+			attack(pokemon1, pokemon2, move1);
 		
 		// target becomes attacker if battle not over
-		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
+		if (pokemon[pokemon1].isAlive() && pokemon[pokemon2].isAlive()) {
 			
 			// if target can fight
-			if (canTurn(pk2)) 
-				attack(pk2, pk1, move2);			
+			if (canTurn(pokemon2)) 
+				attack(pokemon2, pokemon1, move2);			
 		}		
 	}
 	
@@ -514,12 +514,19 @@ public class BattleEngine {
 		else
 			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
 		
-		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
 		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);
 
 		// keep damage dealt less than or equal to remaining HP
 		if (damageDealt > pokemon[trg].getHP())
 			damageDealt = pokemon[trg].getHP();
+		
+		
+		// potential health drop on damage hit?
+		/*
+	
+		*/		
+		
 		
 		// don't play sound if cpu is calling method
 		if (cpu) return damageDealt;
@@ -529,7 +536,29 @@ public class BattleEngine {
 		return damageDealt;
 	}
 	/** END CALCULATE DAMAGE DEALT METHOD **/
-
+	
+	/** DROP HEALTH METHOD 
+	private void dropHealth(Pokedex attacker, Pokedex target, int damageDealt) {
+		
+		int rhp = target.getHP();
+	
+		for (int i = rhp; i > (target.getHP() - damageDealt); i--) {
+	
+			String health = "";			
+			for (int counter = 0; counter < rhp; counter++) {	
+				health += ".";
+			}
+			System.out.println(health);
+			
+			Sleeper.pause(600);
+			clearContent();
+			
+			rhp--;
+		}
+	}
+	 END DROP HEALTH METHOD **/
+	
+	
 	/** DEAL DAMAGE METHOD **/
 	private void dealDamage(int trg, int damage) {		
 		

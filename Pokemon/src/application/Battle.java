@@ -13,24 +13,28 @@ public class Battle {
 	
 	// create static scanner to receive user input	
 	private static Scanner input = new Scanner(System.in);	
+	private String name1;
+	private String name2;
 	private int numPlayers;
 	private int partySize;
+	private static Pokedex pokemon1, pokemon2;
 	private ArrayList<Pokedex> pokemonParty1;
 	private ArrayList<Pokedex> pokemonParty2;
-	private static Pokedex pokemon1, pokemon2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
-	public Battle(int numPlayers, int partySize) {
+	public Battle(String name1, String name2, int numPlayers, int partySize) {
+		
+		this.name1 = name1;
+		this.name2 = name2;
 		
 		// prevent errors upon startup by setting variables expected values
 		if (numPlayers < 1) numPlayers = 1;
 		else if (numPlayers > 2) numPlayers = 2;		
+		this.numPlayers = numPlayers;
 		
 		if (partySize < 1) partySize = 1;
-		if (partySize > 6) partySize = 6;
-		
-		this.numPlayers = numPlayers;
+		else if (partySize > 6) partySize = 6;		
 		this.partySize = partySize;
 		
 		pokemonParty1 = new ArrayList<Pokedex>();
@@ -41,8 +45,6 @@ public class Battle {
 	/** MAIN MENU METHOD **/
 	public void start() {		
 		clearContent();	
-		
-		//selectPokemon();
 		
 		selectParty(1);
 		selectParty(2);
@@ -102,60 +104,62 @@ public class Battle {
 								return choice;
 						}
 						else 
-							System.out.println("This is not a valid selection");
+							System.out.println("ERROR: This is not a valid selection!");
 					}
 					catch (Exception e) {
-						System.out.println("ERROR! Input must be a number!");
+						System.out.println("ERROR: Input must be a number!");
 						input.next();
 					}
 				}
 			};							
 			/** END LAMBDA METHOD **/
 			
-			System.out.println("TRAINER " + player + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
-			
 			// assign fighter to pokemon found at given index
 			if (player == 1) {	
 				
-				System.out.print("TRAINER 1 PARTY: ");
+				System.out.print(name1 + "'s PARTY: ");
 				
 				if (!pokemonParty1.isEmpty()) {
 					for (Pokedex p : pokemonParty1)
 						System.out.print(p.getName() + " ");
 				}
-				System.out.print("\nTRAINER 2 PARTY:\n\n");
+				System.out.print("\n" + name2 + "'s PARTY: ");
+				
+				System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
 				
 				pokemonParty1.add(Pokedex.getPokemon(getInput.get(1) - 1));
 								
 				// play pokemon cry
 				SoundCard.play("//pokedex//" + pokemonParty1.get(party).getName());	
-				clearContent();
 				party++;
+				
+				clearContent();
 			}				
-			else if (player == 2) {
+			else if (player == 2) {				
 				
 				if (!pokemonParty1.isEmpty()) {
-					System.out.print("TRAINER 1 PARTY: ");
+					System.out.print("\n" + name1 + "'s PARTY: ");
 					for (Pokedex p : pokemonParty1)
 						System.out.print(p.getName() + " ");
 				}
 				
 				if (!pokemonParty2.isEmpty()) {
-					System.out.print("\nTRAINER 2 PARTY: ");
+					System.out.print("\n" + name2 + "'s PARTY: ");
 					for (Pokedex p : pokemonParty2)
 						System.out.print(p.getName() + " ");
 				}
 				else
-					System.out.print("\nTRAINER 2 PARTY: ");
+					System.out.print("\n" + name2 + "'s PARTY:");
 				
-				System.out.print("\n\n");
+				System.out.println("\n\n" + name2 + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
 				
 				pokemonParty2.add(Pokedex.getPokemon(getInput.get(1) - 1));
 				
 				// play pokemon cry
 				SoundCard.play("//pokedex//" + pokemonParty2.get(party).getName());	
-				clearContent();
 				party++;
+				
+				clearContent();
 			}
 		}
 	}
@@ -168,13 +172,23 @@ public class Battle {
 		
 		while (true) {
 			
-			clearContent();
-							
+			clearContent();							
 			displayParty(); displayHP();
-			move1 = displayMoves(pokemon1);
-			move2 = battle.cpuSelectMove();				
-			clearContent();
 			
+			if (numPlayers == 1) {
+				move1 = displayMoves(pokemon1);
+				move2 = battle.cpuSelectMove();			
+			}
+			else {
+				move1 = displayMoves(pokemon1);
+				
+				clearContent();
+				displayParty(); displayHP();
+				
+				move2 = displayMoves(pokemon2);
+			}
+						
+			clearContent();			
 			battle.move(move1, move2);				
 			clearContent();
 			
@@ -188,7 +202,7 @@ public class Battle {
 					
 					// if no pokemon left
 					if (pokemonParty1.isEmpty()) {
-						announceWinner("2", "1", battle.getMoney(1));	
+						announceWinner(name2, name1, battle.getMoney(1));	
 						return;
 					}
 					else {			
@@ -199,7 +213,7 @@ public class Battle {
 						pokemon1 = pokemonParty1.get(0);
 						battle.swapPokemon(pokemon1, 0);
 						
-						System.out.println("TRAINER 1: GO, " + pokemon1.getName() + "!");
+						System.out.println(name1 + ": GO, " + pokemon1.getName() + "!");
 						SoundCard.play("//pokedex//" + pokemon1.getName());
 						Sleeper.pause(1700);	
 						clearContent();
@@ -212,7 +226,7 @@ public class Battle {
 					
 					// if no pokemon left
 					if (pokemonParty2.isEmpty()) {
-						announceWinner("1", "2", battle.getMoney(0));	
+						announceWinner(name1, name2, battle.getMoney(0));	
 						return;
 					}
 					else {			
@@ -223,7 +237,7 @@ public class Battle {
 						pokemon2 = pokemonParty2.get(0);
 						battle.swapPokemon(pokemon2, 1);
 						
-						System.out.println("TRAINER 2: GO, " + pokemon2.getName() + "!");
+						System.out.println(name2 + ": GO, " + pokemon2.getName() + "!");
 						SoundCard.play("//pokedex//" + pokemon2.getName());
 						Sleeper.pause(1700);	
 						clearContent();
@@ -236,11 +250,11 @@ public class Battle {
 	
 	private void displayParty() {
 		
-		System.out.print("TRAINER 1 PARTY: ");
+		System.out.print(name1 + "'s PARTY: ");
 		for (Pokedex p : pokemonParty1)
 			System.out.print(p.getName() + " ");
 		
-		System.out.print("\nTRAINER 2 PARTY: ");
+		System.out.print("\n" + name2 + "'s PARTY: ");
 		
 		for (Pokedex p : pokemonParty2)
 			System.out.print(p.getName() + " ");
@@ -249,7 +263,7 @@ public class Battle {
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
 						
-		System.out.print("\n\nTRAINER 1: " + pokemon1.getName() + 
+		System.out.print("\n\n" + name1 + ": " + pokemon1.getName() + 
 				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]: ");
 		
 		if (pokemon1.getStatus() != null)
@@ -259,10 +273,10 @@ public class Battle {
 			if (i % 50 == 0)
 				System.out.println();
 			
-			System.out.print("*");
+			System.out.print(".");
 		}
 		
-		System.out.print("\nTRAINER 2: " + pokemon2.getName() + 
+		System.out.print("\n" + name2 + ": " + pokemon2.getName() + 
 				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]: ");
 		
 		if (pokemon2.getStatus() != null)
@@ -272,7 +286,7 @@ public class Battle {
 			if (i % 50 == 0)
 				System.out.println();
 			
-			System.out.print("*");
+			System.out.print(".");
 		}
 		System.out.println("\n");
 	}
@@ -312,10 +326,10 @@ public class Battle {
 					System.exit(1);
 				}
 				else
-					System.out.println("This is not a move"); 		
+					System.out.println("This is not a move!"); 		
 			}
 			catch (InputMismatchException e) { 
-				System.out.println("Input must be a number");
+				System.out.println("ERROR: Input must be a number!");
 				input.next();
 			}
 		}
@@ -341,10 +355,10 @@ public class Battle {
 				return;
 			}
 			else
-				System.out.println("This is not a valid selection");
+				System.out.println("ERROR: This is not a valid selection!");
 		}
 		catch (InputMismatchException e) { 
-			System.out.println("Input must be a number");
+			System.out.println("Input must be a number!");
 			input.next();
 		}		
 	}
@@ -360,10 +374,10 @@ public class Battle {
 	/** END GET MOVE METHOD **/
 	
 	/** ANNOUNCE WINNER METHOD **/
-	private void announceWinner(String winner, String loser, int money) {		
+	private void announceWinner(String winner, String loser, int money) {
 		SoundCard.play("//in-battle//in-battle-victory");
-		System.out.println("Player defeated, Pokemon Trainer " + loser + "!");
-		System.out.println("Trainer " + winner + " got $" + money + " for winning!");
+		System.out.println("Player defeated, " + winner + " !");
+		System.out.println(winner + " got $" + money + " for winning!");
 	}
 	/** END ANNOUNCE WINNER METHOD **/
 

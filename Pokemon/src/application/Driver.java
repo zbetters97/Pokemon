@@ -2,7 +2,7 @@
  * CREATED: 03/01/2022
  * Pokemon Battle Simulation
  *
- * --- UPDATES ---
+ * --- RELEASE UPDATES ---
  * 
  * 3/03/2022:
  * 		-Completed efficiency chart for move types
@@ -121,6 +121,11 @@
  * 		-Organized the music list
  * 		-Fixed bug where Pokemon don't swap during two player mode
  * 		-Fixed bug where incorrect winner is announced
+ * 6/29/2023 (cont.):
+ * 		-Fixed bug where select move isn't an option for multi player
+ * 		-Cleaned up menu wording and error messages
+ * 		-Added name your player functionality
+ * 		-Modifed IVs to randomly generate per stat
  */
 
 package application;

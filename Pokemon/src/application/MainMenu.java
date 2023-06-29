@@ -17,8 +17,20 @@ public class MainMenu {
 	/** LOAD METHOD **/
 	public static void load() {
 
+		String name1 = "null", name2 = "null";
+		
 		clearContent();		
 		int players = selectPlayers();
+		
+		clearContent();
+		if (players == 1) {
+			name1 = inputName(1);
+			name2 = "Red";
+		}
+		else if (players == 2) {
+			name1 = inputName(1);
+			name2 = inputName(2);
+		}		
 		
 		clearContent();
 		int partySize = selectPartySize();
@@ -26,19 +38,19 @@ public class MainMenu {
 		clearContent();		
 		selectMusic();
 		
-		startGame(players, partySize);
+		startGame(name1, name2, players, partySize);
 	}
 	/** END LOAD METHOD **/
 	
 	/** SELECT PLAYERS METHOD **/
 	private static int selectPlayers() {
-				
+						
 		System.out.println("PLEASE SELECT MODE:\n"
-				+ "[1] ONE PLAYER\n"
-				+ "[2] TWO PLAYER\n"
+				+ "[1] SINGLE PLAYER\n"
+				+ "[2] MULTI PLAYER\n"
 				+ "[3] QUIT");
 		
-		// loop until Quit is selected
+		// loop until QUIT is selected
 		while (true) {
 			
 			try { 
@@ -47,19 +59,46 @@ public class MainMenu {
 				if (choice == 1 || choice == 2)
 					return choice;
 				else if (choice == 3) { 
-					System.out.println("Turning off..."); 
+					System.out.println("Shutting down..."); 
 					System.exit(0); 
 				}	
 				else 
-					System.out.println("ERROR! Input must be a valid selection!"); 
+					System.out.println("ERROR: Input must be a valid selection!"); 
 			}
 			catch (Exception e) {
-				System.out.println("ERROR! Input must be a number!");
+				System.out.println("ERROR: Input must be a number!");
 				input.next();
 			}
 		}
 	}
 	/** END SELECT PLAYERS METHOD **/
+	
+	/** INPUT NAME METHOD **/
+	private static String inputName(int player) {
+				
+		System.out.println("WHAT IS YOUR NAME, TRAINER " + player + "?");
+		
+		// loop until QUIT is selected
+		while (true) {
+			
+			try { 
+				String name = input.next(); 
+				
+				clearContent();
+				System.out.println("WELCOME TO THE WORLD OF POKEMON, " + name + "!");			
+				
+				Sleeper.pause(2000);	
+				clearContent();
+				
+				return name;
+			}
+			catch (Exception e) {
+				System.out.println("ERROR: Something went wrong!");
+				input.next();
+			}
+		}
+	}
+	/** END INPUT NAME METHOD **/
 	
 	/** SELECT PARTY SIZE METHOD **/
 	private static int selectPartySize() {
@@ -75,14 +114,14 @@ public class MainMenu {
 				if (1 <= choice && choice <= 6)
 					return choice;
 				else if (choice == 7) { 
-					System.out.println("Turning off..."); 
+					System.out.println("Shutting down..."); 
 					System.exit(0); 
 				}	
 				else 
-					System.out.println("ERROR! Input must be a valid selection!"); 
+					System.out.println("ERROR: Input must be a valid selection!"); 
 			}
 			catch (Exception e) {
-				System.out.println("ERROR! Input must be a number!");
+				System.out.println("ERROR: Input must be a number!");
 				input.next();
 			}
 		}
@@ -95,7 +134,7 @@ public class MainMenu {
 		// arraylist to hold music String
 		ArrayList<String> musicList = new ArrayList<>();
 		
-		// hashmap to hold music file and corrosponding index
+		// hashmap to hold music file and corresponding index
 		LinkedHashMap<Integer, String> musicDict = new LinkedHashMap<>();
 		
 		// get all songs from music folder
@@ -105,8 +144,10 @@ public class MainMenu {
 		// store all music files into array
 		File filesList[] = directoryPath.listFiles();
 		
+		// for each song in directory		
 		for (int i = 0; i < filesList.length; i++) {			
 			
+			// add song names to list
 			String music = filesList[i].getName();
 			musicDict.put(i, music);
 			
@@ -127,7 +168,7 @@ public class MainMenu {
 			Collections.sort(musicList);
 		}		
 		
-		System.out.println("PLEASE SELECT MUSIC:\n\n[0] QUIT\n[1] NONE");
+		System.out.println("PLEASE SELET MUSIC:\n\n[00] QUIT\n[01] NONE");
 		
 		for (int i = 0; i < musicList.size(); i++) 
 			System.out.println("[" + musicList.get(i));
@@ -146,17 +187,16 @@ public class MainMenu {
 				}					
 				else if (choice == -1) {
 					clearContent();
-					System.out.println("Turning off..."); 
+					System.out.println("Shutting down..."); 
 					System.exit(0);
 				}
-				else if (choice == 0) {
+				else if (choice == 0)
 					return;
-				}
 				else
-					System.out.println("ERROR! Input must be a valid selection!");
+					System.out.println("ERROR: Input must be a valid selection!");
 			}
 			catch (Exception e) {
-				System.out.println("ERROR! Input must be a number!");
+				System.out.println("ERROR: Input must be a number!");
 				System.out.println(e);
 				input.next();
 			}
@@ -165,9 +205,9 @@ public class MainMenu {
 	/** END SELECT MUSIC METHOD **/
 	
 	/** START GAME METHOD **/
-	private static void startGame(int players, int partySize) {
+	private static void startGame(String name1, String name2, int numPlayers, int partySize) {
 		
-		Battle game = new Battle(players, partySize);
+		Battle game = new Battle(name1, name2, numPlayers, partySize);
 		game.start();
 		
 		// when battle is over, stopMusic will be called

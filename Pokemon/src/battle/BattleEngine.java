@@ -88,14 +88,13 @@ public class BattleEngine {
 		// for each move in attacker's move set
 		for (Moves move : pokemon[1].getMoveSet()) {
 			
-			if (!move.getMType().equals("Status")) {
-				
+			if (!move.isToSelf()) {				
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
 				
 				// add move and corresponding damage to list
 				moves.put(move, damage);	
-			}			
+			}		
 		}
 		
 		if (!moves.isEmpty()) {
@@ -251,7 +250,7 @@ public class BattleEngine {
 			int damage = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
 		
 			System.out.println(pokemon[atk].getName() + " hurt itself in confusion!");
-			SoundCard.play(1.0);			
+			SoundCard.playHit(1.0);			
 			Sleeper.pause(1700);
 			clearContent();
 			
@@ -368,7 +367,9 @@ public class BattleEngine {
 						Sleeper.pause(1700);
 						clearContent();
 					}
-					else {																		
+					else {
+						//dropHealth(pokemon[atk], pokemon[trg], damage, move);
+						
 						System.out.println(pokemon[trg].getName() + " took " + damage + " damage!");
 						Sleeper.pause(1700);										
 						
@@ -521,43 +522,14 @@ public class BattleEngine {
 		if (damageDealt > pokemon[trg].getHP())
 			damageDealt = pokemon[trg].getHP();
 		
-		
-		// potential health drop on damage hit?
-		/*
-	
-		*/		
-		
-		
 		// don't play sound if cpu is calling method
 		if (cpu) return damageDealt;
 		
-		SoundCard.play(type);
+		SoundCard.playHit(type);
 		
 		return damageDealt;
 	}
-	/** END CALCULATE DAMAGE DEALT METHOD **/
-	
-	/** DROP HEALTH METHOD 
-	private void dropHealth(Pokedex attacker, Pokedex target, int damageDealt) {
-		
-		int rhp = target.getHP();
-	
-		for (int i = rhp; i > (target.getHP() - damageDealt); i--) {
-	
-			String health = "";			
-			for (int counter = 0; counter < rhp; counter++) {	
-				health += ".";
-			}
-			System.out.println(health);
-			
-			Sleeper.pause(600);
-			clearContent();
-			
-			rhp--;
-		}
-	}
-	 END DROP HEALTH METHOD **/
-	
+	/** END CALCULATE DAMAGE DEALT METHOD **/	
 	
 	/** DEAL DAMAGE METHOD **/
 	private void dealDamage(int trg, int damage) {		
@@ -574,7 +546,6 @@ public class BattleEngine {
 	/** END DEAL DAMAGE METHOD **/
 
 	/** STATUS DAMAGE METHOD **/
-	// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects //
 	private void statusDamage(int pk1, int pk2) {
 		
 		StatusEffect condition = (Pokedex p) -> {
@@ -583,6 +554,7 @@ public class BattleEngine {
 				
 				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
 					
+					// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects			
 					int damage = (int) (p.getHP() * 0.16);
 					int newHP = p.getHP() - damage;		
 					
@@ -652,8 +624,8 @@ public class BattleEngine {
 	/** CALCULATE XP METHOD **/
 	private int calculateXP(int trg) {
 				
-		// exp formula reference: https://bulbapedia.bulbagarden.net/wiki/Experience
-		int exp = (int) (1.5 * 1 * pokemon[trg].getXP() * 1 * pokemon[trg].getLevel() * 1 * 1 * 1) / 7;		
+		// exp formula reference (GEN I-IV): https://bulbapedia.bulbagarden.net/wiki/Experience		
+		int exp = (int) (((( pokemon[trg].getXP() * pokemon[trg].getLevel() ) / 7)) * ( 1 / 1 ) * 1 * 1.5 * 1);
 		return exp;
 	}
 	/** END CALCULATE XP METHOD **/	
@@ -669,7 +641,7 @@ public class BattleEngine {
 	
 	/** GET MONEY METHOD **/
 	public int getMoney(int lsr) {		
-		int money = 24 * pokemon[lsr].getLevel();		
+		int money = 12 * pokemon[lsr].getLevel();		
 		return money;
 	}
 	/** END GET MONEY METHOD **/

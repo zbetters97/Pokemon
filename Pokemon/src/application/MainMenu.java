@@ -87,7 +87,7 @@ public class MainMenu {
 				clearContent();
 				System.out.println("WELCOME TO THE WORLD OF POKEMON, " + name + "!");			
 				
-				Sleeper.pause(2000);	
+				Sleeper.pause(1500);	
 				clearContent();
 				
 				return name;
@@ -211,7 +211,9 @@ public class MainMenu {
 		game.start();
 		
 		// when battle is over, stopMusic will be called
-		bgmusic.stopMusic();
+		if (!(bgmusic == null)) {
+			bgmusic.stopMusic();	
+		}
 		
 		// waits until user input to finish
 		try { System.in.read(); } 

@@ -56,12 +56,14 @@ public class SoundCard {
             	Sleeper.pause(duration);
             }
         }
-        catch (Exception e) { System.out.println(e.getMessage()); }
+        catch (Exception e) { 
+        	
+        }
 	}
 	/** END SOUND CARD METHOD **/
 	
 	/** HIT SOUND METHOD **/
-	public static void play(double effectiveness) {
+	public static void playHit(double effectiveness) {
 		
 		String hit = "";
 		

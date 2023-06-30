@@ -15,8 +15,8 @@ public enum Pokedex implements PokedexInterface {
 	
 	/** INITIALIZE ENUMS **/
 	// stat reference: https://www.serebii.net/
-	// xp values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
-	BULBASAUR ("Bulbasaur", 1, TypeEngine.grass, 05, 45, 49, 49, 65, 65, 45, 16, 64, 1),
+	// exp / ev values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
+	BULBASAUR ("Bulbasaur", 1, TypeEngine.grass, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
 	IVYSAUR ("Ivysaur", 2, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
 	VENUSAUR ("Venusaur", 3, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
 	CHARMANDER ("Charmander", 4, TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
@@ -38,7 +38,22 @@ public enum Pokedex implements PokedexInterface {
 	GOLEM ("Golem", 76, Arrays.asList(TypeEngine.rock, TypeEngine.ground), 40, 80, 120, 130, 55, 65, 45, -1, 248, 3),
 	GASTLY ("Gastly", 92, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 5, 30, 35, 30, 100, 35, 80, 25, 62, 1),
 	HAUNTER ("Haunter", 93, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 25, 45, 50, 45, 115, 55, 96, 40, 142, 2),
-	GENGAR ("Gengar", 94, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3);
+	GENGAR ("Gengar", 94, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3),
+	HORSEA ("Horsea", 116, TypeEngine.water, 5, 30, 40, 70, 70, 25, 60, 32, 59, 1),
+	SEADRA ("Seadra", 117, TypeEngine.water, 32, 55, 65, 95, 95, 45, 85, 45, 154, 2),
+	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 45, 75, 95, 95, 95, 95, 85, -1, 270, 3),
+	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
+	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
+	SKEPTILE ("Skeptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
+	TORCHIC ("Torchi", 255, TypeEngine.fire, 5, 45, 60, 40, 70, 50, 45, 16, 62, 1),
+	COMBUSKEN ("Combusken", 256, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 16, 60, 85, 60, 85, 60, 55, 36, 142, 2),
+	BLAZIKEN ("Blaziken", 257, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 36, 80, 120, 70, 110, 70, 80, -1, 265, 3),
+	MUDKIP ("Mudkip", 258, TypeEngine.water, 5, 50, 70, 50, 50, 50, 40, 16, 62, 1),
+	MARSHTOMP ("Marshtomp", 259, Arrays.asList(TypeEngine.water, TypeEngine.ground), 16, 70, 85, 70, 60, 70, 50, 36, 142, 2),
+	SWAMPERT ("Swampert", 260, Arrays.asList(TypeEngine.water, TypeEngine.ground), 36, 100, 110, 90, 85, 90, 60, -1, 268, 3);
+	
+	
+	
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
@@ -66,6 +81,8 @@ public enum Pokedex implements PokedexInterface {
 	Pokedex(String name, int index, TypeEngine type, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
 		
+		
+		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
 		this.name = name; this.index = index; this.type = type; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
@@ -186,6 +203,31 @@ public enum Pokedex implements PokedexInterface {
         		Moves.DARKPULSE));   
         pokeMap.put(GENGAR, Arrays.asList(Moves.HEX, Moves.DARKPULSE, Moves.SHADOWBALL, 
         		Moves.SHADOWPUNCH)); 
+        
+        pokeMap.put(HORSEA, Arrays.asList(Moves.BUBBLE, Moves.WATERGUN, Moves.LEER)); 
+        pokeMap.put(SEADRA, Arrays.asList(Moves.WATERGUN, Moves.TWISTER, Moves.HYDROPUMP, 
+        		Moves.AGILITY)); 
+        pokeMap.put(KINGDRA, Arrays.asList(Moves.TWISTER, Moves.HYDROPUMP, Moves.DRAGONPULSE, 
+        		Moves.AGILITY)); 
+        
+        pokeMap.put(TREECKO, Arrays.asList(Moves.POUND, Moves.QUICKATTACK, Moves.LEER)); 
+        pokeMap.put(GROVYLE, Arrays.asList(Moves.QUICKATTACK, Moves.LEAFBLADE, Moves.LEER, 
+        		Moves.AGILITY)); 
+        pokeMap.put(SKEPTILE, Arrays.asList(Moves.LEAFBLADE, Moves.LEAFSTORM, Moves.XSCISSOR, 
+        		Moves.AGILITY)); 
+        
+        pokeMap.put(TORCHIC, Arrays.asList(Moves.EMBER, Moves.SCRATCH, Moves.GROWL)); 
+        pokeMap.put(COMBUSKEN, Arrays.asList(Moves.EMBER, Moves.DOUBLEKICK, Moves.SLASH, 
+        		Moves.GROWL)); 
+        pokeMap.put(BLAZIKEN, Arrays.asList(Moves.FIREPUNCH, Moves.BLAZEKICK, Moves.SKYUPPERCUT, 
+        		Moves.FLAREBLITZ)); 
+        
+        pokeMap.put(MUDKIP, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.GROWL)); 
+        pokeMap.put(MARSHTOMP, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.MUDSHOT, 
+        		Moves.MUDSLAP)); 
+        pokeMap.put(SWAMPERT, Arrays.asList(Moves.SURF, Moves.MUDBOMB, Moves.MUDDYWATER, 
+        		Moves.EARTHQUAKE));
+        
         
         // if pokemon not already mapped to moveset
         if (pokemon.getMoveSet().isEmpty()) {
@@ -425,7 +467,7 @@ public enum Pokedex implements PokedexInterface {
 					return;
 				}
 				else {	
-					this.speedStg += level;
+					this.speedStg += level;					
 					this.speed *= Math.max(2, 2 + (double) this.speedStg) / Math.max(2, 2 - (double) this.speedStg);	
 					
 					outputChange(stat, level);

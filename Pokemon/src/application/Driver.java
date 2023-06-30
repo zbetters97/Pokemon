@@ -126,6 +126,15 @@
  * 		-Cleaned up menu wording and error messages
  * 		-Added name your player functionality
  * 		-Modifed IVs to randomly generate per stat
+ * 6/30/2023:
+ * 		-Added Horsea, Seadra, Kingdra, Treecko, Grovyle, Skeptile, Torchic, 
+ * 			Combuskin, Blaziken, Mudkip, Marshtomp, and Swampert
+ * 		-Added Agility, Bubble, Twister, Dragon Pulse, Pound, Leaf Blade,
+ * 			Leaf Storm, X-Scissor, Double Kick, Fire Punch, Blaze Kick,
+ * 			Sky Uppercut, Mudslap, Mudshot, Surf, Mudbomb, and Muddy Water
+ * 		-Added select Pokemon to swap out functionality
+ * 		-Removed error output if sound file is not found
+ * 		-Modified the winning EXP formula to be more accurate
  */
 
 package application;

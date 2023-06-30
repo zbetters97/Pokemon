@@ -13,157 +13,40 @@ public class Battle {
 	
 	// create static scanner to receive user input	
 	private static Scanner input = new Scanner(System.in);	
-	private String name1;
-	private String name2;
+	private String name1, name2;
 	private int numPlayers;
-	private int partySize;
 	private static Pokedex pokemon1, pokemon2;
-	private ArrayList<Pokedex> pokemonParty1;
-	private ArrayList<Pokedex> pokemonParty2;
+	private ArrayList<Pokedex> pokemonParty1, pokemonParty2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
-	public Battle(String name1, String name2, int numPlayers, int partySize) {
+	public Battle(String name1, String name2, int numPlayers, 
+			ArrayList<Pokedex> pokemonParty1, ArrayList<Pokedex> pokemonParty2) {
 		
-		this.name1 = name1;
-		this.name2 = name2;
+		this.name1 = name1; this.name2 = name2;
 		
 		// prevent errors upon startup by setting variables expected values
 		if (numPlayers < 1) numPlayers = 1;
-		else if (numPlayers > 2) numPlayers = 2;		
+		else if (2 > numPlayers) numPlayers = 2;		
 		this.numPlayers = numPlayers;
-		
-		if (partySize < 1) partySize = 1;
-		else if (partySize > 6) partySize = 6;		
-		this.partySize = partySize;
-		
-		pokemonParty1 = new ArrayList<Pokedex>();
-		pokemonParty2 = new ArrayList<Pokedex>();
+				
+		this.pokemonParty1 = pokemonParty1;
+		this.pokemonParty2 = pokemonParty2;
 	}
 	/** END CONSTRUCTOR **/
 	
 	/** MAIN MENU METHOD **/
-	public void start() {		
+	public void start() {
+		
 		clearContent();	
 		
-		selectParty(1);
-		selectParty(2);
-		
-		pokemon1 = pokemonParty1.get(0);
-		pokemon2 = pokemonParty2.get(0);
+		pokemon1 = pokemonParty1.get(0); pokemon2 = pokemonParty2.get(0);
 		
 		battle = new BattleEngine(pokemon1, pokemon2);
 				
 		selectMove();
 	}
 	/** END MAIN METHOD **/
-	
-	/** SELECT PARTY METHOD **/
-	private void selectParty(int player) {
-				
-		int party = 0;		
-		
-		while (party < partySize) {
-		
-			/** LAMBDA METHOD TO GET POKEMON SELECTION **/
-			SelectionGrabber getInput = (trainerNum) -> {				
-				
-				int counter = 0;
-				
-				for (Pokedex p : Pokedex.getPokedex()) {
-					
-					// don't display Pokemon who are already chosen					
-					if (pokemonParty1.contains(Pokedex.getPokemon(counter)) || 
-							pokemonParty2.contains(Pokedex.getPokemon(counter))) {
-						counter++;
-						continue;
-					}			
-					
-					if (p.getType() == null) {
-						System.out.printf("[" + ++counter + "] " + p.getName() + 
-							"\tLVL: %02d | TYPE: " + p.getTypes() + "\n", p.getLevel());	
-					}
-					else {
-						System.out.printf("[" + ++counter + "] " + p.getName() + 
-							"\tLVL: %02d | TYPE: " + p.getType() + "\n", p.getLevel());	
-					}
-				}			
-				
-				while (true) {				
-					try { 
-						int choice = input.nextInt(); 
-						
-						// choice must be a number from 0 to last element in list
-						if (0 < choice && choice <= counter) {
-							
-							// chosen Pokemon must not have already been selected by either trainer
-							if (pokemonParty1.contains(Pokedex.getPokemon(choice - 1)) || 
-									pokemonParty2.contains(Pokedex.getPokemon(choice - 1))) 						
-								System.out.println("This Pokemon has already been chosen!");							
-							else						
-								return choice;
-						}
-						else 
-							System.out.println("ERROR: This is not a valid selection!");
-					}
-					catch (Exception e) {
-						System.out.println("ERROR: Input must be a number!");
-						input.next();
-					}
-				}
-			};							
-			/** END LAMBDA METHOD **/
-			
-			// assign fighter to pokemon found at given index
-			if (player == 1) {	
-				
-				System.out.print(name1 + "'s PARTY: ");
-				
-				if (!pokemonParty1.isEmpty()) {
-					for (Pokedex p : pokemonParty1)
-						System.out.print(p.getName() + " ");
-				}
-				System.out.print("\n" + name2 + "'s PARTY: ");
-				
-				System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
-				
-				pokemonParty1.add(Pokedex.getPokemon(getInput.get(1) - 1));
-								
-				// play pokemon cry
-				SoundCard.play("//pokedex//" + pokemonParty1.get(party).getName());	
-				party++;
-				
-				clearContent();
-			}				
-			else if (player == 2) {				
-				
-				if (!pokemonParty1.isEmpty()) {
-					System.out.print("\n" + name1 + "'s PARTY: ");
-					for (Pokedex p : pokemonParty1)
-						System.out.print(p.getName() + " ");
-				}
-				
-				if (!pokemonParty2.isEmpty()) {
-					System.out.print("\n" + name2 + "'s PARTY: ");
-					for (Pokedex p : pokemonParty2)
-						System.out.print(p.getName() + " ");
-				}
-				else
-					System.out.print("\n" + name2 + "'s PARTY:");
-				
-				System.out.println("\n\n" + name2 + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
-				
-				pokemonParty2.add(Pokedex.getPokemon(getInput.get(1) - 1));
-				
-				// play pokemon cry
-				SoundCard.play("//pokedex//" + pokemonParty2.get(party).getName());	
-				party++;
-				
-				clearContent();
-			}
-		}
-	}
-	/** END SELECT PARTY METHOD **/
 		
 	/** SELECT MOVE METHOD **/
 	private void selectMove() {
@@ -199,7 +82,13 @@ public class Battle {
 				if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {
 					
 					// remove from player 1 party
-					pokemonParty1.remove(0);
+					for (Pokedex p : pokemonParty1) {
+						
+						if (p.getIndex() == pokemon1.getIndex()) {
+							pokemonParty1.remove(p);
+							break;
+						}
+					}
 										
 					// if no pokemon left
 					if (pokemonParty1.isEmpty()) {
@@ -299,8 +188,9 @@ public class Battle {
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
 						
-		System.out.print("\n\n" + name1 + ": " + pokemon1.getName() + 
-				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]: ");
+		System.out.print("\n\n(" + name1 + ") " + pokemon1.getName() + 
+				" : LVL [" + pokemon1.getLevel() + "] |" +
+				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]");
 		
 		if (pokemon1.getStatus() != null)
 			System.out.println(pokemon1.getStatus().getName());
@@ -312,8 +202,9 @@ public class Battle {
 			System.out.print(".");
 		}
 		
-		System.out.print("\n" + name2 + ": " + pokemon2.getName() + 
-				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]: ");
+		System.out.print("\n\n(" + name2 + ") " + pokemon2.getName() + 
+				" : LVL [" + pokemon2.getLevel() + "] |" +
+				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]");
 		
 		if (pokemon2.getStatus() != null)
 			System.out.println(pokemon2.getStatus().getName());

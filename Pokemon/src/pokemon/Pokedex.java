@@ -45,7 +45,7 @@ public enum Pokedex implements PokedexInterface {
 	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
 	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
 	SKEPTILE ("Skeptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
-	TORCHIC ("Torchi", 255, TypeEngine.fire, 5, 45, 60, 40, 70, 50, 45, 16, 62, 1),
+	TORCHIC ("Torchic", 255, TypeEngine.fire, 5, 45, 60, 40, 70, 50, 45, 16, 62, 1),
 	COMBUSKEN ("Combusken", 256, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 16, 60, 85, 60, 85, 60, 55, 36, 142, 2),
 	BLAZIKEN ("Blaziken", 257, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 36, 80, 120, 70, 110, 70, 80, -1, 265, 3),
 	MUDKIP ("Mudkip", 258, TypeEngine.water, 5, 50, 70, 50, 50, 50, 40, 16, 62, 1),

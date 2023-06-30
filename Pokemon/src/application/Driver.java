@@ -125,7 +125,7 @@
  * 		-Fixed bug where select move isn't an option for multi player
  * 		-Cleaned up menu wording and error messages
  * 		-Added name your player functionality
- * 		-Modifed IVs to randomly generate per stat
+ * 		-Modified IVs to randomly generate per stat
  * 6/30/2023:
  * 		-Added Horsea, Seadra, Kingdra, Treecko, Grovyle, Skeptile, Torchic, 
  * 			Combuskin, Blaziken, Mudkip, Marshtomp, and Swampert
@@ -135,6 +135,11 @@
  * 		-Added select Pokemon to swap out functionality
  * 		-Removed error output if sound file is not found
  * 		-Modified the winning EXP formula to be more accurate
+ * 6/30/2023 (cont.):
+ * 		-Fixed bug in Pokemon swap out functionality
+ * 		-Added level info in displayHP method and cleaned up formatting
+ * 		-Cleaned up coding
+ * 		-Condensed chunks of coding
  */
 
 package application;

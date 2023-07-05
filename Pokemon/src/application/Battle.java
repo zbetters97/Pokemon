@@ -225,9 +225,20 @@ public class Battle {
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {
 						
-		System.out.print("\n\n(" + name1 + ") " + pokemon1.getName() + 
-				" : LVL [" + pokemon1.getLevel() + "] |" +
-				" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "]");
+		// if pokemon has multiple types
+		if (pokemon1.getType() == null) {
+			
+			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
+					" : LVL [" + pokemon1.getLevel() + "] |" +
+					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
+					pokemon1.printTypes() + "]");
+		}
+		else {
+			System.out.print("\n\n(" + name1 + ")\n " + pokemon1.getName() + 
+					" : LVL [" + pokemon1.getLevel() + "] |" +
+					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
+					pokemon1.getType() + "]");	
+		}
 		
 		if (pokemon1.getStatus() != null)
 			System.out.println(pokemon1.getStatus().getName());
@@ -239,17 +250,28 @@ public class Battle {
 			System.out.print(".");
 		}
 		
-		System.out.print("\n\n(" + name2 + ") " + pokemon2.getName() + 
-				" : LVL [" + pokemon2.getLevel() + "] |" +
-				" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "]");
+		// if pokemon has mutliple types
+		if (pokemon2.getType() == null) {
+			
+			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
+					" : LVL [" + pokemon2.getLevel() + "] |" +
+					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
+					pokemon2.printTypes() + "]");
+		}
+		else {
+			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
+					" : LVL [" + pokemon2.getLevel() + "] |" +
+					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
+					pokemon2.getType() + "]");	
+		}
 		
 		if (pokemon2.getStatus() != null)
 			System.out.println(pokemon2.getStatus().getName());
 		
 		for (int i = 0; i < pokemon2.getHP(); i++) {
-			if (i % 50 == 0)
-				System.out.println();
 			
+			// add new line for every 50 health points
+			if (i % 50 == 0) System.out.println();			
 			System.out.print(".");
 		}
 		System.out.println("\n");

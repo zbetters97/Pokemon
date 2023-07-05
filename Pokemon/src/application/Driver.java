@@ -146,6 +146,13 @@
  * 		-Fixed bug in remove from party functionality
  * 		-Cleaned up coding
  * 		-Condensed chunks of coding
+ * 7/5/2023 (cont.):
+ * 		-Fixed typo for Sceptile
+ * 		-Minor code cleanup
+ * 		-Changed formatting for Pokemon selection and in-battle info
+ * 		-Changed formatting for multi-type Pokemon
+ * 		-Changed wording for two player menu
+ * 		-Fixed damage calculation logical error
  */
 
 package application;
@@ -158,7 +165,7 @@ public class Driver {
 	static Scanner input = new Scanner(System.in);
 	
 	/** MAIN METHOD **/
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
 		MainMenu.load();
 	}
 	/** END MAIN METHOD **/

@@ -514,9 +514,9 @@ public class BattleEngine {
 		}
 		else
 			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
-		
+
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
-		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (int)(A / D)) / 50)) + 2) * crit * STAB * type);
 
 		// keep damage dealt less than or equal to remaining HP
 		if (damageDealt > pokemon[trg].getHP())

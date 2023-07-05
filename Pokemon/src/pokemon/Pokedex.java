@@ -44,7 +44,7 @@ public enum Pokedex implements PokedexInterface {
 	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 45, 75, 95, 95, 95, 95, 85, -1, 270, 3),
 	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
 	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
-	SKEPTILE ("Skeptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
+	SCEPTILE ("Sceptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
 	TORCHIC ("Torchic", 255, TypeEngine.fire, 5, 45, 60, 40, 70, 50, 45, 16, 62, 1),
 	COMBUSKEN ("Combusken", 256, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 16, 60, 85, 60, 85, 60, 55, 36, 142, 2),
 	BLAZIKEN ("Blaziken", 257, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 36, 80, 120, 70, 110, 70, 80, -1, 265, 3),
@@ -80,8 +80,7 @@ public enum Pokedex implements PokedexInterface {
 	 * @param index **/
 	Pokedex(String name, int index, TypeEngine type, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
-		
-		
+
 		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
 		this.name = name; this.index = index; this.type = type; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
@@ -117,7 +116,7 @@ public enum Pokedex implements PokedexInterface {
 	}
 	Pokedex(String name, int index, List<TypeEngine> types, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
-		
+
 		this.name = name; this.index = index; this.types = types; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
@@ -213,7 +212,7 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(TREECKO, Arrays.asList(Moves.POUND, Moves.QUICKATTACK, Moves.LEER)); 
         pokeMap.put(GROVYLE, Arrays.asList(Moves.QUICKATTACK, Moves.LEAFBLADE, Moves.LEER, 
         		Moves.AGILITY)); 
-        pokeMap.put(SKEPTILE, Arrays.asList(Moves.LEAFBLADE, Moves.LEAFSTORM, Moves.XSCISSOR, 
+        pokeMap.put(SCEPTILE, Arrays.asList(Moves.LEAFBLADE, Moves.LEAFSTORM, Moves.XSCISSOR, 
         		Moves.AGILITY)); 
         
         pokeMap.put(TORCHIC, Arrays.asList(Moves.EMBER, Moves.SCRATCH, Moves.GROWL)); 
@@ -328,9 +327,20 @@ public enum Pokedex implements PokedexInterface {
 	public TypeEngine getType() { return type; }
 	public void setType(TypeEngine type) { this.type = type; }
 	
-	public List<TypeEngine> getTypes() { return types; }
+	public List<TypeEngine> getTypes() { return types; }	
 	public void setTypes(List<TypeEngine> types) { this.types = types; }
-
+	
+	public String printTypes() {
+		String s = "";		
+		int i = types.size() - 1;
+		for (TypeEngine t : types) {
+			 s += t.toString();		
+			 if (i-- != 0)
+				 s += ", ";
+		}
+		return s;
+	}
+	
 	public int getLevel() {	return level; }
 	public void setLevel(int level) { this.level = level; }
 

@@ -25,11 +25,9 @@ public class MainMenu {
 		
 		clearContent();
 		
-		//name1 = inputName(1);		
-		//name2 = (players == 1 ) ? "Red" : inputName(2);
+		name1 = inputName(1);		
+		name2 = (players == 1 ) ? "Red" : inputName(2);
 		
-		name1 = "steel";
-		name2 = "red";
 		int partySize = selectPartySize();
 		
 		selectMusic();
@@ -50,8 +48,8 @@ public class MainMenu {
 		clearContent();
 		
 		System.out.println("PLEASE SELECT MODE:\n"
-				+ "[1] SINGLE PLAYER\n"
-				+ "[2] MULTI PLAYER\n"
+				+ "[1] ONE PLAYER\n"
+				+ "[2] TWO PLAYER\n"
 				+ "[3] QUIT");
 		
 		// loop until QUIT is selected
@@ -78,7 +76,7 @@ public class MainMenu {
 	/** END SELECT PLAYERS METHOD **/
 	
 	/** INPUT NAME METHOD **/
-	/*(private static String inputName(int player) {
+	private static String inputName(int player) {
 				
 		System.out.println("WHAT IS YOUR NAME, TRAINER " + player + "?");
 		
@@ -101,7 +99,7 @@ public class MainMenu {
 				input.next();
 			}
 		}
-	}*/
+	}
 	/** END INPUT NAME METHOD **/
 	
 	/** SELECT PARTY SIZE METHOD **/
@@ -233,13 +231,14 @@ public class MainMenu {
 					continue;
 				}
 				
+				// if pokemon has multiple types
 				if (p.getType() == null) {
-					System.out.printf("[" + ++counter + "] " + p.getName() + 
-						"\tLVL: %02d | TYPE: " + p.getTypes() + "\n", p.getLevel());	
+					System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
+							p.printTypes() + "\n", ++counter, p.getLevel());	
 				}
 				else {
-					System.out.printf("[" + ++counter + "] " + p.getName() + 
-						"\tLVL: %02d | TYPE: " + p.getType() + "\n", p.getLevel());	
+					System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
+							p.getType() + "\n", ++counter, p.getLevel());	
 				}
 			}
 	

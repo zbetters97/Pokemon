@@ -140,6 +140,12 @@
  * 		-Added level info in displayHP method and cleaned up formatting
  * 		-Cleaned up coding
  * 		-Condensed chunks of coding
+ * 7/5/2023
+ * 		-Fixed bug in selectParty method
+ * 		-Fixed bug in CPU select move functionality
+ * 		-Fixed bug in remove from party functionality
+ * 		-Cleaned up coding
+ * 		-Condensed chunks of coding
  */
 
 package application;
@@ -152,7 +158,7 @@ public class Driver {
 	static Scanner input = new Scanner(System.in);
 	
 	/** MAIN METHOD **/
-	public static void main(String[] args) {		
+	public static void main(String[] args) {	
 		MainMenu.load();
 	}
 	/** END MAIN METHOD **/

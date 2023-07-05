@@ -27,7 +27,7 @@ public class Battle {
 		
 		// prevent errors upon startup by setting variables expected values
 		if (numPlayers < 1) numPlayers = 1;
-		else if (2 > numPlayers) numPlayers = 2;		
+		else if (2 < numPlayers) numPlayers = 2;		
 		this.numPlayers = numPlayers;
 				
 		this.pokemonParty1 = pokemonParty1;
@@ -77,102 +77,138 @@ public class Battle {
 			
 			// if a pokemon is defeated
 			if (battle.hasWinner()) {
-					
-				// if player 2 defeated player 1
-				if (battle.getWinningPokemon().getName().equals(pokemon2.getName())) {
-					
-					// remove from player 1 party
-					for (Pokedex p : pokemonParty1) {
-						
-						if (p.getIndex() == pokemon1.getIndex()) {
-							pokemonParty1.remove(p);
-							break;
-						}
-					}
-										
-					// if no pokemon left
-					if (pokemonParty1.isEmpty()) {
-						announceWinner(name2, name1, battle.getMoney(0));	
-						return;
-					}
-					else {			
-						// reset winner
-						battle.setWinningPokemon(null);
-						
-						System.out.println("WHO SHOULD BATTLE NEXT?");
-						
-						int counter = 0;
-						for (Pokedex p : pokemonParty1) {
-							if (p.getType() == null) {							
-								System.out.printf("[" + ++counter + "] " + p.getName() + 
-									"\tLVL: %02d | TYPE: " + p.getTypes() + "\n", p.getLevel());	
-							}
-							else {
-								System.out.printf("[" + ++counter + "] " + p.getName() + 
-									"\tLVL: %02d | TYPE: " + p.getType() + "\n", p.getLevel());
-							}
-						}
-						
-						int choice = 0;
-						
-						while (true) {				
-							try { 
-								choice = input.nextInt(); 
-								
-								// choice must be a number from 0 to last element in list
-								if (0 < choice && choice <= counter) {
-									break;									
-								}
-								else 
-									System.out.println("ERROR: This is not a valid selection!");
-							}
-							catch (Exception e) {
-								System.out.println("ERROR: Input must be a number!");
-								input.next();
-							}
-						}
-												
-						// get next pokemon in party and swap out battle
-						pokemon1 = pokemonParty1.get(choice - 1);
-						battle.swapPokemon(pokemon1, 0);
-						
-						clearContent();
-						
-						System.out.println(name1 + ": GO, " + pokemon1.getName() + "!");
-						SoundCard.play("//pokedex//" + pokemon1.getName());
-						Sleeper.pause(1700);	
-						clearContent();
-					}
-				}
-				// if player 1 defeated player 2
-				else {				
-					// remove from party 2
-					pokemonParty2.remove(0);
-					
-					// if no pokemon left
-					if (pokemonParty2.isEmpty()) {
-						announceWinner(name1, name2, battle.getMoney(1));	
-						return;
-					}
-					else {			
-						// reset winner
-						battle.setWinningPokemon(null);
-						
-						// get next pokemon in party and swap out battle
-						pokemon2 = pokemonParty2.get(0);
-						battle.swapPokemon(pokemon2, 1);
-						
-						System.out.println(name2 + ": GO, " + pokemon2.getName() + "!");
-						SoundCard.play("//pokedex//" + pokemon2.getName());
-						Sleeper.pause(1700);	
-						clearContent();
-					}					
-				}
+				
+				// if no pokemon left in party
+				if (chooseNextFighter())
+					return;
 			}
 		}
 	}
 	/** END SELECT MOVE METHOD **/
 	
+	/** CHOOSE NEXT POKEMON METHOD **/
+	public boolean chooseNextFighter() {
+		
+		boolean playerTwoWinner = battle.getWinningPokemon().getName().equals(pokemon2.getName());
+		int choice;
+		
+		// if player 2 defeated player 1
+		if (playerTwoWinner) {
+			
+			// remove from player 1 party			
+			for (Pokedex p : pokemonParty1) {
+				
+				if (p.getIndex() == pokemon1.getIndex()) {
+					pokemonParty1.remove(p);
+					break;
+				}
+			}
+			
+			// if no pokemon left
+			if (pokemonParty1.isEmpty()) {
+				announceWinner(name2, name1, battle.getMoney(0));
+				
+				return true;
+			}
+			else {			
+				// reset winner
+				battle.setWinningPokemon(null);
+				
+				// ask which pokemon to sub in and swap
+				choice = listNextFighter(1);
+				pokemon1 = pokemonParty1.get(choice - 1);
+				battle.swapPokemon(pokemon1, 0);
+				
+				clearContent();
+				
+				System.out.println(name1 + ": GO, " + pokemon1.getName() + "!");
+				SoundCard.play("//pokedex//" + pokemon1.getName());
+				Sleeper.pause(1700);	
+				clearContent();
+				
+				return false;
+			}
+		}
+		// if player 1 defeated player 2
+		else {		
+			
+			// remove from party 2
+			for (Pokedex p : pokemonParty2) {
+				
+				if (p.getIndex() == pokemon2.getIndex()) {
+					pokemonParty2.remove(p);
+					break;
+				}
+			}
+			
+			// if no pokemon left
+			if (pokemonParty2.isEmpty()) {
+				announceWinner(name1, name2, battle.getMoney(1));	
+				return true;
+			}
+			else {			
+				// reset winner
+				battle.setWinningPokemon(null);
+					
+				// ask which pokemon to sub in and swap (1 for cpu so choice would = 0)
+				choice = (numPlayers == 2 ) ? listNextFighter(2) : 1;				
+				pokemon2 = pokemonParty2.get(choice - 1);
+				battle.swapPokemon(pokemon2, 1);
+				
+				clearContent();
+				
+				System.out.println(name2 + ": GO, " + pokemon2.getName() + "!");
+				SoundCard.play("//pokedex//" + pokemon2.getName());
+				Sleeper.pause(1700);	
+				clearContent();
+				
+				return false;
+			}		
+		}
+	}	
+	/** END CHOOSE NEXT POKEMON METHOD **/	
+	
+	/** LIST FIGHTERS METHOD **/
+	public int listNextFighter(int player) {
+		
+		System.out.println("WHO SHOULD BATTLE NEXT?");
+		
+		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
+		
+		int counter = 0;
+		for (Pokedex p : pokemonParty) {
+			if (p.getType() == null) {							
+				System.out.printf("[" + ++counter + "] " + p.getName() + 
+					"\tLVL: %02d | TYPE: " + p.getTypes() + "\n", p.getLevel());	
+			}
+			else {
+				System.out.printf("[" + ++counter + "] " + p.getName() + 
+					"\tLVL: %02d | TYPE: " + p.getType() + "\n", p.getLevel());
+			}
+		}
+		
+		int choice = 0;
+		
+		while (true) {				
+			try { 
+				choice = input.nextInt(); 
+				
+				// choice must be a number from 0 to last element in list
+				if (0 < choice && choice <= counter) {
+					return choice;									
+				}
+				else 
+					System.out.println("ERROR: This is not a valid selection!");
+			}
+			catch (Exception e) {
+				System.out.println("ERROR: Input must be a number!");
+				input.next();
+			}
+		}
+	}
+	/** END LIST FIGHTERS METHOD **/
+	
+	/** DISPLAY PARTY METHOD **/
 	private void displayParty() {
 		
 		System.out.print(name1 + "'s PARTY: ");
@@ -184,6 +220,7 @@ public class Battle {
 		for (Pokedex p : pokemonParty2)
 			System.out.print(p.getName() + " ");
 	}
+	/** END DISPLAY PARTY METHOD **/
 	
 	/** DISPLAY HP METHOD **/
 	private void displayHP() {

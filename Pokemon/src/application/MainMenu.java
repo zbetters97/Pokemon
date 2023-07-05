@@ -25,9 +25,11 @@ public class MainMenu {
 		
 		clearContent();
 		
-		name1 = inputName(1);		
-		name2 = (players == 1 ) ? "Red" : inputName(2);
-				
+		//name1 = inputName(1);		
+		//name2 = (players == 1 ) ? "Red" : inputName(2);
+		
+		name1 = "steel";
+		name2 = "red";
 		int partySize = selectPartySize();
 		
 		selectMusic();
@@ -76,7 +78,7 @@ public class MainMenu {
 	/** END SELECT PLAYERS METHOD **/
 	
 	/** INPUT NAME METHOD **/
-	private static String inputName(int player) {
+	/*(private static String inputName(int player) {
 				
 		System.out.println("WHAT IS YOUR NAME, TRAINER " + player + "?");
 		
@@ -99,7 +101,7 @@ public class MainMenu {
 				input.next();
 			}
 		}
-	}
+	}*/
 	/** END INPUT NAME METHOD **/
 	
 	/** SELECT PARTY SIZE METHOD **/
@@ -241,7 +243,7 @@ public class MainMenu {
 				}
 			}
 	
-			System.out.print(name1 + "'s PARTY: ");
+			System.out.print("\n" + name1 + "'s PARTY: ");
 			for (Pokedex p : party1)
 				System.out.print(p.getName() + " ");
 			
@@ -249,7 +251,7 @@ public class MainMenu {
 			for (Pokedex p : party2)
 				System.out.print(p.getName() + " ");
 			
-			System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:\n");
+			System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:");
 			
 			while (true) {				
 				try { 
@@ -275,10 +277,11 @@ public class MainMenu {
 			}
 			
 			// assign fighter to party found at given index
-			party1.add(Pokedex.getPokemon(choice - 1));
+			Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
+			party1.add(selectedPokemon);
 			
 			// play pokemon cry
-			SoundCard.play("//pokedex//" + party1.get(choice - 1).getName());
+			SoundCard.play("//pokedex//" + selectedPokemon.getName());
 			
 			clearContent();
 			c++;

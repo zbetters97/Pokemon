@@ -3,7 +3,7 @@ package application;
 /*** SLEEPER CLASS ***/
 public class Sleeper {
 	
-	private static int speed = 20;
+	private static int speed = 15;
 	
 	/** SET SPEED METHOD **/
 	public static void setSpeed(int sp) {

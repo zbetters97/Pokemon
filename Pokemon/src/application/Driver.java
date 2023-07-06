@@ -163,7 +163,9 @@
  * 7/6/2023 (cont.):
  * 		-Moved "effective" sound to play before text
  * 		-Fixed formatting error in displayMove method
- * 		-Changed wording in settings menu
+ * 		-Changed wording in welcome and settings menu
+ * 		-Increased text speeds
+ * 		-Added delay after effectiveness text read
  */
 
 package application;

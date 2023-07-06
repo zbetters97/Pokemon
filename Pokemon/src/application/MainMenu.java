@@ -155,19 +155,19 @@ public class MainMenu {
 				int choice = input.nextInt(); 
 				
 				if (choice == 1) {
-					Sleeper.setSpeed(50);
+					Sleeper.setSpeed(45);
 					Sleeper.print("TEXT SPEED SET TO SLOW"); 
 					Sleeper.pause(1200);
 					return;
 				}
 				else if (choice == 2) {	
-					Sleeper.setSpeed(35);
+					Sleeper.setSpeed(30);
 					Sleeper.print("TEXT SPEED SET TO MEDIUM"); 
 					Sleeper.pause(1200);
 					return;
 				}
 				else if (choice == 3) {
-					Sleeper.setSpeed(20);
+					Sleeper.setSpeed(15);
 					Sleeper.print("TEXT SPEED SET TO FAST"); 
 					Sleeper.pause(1200);					
 					return;

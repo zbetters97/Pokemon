@@ -102,11 +102,11 @@ public class SoundCard {
         }
         
         if (effectiveness == 1.5) 
-        	Sleeper.print("It's super effective!");
+        	Sleeper.print("It's super effective!", 1000);
 		else if (effectiveness == .5)
-			Sleeper.print("It's not very effective...");
+			Sleeper.print("It's not very effective...", 1000);
 		else if (effectiveness == 0) 
-			Sleeper.print("It has no effect!");
+			Sleeper.print("It has no effect!", 1000);
 	}
 	/** END HIT SOUND METHOD **/
 	

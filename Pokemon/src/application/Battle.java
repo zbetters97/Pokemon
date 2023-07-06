@@ -323,7 +323,7 @@ public class Battle {
 	/** LIST FIGHTERS METHOD **/
 	public int listNextFighter(int player) {
 		
-		Sleeper.print("WHO SHOULD BATTLE NEXT?", 700);
+		Sleeper.print("CHOOSE A POKEMON.", 700);
 		
 		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
 		

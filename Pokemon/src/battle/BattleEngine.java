@@ -359,7 +359,7 @@ public class BattleEngine {
 					else {
 						//dropHealth(pokemon[atk], pokemon[trg], damage, move);
 						
-						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);
+						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1500);
 						
 						// damage is fatal
 						if (damage >= pokemon[trg].getHP()) {

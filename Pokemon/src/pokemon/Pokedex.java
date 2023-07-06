@@ -21,7 +21,7 @@ public enum Pokedex implements PokedexInterface {
 	VENUSAUR ("Venusaur", 3, Arrays.asList(TypeEngine.grass, TypeEngine.poison), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
 	CHARMANDER ("Charmander", 4, TypeEngine.fire, 5, 39, 52, 43, 60, 50, 65, 16, 65, 1),
 	CHARMELEON ("Charmeleon", 5, TypeEngine.fire, 16, 58, 64, 58, 80, 65, 80, 36, 142, 2),
-	CHARIZARD ("Charizard", 6, Arrays.asList(TypeEngine.fire, TypeEngine.flying, TypeEngine.dragon), 36, 78, 84, 78, 109, 85, 100, -1, 209, 3),
+	CHARIZARD ("Charizard", 6, Arrays.asList(TypeEngine.fire, TypeEngine.flying), 36, 78, 84, 78, 109, 85, 100, -1, 209, 3),
 	SQUIRTLE ("Squirtle", 7, TypeEngine.water, 5, 44, 48, 65, 50, 64, 43, 16, 66, 1),
 	WARTORTLE ("Wartortle", 8, TypeEngine.water, 16, 59, 63, 80, 65, 80, 58, 36, 143, 2),
 	BLASTOISE ("Blastoise", 9, TypeEngine.water, 36, 79, 83, 100, 85, 105, 78, -1, 210, 3),

@@ -28,6 +28,7 @@ public class BattleEngine {
 		
 		// array to hold fighting pokemon
 		pokemon = new Pokedex[2];
+		
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
 	}
@@ -150,9 +151,8 @@ public class BattleEngine {
 					
 					int val = 1 + (int)(Math.random() * ((4 - 1) + 1));
 					if (val == 1) {						
-						System.out.println(pokemon[atk].getName() + " is paralyzed and unable to move!");
 						SoundCard.playStatus(pokemon[atk].getStatus().getName());
-						Sleeper.pause(1700);
+						Sleeper.print(pokemon[atk].getName() + " is paralyzed and unable to move!", 1700);
 						clearContent();
 						
 						return false;
@@ -162,9 +162,8 @@ public class BattleEngine {
 					}					
 					
 				case "FZN":
-					System.out.println(pokemon[atk].getName() + " is frozen solid and unable to move!");
 					SoundCard.playStatus(pokemon[atk].getStatus().getName());
-					Sleeper.pause(1700);
+					Sleeper.print(pokemon[atk].getName() + " is frozen solid and unable to move!", 1700);
 					clearContent();
 					
 					return false;
@@ -199,32 +198,29 @@ public class BattleEngine {
 			pokemon[pkm].setStatus(null);
 			
 			if (status.equals("SLP")) 
-				System.out.println(pokemon[pkm].getName() + " woke up!");				
+				Sleeper.print(pokemon[pkm].getName() + " woke up!", 1700);				
 			else if (status.equals("CNF")) 
-				System.out.println(pokemon[pkm].getName() + " snapped out of confusion!");						
-							
-			Sleeper.pause(1700);			
+				Sleeper.print(pokemon[pkm].getName() + " snapped out of confusion!", 1700);						
+		
 			return true;
 		}
 		else {
 			pokemon[pkm].setStatusCounter(pokemon[pkm].getStatusCounter() + 1);
 			
 			if (status.equals("SLP")) {				
-				System.out.println(pokemon[pkm].getName() + " is fast asleep!");
 				SoundCard.playStatus(pokemon[pkm].getStatus().getName());
-				Sleeper.pause(1700);
+				Sleeper.print(pokemon[pkm].getName() + " is fast asleep!", 1700);
 				clearContent();	
+				
 				return false;
 			}
 			else if (status.equals("CNF")) {				
-				System.out.println(pokemon[pkm].getName() + " is confused!");							
 				SoundCard.playStatus(pokemon[pkm].getStatus().getName());
-				Sleeper.pause(1700);
+				Sleeper.print(pokemon[pkm].getName() + " is confused!", 1700);
+				clearContent();
 				
-				if (confusionDamage(pkm))
-					return false;
-				else
-					return true;				
+				if (confusionDamage(pkm)) return false;
+				else return true;				
 			}
 			return false;
 		}
@@ -232,7 +228,6 @@ public class BattleEngine {
 	/**  END GET EFFECT METHOD **/
 	
 	/** CALCULATE CONFUSION DAMAGE DEALT METHOD **/
-	// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status) //
 	private boolean confusionDamage(int atk) {
 		
 		int trg = (atk == 1) ? 0 : 1;
@@ -246,12 +241,11 @@ public class BattleEngine {
 			double A = pokemon[atk].getAttack();
 			double D = pokemon[atk].getDefense();
 					
-			// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+			// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status)
 			int damage = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
 		
-			System.out.println(pokemon[atk].getName() + " hurt itself in confusion!");
-			SoundCard.playHit(1.0);			
-			Sleeper.pause(1700);
+			SoundCard.playHit(1.0);	
+			Sleeper.print(pokemon[atk].getName() + " hurt itself in confusion!", 1700);
 			clearContent();
 			
 			int hp = pokemon[atk].getHP() - damage;
@@ -295,8 +289,7 @@ public class BattleEngine {
 			// decrease move pp
 			move.setpp(move.getpp() - 1);
 			
-			System.out.println(pokemon[atk].getName() + " used " + move.getName() + "!");
-			Sleeper.pause(1000);			
+			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 1000);
 			SoundCard.play("//moves//" + move.getName(), true);
 				        
 	        // if attack lands
@@ -307,18 +300,15 @@ public class BattleEngine {
 					// if pokemon does not already have status affect
 					if (pokemon[trg].getStatus() == null) {
 						
-						pokemon[trg].setStatus(move.getEffect());				
-						
-						System.out.println(pokemon[trg].getName() + " is " + pokemon[trg].getStatus().getCondition() + "!");						
-						Sleeper.pause(1700);
-						
+						pokemon[trg].setStatus(move.getEffect());						
+						Sleeper.print(pokemon[trg].getName() + " is " + 
+								pokemon[trg].getStatus().getCondition() + "!", 1700);
 						clearContent();
 					}
 					// pokemon already has status affect
 					else {
-						System.out.println(pokemon[trg].getName() + " is already " + pokemon[trg].getStatus().getCondition() + "!");						
-						Sleeper.pause(1700);
-						
+						Sleeper.print(pokemon[trg].getName() + " is already " + 
+								pokemon[trg].getStatus().getCondition() + "!", 1700);
 						clearContent();
 					}
 				}
@@ -356,22 +346,20 @@ public class BattleEngine {
 					
 					// if critical hit
 					if (crit == 1.5) 
-						System.out.println("A critical hit!");
+						Sleeper.print("A critical hit!");
 									
 					// calculate damage to be dealt
 					int damage = calculateDamage(atk, trg, move, crit, false);
 							
 					// no damage dealt
 					if (damage == 0) {
-						System.out.println("It had no effect!");
-						Sleeper.pause(1700);
+						Sleeper.print("It had no effect!", 1700);
 						clearContent();
 					}
 					else {
 						//dropHealth(pokemon[atk], pokemon[trg], damage, move);
 						
-						System.out.println(pokemon[trg].getName() + " took " + damage + " damage!");
-						Sleeper.pause(1700);										
+						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);
 						
 						// damage is fatal
 						if (damage >= pokemon[trg].getHP()) {
@@ -388,8 +376,8 @@ public class BattleEngine {
 								if (new Random().nextDouble() <= move.getProbability()) {
 									pokemon[trg].setStatus(move.getEffect());
 									
-									System.out.println(pokemon[trg].getName() + " is " + pokemon[trg].getStatus().getCondition() + "!");							
-									Sleeper.pause(1700);
+									Sleeper.print(pokemon[trg].getName() + " is " + 
+											pokemon[trg].getStatus().getCondition() + "!", 1700);
 								}							
 							}						
 							clearContent();
@@ -399,8 +387,7 @@ public class BattleEngine {
 			}
 			// attack missed
 			else {
-				System.out.println("The attack missed!");
-				Sleeper.pause(2000);
+				Sleeper.print("The attack missed!", 2000);
 				clearContent();
 			}				
 		}		
@@ -516,7 +503,7 @@ public class BattleEngine {
 			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
 
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
-		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (int)(A / D)) / 50)) + 2) * crit * STAB * type);
+		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);
 
 		// keep damage dealt less than or equal to remaining HP
 		if (damageDealt > pokemon[trg].getHP())
@@ -566,9 +553,8 @@ public class BattleEngine {
 					
 					p.setHP(newHP);			
 					
-					System.out.println(p.getName() + " is hurt from the " + p.getStatus().getEffect().toLowerCase() + "!");
 					SoundCard.playStatus(p.getStatus().getName());
-					Sleeper.pause(1700);
+					Sleeper.print(p.getName() + " is hurt from the " + p.getStatus().getEffect().toLowerCase() + "!", 1700);
 					clearContent();	
 										
 					return damage;
@@ -596,13 +582,12 @@ public class BattleEngine {
 	/** POKEMON DEFEATED METHOD **/
 	private void defeated(int win, int lsr, int damageDealt) {
 				
-		int xp = setWinGetXP(win, lsr, damageDealt);	
+		int xp = setWinGetXP(win, lsr, damageDealt);
 		
-		System.out.println(pokemon[lsr].getName() + " fainted!");		
-		Sleeper.pause(2000);
+		clearContent();
 		
-		System.out.println(pokemon[win].getName() + " gained " + xp + " Exp. Points!");		
-		Sleeper.pause(2000);	
+		Sleeper.print(pokemon[lsr].getName() + " fainted!", 2000);		
+		Sleeper.print(pokemon[win].getName() + " gained " + xp + " Exp. Points!", 2000);
 		
 		return;
 	}

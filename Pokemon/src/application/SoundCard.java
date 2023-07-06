@@ -9,6 +9,7 @@ import javax.sound.sampled.Clip;
 /*** SOUND CARD CLASS ***/
 public class SoundCard {
 	
+	private static boolean active = true;
 	private Clip music;
 	
 	/** CONSTRUCTOR **/
@@ -28,6 +29,12 @@ public class SoundCard {
 	}
 	/** END CONSTRUCTOR **/
 	
+	/** SET ACTIVE METHOD **/
+	public static void setActive(boolean act) {
+		active = act;
+	}
+	/** END SET ACTIVE METHOD **/
+	
 	/** PLAY/STOP MUSIC METHODS **/
 	public void playMusic() {
 		music.start();
@@ -42,23 +49,25 @@ public class SoundCard {
 	// optional parameter to wait until finished playing //
 	public static void play(String arg, boolean... hold) {
 		
-		try {
-			// retrieve sound file based on argument given
-			String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
-            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
-            
-            Clip c = AudioSystem.getClip();            
-            c.open(ais); c.start(); 
-            
-            // wait until sound file has finished playing
-            if (hold.length >= 1) {
-            	double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate(); 
-            	Sleeper.pause(duration);
-            }
-        }
-        catch (Exception e) { 
-        	
-        }
+		if (active) {
+			try {
+				// retrieve sound file based on argument given
+				String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
+	            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
+	            
+	            Clip c = AudioSystem.getClip();            
+	            c.open(ais); c.start(); 
+	            
+	            // wait until sound file has finished playing
+	            if (hold.length >= 1) {
+	            	double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate(); 
+	            	Sleeper.pause(duration);
+	            }
+	        }
+	        catch (Exception e) { 
+	        	
+	        }
+		}
 	}
 	/** END SOUND CARD METHOD **/
 	
@@ -80,22 +89,24 @@ public class SoundCard {
         File sound = new File(path);
         
         if (effectiveness == 1.5) 
-        	System.out.println("It's super effective!");
+        	Sleeper.print("It's super effective!");
 		else if (effectiveness == .5)
-			System.out.println("It's not very effective...");
+			Sleeper.print("It's not very effective...");
 		else if (effectiveness == 0) 
-			System.out.println("It has no effect!");
+			Sleeper.print("It has no effect!");
 
-        try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-            
-            double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate(); 
-            Clip c = AudioSystem.getClip();
-            c.open(ais); c.start(); 
-            
-            Sleeper.pause(duration);
+        if (active) {        
+	        try {
+	            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+	            
+	            double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate(); 
+	            Clip c = AudioSystem.getClip();
+	            c.open(ais); c.start(); 
+	            
+	            Sleeper.pause(duration);
+	        }
+	        catch (Exception e) { }
         }
-        catch (Exception e) { System.out.println(e.getMessage()); }
 	}
 	/** END HIT SOUND METHOD **/
 	
@@ -119,17 +130,19 @@ public class SoundCard {
 		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
         File sound = new File(path);
         
-        try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-            
-            double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate();
-            
-            Clip c = AudioSystem.getClip();
-            c.open(ais); c.start(); 
-            
-            Sleeper.pause(duration);
+        if (active) {
+	        try {
+	            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+	            
+	            double duration = (ais.getFrameLength() + 0.0) / ais.getFormat().getFrameRate();
+	            
+	            Clip c = AudioSystem.getClip();
+	            c.open(ais); c.start(); 
+	            
+	            Sleeper.pause(duration);
+	        }
+	        catch (Exception e) { }
         }
-        catch (Exception e) { System.out.println(e.getMessage()); }
 	}
 	/** END STATUS SOUND METHOD **/
 }

@@ -152,7 +152,14 @@
  * 		-Changed formatting for Pokemon selection and in-battle info
  * 		-Changed formatting for multi-type Pokemon
  * 		-Changed wording for two player menu
- * 		-Fixed damage calculation logical error
+ * 		-Fixed damage formula logic error
+ * 7/6/2023:
+ * 		-Changed text output to mimic traditional Pokemon
+ * 		-Moved music to now play when battle starts
+ * 		-Removed type Dragon from Charizard
+ * 		-Fixed damage formula logic error
+ * 		-Added Settings menu to change text speed and sounds
+ * 		-Added player input indicator
  */
 
 package application;

@@ -40,7 +40,8 @@ public class Battle {
 		
 		clearContent();	
 		
-		pokemon1 = pokemonParty1.get(0); pokemon2 = pokemonParty2.get(0);
+		pokemon1 = pokemonParty1.get(0); 
+		pokemon2 = pokemonParty2.get(0);
 		
 		battle = new BattleEngine(pokemon1, pokemon2);
 				
@@ -121,7 +122,7 @@ public class Battle {
 				
 				clearContent();
 				
-				System.out.println(name1 + ": GO, " + pokemon1.getName() + "!");
+				Sleeper.print(name1 + ": GO, " + pokemon1.getName() + "!");
 				SoundCard.play("//pokedex//" + pokemon1.getName());
 				Sleeper.pause(1700);	
 				clearContent();
@@ -157,7 +158,7 @@ public class Battle {
 				
 				clearContent();
 				
-				System.out.println(name2 + ": GO, " + pokemon2.getName() + "!");
+				Sleeper.print(name2 + ": GO, " + pokemon2.getName() + "!");
 				SoundCard.play("//pokedex//" + pokemon2.getName());
 				Sleeper.pause(1700);	
 				clearContent();
@@ -171,7 +172,7 @@ public class Battle {
 	/** LIST FIGHTERS METHOD **/
 	public int listNextFighter(int player) {
 		
-		System.out.println("WHO SHOULD BATTLE NEXT?");
+		Sleeper.print("WHO SHOULD BATTLE NEXT?", 700);
 		
 		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
 		
@@ -187,6 +188,8 @@ public class Battle {
 			}
 		}
 		
+		System.out.print(">");
+		
 		int choice = 0;
 		
 		while (true) {				
@@ -197,11 +200,14 @@ public class Battle {
 				if (0 < choice && choice <= counter) {
 					return choice;									
 				}
-				else 
-					System.out.println("ERROR: This is not a valid selection!");
+				else {
+					Sleeper.print("ERROR: This is not a valid selection!");
+					System.out.print(">");
+				}
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Input must be a number!");
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
 				input.next();
 			}
 		}
@@ -234,7 +240,7 @@ public class Battle {
 					pokemon1.printTypes() + "]");
 		}
 		else {
-			System.out.print("\n\n(" + name1 + ")\n " + pokemon1.getName() + 
+			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
 					" : LVL [" + pokemon1.getLevel() + "] |" +
 					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
 					pokemon1.getType() + "]");	
@@ -294,6 +300,7 @@ public class Battle {
 			}
 			System.out.println("[" + ++counter + "] INFO");
 			System.out.println("[" + ++counter + "] RUN");
+			System.out.print(">");
 			
 			try { 
 				int choice = input.nextInt();
@@ -308,14 +315,17 @@ public class Battle {
 				else if (choice == counter) {
 					clearContent();	
 					SoundCard.play("\\in-battle\\in-battle-run");
-					System.out.println("Got away safely!"); 					 
+					Sleeper.print("Got away safely!"); 					 
 					System.exit(1);
 				}
-				else
-					System.out.println("This is not a move!"); 		
+				else {
+					Sleeper.print("This is not a move!"); 	
+					System.out.print(">");
+				}
 			}
 			catch (InputMismatchException e) { 
-				System.out.println("ERROR: Input must be a number!");
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
 				input.next();
 			}
 		}
@@ -338,13 +348,17 @@ public class Battle {
 				clearContent();	
 				displayHP();
 				System.out.println("What will " + fighter.getName() + " do?\n");
+				System.out.print(">");
 				return;
 			}
-			else
-				System.out.println("ERROR: This is not a valid selection!");
+			else {
+				Sleeper.print("ERROR: This is not a valid selection!");
+				System.out.print(">");
+			}
 		}
 		catch (InputMismatchException e) { 
-			System.out.println("Input must be a number!");
+			Sleeper.print("Input must be a number!");
+			System.out.print(">");
 			input.next();
 		}		
 	}
@@ -353,8 +367,13 @@ public class Battle {
 	/** GET MOVE METHOD **/
 	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {		
 		// if move has pp
-		if (moveSet.get(choice - 1).getpp() > 0) { return moveSet.get(choice - 1); }
-		else { System.out.println("This move is out of PP and cannot be used!"); return null; }
+		if (moveSet.get(choice - 1).getpp() > 0) 
+			return moveSet.get(choice - 1);
+		else { 
+			Sleeper.print("This move is out of PP and cannot be used!"); 
+			System.out.print(">");
+			return null; 
+		}
 		
 	}
 	/** END GET MOVE METHOD **/
@@ -362,8 +381,8 @@ public class Battle {
 	/** ANNOUNCE WINNER METHOD **/
 	private void announceWinner(String winner, String loser, int money) {
 		SoundCard.play("//in-battle//in-battle-victory");
-		System.out.println("Player defeated, " + winner + "!");
-		System.out.println(winner + " got $" + money + " for winning!");
+		Sleeper.print("Player defeated, " + winner + "!");
+		Sleeper.print(winner + " got $" + money + " for winning!");
 	}
 	/** END ANNOUNCE WINNER METHOD **/
 

@@ -15,6 +15,7 @@ public class MainMenu {
 	// scanner to receive user input
 	static Scanner input = new Scanner(System.in);
 	static SoundCard bgmusic;
+	static Sleeper sleeper;
 	
 	/** LOAD METHOD **/
 	public static void load() {
@@ -30,27 +31,35 @@ public class MainMenu {
 		
 		int partySize = selectPartySize();
 		
-		selectMusic();
+		String file = selectMusic();
 		
 		ArrayList<Pokedex> pokemonParty1 = new ArrayList<>();
 		ArrayList<Pokedex> pokemonParty2 = new ArrayList<>();
 		
 		pokemonParty1 = selectParty(1, partySize, name1, name2, pokemonParty1, pokemonParty2);
 		pokemonParty2 = selectParty(2, partySize, name2, name1, pokemonParty2, pokemonParty1);
+
+		if (file != "") {
+			bgmusic = new SoundCard("\\music\\" + file);
+			bgmusic.playMusic();
+		}
 		
 		startGame(players, name1, name2, pokemonParty1, pokemonParty2);
 	}
 	/** END LOAD METHOD **/
 	
+	
+	
 	/** SELECT PLAYERS METHOD **/
 	private static int selectPlayers() {
 						
-		clearContent();
-		
+		clearContent();			
 		System.out.println("PLEASE SELECT MODE:\n"
 				+ "[1] ONE PLAYER\n"
 				+ "[2] TWO PLAYER\n"
-				+ "[3] QUIT");
+				+ "[3] SETTINGS\n"
+				+ "[4] QUIT");
+		System.out.print(">");
 		
 		// loop until QUIT is selected
 		while (true) {
@@ -60,25 +69,166 @@ public class MainMenu {
 				
 				if (choice == 1 || choice == 2)
 					return choice;
-				else if (choice == 3) { 
-					System.out.println("Shutting down..."); 
+				else if (choice == 3) {
+					settingsMenu();
+					
+					clearContent();					
+					System.out.println("PLEASE SELECT MODE:\n"
+							+ "[1] ONE PLAYER\n"
+							+ "[2] TWO PLAYER\n"
+							+ "[3] SETTINGS\n"
+							+ "[4] QUIT");
+					System.out.print(">");
+				}
+				else if (choice == 4) { 
+					Sleeper.print("Shutting down..."); 
 					System.exit(0); 
 				}	
-				else 
-					System.out.println("ERROR: Input must be a valid selection!"); 
+				else {
+					Sleeper.print("ERROR: Input must be a valid selection!"); 
+					System.out.print(">");
+				}
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Input must be a number!");
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
 				input.next();
 			}
 		}
 	}
 	/** END SELECT PLAYERS METHOD **/
 	
+	/** SETTINGS METHOD **/
+	private static void settingsMenu() {
+		
+		clearContent();				
+		System.out.println("PLEASE SELECT AN OPTION:\n"
+				+ "[1] TEXT SPEED\n"
+				+ "[2] SOUNDS\n"
+				+ "[3] BACK");
+		System.out.print(">");
+		
+		// loop until BACK is selected
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				
+				if (choice == 1) {
+					textSpeedMenu();
+					return;
+				}
+				else if (choice == 2) {
+					soundMenu();
+					return;
+				}
+				else if (choice == 3) { 
+					clearContent();
+					return;
+				}	
+				else {
+					Sleeper.print("ERROR: Input must be a valid selection!"); 
+					System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	/** END SETTINGS METHOD **/
+	
+	private static void textSpeedMenu() {
+		
+		clearContent();				
+		System.out.println("TEXT SPEED:\n"
+				+ "[1] SLOW\n"
+				+ "[2] MEDIUM\n"
+				+ "[3] FAST");
+		System.out.print(">");
+		
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				
+				if (choice == 1) {
+					Sleeper.setSpeed(50);
+					Sleeper.print("TEXT SPEED SET TO SLOW"); 
+					Sleeper.pause(1200);
+					return;
+				}
+				else if (choice == 2) {	
+					Sleeper.setSpeed(35);
+					Sleeper.print("TEXT SPEED SET TO MEDIUM"); 
+					Sleeper.pause(1200);
+					return;
+				}
+				else if (choice == 3) {
+					Sleeper.setSpeed(20);
+					Sleeper.print("TEXT SPEED SET TO FAST"); 
+					Sleeper.pause(1200);					
+					return;
+				}	
+				else {
+					Sleeper.print("ERROR: Input must be a valid selection!"); 
+					System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	
+	private static void soundMenu() {
+		
+		clearContent();				
+		System.out.println("BATTLE SOUNDS:\n"
+				+ "[1] ON\n"
+				+ "[2] OFF");
+		System.out.print(">");
+		
+		// loop until BACK is selected
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				
+				if (choice == 1) {
+					SoundCard.setActive(true);
+					Sleeper.print("BATTLE SOUNDS ARE NOW ON"); 
+					Sleeper.pause(1200);	
+					return;
+				}
+				else if (choice == 2) {	
+					SoundCard.setActive(false);
+					Sleeper.print("BATTLE SOUNDS ARE NOW OFF"); 
+					Sleeper.pause(1200);	
+					return;
+				}
+				else {
+					Sleeper.print("ERROR: Input must be a valid selection!"); 
+					System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	
 	/** INPUT NAME METHOD **/
 	private static String inputName(int player) {
 				
-		System.out.println("WHAT IS YOUR NAME, TRAINER " + player + "?");
+		Sleeper.print("WHAT IS YOUR NAME, TRAINER " + player + "?");
+		System.out.print(">");
 		
 		// loop until QUIT is selected
 		while (true) {
@@ -87,15 +237,14 @@ public class MainMenu {
 				String name = input.next(); 
 				
 				clearContent();
-				System.out.println("WELCOME TO THE WORLD OF POKEMON, " + name + "!");			
-				
-				Sleeper.pause(1500);	
+				Sleeper.print("WELCOME TO THE WORLD OF POKEMON, " + name + "!", 1500);
 				clearContent();
 				
 				return name;
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Something went wrong!");
+				Sleeper.print("ERROR: Something went wrong!");
+				System.out.print(">");
 				input.next();
 			}
 		}
@@ -107,7 +256,8 @@ public class MainMenu {
 		
 		clearContent();
 				
-		System.out.println("PLEASE SELECT PARTY SIZE (1-6):");
+		Sleeper.print("PLEASE SELECT PARTY SIZE (1-6):");
+		System.out.print(">");
 		
 		// loop until Quit is selected
 		while (true) {
@@ -118,14 +268,14 @@ public class MainMenu {
 				if (1 <= choice && choice <= 6)
 					return choice;
 				else if (choice == 7) { 
-					System.out.println("Shutting down..."); 
+					Sleeper.print("Shutting down..."); 
 					System.exit(0); 
 				}	
 				else 
-					System.out.println("ERROR: Input must be a valid selection!"); 
+					Sleeper.print("ERROR: Input must be a valid selection!"); 
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Input must be a number!");
+				Sleeper.print("ERROR: Input must be a number!");
 				input.next();
 			}
 		}
@@ -133,7 +283,7 @@ public class MainMenu {
 	/** END SELECT PARTY SIZE METHOD **/
 	
 	/** SELECT MUSIC METHOD **/
-	private static void selectMusic() {
+	private static String selectMusic() {
 		
 		clearContent();	
 		
@@ -174,10 +324,13 @@ public class MainMenu {
 			Collections.sort(musicList);
 		}		
 		
-		System.out.println("PLEASE SELET MUSIC:\n\n[00] QUIT\n[01] NONE");
+		Sleeper.print("PLEASE SELET MUSIC:", 700);
+		System.out.println("\n[00] QUIT\n[01] NONE");
 		
 		for (int i = 0; i < musicList.size(); i++) 
-			System.out.println("[" + musicList.get(i));
+			System.out.println("[" + musicList.get(i));		
+		
+		System.out.print(">");
 		
 		while (true) {
 			
@@ -186,24 +339,23 @@ public class MainMenu {
 				
 				if (0 < choice && choice <= musicDict.size()) {
 					String file = musicDict.get(choice - 1).replace(".wav", "");
-					
-					bgmusic = new SoundCard("\\music\\" + file);
-					bgmusic.playMusic();
-					return;
+					return file;
 				}					
 				else if (choice == -1) {
 					clearContent();
-					System.out.println("Shutting down..."); 
+					Sleeper.print("Shutting down..."); 
 					System.exit(0);
 				}
 				else if (choice == 0)
-					return;
-				else
-					System.out.println("ERROR: Input must be a valid selection!");
+					return "";
+				else {
+					Sleeper.print("ERROR: Input must be a valid selection!");
+					System.out.print(">");
+				}
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Input must be a number!");
-				System.out.println(e);
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
 				input.next();
 			}
 		}
@@ -251,6 +403,7 @@ public class MainMenu {
 				System.out.print(p.getName() + " ");
 			
 			System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:");
+			System.out.print(">");
 			
 			while (true) {				
 				try { 
@@ -261,16 +414,21 @@ public class MainMenu {
 						
 						// chosen Pokemon must not have already been selected by either trainer
 						if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
-								party2.contains(Pokedex.getPokemon(choice - 1))) 						
-							System.out.println("This Pokemon has already been chosen!");
+								party2.contains(Pokedex.getPokemon(choice - 1))) {					
+							Sleeper.print("This Pokemon has already been chosen!");
+							System.out.print(">");
+						}
 						else
 							break;
 					}
-					else 
-						System.out.println("ERROR: This is not a valid selection!");
+					else {
+						Sleeper.print("ERROR: This is not a valid selection!");
+						System.out.print(">");
+					}
 				}
 				catch (Exception e) {
-					System.out.println("ERROR: Input must be a number!");
+					Sleeper.print("ERROR: Input must be a number!");
+					System.out.print(">");
 					input.next();
 				}
 			}

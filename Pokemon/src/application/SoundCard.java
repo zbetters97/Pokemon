@@ -87,15 +87,8 @@ public class SoundCard {
 		
 		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
         File sound = new File(path);
-        
-        if (effectiveness == 1.5) 
-        	Sleeper.print("It's super effective!");
-		else if (effectiveness == .5)
-			Sleeper.print("It's not very effective...");
-		else if (effectiveness == 0) 
-			Sleeper.print("It has no effect!");
-
-        if (active) {        
+		
+		if (active) {        
 	        try {
 	            AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
 	            
@@ -107,6 +100,13 @@ public class SoundCard {
 	        }
 	        catch (Exception e) { }
         }
+        
+        if (effectiveness == 1.5) 
+        	Sleeper.print("It's super effective!");
+		else if (effectiveness == .5)
+			Sleeper.print("It's not very effective...");
+		else if (effectiveness == 0) 
+			Sleeper.print("It has no effect!");
 	}
 	/** END HIT SOUND METHOD **/
 	

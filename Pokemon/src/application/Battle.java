@@ -57,7 +57,8 @@ public class Battle {
 		while (true) {
 			
 			clearContent();							
-			displayParty(); displayHP();
+			displayParty(); 
+			displayHP();
 			
 			if (numPlayers == 1) {
 				move1 = displayMoves(pokemon1);				
@@ -86,6 +87,156 @@ public class Battle {
 		}
 	}
 	/** END SELECT MOVE METHOD **/
+	
+	/** DISPLAY PARTY METHOD **/
+	private void displayParty() {
+		
+		System.out.print(name1 + "'s PARTY: ");
+		for (Pokedex p : pokemonParty1)
+			System.out.print(p.getName() + " ");
+		
+		System.out.print("\n" + name2 + "'s PARTY: ");
+		
+		for (Pokedex p : pokemonParty2)
+			System.out.print(p.getName() + " ");
+	}
+	/** END DISPLAY PARTY METHOD **/
+	
+	/** DISPLAY HP METHOD **/
+	private void displayHP() {
+						
+		// if pokemon has multiple types
+		if (pokemon1.getType() == null) {
+			
+			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
+					" : LVL [" + pokemon1.getLevel() + "] |" +
+					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
+					pokemon1.printTypes() + "]");
+		}
+		else {
+			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
+					" : LVL [" + pokemon1.getLevel() + "] |" +
+					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
+					pokemon1.getType() + "]");	
+		}
+		
+		if (pokemon1.getStatus() != null)
+			System.out.println(pokemon1.getStatus().getName());
+		
+		for (int i = 0; i < pokemon1.getHP(); i++) {
+			if (i % 50 == 0)
+				System.out.println();
+			
+			System.out.print(".");
+		}
+		
+		// if pokemon has mutliple types
+		if (pokemon2.getType() == null) {
+			
+			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
+					" : LVL [" + pokemon2.getLevel() + "] |" +
+					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
+					pokemon2.printTypes() + "]");
+		}
+		else {
+			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
+					" : LVL [" + pokemon2.getLevel() + "] |" +
+					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
+					pokemon2.getType() + "]");	
+		}
+		
+		if (pokemon2.getStatus() != null)
+			System.out.println(pokemon2.getStatus().getName());
+		
+		for (int i = 0; i < pokemon2.getHP(); i++) {
+			
+			// add new line for every 50 health points
+			if (i % 50 == 0) System.out.println();			
+			System.out.print(".");
+		}
+		System.out.println("\n");
+	}
+	/** END DISPLAY HP METHOD **/
+	
+	/** DISPLAY MOVES METHOD **/
+	private Moves displayMoves(Pokedex fighter) {
+		
+		System.out.println("What will " + fighter.getName() + " do?\n");
+		
+		while (true) {
+			
+			int counter = 0;
+			
+			// display all moves				
+			for (Moves m : fighter.getMoveSet()) {
+				System.out.println("[" + ++counter + "] " + m.getName() + 
+						" (PP: " + m.getpp() + ", PWR: " + m.getPower() + ", ACC: " + m.getAccuracy() + ")");
+			}
+			System.out.println("[" + ++counter + "] INFO");
+			System.out.println("[" + ++counter + "] RUN");
+			System.out.print(">");
+			
+			try { 
+				int choice = input.nextInt();
+				
+				// if choice is a valid move option
+				if (0 < choice && choice < counter - 1)
+					return getMove(choice, fighter.getMoveSet());				
+				else if (choice == counter - 1) {
+					clearContent();
+					displayInfo(fighter);
+				}
+				else if (choice == counter) {
+					clearContent();	
+					SoundCard.play("\\in-battle\\in-battle-run");
+					Sleeper.print("Got away safely!"); 					 
+					System.exit(1);
+				}
+				else {
+					Sleeper.print("This is not a move!"); 	
+					System.out.print(">");
+				}
+			}
+			catch (InputMismatchException e) { 
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}
+	}
+	/** END DISPLAY MOVE METHOD **/
+		
+	/** GET MOVE INFO METHOD **/
+	private void displayInfo(Pokedex fighter) {	
+				
+		for (Moves m : fighter.getMoveSet())
+			System.out.println(m.getName() + " : " + m.getInfo() + "");
+		
+		System.out.println("\n[0] BACK");
+		System.out.print(">");
+		
+		try { 
+			int choice = input.nextInt();
+			
+			// if choice is a valid move option
+			if (choice == 0) {
+				clearContent();	
+				displayHP();
+				System.out.println("What will " + fighter.getName() + " do?\n");
+				return;
+			}
+			else {
+				Sleeper.print("ERROR: This is not a valid selection!");
+				System.out.print(">");
+			}
+		}
+		catch (InputMismatchException e) { 
+			Sleeper.print("Input must be a number!");
+			System.out.print(">");
+			input.next();
+		}		
+	}
+	/** END GET MOVE INFO METHOD **/
 	
 	/** CHOOSE NEXT POKEMON METHOD **/
 	public boolean chooseNextFighter() {
@@ -212,157 +363,7 @@ public class Battle {
 			}
 		}
 	}
-	/** END LIST FIGHTERS METHOD **/
-	
-	/** DISPLAY PARTY METHOD **/
-	private void displayParty() {
-		
-		System.out.print(name1 + "'s PARTY: ");
-		for (Pokedex p : pokemonParty1)
-			System.out.print(p.getName() + " ");
-		
-		System.out.print("\n" + name2 + "'s PARTY: ");
-		
-		for (Pokedex p : pokemonParty2)
-			System.out.print(p.getName() + " ");
-	}
-	/** END DISPLAY PARTY METHOD **/
-	
-	/** DISPLAY HP METHOD **/
-	private void displayHP() {
-						
-		// if pokemon has multiple types
-		if (pokemon1.getType() == null) {
-			
-			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					" : LVL [" + pokemon1.getLevel() + "] |" +
-					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
-					pokemon1.printTypes() + "]");
-		}
-		else {
-			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					" : LVL [" + pokemon1.getLevel() + "] |" +
-					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
-					pokemon1.getType() + "]");	
-		}
-		
-		if (pokemon1.getStatus() != null)
-			System.out.println(pokemon1.getStatus().getName());
-		
-		for (int i = 0; i < pokemon1.getHP(); i++) {
-			if (i % 50 == 0)
-				System.out.println();
-			
-			System.out.print(".");
-		}
-		
-		// if pokemon has mutliple types
-		if (pokemon2.getType() == null) {
-			
-			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					" : LVL [" + pokemon2.getLevel() + "] |" +
-					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
-					pokemon2.printTypes() + "]");
-		}
-		else {
-			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					" : LVL [" + pokemon2.getLevel() + "] |" +
-					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
-					pokemon2.getType() + "]");	
-		}
-		
-		if (pokemon2.getStatus() != null)
-			System.out.println(pokemon2.getStatus().getName());
-		
-		for (int i = 0; i < pokemon2.getHP(); i++) {
-			
-			// add new line for every 50 health points
-			if (i % 50 == 0) System.out.println();			
-			System.out.print(".");
-		}
-		System.out.println("\n");
-	}
-	/** END DISPLAY HP METHOD **/
-	
-	/** DISPLAY MOVES METHOD **/
-	private Moves displayMoves(Pokedex fighter) {
-		
-		System.out.println("What will " + fighter.getName() + " do?\n");
-		
-		while (true) {
-			
-			int counter = 0;
-			
-			// display all moves				
-			for (Moves m : fighter.getMoveSet()) {
-				System.out.println("[" + ++counter + "] " + m.getName() + 
-						" (PP: " + m.getpp() + ", PWR: " + m.getPower() + ", ACC: " + m.getAccuracy() + ")");
-			}
-			System.out.println("[" + ++counter + "] INFO");
-			System.out.println("[" + ++counter + "] RUN");
-			System.out.print(">");
-			
-			try { 
-				int choice = input.nextInt();
-				
-				// if choice is a valid move option
-				if (0 < choice && choice < counter - 1)
-					return getMove(choice, fighter.getMoveSet());				
-				else if (choice == counter - 1) {
-					clearContent();
-					displayInfo(fighter);		
-				}
-				else if (choice == counter) {
-					clearContent();	
-					SoundCard.play("\\in-battle\\in-battle-run");
-					Sleeper.print("Got away safely!"); 					 
-					System.exit(1);
-				}
-				else {
-					Sleeper.print("This is not a move!"); 	
-					System.out.print(">");
-				}
-			}
-			catch (InputMismatchException e) { 
-				Sleeper.print("ERROR: Input must be a number!");
-				System.out.print(">");
-				input.next();
-			}
-		}
-	}
-	/** END DISPLAY MOVE METHOD **/
-		
-	/** GET MOVE INFO METHOD **/
-	private void displayInfo(Pokedex fighter) {	
-				
-		for (Moves m : fighter.getMoveSet())
-			System.out.println(m.getName() + " : " + m.getInfo() + "");
-		
-		System.out.println("\n[0] BACK");
-		
-		try { 
-			int choice = input.nextInt();
-			
-			// if choice is a valid move option
-			if (choice == 0) {
-				clearContent();	
-				displayHP();
-				System.out.println("What will " + fighter.getName() + " do?\n");
-				System.out.print(">");
-				return;
-			}
-			else {
-				Sleeper.print("ERROR: This is not a valid selection!");
-				System.out.print(">");
-			}
-		}
-		catch (InputMismatchException e) { 
-			Sleeper.print("Input must be a number!");
-			System.out.print(">");
-			input.next();
-		}		
-	}
-	/** END GET MOVE INFO METHOD **/	
+	/** END LIST FIGHTERS METHOD **/	
 
 	/** GET MOVE METHOD **/
 	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {		

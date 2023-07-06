@@ -160,6 +160,10 @@
  * 		-Fixed damage formula logic error
  * 		-Added Settings menu to change text speed and sounds
  * 		-Added player input indicator
+ * 7/6/2023 (cont.):
+ * 		-Moved "effective" sound to play before text
+ * 		-Fixed formatting error in displayMove method
+ * 		-Changed wording in settings menu
  */
 
 package application;

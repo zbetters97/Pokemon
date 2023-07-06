@@ -201,13 +201,13 @@ public class MainMenu {
 				
 				if (choice == 1) {
 					SoundCard.setActive(true);
-					Sleeper.print("BATTLE SOUNDS ARE NOW ON"); 
+					Sleeper.print("BATTLE SOUNDS TURNED ON"); 
 					Sleeper.pause(1200);	
 					return;
 				}
 				else if (choice == 2) {	
 					SoundCard.setActive(false);
-					Sleeper.print("BATTLE SOUNDS ARE NOW OFF"); 
+					Sleeper.print("BATTLE SOUNDS TURNED OFF"); 
 					Sleeper.pause(1200);	
 					return;
 				}
@@ -324,7 +324,7 @@ public class MainMenu {
 			Collections.sort(musicList);
 		}		
 		
-		Sleeper.print("PLEASE SELET MUSIC:", 700);
+		Sleeper.print("PLEASE SELECT MUSIC:", 700);
 		System.out.println("\n[00] QUIT\n[01] NONE");
 		
 		for (int i = 0; i < musicList.size(); i++) 

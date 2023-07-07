@@ -1,5 +1,6 @@
 package status;
 
+/*** STATUS CLASS ***/
 public class StatusEngine implements StatusInterface {
 
 	public static StatusEngine paralyze, poison, confuse, burn, freeze, sleep;
@@ -28,3 +29,4 @@ public class StatusEngine implements StatusInterface {
 	public String getCondition() { return this.condition; }
 	public String getName() { return this.name; }
 }
+/*** END STATUS CLASS ***/

@@ -50,10 +50,7 @@ public enum Pokedex implements PokedexInterface {
 	BLAZIKEN ("Blaziken", 257, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 36, 80, 120, 70, 110, 70, 80, -1, 265, 3),
 	MUDKIP ("Mudkip", 258, TypeEngine.water, 5, 50, 70, 50, 50, 50, 40, 16, 62, 1),
 	MARSHTOMP ("Marshtomp", 259, Arrays.asList(TypeEngine.water, TypeEngine.ground), 16, 70, 85, 70, 60, 70, 50, 36, 142, 2),
-	SWAMPERT ("Swampert", 260, Arrays.asList(TypeEngine.water, TypeEngine.ground), 36, 100, 110, 90, 85, 90, 60, -1, 268, 3);
-	
-	
-	
+	SWAMPERT ("Swampert", 260, Arrays.asList(TypeEngine.water, TypeEngine.ground), 36, 100, 110, 90, 85, 90, 60, -1, 268, 3);	
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
@@ -76,11 +73,10 @@ public enum Pokedex implements PokedexInterface {
 	// initialize arraylist to hold all enums in pokemon class
 	private static List<Pokedex> POKEDEX = Arrays.asList(Pokedex.values());
 
-	/** CONSTRUCTOR 
-	 * @param index **/
+	/** CONSTRUCTORS **/
 	Pokedex(String name, int index, TypeEngine type, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
-
+		
 		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
 		this.name = name; this.index = index; this.type = type; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
@@ -116,7 +112,7 @@ public enum Pokedex implements PokedexInterface {
 	}
 	Pokedex(String name, int index, List<TypeEngine> types, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
-
+		
 		this.name = name; this.index = index; this.types = types; this.level = level;
 		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
@@ -149,7 +145,7 @@ public enum Pokedex implements PokedexInterface {
 		
 		moveSet = new ArrayList<>();		
 	}
-	/** END CONSTRUCTOR **/
+	/** END CONSTRUCTORS **/
 	
 	/** MAP MOVES POKEMON METHOD **/
 	public static Pokedex mapMoves(Pokedex pokemon) {
@@ -263,6 +259,14 @@ public enum Pokedex implements PokedexInterface {
 	}	
 	/** END POKEDEX ARRAYLIST GETTERS **/
 	
+	/** CAN EVOLVE METHOD **/
+	public boolean canEvolve() {
+		
+		// pokemon can't evolve if evLevel is -1
+		return this.getEvLevel() != -1;
+	}
+	/** END CAN EVOLVE METHOD **/
+	
 	/** EVOLVE POKEMON  METHOD **/
 	public Pokedex evolve() {
 		
@@ -283,14 +287,6 @@ public enum Pokedex implements PokedexInterface {
 		}
 	}
 	/** END EVOLVE POKEMON METHOD **/
-	
-	/** CAN EVOLVE METHOD **/
-	public boolean canEvolve() {
-		
-		// pokemon can't evolve if evLevel is -1
-		return this.getEvLevel() != -1;
-	}
-	/** END CAN EVOLVE METHOD **/
 	
 	/** ADD NEW MOVE METHOD **/
 	public boolean addMove(Moves move) { 
@@ -519,8 +515,6 @@ public enum Pokedex implements PokedexInterface {
 	}
 }
 /*** EDN POKEDEX ENUM CLASS ***/
-
-
 
 @FunctionalInterface
 interface Calculate {

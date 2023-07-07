@@ -60,6 +60,7 @@ public class BattleEngine {
 	}
 	/** END MOVE METHOD **/
 	
+	/** TURN METHOD **/
 	private void turn(int pokemon1, Moves move1, Moves move2) {
 		
 		int pokemon2 = (pokemon1 == 0) ? 1 : 0;
@@ -76,9 +77,9 @@ public class BattleEngine {
 				attack(pokemon2, pokemon1, move2);			
 		}		
 	}
+	/** END TURN METHOD **/
 	
 	/** CPU SELECT MOVE METHOD **/
-	// returns move with max damage //
 	public Moves cpuSelectMove() {
 		
 		Moves bestMove;
@@ -111,7 +112,6 @@ public class BattleEngine {
 	/** END CPU SELECT MOVE METHOD **/
 	
 	/** GET TURN METHOD **/
-	// returns 1 if pokemon1 goes first, returns 2 if pokemon2 goes first //
 	private int getTurn(Moves move1, Moves move2) {
 		
 		// if both moves go first (EX: Quick Attack)
@@ -139,7 +139,6 @@ public class BattleEngine {
 	/** END GET TURN METHOD **/
 	
 	/** CAN TURN METHOD **/ 
-	// returns false if given pokemon cannot move due to status //
 	private boolean canTurn(int atk) {
 		
 		if (pokemon[atk].getStatus() != null) {

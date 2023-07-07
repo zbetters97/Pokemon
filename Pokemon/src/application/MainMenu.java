@@ -147,7 +147,6 @@ public class MainMenu {
 	}
 	/** END SETTINGS METHOD **/
 	
-	
 	/** SELECT MUSIC METHOD **/
 	private static void musicSetting() {
 		

@@ -396,7 +396,6 @@ public class Battle {
 }
 /*** END BATTLE CLASS ***/
 
-
 /*** LAMBDA INTERFACE ***/
 @FunctionalInterface
 interface SelectionGrabber {

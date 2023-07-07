@@ -185,13 +185,16 @@
  * 		-Moved select music to settings menu
  * 		-Cleaned up coding
  * 		-Moved Battle class to battle package
- */
+ * 7/7/2023 (cont.):
+ * 		-Corrected attributes for several moves
+ * 		-Code cleanup
+ */	
 
 package application;
 
 import java.util.Scanner;
 
-/*** APPLICATION CLASS ***/
+/*** DRIVER CLASS ***/
 public class Driver {
 	
 	static Scanner input = new Scanner(System.in);

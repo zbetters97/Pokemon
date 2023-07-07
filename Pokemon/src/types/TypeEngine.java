@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/*** TYPE CLASS ***/
 public class TypeEngine implements TypeInterface {
 
 	public static TypeEngine normal, fire, water, electric, grass, ice, fighting, 
@@ -159,10 +160,6 @@ public class TypeEngine implements TypeInterface {
 		fairy.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.POISON, TypeEngine.Type.STEEL)), 1.5);
 	}
-	
-	public ArrayList<TypeEngine> getTypeEngine() {		
-		return types;
-	}
     
 	public void resistantTo(TypeInterface.Type type, Double strength) {
         resistance.add(new TypeEngine(type, strength));
@@ -182,6 +179,8 @@ public class TypeEngine implements TypeInterface {
     	}       
     }
     
+    public ArrayList<TypeEngine> getTypeEngine() { return types; }
+    
     public List<TypeEngine> getResistance() { return this.resistance; }
     public List<TypeEngine> getVulnerability() { return this.vulnerability; }  
  
@@ -189,3 +188,4 @@ public class TypeEngine implements TypeInterface {
 
     public String toString() { return type.toString(); }
 }
+/*** END TYPE CLASS ***/

@@ -289,7 +289,7 @@ public class BattleEngine {
 			// decrease move pp
 			move.setpp(move.getpp() - 1);
 			
-			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 1000);
+			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 500);
 			SoundCard.play("//moves//" + move.getName(), true);
 				        
 	        // if attack lands

@@ -176,6 +176,15 @@
  * 			Twister, Dragon Pulse, Pound, Leaf Blade, Leaf Storm, 
  * 			X-Scissor, Double Kick, Fire Punch, Blaze Kick, Sky Uppercut, 
  * 			Mudslap, Mudshot, Surf, Mudbomb, and Muddy Water
+ * 7/7/2023 (cont.):
+ * 		-Patched broken audio files
+ * 		-Modified audio levels in most song files
+ * 		-Changed numbering for all song files
+ * 		-Decreased wait time after in battle text
+ * 		-Added menu beep noise
+ * 		-Moved select music to settings menu
+ * 		-Cleaned up coding
+ * 		-Moved Battle class to battle package
  */
 
 package application;

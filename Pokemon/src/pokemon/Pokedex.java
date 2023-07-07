@@ -206,7 +206,7 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(HORSEA, Arrays.asList(Moves.BUBBLE, Moves.WATERGUN, Moves.LEER)); 
         pokeMap.put(SEADRA, Arrays.asList(Moves.WATERGUN, Moves.TWISTER, Moves.HYDROPUMP, 
         		Moves.AGILITY)); 
-        pokeMap.put(KINGDRA, Arrays.asList(Moves.TWISTER, Moves.HYDROPUMP, Moves.DRAGONPULSE, 
+        pokeMap.put(KINGDRA, Arrays.asList(Moves.SURF, Moves.HYDROPUMP, Moves.DRAGONPULSE, 
         		Moves.AGILITY)); 
         
         pokeMap.put(TREECKO, Arrays.asList(Moves.POUND, Moves.QUICKATTACK, Moves.LEER)); 

@@ -65,7 +65,7 @@ public class SoundCard {
 	            }
 	        }
 	        catch (Exception e) { 
-	        	
+	        	System.out.println(e);	        	
 	        }
 		}
 	}
@@ -100,16 +100,18 @@ public class SoundCard {
 	            
 	            Sleeper.pause(duration);
 	        }
-	        catch (Exception e) { }
+	        catch (Exception e) { 
+	        	System.out.println(e);
+	        }
         }
 		
         
         if (effectiveness == 1.5 || effectiveness == 2.25) 
-        	Sleeper.print("It's super effective!", 1000);
+        	Sleeper.print("It's super effective!", 800);
 		else if (effectiveness == 0.25 || effectiveness == 0.5)
-			Sleeper.print("It's not very effective...", 1000);
+			Sleeper.print("It's not very effective...", 800);
 		else if (effectiveness == 0) 
-			Sleeper.print("It has no effect!", 1000);
+			Sleeper.print("It has no effect!", 800);
 	}
 	/** END HIT SOUND METHOD **/
 	
@@ -144,7 +146,9 @@ public class SoundCard {
 	            
 	            Sleeper.pause(duration);
 	        }
-	        catch (Exception e) { }
+	        catch (Exception e) {
+	        	System.out.println(e);
+	        }
         }
 	}
 	/** END STATUS SOUND METHOD **/

@@ -164,8 +164,18 @@
  * 		-Moved "effective" sound to play before text
  * 		-Fixed formatting error in displayMove method
  * 		-Changed wording in welcome and settings menu
- * 		-Increased text speeds
+ * 7/7/2023:
+ *  	-Increased text speeds
  * 		-Added delay after effectiveness text read
+ * 		-Fixed error in trainer defeated text 	
+ * 		-Overhauled type effectiveness method to be more accurate
+ * 		-Added sound files for the following Pokemon: Horsea, Seadra, 
+ * 			Kingdra, Treecko, Grovyle, Skeptile, Torchic, Combuskin, 
+ * 			Blaziken, Mudkip, Marshtomp, and Swampert
+ * 		-Added sound files for the following moves: Agility, Bubble, 
+ * 			Twister, Dragon Pulse, Pound, Leaf Blade, Leaf Storm, 
+ * 			X-Scissor, Double Kick, Fire Punch, Blaze Kick, Sky Uppercut, 
+ * 			Mudslap, Mudshot, Surf, Mudbomb, and Muddy Water
  */
 
 package application;

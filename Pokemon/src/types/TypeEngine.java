@@ -50,7 +50,7 @@ public class TypeEngine implements TypeInterface {
 		water = new TypeEngine(TypeEngine.Type.WATER, 0.5); 
 		water.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.FIRE, TypeEngine.Type.WATER, TypeEngine.Type.ICE, 
-				TypeEngine.Type.STEEL)), 0.5);		
+				TypeEngine.Type.STEEL)), 0.5);
 		water.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.ELECTRIC, TypeEngine.Type.GRASS)), 1.5);
 		
@@ -90,6 +90,8 @@ public class TypeEngine implements TypeInterface {
 		ground.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
 				TypeEngine.Type.POISON, TypeEngine.Type.ROCK)), 0.5);
 		ground.resistantTo(TypeEngine.Type.ELECTRIC, 0.0);
+		ground.vulnerableTo(new ArrayList<TypeEngine.Type>(Arrays.asList(
+				TypeEngine.Type.WATER, TypeEngine.Type.GRASS, TypeEngine.Type.ICE)), 1.5);
 		
 		flying = new TypeEngine(TypeEngine.Type.FLYING, 0.5); 
 		flying.resistantTo(new ArrayList<TypeEngine.Type>(Arrays.asList(

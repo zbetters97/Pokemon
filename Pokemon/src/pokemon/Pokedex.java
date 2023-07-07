@@ -41,7 +41,7 @@ public enum Pokedex implements PokedexInterface {
 	GENGAR ("Gengar", 94, Arrays.asList(TypeEngine.ghost, TypeEngine.poison), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3),
 	HORSEA ("Horsea", 116, TypeEngine.water, 5, 30, 40, 70, 70, 25, 60, 32, 59, 1),
 	SEADRA ("Seadra", 117, TypeEngine.water, 32, 55, 65, 95, 95, 45, 85, 45, 154, 2),
-	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 45, 75, 95, 95, 95, 95, 85, -1, 270, 3),
+	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 40, 75, 95, 95, 95, 95, 85, -1, 270, 3),
 	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
 	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
 	SCEPTILE ("Sceptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),

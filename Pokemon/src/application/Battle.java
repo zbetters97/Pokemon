@@ -382,7 +382,7 @@ public class Battle {
 	/** ANNOUNCE WINNER METHOD **/
 	private void announceWinner(String winner, String loser, int money) {
 		SoundCard.play("//in-battle//in-battle-victory");
-		Sleeper.print("Player defeated, " + winner + "!");
+		Sleeper.print("Player defeated, " + loser + "!");
 		Sleeper.print(winner + " got $" + money + " for winning!");
 	}
 	/** END ANNOUNCE WINNER METHOD **/

@@ -48,7 +48,7 @@ public enum Moves {
 	LOWSWEEP ("Low Sweep", "Physical", TypeEngine.fighting, 20, 95, 100, "The user makes a swift attack on the target's legs."),
 	MUDBOMB ("Mud Bomb", "Special", TypeEngine.ground, false, 10, 65, 85, Arrays.asList("accuracy"), "The user launches a hard-packed mud ball to attack. It may also lower the target's accuracy."),
 	MUDSHOT ("Mud Shot", "Special", TypeEngine.ground, false, 15, 55, 95, Arrays.asList("defense"), "The user attacks by hurling a blob of mud at the foe. It also reduces the target's Speed."),
-	MUDSLAP ("Mud-slap", "Special", TypeEngine.ground, false, 10, 20, 100, Arrays.asList("accuracy"), "The user hurls mud in the foe's face to inflict damage and lower its accuracy."),
+	MUDSLAP ("Mud Slap", "Special", TypeEngine.ground, false, 10, 20, 100, Arrays.asList("accuracy"), "The user hurls mud in the foe's face to inflict damage and lower its accuracy."),
 	MUDDYWATER ("Muddy Water", "Special", TypeEngine.water, false, 10, 95, 85, Arrays.asList("accuracy"), "The user attacks by shooting out muddy water. It may also lower the foe's accuracy."),
 	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100, "If the user can use this attack after the foe attacks, its power is doubled."),
 	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100, "The user stirs up a violent petal blizzard and attacks everything around it."),

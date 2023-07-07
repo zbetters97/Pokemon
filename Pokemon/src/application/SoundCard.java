@@ -78,9 +78,11 @@ public class SoundCard {
 		
 		// set hit to corresponding path
 		switch (Double.toString(effectiveness)) {
+			case "0.25": hit = "hit-weak.wav"; break;
 			case "0.5": hit = "hit-weak.wav"; break;
 			case "1.0": hit = "hit-normal.wav"; break;
 			case "1.5": hit = "hit-super.wav"; break;
+			case "2.25": hit = "hit-super.wav"; break;
 			
 			default: return;
 		}
@@ -100,10 +102,11 @@ public class SoundCard {
 	        }
 	        catch (Exception e) { }
         }
+		
         
-        if (effectiveness == 1.5) 
+        if (effectiveness == 1.5 || effectiveness == 2.25) 
         	Sleeper.print("It's super effective!", 1000);
-		else if (effectiveness == .5)
+		else if (effectiveness == 0.25 || effectiveness == 0.5)
 			Sleeper.print("It's not very effective...", 1000);
 		else if (effectiveness == 0) 
 			Sleeper.print("It has no effect!", 1000);

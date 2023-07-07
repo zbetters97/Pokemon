@@ -420,28 +420,62 @@ public class BattleEngine {
 	/** END IS CRITICAL METHOD **/
 	
 	/** EFFECTIVENESS METHOD **/
-	private static double effectiveness(TypeEngine move, TypeEngine target) {
+	private static double effectiveness(Pokedex target, TypeEngine move) {
 		
-		double result = 1.0;
+		// default value
+		double effect = 1.0;
 		
-		// if vulnerable, retrieve and return vulnerability value
-		for (TypeEngine type : target.getVulnerability()) {			
-			if (type.toString().equals(move.toString())) {
-				result = type.getStrength();
-				return result;
-			}
-		}
-		
-		// if resistant, retrieve and return resistance value
-		for (TypeEngine type : target.getResistance()) {			
-			if (type.toString().equals(move.toString())) {
-				result = type.getStrength();
-				return result;
+		// if target has multiple types
+		if (target.getTypes() != null) {
+			
+			// for each type in target
+			for (TypeEngine targetType : target.getTypes()) {		
+				
+				// for each vulnerability
+				vulnerabilityLoop:
+				for (TypeEngine vulnType : targetType.getVulnerability()) {		
+					
+					// if found, multiply by effect and move to next loop
+					if (vulnType.toString().equals(move.toString())) {						
+						effect *= vulnType.getStrength();						
+						break vulnerabilityLoop;
+					}
+				}
+				
+				// for each resistance
+				resistanceLoop:
+				for (TypeEngine resType : targetType.getResistance()) {		
+					
+					// if found, multiply by effect and move to next loop
+					if (resType.toString().equals(move.toString())) {
+						effect *= resType.getStrength();
+						break resistanceLoop;
+					}
+				}
 			}			
-		}		
-		
-		// return 1.0 if neither found
-		return result;
+			//  vulnerable and resistant cancel out
+			if (effect == 0.75)	effect = 1;
+		}
+		// if target is single type
+		else {
+			
+			// if vulnerable, retrieve and return vulnerable value
+			for (TypeEngine vulnType : target.getType().getVulnerability()) {		
+				if (vulnType.toString().equals(move.toString())) {
+					effect = vulnType.getStrength();
+					return effect;
+				}
+			}			
+			// if resistant, retrieve and return resistance value
+			for (TypeEngine resType : target.getType().getResistance()) {			
+				if (resType.toString().equals(move.toString())) {
+					effect = resType.getStrength();
+					return effect;
+				}			
+			}		
+		}			
+						
+		return effect;
 	}
 	/** END EFFECTIVENESS METHOD **/
 	
@@ -469,23 +503,6 @@ public class BattleEngine {
 			D = pokemon[trg].getDefense();
 		}
 		
-		// if target has more than 1 type
-		if (pokemon[trg].getTypes() != null) {	
-			
-			// cycle through each type of target
-			for (TypeEngine t : pokemon[trg].getTypes()) {
-				
-				// if super effective
-				if (effectiveness(move.getType(), t) == 1.5) {
-					type = 1.5;
-					break;
-				}
-				type = effectiveness(move.getType(), t);
-			}
-		}
-		else 	
-			type = effectiveness(move.getType(), pokemon[trg].getType());	
-				
 		// if attacker has more than 1 type
 		if (pokemon[atk].getTypes() != null) {	
 			
@@ -501,6 +518,8 @@ public class BattleEngine {
 		}
 		else
 			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
+
+		type = effectiveness(pokemon[trg], move.getType());	
 
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
 		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2) * crit * STAB * type);

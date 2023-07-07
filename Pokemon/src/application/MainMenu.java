@@ -23,7 +23,6 @@ public class MainMenu {
 		String name1 = null, name2 = null;
 		
 		int players = selectPlayers();
-		
 		clearContent();
 		
 		name1 = inputName(1);		

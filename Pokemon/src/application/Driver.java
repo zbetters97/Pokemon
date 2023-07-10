@@ -195,6 +195,8 @@
  * 		-Streamlined sound card to be compatible with MacOS
  * 		-Reorganized files and folders
  * 		-Added Absorb and added to Treeko's move set
+ * 7/10/2023 (cont.):
+ * 		-Added fainting cry for all existing Pokemon
  */	
 
 package application;

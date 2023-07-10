@@ -605,9 +605,9 @@ public class BattleEngine {
 		
 		clearContent();
 		
-		Sleeper.print(pokemon[lsr].getName() + " fainted!", 2000);	
 		SoundCard.play("pokedex" + File.separator + "faint" + 
-				File.separator + pokemon[lsr].getName());
+				File.separator + pokemon[lsr].getName());		
+		Sleeper.print(pokemon[lsr].getName() + " fainted!", 1500);			
 		Sleeper.print(pokemon[win].getName() + " gained " + xp + " Exp. Points!", 2000);
 		
 		return;

@@ -1,5 +1,6 @@
 package battle;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -330,10 +331,10 @@ public class BattleEngine {
 					
 					// attributes raised
 					if (move.getLevel() > 0) 
-						SoundCard.play("//in-battle//stat-up", true);
+						SoundCard.play("//battle//stat-up", true);
 					// attributes lowered
 					else 
-						SoundCard.play("//in-battle//stat-down", true);
+						SoundCard.play("//battle//stat-down", true);
 					
 					Sleeper.pause(1700);						
 					clearContent();
@@ -600,11 +601,13 @@ public class BattleEngine {
 	/** POKEMON DEFEATED METHOD **/
 	private void defeated(int win, int lsr, int damageDealt) {
 				
-		int xp = setWinGetXP(win, lsr, damageDealt);
+		int xp = setWinGetXP(win, lsr);
 		
 		clearContent();
 		
-		Sleeper.print(pokemon[lsr].getName() + " fainted!", 2000);		
+		Sleeper.print(pokemon[lsr].getName() + " fainted!", 2000);	
+		SoundCard.play("pokedex" + File.separator + "faint" + 
+				File.separator + pokemon[lsr].getName());
 		Sleeper.print(pokemon[win].getName() + " gained " + xp + " Exp. Points!", 2000);
 		
 		return;
@@ -612,26 +615,16 @@ public class BattleEngine {
 	/** END DEFEATED METHOD **/
 	
 	/** SET WIN METHOD **/
-	private int setWinGetXP(int win, int lsr, int damageDealt) {
+	private int setWinGetXP(int win, int lsr) {
 											
 		pokemon[lsr].setAlive(false);
 						
-		int xp = calculateXP(lsr); 
-		pokemon[win].setXP(xp);				
-		
+		int xp = calculateXP(lsr); 		
 		this.setWinningPokemon(pokemon[win]);
+		
 		return xp;
 	}
 	/** END SET WIN METHOD **/
-	
-	/** CALCULATE XP METHOD **/
-	private int calculateXP(int trg) {
-				
-		// exp formula reference (GEN I-IV): https://bulbapedia.bulbagarden.net/wiki/Experience		
-		int exp = (int) (((( pokemon[trg].getXP() * pokemon[trg].getLevel() ) / 7)) * ( 1 / 1 ) * 1 * 1.5 * 1);
-		return exp;
-	}
-	/** END CALCULATE XP METHOD **/	
 	
 	/** GET WINNER METHOD **/
 	public boolean hasWinner() {
@@ -641,6 +634,15 @@ public class BattleEngine {
 			return false;
 	}
 	/** END GET WINNER METHOD **/
+	
+	/** CALCULATE XP METHOD **/
+	private int calculateXP(int trg) {
+		
+		// exp formula reference (GEN I-IV): https://bulbapedia.bulbagarden.net/wiki/Experience		
+		int exp = (int) (((( pokemon[trg].getXP() * pokemon[trg].getLevel() ) / 7)) * 1.5);		
+		return exp;
+	}
+	/** END CALCULATE XP METHOD **/	
 	
 	/** GET MONEY METHOD **/
 	public int getMoney(int lsr) {		

@@ -18,12 +18,13 @@ public class MainMenu {
 	static String file;
 	static SoundCard bgmusic;
 	static Sleeper sleeper;
+	static String select = "menu" + File.separator + "select";
 
 	/** LOAD METHOD **/
 	public static void load() {
 
 		// default battle music
-		file =  "12battle-pc-first";
+		file =  "11battle-pc-first";
 		
 		String name1 = null, name2 = null;
 		
@@ -42,7 +43,7 @@ public class MainMenu {
 		pokemonParty2 = selectParty(2, partySize, name2, name1, pokemonParty2, pokemonParty1);
 		
 		if (file != "") {
-			bgmusic = new SoundCard("\\music\\" + file);
+			bgmusic = new SoundCard("music" + File.separator + file);
 			bgmusic.playMusic();
 		}
 		
@@ -66,7 +67,7 @@ public class MainMenu {
 			
 			try { 
 				int choice = input.nextInt(); 				
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (choice == 1 || choice == 2) 
 					return choice;
@@ -115,7 +116,7 @@ public class MainMenu {
 			
 			try { 
 				int choice = input.nextInt(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (choice == 1) {
 					musicSetting();
@@ -125,11 +126,11 @@ public class MainMenu {
 					textSetting();
 					return;
 				}
-				else if (choice == 2) {
+				else if (choice == 3) {
 					soundSetting();
 					return;
 				}
-				else if (choice == 3) { 
+				else if (choice == 4) { 
 					clearContent();
 					return;
 				}	
@@ -159,7 +160,8 @@ public class MainMenu {
 		LinkedHashMap<Integer, String> musicDict = new LinkedHashMap<>();
 		
 		// get all songs from music folder
-		String path = new File("").getAbsolutePath() + "//lib//sounds//music";
+		String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+				File.separator + "sounds" + File.separator + "music";
 		File directoryPath = new File(path);
 		
 		// store all music files into array
@@ -190,6 +192,7 @@ public class MainMenu {
 		}		
 		
 		Sleeper.print("PLEASE SELECT MUSIC:", 700);		
+		
 		for (int i = 0; i < musicList.size(); i++) 
 			System.out.println("[" + musicList.get(i));		
 		System.out.println("[16] BACK");
@@ -200,7 +203,7 @@ public class MainMenu {
 			
 			try { 				
 				int choice = input.nextInt(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (0 < choice && choice <= musicDict.size()) {
 					file = musicDict.get(choice - 1).replace(".wav", "");
@@ -238,7 +241,7 @@ public class MainMenu {
 			
 			try { 
 				int choice = input.nextInt(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (choice == 1) {
 					Sleeper.setSpeed(45);
@@ -273,7 +276,7 @@ public class MainMenu {
 	private static void soundSetting() {
 		
 		clearContent();				
-		System.out.println("BATTLE SOUNDS:\n"
+		System.out.println("SOUND EFFECTS:\n"
 				+ "[1] ON\n"
 				+ "[2] OFF");
 		System.out.print(">");
@@ -283,16 +286,16 @@ public class MainMenu {
 			
 			try { 
 				int choice = input.nextInt(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (choice == 1) {
 					SoundCard.setActive(true);
-					Sleeper.print("BATTLE SOUNDS TURNED ON", 1200); 
+					Sleeper.print("SOUND EFFECTS TURNED ON", 1200); 
 					return;
 				}
 				else if (choice == 2) {	
 					SoundCard.setActive(false);
-					Sleeper.print("BATTLE SOUNDS TURNED OFF", 1200); 
+					Sleeper.print("SOUND EFFECTS TURNED OFF", 1200); 
 					return;
 				}
 				else {
@@ -320,7 +323,7 @@ public class MainMenu {
 			
 			try { 
 				String name = input.next(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				clearContent();
 				Sleeper.print("WELCOME TO THE WORLD OF POKEMON, " + name + "!", 1500);
@@ -350,7 +353,7 @@ public class MainMenu {
 			
 			try { 
 				int choice = input.nextInt(); 
-				SoundCard.play("\\menu\\select");
+				SoundCard.play(select);
 				
 				if (1 <= choice && choice <= 6)
 					return choice;
@@ -445,7 +448,7 @@ public class MainMenu {
 			party1.add(selectedPokemon);
 			
 			// play pokemon cry
-			SoundCard.play("//pokedex//" + selectedPokemon.getName());
+			SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
 			
 			clearContent();
 			c++;

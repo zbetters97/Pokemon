@@ -64,7 +64,7 @@ public enum Moves {
 	ROCKTHROW ("Rock Throw", "Physical", TypeEngine.rock, 15, 75, 90, "The user picks up and throws a small rock at the foe to attack."),
 	ROLLOUT ("Rollout", "Physical", TypeEngine.rock, 20, 45, 90, "The user continually rolls into the foe over five turns."),
 	SCRATCH ("Scratch", "Physical", TypeEngine.normal, 35, 40, 100, "Hard, pointed, and sharp claws rake the foe to inflict damage."),
-	SEISMICTOSS ("Seismic Toss", "Physical", TypeEngine.fighting, 20, -1, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
+	SEISMICTOSS ("Seismic Toss", "Physical", TypeEngine.fighting, 20, 50, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
 	SHADOWBALL ("Shadow Ball", "Special", TypeEngine.ghost, 15, 120, 100, "The user hurls a shadowy blob at the foe."),
 	SHADOWPUNCH ("Shadow Punch", "Physical", TypeEngine.ghost, 20, 90, -1, "The user throws a punch at the foe from the shadows. The punch lands without fail."),
 	SKYUPPERCUT ("Sky Uppercut", "Physical", TypeEngine.fighting, 15, 120, 100, "The user attacks the foe with an uppercut thrown skyward with force."),

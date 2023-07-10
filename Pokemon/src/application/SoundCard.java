@@ -17,15 +17,16 @@ public class SoundCard {
 		
 		try {			
 			// retrieve sound file based on argument given
-			String path = new File("").getAbsolutePath() + "//lib//sounds//" + soundfile + ".wav";	
+			String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+					File.separator + "sounds" + File.separator + soundfile + ".wav";	
 		    AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
-            
+       
 		    music = AudioSystem.getClip();
 		    
 		    // prepare music file
 		    music.open(ais); 
         }
-        catch (Exception e) { System.out.println(e.getMessage()); }
+        catch (Exception e) { }
 	}
 	/** END CONSTRUCTOR **/
 	
@@ -52,7 +53,8 @@ public class SoundCard {
 		if (active) {
 			try {
 				// retrieve sound file based on argument given
-				String path = new File("").getAbsolutePath() + "//lib//sounds//" + arg + ".wav";	
+				String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+						File.separator + "sounds" + File.separator + arg + ".wav";	
 	            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
 	            
 	            Clip c = AudioSystem.getClip();            
@@ -64,9 +66,7 @@ public class SoundCard {
 	            	Sleeper.pause(duration);
 	            }
 	        }
-	        catch (Exception e) { 
-	        	System.out.println(e);	        	
-	        }
+	        catch (Exception e) { System.out.println(e);}
 		}
 	}
 	/** END SOUND CARD METHOD **/
@@ -87,7 +87,8 @@ public class SoundCard {
 			default: return;
 		}
 		
-		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
+		String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+				File.separator + "sounds" + File.separator + "battle" + File.separator + hit;		
         File sound = new File(path);
 		
 		if (active) {        
@@ -100,9 +101,7 @@ public class SoundCard {
 	            
 	            Sleeper.pause(duration);
 	        }
-	        catch (Exception e) { 
-	        	System.out.println(e);
-	        }
+	        catch (Exception e) { }
         }
 		
         
@@ -132,7 +131,8 @@ public class SoundCard {
 			default: return;
 		}
 		
-		String path = new File("").getAbsolutePath() + "//lib//sounds//in-battle//" + hit;		
+		String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+				File.separator + "sounds" + File.separator + "battle" + File.separator + hit;		
         File sound = new File(path);
         
         if (active) {
@@ -146,9 +146,7 @@ public class SoundCard {
 	            
 	            Sleeper.pause(duration);
 	        }
-	        catch (Exception e) {
-	        	System.out.println(e);
-	        }
+	        catch (Exception e) { }
         }
 	}
 	/** END STATUS SOUND METHOD **/

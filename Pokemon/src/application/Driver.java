@@ -188,6 +188,12 @@
  * 7/7/2023 (cont.):
  * 		-Corrected attributes for several moves
  * 		-Code cleanup
+ * 7/10/2023:
+ * 		-Fixed default music bug
+ * 		-Fixed EXP earned bug		
+ * 		-Simplified EXP formula
+ * 		-Streamlined sound card to be compatible with MacOS
+ * 		-Reorganized files and folders
  */	
 
 package application;

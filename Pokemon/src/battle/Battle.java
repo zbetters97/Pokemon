@@ -1,5 +1,6 @@
 package battle;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -189,7 +190,7 @@ public class Battle {
 				}
 				else if (choice == counter) {
 					clearContent();	
-					SoundCard.play("\\in-battle\\in-battle-run");
+					SoundCard.play("battle" + File.separator + "run");
 					Sleeper.print("Got away safely!"); 					 
 					System.exit(1);
 				}
@@ -275,7 +276,7 @@ public class Battle {
 				clearContent();
 				
 				Sleeper.print(name1 + ": GO, " + pokemon1.getName() + "!");
-				SoundCard.play("//pokedex//" + pokemon1.getName());
+				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);	
 				clearContent();
 				
@@ -311,7 +312,7 @@ public class Battle {
 				clearContent();
 				
 				Sleeper.print(name2 + ": GO, " + pokemon2.getName() + "!");
-				SoundCard.play("//pokedex//" + pokemon2.getName());
+				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
 				clearContent();
 				
@@ -382,7 +383,7 @@ public class Battle {
 	
 	/** ANNOUNCE WINNER METHOD **/
 	private void announceWinner(String winner, String loser, int money) {
-		SoundCard.play("//in-battle//in-battle-victory");
+		SoundCard.play("battle" + File.separator + "victory");
 		Sleeper.print("Player defeated, " + loser + "!");
 		Sleeper.print(winner + " got $" + money + " for winning!");
 	}

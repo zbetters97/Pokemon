@@ -11,6 +11,7 @@ public enum Moves {
 	/** INITIALIZE ENUMS **/	
 	// attack descriptions reference (GEN IV): https://www.serebii.net/attackdex-dp/
 	CONFUSE("Confuse", "Physical", TypeEngine.normal, 1, 40, -1, null),
+	ABSORB ("Absorb", "Special", TypeEngine.grass, 20, 20, 100, "A nutrient-draining attack."),
 	AGILITY ("Agility", "Attribute", TypeEngine.psychic, true, 30, -1, 1, Arrays.asList("speed"), "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat."),
 	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm."),
 	BLAZEKICK ("Blaze Kick", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 10, 85, 90, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),

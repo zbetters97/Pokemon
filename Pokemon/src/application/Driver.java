@@ -205,6 +205,17 @@
  * 		-Added Agility and Giga Drain functionality
  * 		-Cleaned up code to be more concise
  * 		-Fixed formatting of status condition
+ * 7/12/2023:
+ * 		-Condensed coding
+ * 		-Fixed Venusaur faint sound		
+ * 		-Added new music
+ * 		-Added ability to set default levels
+ * 		-Changed move info layout to add new line after 40 characters 	
+ * 		-Changed party selection to rotate between players
+ * 		-Reformatted in battle status info	
+ * 		-Added the following Pokemon: Raikou, Entei, Suicune
+ * 		-Added the following moves: Crunch, Thunder, Thunder Fang, 
+ * 			Extrasensory, Ice Fang, Aurora Beam
  */	
 
 package application;

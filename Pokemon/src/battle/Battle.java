@@ -111,15 +111,13 @@ public class Battle {
 		if (pokemon1.getType() == null) {
 			
 			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					" : LVL [" + pokemon1.getLevel() + "] |" +
-					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
-					pokemon1.printTypes() + "]");
+					": HP " + pokemon1.getHP() + "/" + pokemon1.getBHP() + 
+					" | Lv " + pokemon1.getLevel() + " | " + pokemon1.printTypes());
 		}
 		else {
 			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					" : LVL [" + pokemon1.getLevel() + "] |" +
-					" HP [" + pokemon1.getHP() + "/" + pokemon1.getBHP() + "] | TYPE [" +
-					pokemon1.getType() + "]");	
+					" : HP " + pokemon1.getHP() + "/" + pokemon1.getBHP() + 
+					" | Lv " + pokemon1.getLevel() + " | " + pokemon1.getType());	
 		}
 		
 		if (pokemon1.getStatus() != null)
@@ -136,15 +134,13 @@ public class Battle {
 		if (pokemon2.getType() == null) {
 			
 			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					" : LVL [" + pokemon2.getLevel() + "] |" +
-					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
-					pokemon2.printTypes() + "]");
+					": HP " + pokemon2.getHP() + "/" + pokemon2.getBHP() + 
+					" | Lv " + pokemon2.getLevel() + " | " + pokemon2.printTypes());
 		}
 		else {
 			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					" : LVL [" + pokemon2.getLevel() + "] |" +
-					" HP [" + pokemon2.getHP() + "/" + pokemon2.getBHP() + "] | TYPE [" +
-					pokemon2.getType() + "]");	
+					" : HP " + pokemon2.getHP() + "/" + pokemon2.getBHP() + 
+					" | Lv " + pokemon2.getLevel() + " | " + pokemon2.getType());	
 		}
 		
 		if (pokemon2.getStatus() != null)
@@ -211,10 +207,20 @@ public class Battle {
 	/** GET MOVE INFO METHOD **/
 	private void displayInfo(Pokedex fighter) {	
 				
-		for (Moves m : fighter.getMoveSet())
-			System.out.println(m.getName() + " : " + m.getInfo() + "");
+		for (Moves m : fighter.getMoveSet()) {
+			
+			StringBuilder info = new StringBuilder(m.getInfo());
+			
+			// add new line after 40 characters
+			int i = 0;				
+			while ( (i = info.indexOf(" ", i + 40)) != -1) {
+				info.replace(i, i + 1, "\n");
+			}
+			
+			System.out.println(m.getName() + ": " + info.toString() + "\n");
+		}
 		
-		System.out.println("\n[0] BACK");
+		System.out.println("[0] BACK");
 		System.out.print(">");
 		
 		try { 

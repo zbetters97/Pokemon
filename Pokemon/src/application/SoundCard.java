@@ -66,7 +66,7 @@ public class SoundCard {
 	            	Sleeper.pause(duration);
 	            }
 	        }
-	        catch (Exception e) { System.out.println(e);}
+	        catch (Exception e) { }
 		}
 	}
 	/** END SOUND CARD METHOD **/

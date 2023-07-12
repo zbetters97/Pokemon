@@ -42,6 +42,9 @@ public enum Pokedex implements PokedexInterface {
 	HORSEA ("Horsea", 116, TypeEngine.water, 5, 30, 40, 70, 70, 25, 60, 32, 59, 1),
 	SEADRA ("Seadra", 117, TypeEngine.water, 32, 55, 65, 95, 95, 45, 85, 45, 154, 2),
 	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 40, 75, 95, 95, 95, 95, 85, -1, 270, 3),
+	RAIKOU ("Raikou", 243, TypeEngine.electric, 40, 90, 85, 75, 115, 100, 115, -1, 290, 3),
+	ENTEI ("Entei", 244, TypeEngine.fire, 40, 115, 115, 85, 90, 75, 100, -1, 290, 3),
+	SUICINE ("Suicine", 245, TypeEngine.water, 40, 100, 75, 115, 90, 115, 85, -1, 290, 3),
 	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
 	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
 	SCEPTILE ("Sceptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
@@ -58,12 +61,12 @@ public enum Pokedex implements PokedexInterface {
 	private int index;
 	protected TypeEngine type;
 	private List<TypeEngine> types;
-	private int level, bhp, hp, evLevel, xp, ev;
+	private int level, bhp, hp, evLevel, xp, ev, iv;
 	private double speed, attack, defense, spAttack, spDefense, accuracy;	
 	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg, accuracyStg;
 	private StatusEngine status;
 	private boolean isAlive;
-
+	
 	private int statusCounter, statusLimit;
 	/** END INITIALIZE VALUES **/
 	
@@ -79,7 +82,7 @@ public enum Pokedex implements PokedexInterface {
 		
 		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
 		this.name = name; this.index = index; this.type = type; this.level = level;
-		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
+		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
 		
@@ -114,7 +117,7 @@ public enum Pokedex implements PokedexInterface {
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
 		
 		this.name = name; this.index = index; this.types = types; this.level = level;
-		int iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
+		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
 		
@@ -205,6 +208,13 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(KINGDRA, Arrays.asList(Moves.SURF, Moves.HYDROPUMP, Moves.DRAGONPULSE, 
         		Moves.AGILITY)); 
         
+        pokeMap.put(RAIKOU, Arrays.asList(Moves.CRUNCH, Moves.THUNDERFANG, Moves.THUNDER, 
+        		Moves.CALMMIND));
+        pokeMap.put(ENTEI, Arrays.asList(Moves.EXTRASENSORY, Moves.FIREFANG, Moves.FLAMETHROWER,
+        		Moves.CALMMIND));
+        pokeMap.put(SUICINE, Arrays.asList(Moves.AURORABEAM, Moves.ICEFANG, Moves.HYDROPUMP,
+        		Moves.CALMMIND));
+        
         pokeMap.put(TREECKO, Arrays.asList(Moves.ABSORB, Moves.QUICKATTACK, Moves.LEER)); 
         pokeMap.put(GROVYLE, Arrays.asList(Moves.QUICKATTACK, Moves.LEAFBLADE, Moves.ABSORB, 
         		Moves.AGILITY)); 
@@ -250,8 +260,8 @@ public enum Pokedex implements PokedexInterface {
 			}
 		}
 		return null;
-	}	
-	public static List<Pokedex> getPokedex() { 
+	}
+	public static List<Pokedex> getPokedex() {
 		return POKEDEX; 
 	}
 	public static int getPokedexSize() { 
@@ -260,7 +270,7 @@ public enum Pokedex implements PokedexInterface {
 	/** END POKEDEX ARRAYLIST GETTERS **/
 	
 	/** CAN EVOLVE METHOD **/
-	public boolean canEvolve() {
+	public boolean canEvolve() {		
 		
 		// pokemon can't evolve if evLevel is -1
 		return this.getEvLevel() != -1;
@@ -338,7 +348,16 @@ public enum Pokedex implements PokedexInterface {
 	}
 	
 	public int getLevel() {	return level; }
-	public void setLevel(int level) { this.level = level; }
+	
+	public void setLevel(int level) { 	
+		
+		// don't initiate twice on same pokemon
+		if (level != this.level && level != -1) {
+			this.level = level;			
+			this.hp = (int)(Math.floor(((2 * this.hp + this.iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
+			this.bhp = hp;
+		}
+	}
 
 	public int getXP() { return xp; }
 	public void setXP(int xp) {	this.xp = xp; }
@@ -388,6 +407,9 @@ public enum Pokedex implements PokedexInterface {
 	
 	public int getEV() { return ev; }
 	public void setEV(int ev) { this.ev = ev; }
+	
+	public int getIV() { return iv; }
+	public void setIV(int iv) { this.iv = iv; }
 
 	public boolean isAlive() { return isAlive; }
 	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }

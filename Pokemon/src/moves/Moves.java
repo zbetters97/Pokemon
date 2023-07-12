@@ -11,7 +11,7 @@ public enum Moves {
 	/** INITIALIZE ENUMS **/	
 	// attack descriptions reference (GEN IV): https://www.serebii.net/attackdex-dp/
 	CONFUSE("Confuse", "Physical", TypeEngine.normal, 1, 40, -1, null),
-	ABSORB ("Absorb", "Special", TypeEngine.grass, 20, 20, 100, "A nutrient-draining attack."),
+	ABSORB ("Absorb", "Special", TypeEngine.grass, 20, 20, 100, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target."),
 	AGILITY ("Agility", "Attribute", TypeEngine.psychic, true, 30, -1, 1, Arrays.asList("speed"), "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat."),
 	AQUATAIL ("Aqua Tail", "Physical", TypeEngine.water, 10, 135, 90, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm."),
 	BLAZEKICK ("Blaze Kick", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 10, 85, 90, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),
@@ -35,6 +35,7 @@ public enum Moves {
 	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 135, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
 	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 180, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
 	FLASHCANNON ("Flash Cannon", "Special", TypeEngine.steel, 10, 80, 100, "The user gathers all its light energy and releases it at once."),
+	GIGADRAIN ("Giga Drain", "Special", TypeEngine.grass, 10, 60, 100, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target."),
 	GROWL ("Growl", "Attribute", TypeEngine.normal, false, 40, 100, -1, Arrays.asList("attack"), "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered."),
 	HEAVYSLAM ("Heavy Slam", "Physical", TypeEngine.normal, 20, 80, 75, "The user slams into the target with its heavy body."),
 	HEX ("Hex", "Special", TypeEngine.ghost, 10, 95, 100, "This relentless attack does massive damage to a target affected by status conditions."),

@@ -208,7 +208,7 @@ public enum Pokedex implements PokedexInterface {
         pokeMap.put(TREECKO, Arrays.asList(Moves.ABSORB, Moves.QUICKATTACK, Moves.LEER)); 
         pokeMap.put(GROVYLE, Arrays.asList(Moves.QUICKATTACK, Moves.LEAFBLADE, Moves.ABSORB, 
         		Moves.AGILITY)); 
-        pokeMap.put(SCEPTILE, Arrays.asList(Moves.LEAFBLADE, Moves.LEAFSTORM, Moves.XSCISSOR, 
+        pokeMap.put(SCEPTILE, Arrays.asList(Moves.LEAFBLADE, Moves.LEAFSTORM, Moves.GIGADRAIN, 
         		Moves.AGILITY)); 
         
         pokeMap.put(TORCHIC, Arrays.asList(Moves.EMBER, Moves.SCRATCH, Moves.GROWL)); 

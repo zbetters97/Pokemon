@@ -197,6 +197,14 @@
  * 		-Added Absorb and added to Treeko's move set
  * 7/10/2023 (cont.):
  * 		-Added fainting cry for all existing Pokemon
+ * 7/11/2023:
+ * 		-Forced victory music playback when no sound effects		
+ * 		-Added menu music
+ * 		-Added option to turn off music * 		
+ * 		-Added the move Giga Drain
+ * 		-Added Agility and Giga Drain functionality
+ * 		-Cleaned up code to be more concise
+ * 		-Fixed formatting of status condition
  */	
 
 package application;

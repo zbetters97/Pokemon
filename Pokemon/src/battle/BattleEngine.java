@@ -323,10 +323,9 @@ public class BattleEngine {
 					}
 					// if move changes target attributes
 					else {
-						
 						// loop through each specified attribute to be changed
 						for (String stat : move.getStats()) 
-							pokemon[trg].changeStat(stat, move.getLevel());							
+							pokemon[trg].changeStat(stat, move.getLevel());	
 					}
 					
 					// attributes raised
@@ -360,6 +359,16 @@ public class BattleEngine {
 						//dropHealth(pokemon[atk], pokemon[trg], damage, move);
 						
 						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1500);
+						
+						if (move.getName() == "Absorb" || move.getName() == "Giga Drain") {
+							int gainedHP = (damage / 2);
+							
+							if (gainedHP > pokemon[atk].getBHP())
+								gainedHP = pokemon[atk].getBHP();
+							
+							pokemon[atk].setHP(gainedHP + pokemon[atk].getHP());	
+							Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1200);
+						}
 						
 						// damage is fatal
 						if (damage >= pokemon[trg].getHP()) {

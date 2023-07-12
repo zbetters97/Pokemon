@@ -148,7 +148,7 @@ public class Battle {
 		}
 		
 		if (pokemon2.getStatus() != null)
-			System.out.println(pokemon2.getStatus().getName());
+			System.out.println(" (" + pokemon2.getStatus().getName() + ")");
 		
 		for (int i = 0; i < pokemon2.getHP(); i++) {
 			
@@ -383,7 +383,10 @@ public class Battle {
 	
 	/** ANNOUNCE WINNER METHOD **/
 	private void announceWinner(String winner, String loser, int money) {
+		
+		SoundCard.setActive(true);		
 		SoundCard.play("battle" + File.separator + "victory");
+		
 		Sleeper.print("Player defeated, " + loser + "!");
 		Sleeper.print(winner + " got $" + money + " for winning!");
 	}

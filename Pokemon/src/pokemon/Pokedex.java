@@ -342,7 +342,7 @@ public enum Pokedex implements PokedexInterface {
 		for (TypeEngine t : types) {
 			 s += t.toString();		
 			 if (i-- != 0)
-				 s += ", ";
+				 s += " / ";
 		}
 		return s;
 	}

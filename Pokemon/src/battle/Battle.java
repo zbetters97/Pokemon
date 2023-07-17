@@ -37,7 +37,9 @@ public class Battle {
 	}
 	/** END CONSTRUCTOR **/
 	
-	/** MAIN MENU METHOD **/
+	/** MAIN MENU METHOD
+	  * Begin battle sequence 
+	  **/
 	public void start() {
 		
 		clearContent();	
@@ -47,12 +49,14 @@ public class Battle {
 		
 		battle = new BattleEngine(pokemon1, pokemon2);
 				
-		selectMove();
+		turn();
 	}
 	/** END MAIN METHOD **/
 		
-	/** SELECT MOVE METHOD **/
-	private void selectMove() {
+	/** TURN METHOD
+	  * Call displayParty(), displayHP(), and displayMoves() 
+	  **/
+	private void turn() {
 		
 		Moves move1, move2;
 		
@@ -88,9 +92,11 @@ public class Battle {
 			}
 		}
 	}
-	/** END SELECT MOVE METHOD **/
+	/** END TURN METHOD **/
 	
-	/** DISPLAY PARTY METHOD **/
+	/** DISPLAY PARTY METHOD
+	  * Print out pokemon party for both trainers 
+	  **/
 	private void displayParty() {
 		
 		System.out.print(name1 + "'s PARTY: ");
@@ -104,51 +110,31 @@ public class Battle {
 	}
 	/** END DISPLAY PARTY METHOD **/
 	
-	/** DISPLAY HP METHOD **/
+	/** DISPLAY HP METHOD
+	  * Print out current in-battle pokemon info 
+	  **/
 	private void displayHP() {
-						
+								
 		// if pokemon has multiple types
-		if (pokemon1.getType() == null) {
-			
-			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					": HP " + pokemon1.getHP() + "/" + pokemon1.getBHP() + 
-					" | Lv " + pokemon1.getLevel() + " | " + pokemon1.printTypes());
-		}
-		else {
-			System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
-					" : HP " + pokemon1.getHP() + "/" + pokemon1.getBHP() + 
-					" | Lv " + pokemon1.getLevel() + " | " + pokemon1.getType());	
-		}
-		
-		if (pokemon1.getStatus() != null)
-			System.out.println(pokemon1.getStatus().getName());
+		System.out.print("\n\n(" + name1 + ")\n" + pokemon1.getName() + 
+				((pokemon1.getStatus() != null) ? " (" + pokemon1.getStatus().getName() + ")" : "") + 
+				" : HP " + pokemon1.getHP() + "/" + pokemon1.getBHP() + 
+			" | Lv " + pokemon1.getLevel() + " | " + 
+			((pokemon1.getTypes() == null) ? pokemon1.getType() : pokemon1.printTypes()));	
 		
 		for (int i = 0; i < pokemon1.getHP(); i++) {
-			if (i % 50 == 0)
-				System.out.println();
-			
+			if (i % 50 == 0) System.out.println();		
 			System.out.print(".");
 		}
 		
 		// if pokemon has mutliple types
-		if (pokemon2.getType() == null) {
-			
-			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					": HP " + pokemon2.getHP() + "/" + pokemon2.getBHP() + 
-					" | Lv " + pokemon2.getLevel() + " | " + pokemon2.printTypes());
-		}
-		else {
-			System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
-					" : HP " + pokemon2.getHP() + "/" + pokemon2.getBHP() + 
-					" | Lv " + pokemon2.getLevel() + " | " + pokemon2.getType());	
-		}
-		
-		if (pokemon2.getStatus() != null)
-			System.out.println(" (" + pokemon2.getStatus().getName() + ")");
+		System.out.print("\n\n(" + name2 + ")\n" + pokemon2.getName() + 
+				((pokemon2.getStatus() != null) ? " (" + pokemon2.getStatus().getName() + ")" : "") + 
+				" : HP " + pokemon2.getHP() + "/" + pokemon2.getBHP() + 
+			" | Lv " + pokemon2.getLevel() + " | " + 
+			((pokemon2.getTypes() == null) ? pokemon2.getType() : pokemon2.printTypes()));	
 		
 		for (int i = 0; i < pokemon2.getHP(); i++) {
-			
-			// add new line for every 50 health points
 			if (i % 50 == 0) System.out.println();			
 			System.out.print(".");
 		}
@@ -156,30 +142,40 @@ public class Battle {
 	}
 	/** END DISPLAY HP METHOD **/
 	
-	/** DISPLAY MOVES METHOD **/
+	/** DISPLAY MOVES METHOD
+	  * Print out in-battle pokemon's moveset and return chosen move 
+	  * @param Pokedex current fighter
+	  * @return selected move
+	  **/
 	private Moves displayMoves(Pokedex fighter) {
 		
-		System.out.println("What will " + fighter.getName() + " do?\n");
-		
-		while (true) {
+		while (true) {		
+			
+			System.out.println("What will " + fighter.getName() + " do?\n");
 			
 			int counter = 0;
 			
 			// display all moves				
 			for (Moves m : fighter.getMoveSet()) {
 				System.out.println("[" + ++counter + "] " + m.getName() + 
-						" (PP: " + m.getpp() + ", PWR: " + m.getPower() + ", ACC: " + m.getAccuracy() + ")");
+						" : PP " + m.getpp() + " | PWR " + m.getPower() + 
+						" | ACC " + m.getAccuracy() + " | TYPE " + m.getType());
 			}
 			System.out.println("[" + ++counter + "] INFO");
 			System.out.println("[" + ++counter + "] RUN");
-			System.out.print(">");
+			System.out.print(">");			
 			
 			try { 
 				int choice = input.nextInt();
 				
 				// if choice is a valid move option
-				if (0 < choice && choice < counter - 1)
-					return getMove(choice, fighter.getMoveSet());				
+				if (0 < choice && choice < counter - 1) {
+					
+					Moves selectedMove = checkMove(choice, fighter.getMoveSet());
+					
+					if (selectedMove != null)
+						return selectedMove;
+				}
 				else if (choice == counter - 1) {
 					clearContent();
 					displayInfo(fighter);
@@ -204,7 +200,10 @@ public class Battle {
 	}
 	/** END DISPLAY MOVE METHOD **/
 		
-	/** GET MOVE INFO METHOD **/
+	/** GET MOVE INFO METHOD
+	  * Print out description of each move in moveset 
+	  * @param Pokedex current fighter
+	  **/
 	private void displayInfo(Pokedex fighter) {	
 				
 		for (Moves m : fighter.getMoveSet()) {
@@ -246,7 +245,9 @@ public class Battle {
 	}
 	/** END GET MOVE INFO METHOD **/
 	
-	/** CHOOSE NEXT POKEMON METHOD **/
+	/** CHOOSE NEXT POKEMON METHOD
+	  * Prompt user to choose next pokemon in party 
+	  **/
 	public boolean chooseNextFighter() {
 		
 		boolean playerTwoWinner = battle.getWinningPokemon().getName().equals(pokemon2.getName());
@@ -266,8 +267,7 @@ public class Battle {
 			
 			// if no pokemon left
 			if (pokemonParty1.isEmpty()) {
-				announceWinner(name2, name1, battle.getMoney(0));
-				
+				announceWinner(name2, name1, battle.getMoney(0));				
 				return true;
 			}
 			else {			
@@ -284,6 +284,7 @@ public class Battle {
 				Sleeper.print(name1 + ": GO, " + pokemon1.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);	
+				
 				clearContent();
 				
 				return false;
@@ -328,7 +329,10 @@ public class Battle {
 	}	
 	/** END CHOOSE NEXT POKEMON METHOD **/	
 	
-	/** LIST FIGHTERS METHOD **/
+	/** LIST FIGHTERS METHOD
+	  * Print out available pokemon to choose from party 
+	  * @param player number
+	  **/
 	public int listNextFighter(int player) {
 		
 		Sleeper.print("CHOOSE A POKEMON.", 700);
@@ -336,15 +340,11 @@ public class Battle {
 		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
 		
 		int counter = 0;
-		for (Pokedex p : pokemonParty) {
-			if (p.getType() == null) {							
+		for (Pokedex p : pokemonParty) {						
 				System.out.printf("[" + ++counter + "] " + p.getName() + 
-					"\tLVL: %02d | TYPE: " + p.getTypes() + "\n", p.getLevel());	
-			}
-			else {
-				System.out.printf("[" + ++counter + "] " + p.getName() + 
-					"\tLVL: %02d | TYPE: " + p.getType() + "\n", p.getLevel());
-			}
+					" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
+					((p.getType() == null) ? p.printTypes() : p.getType()) + 
+					"\n", p.getLevel());	
 		}
 		
 		System.out.print(">");
@@ -373,21 +373,30 @@ public class Battle {
 	}
 	/** END LIST FIGHTERS METHOD **/	
 
-	/** GET MOVE METHOD **/
-	private static Moves getMove(int choice, ArrayList<Moves> moveSet) {		
+	/** CHECK MOVE METHOD
+	  * Find move in moveset, check if has PP, and return 
+	  * @param choice, ArrayList of Moves moveSet
+	  * @return move at given choice
+	  **/
+	private Moves checkMove(int choice, ArrayList<Moves> moveSet) {	
+		
 		// if move has pp
 		if (moveSet.get(choice - 1).getpp() > 0) 
 			return moveSet.get(choice - 1);
 		else { 
-			Sleeper.print("This move is out of PP and cannot be used!"); 
-			System.out.print(">");
+			Sleeper.print("This move is out of PP and cannot be used!", 1000); 
+			clearContent();
+			displayHP();
 			return null; 
 		}
 		
 	}
-	/** END GET MOVE METHOD **/
+	/** END CHECK MOVE METHOD **/
 	
-	/** ANNOUNCE WINNER METHOD **/
+	/** ANNOUNCE WINNER METHOD
+	  * Play victory song and print out winning trainer 
+	  * @param name of winner, name of loser, money earned
+	  **/
 	private void announceWinner(String winner, String loser, int money) {
 		
 		SoundCard.setActive(true);		

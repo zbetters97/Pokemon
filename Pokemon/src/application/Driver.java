@@ -216,6 +216,14 @@
  * 		-Added the following Pokemon: Raikou, Entei, Suicune
  * 		-Added the following moves: Crunch, Thunder, Thunder Fang, 
  * 			Extrasensory, Ice Fang, Aurora Beam
+ * 7/14/2023:
+ * 		-Condensed coding
+ * 		-Reformatted moves info and fighter info
+ * 		-Fixed frozen status effect
+ * 		-Added more detailed comments
+ * 7/17/2023:
+ * 		-Cleaned up coding
+ * 		-Added more detailed comments
  */	
 
 package application;
@@ -228,6 +236,7 @@ public class Driver {
 	static Scanner input = new Scanner(System.in);
 	
 	/** MAIN METHOD **/
+	/* Driver method to call MainMenu class */
 	public static void main(String[] args) {
 		MainMenu.load();
 	}

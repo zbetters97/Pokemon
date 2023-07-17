@@ -22,7 +22,9 @@ public class MainMenu {
 	static int defaultLevel, players, partySize;
 	static ArrayList<Pokedex> party1, party2;
 
-	/** LOAD METHOD **/
+	/** LOAD METHOD
+	  * Method called from Driver 
+	  **/
 	public static void load() {
 		
 		clearContent();	
@@ -36,7 +38,7 @@ public class MainMenu {
 		defaultLevel = -1;
 		file =  "12battle-pc-first";
 		
-		players = selectPlayers();		
+		players = selectMode();		
 		name1 = inputName(1);
 		name2 = (players == 1 ) ? "Red" : inputName(2);
 		
@@ -54,8 +56,11 @@ public class MainMenu {
 	}
 	/** END LOAD METHOD **/
 	
-	/** SELECT PLAYERS METHOD **/
-	private static int selectPlayers() {
+	/** SELECT PLAYERS METHOD
+	  * Prompt player to select a setting from the main menu
+	  * @return choice
+	  **/
+	private static int selectMode() {
 								
 		System.out.println("PLEASE SELECT MODE:\n"
 				+ "[1] ONE PLAYER\n"
@@ -99,7 +104,9 @@ public class MainMenu {
 	}
 	/** END SELECT PLAYERS METHOD **/
 	
-	/** SETTINGS METHOD **/
+	/** SETTINGS METHOD
+	  * Settings main menu 
+	  **/
 	private static void settingsMenu() {
 		
 		System.out.println("PLEASE SELECT AN OPTION:\n"
@@ -138,7 +145,9 @@ public class MainMenu {
 	}
 	/** END SETTINGS METHOD **/
 	
-	/** SELECT MUSIC METHOD **/
+	/** SELECT MUSIC METHOD
+	  * Prompt player to select a new song to play during battle 
+	  **/
 	private static void musicSetting() {
 		
 		// array list to hold music String
@@ -219,7 +228,9 @@ public class MainMenu {
 	}
 	/** END SELECT MUSIC METHOD **/
 	
-	/** TEXT SPEED METHOD **/
+	/** TEXT SPEED METHOD
+	  * Prompt player to select a new text speed for Sleeper 
+	  **/
 	private static void textSetting() {
 				
 		System.out.println("TEXT SPEED:\n"
@@ -262,7 +273,9 @@ public class MainMenu {
 	}
 	/** END TEXT SPEED METHOD **/
 	
-	/** SOUND SETTING METHOD **/
+	/** SOUND SETTING METHOD
+	  * Prompt player to turn on or off sound effects 
+	  **/
 	private static void soundSetting() {
 				
 		System.out.println("SOUND EFFECTS:\n"
@@ -300,7 +313,9 @@ public class MainMenu {
 	}
 	/** END SOUND SETTINGS **/
 	
-	/** LEVEL SETTING METHOD **/
+	/** LEVEL SETTING METHOD
+	  * Prompt player to select a default level for battle 
+	  **/
 	private static void levelSetting() {
 					
 		System.out.println("DEFAULT LEVELS:\n"
@@ -358,7 +373,11 @@ public class MainMenu {
 	}
 	/** END LEVEL SETTING METHOD **/
 	
-	/** INPUT NAME METHOD **/
+	/** INPUT NAME METHOD
+	  * Prompt player to input their name 
+	  * @param Integer player number
+	  * @return String player name
+	  **/
 	private static String inputName(int player) {
 				
 		Sleeper.print("WHAT IS YOUR NAME, TRAINER " + player + "?");
@@ -386,7 +405,9 @@ public class MainMenu {
 	}
 	/** END INPUT NAME METHOD **/
 	
-	/** SELECT PARTY SIZE METHOD **/
+	/** SELECT PARTY SIZE METHOD
+	  * Prompt player to input size of pokemon party (1-6)
+	  **/
 	private static void selectPartySize() {
 					
 		Sleeper.print("PLEASE SELECT PARTY SIZE (1-6):");
@@ -419,125 +440,99 @@ public class MainMenu {
 	}
 	/** END SELECT PARTY SIZE METHOD **/
 	
-	/** SELECT PARTY METHOD **/
+	/** SELECT PARTY METHOD
+	  * call displayPokemon() and prompt player to select pokemon for battle
+	  **/
 	private static void selectParty() {
 		
 		int c = 0, choice = 0;		
 		while (c < partySize * 2) {
 								
-			int counter = 0;			
-			for (Pokedex p : Pokedex.getPokedex()) {	
-				
-				p.setLevel(defaultLevel);
-				
-				// don't display Pokemon who are already chosen					
-				if (party1.contains(Pokedex.getPokemon(counter)) || 
-						party2.contains(Pokedex.getPokemon(counter))) {
-					counter++;
-					continue;
+			int counter = displayPokemon();
+			
+			System.out.println("\n\n" + ((c % 2 == 0) ? name1 : name2) + 
+					", PLEASE SELECT YOUR POKEMON PARTY:");
+			System.out.print(">");
+			
+			while (true) {				
+				try { 
+					choice = input.nextInt(); 
+					
+					// choice must be a number from 0 to last element in list
+					if (0 < choice && choice <= counter) {
+						
+						// chosen Pokemon must not have already been selected by either trainer
+						if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
+								party2.contains(Pokedex.getPokemon(choice - 1))) {					
+							Sleeper.print("This Pokemon has already been chosen!");
+							System.out.print(">");
+						}
+						else
+							break;
+					}
+					else {
+						Sleeper.print("ERROR: This is not a valid selection!");
+						System.out.print(">");
+					}
 				}
-				
-				// if pokemon has multiple types
-				if (p.getType() == null) {
-					System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
-							p.printTypes() + "\n", ++counter, p.getLevel());	
-				}
-				else {					
-					System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
-							p.getType() + "\n", ++counter, p.getLevel());	
+				catch (Exception e) {
+					Sleeper.print("ERROR: Input must be a number!");
+					System.out.print(">");
+					input.next();
 				}
 			}
-	
-			System.out.print("\n" + name1 + "'s PARTY: ");
-			for (Pokedex p : party1) System.out.print(p.getName() + " ");
 			
-			System.out.print("\n" + name2 + "'s PARTY: ");			
-			for (Pokedex p : party2) System.out.print(p.getName() + " ");
-
-			if (c % 2 == 0) {				
-				System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:");
-				System.out.print(">");
-				
-				while (true) {				
-					try { 
-						choice = input.nextInt(); 
-						
-						// choice must be a number from 0 to last element in list
-						if (0 < choice && choice <= counter) {
-							
-							// chosen Pokemon must not have already been selected by either trainer
-							if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
-									party2.contains(Pokedex.getPokemon(choice - 1))) {					
-								Sleeper.print("This Pokemon has already been chosen!");
-								System.out.print(">");
-							}
-							else
-								break;
-						}
-						else {
-							Sleeper.print("ERROR: This is not a valid selection!");
-							System.out.print(">");
-						}
-					}
-					catch (Exception e) {
-						Sleeper.print("ERROR: Input must be a number!");
-						System.out.print(">");
-						input.next();
-					}
-				}
-				
-				// assign fighter to party found at given index
-				Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
-				party1.add(selectedPokemon);
-				
-				// play pokemon cry
-				SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
-			}			
-			else {
-				System.out.println("\n\n" + name2 + ", PLEASE SELECT YOUR POKEMON PARTY:");
-				System.out.print(">");
-				
-				while (true) {				
-					try { 
-						choice = input.nextInt(); 
-						
-						// choice must be a number from 0 to last element in list
-						if (0 < choice && choice <= counter) {
-							
-							// chosen Pokemon must not have already been selected by either trainer
-							if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
-									party2.contains(Pokedex.getPokemon(choice - 1))) {					
-								Sleeper.print("This Pokemon has already been chosen!");
-								System.out.print(">");
-							}
-							else
-								break;
-						}
-						else {
-							Sleeper.print("ERROR: This is not a valid selection!");
-							System.out.print(">");
-						}
-					}
-					catch (Exception e) {
-						Sleeper.print("ERROR: Input must be a number!");
-						System.out.print(">");
-						input.next();
-					}
-				}
-				
-				// assign fighter to party found at given index
-				Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
-				party2.add(selectedPokemon);
-				
-				// play pokemon cry
-				SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
-			}					
+			// assign fighter to party found at given index
+			Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
+			
+			if (c % 2 == 0) party1.add(selectedPokemon);
+			else party2.add(selectedPokemon);
+			
+			// play pokemon cry
+			SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
+		
 			c++; clearContent();
 		}
 	}
 	/** END SELECT PARTY METHOD **/
 	
-	/** START GAME METHOD **/
+	/** DISPLAY POKEMON METHOD
+	  * Display all unchosen pokemon for player to select for battle 
+	  * @return counter
+	  **/
+	private static int displayPokemon() {
+		
+		int counter = 0;			
+		for (Pokedex p : Pokedex.getPokedex()) {	
+			
+			p.setLevel(defaultLevel);
+			
+			// don't display Pokemon who are already chosen					
+			if (party1.contains(Pokedex.getPokemon(counter)) || 
+					party2.contains(Pokedex.getPokemon(counter))) {
+				counter++;
+				continue;
+			}
+			
+			// if pokemon has multiple types
+			System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
+					((p.getTypes() == null) ? p.getType() : p.printTypes()) + 
+					"\n", ++counter, p.getLevel());	
+		}
+		
+		System.out.print("\n" + name1 + "'s PARTY: ");
+		for (Pokedex p : party1) System.out.print(p.getName() + " ");
+		
+		System.out.print("\n" + name2 + "'s PARTY: ");			
+		for (Pokedex p : party2) System.out.print(p.getName() + " ");
+		
+		return counter;
+	}
+	/** END DISPLAY POKEMON METHOD **/
+	
+	/** START GAME METHOD
+	  * Call start() from Battle class to begin trainer battle 
+	  **/
 	private static void startGame() {
 		
 		Battle game = new Battle(name1, name2, players, party1, party2);

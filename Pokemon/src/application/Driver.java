@@ -224,6 +224,9 @@
  * 7/17/2023:
  * 		-Cleaned up coding
  * 		-Added more detailed comments
+ * 7/20/2023:
+ * 		-Added CPU AI to select next best Pokemon in party
+ * 		-Reduced clear content from 70 lines to 60
  */	
 
 package application;
@@ -235,8 +238,9 @@ public class Driver {
 	
 	static Scanner input = new Scanner(System.in);
 	
-	/** MAIN METHOD **/
-	/* Driver method to call MainMenu class */
+	/** MAIN METHOD 
+	 * Driver method to call MainMenu class
+	 **/
 	public static void main(String[] args) {
 		MainMenu.load();
 	}

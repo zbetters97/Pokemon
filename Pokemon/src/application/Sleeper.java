@@ -28,7 +28,7 @@ public class Sleeper {
 	/** PRINT METHOD **/
 	public static void print(String s) {
 		
-		// print text to screen one character at a time, similar to Pokemon
+		// print text to screen one character at a time
 		for (char c : s.toCharArray()) {
 			Sleeper.pause(speed);
 		    System.out.print(c);
@@ -40,7 +40,7 @@ public class Sleeper {
 	/** PRINT METHOD **/
 	public static void print(String s, int time) {
 		
-		// print text to screen one character at a time, similar to Pokemon
+		// print text to screen one character at a time
 		for (char c : s.toCharArray()) {
 			Sleeper.pause(speed);
 		    System.out.print(c);

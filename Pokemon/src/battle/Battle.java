@@ -2,11 +2,16 @@ package battle;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 import moves.Moves;
 import pokemon.Pokedex;
+import types.TypeEngine;
 import application.Sleeper;
 import application.SoundCard;
 
@@ -67,7 +72,7 @@ public class Battle {
 			displayHP();
 			
 			if (numPlayers == 1) {
-				move1 = displayMoves(pokemon1);				
+				move1 = displayMoves(pokemon1);	
 				move2 = battle.cpuSelectMove();		
 			}
 			else {
@@ -212,7 +217,7 @@ public class Battle {
 			
 			// add new line after 40 characters
 			int i = 0;				
-			while ( (i = info.indexOf(" ", i + 40)) != -1) {
+			while ((i = info.indexOf(" ", i + 40)) != -1) {
 				info.replace(i, i + 1, "\n");
 			}
 			
@@ -310,10 +315,12 @@ public class Battle {
 			else {			
 				// reset winner
 				battle.setWinningPokemon(null);
-					
-				// ask which pokemon to sub in and swap (1 for cpu so choice would = 0)
-				choice = (numPlayers == 2 ) ? listNextFighter(2) : 1;				
-				pokemon2 = pokemonParty2.get(choice - 1);
+				
+				if (numPlayers == 2)
+					pokemon2 = pokemonParty2.get(listNextFighter(2));
+				else 
+					pokemon2 = cpuSelectNextPokemon();
+				
 				battle.swapPokemon(pokemon2, 1);
 				
 				clearContent();
@@ -328,6 +335,104 @@ public class Battle {
 		}
 	}	
 	/** END CHOOSE NEXT POKEMON METHOD **/	
+	
+	/** CPU SELECT NEXT BEST POKEMON METHOD 
+	 * Iterates through CPU party and finds best pokemon based on type and/or level
+	 * @return best Pokemon found in party
+	 **/
+	private Pokedex cpuSelectNextPokemon() {
+		
+		// list to hold all candidates based on type effectiveness
+		Map<Pokedex, Integer> pokemonList = new HashMap<>();
+		
+		// if more than 1 pokemon in CPU party
+		if (pokemonParty2.size() > 1) {
+			
+			// loop through each pokemon in party
+			for (Pokedex party : pokemonParty2) {
+				
+				// if party is single type
+				if (party.getTypes() == null) {
+					
+					// loop through each type in target pokemon
+					for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {				
+					
+						// if target is single type
+						if (pokemon1.getTypes() == null) {	
+							
+							// if type matches target's vulnerability
+							if (vulnType.toString().equals(party.getType().toString()))
+								pokemonList.put(party, party.getLevel());
+						}						
+						// if target is multi type
+						else {			
+							
+							// for each type in target
+							for (TypeEngine type : pokemon1.getTypes()) {
+								
+								// loop through each vulnerability in type
+								for (TypeEngine vuln : type.getVulnerability()) {									
+	
+									// if type matches target's vulnerability
+									if (vuln.toString().equals(party.getType().toString()))
+										pokemonList.put(party, party.getLevel());
+								}
+							}						
+						}
+					}
+				}				
+				// if party is multi type
+				else { 
+										
+					// loop through each party type
+					for (TypeEngine partyType : party.getTypes()) {
+						
+						// loop through each vulnerability in target type
+						for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {			
+							
+							// if target is single type
+							if (pokemon1.getTypes() == null) {
+								
+								// if type matches target's vulnerability
+								if (vulnType.toString().equals(partyType.toString()))
+									pokemonList.put(party, party.getLevel());
+							}												
+							// if target is multi type
+							else {
+								
+								// for each type in target
+								for (TypeEngine type : pokemon1.getTypes()) {
+									
+									// loop through each vulnerability in type
+									for (TypeEngine vuln : type.getVulnerability()) {									
+	
+										// if type matches target's vulnerability
+										if (vuln.toString().equals(partyType.toString()))
+											pokemonList.put(party, party.getLevel());
+									}		
+								}
+							}
+						}
+					}
+				}
+			}						
+		}
+		// if 1 pokemon remaining in party
+		else 
+			return pokemonParty2.get(0);
+		
+		// find best pokemon candidate based on max level
+		if (!pokemonList.isEmpty()) 
+			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
+		else {			
+			// loop through party and find highest level pokemon
+			for (Pokedex p : pokemonParty2) 
+				pokemonList.put(p, p.getLevel());
+			
+			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+		}
+	}
+	/** END CPU SELECT NEXT POKEMON METHOD **/
 	
 	/** LIST FIGHTERS METHOD
 	  * Print out available pokemon to choose from party 
@@ -409,7 +514,7 @@ public class Battle {
 
 	/** CLEAR SCREEN METHOD **/	
 	private static void clearContent() {		
-		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/
 }

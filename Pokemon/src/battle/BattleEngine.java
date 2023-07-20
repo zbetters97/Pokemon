@@ -18,6 +18,7 @@ public class BattleEngine {
 	
 	private Pokedex winningPokemon;
 	private Pokedex[] pokemon;
+	public boolean swap = false;
 	
 	/** GETTERS AND SETTERS **/
 	public Pokedex getWinningPokemon() { return winningPokemon; }
@@ -60,7 +61,7 @@ public class BattleEngine {
 		// for each move in attacker's move set
 		for (Moves move : pokemon[1].getMoveSet()) {
 			
-			if (!move.isToSelf()) {				
+			if (!move.isToSelf()) {
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
 				
@@ -84,7 +85,7 @@ public class BattleEngine {
 	 * @param trainer 1 move, trainer 2 move
 	 **/
 	public void move(Moves move1, Moves move2) {
-
+		
 		// if both pokemon are alive
 		if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
 				
@@ -145,11 +146,11 @@ public class BattleEngine {
 		
 		// target becomes attacker if battle not over
 		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
-			
+					
 			// if target can fight
 			if (canTurn(pk2)) 
 				attack(pk2, pk1, move2);			
-		}		
+		}
 	}
 	/** END TURN METHOD **/
 	
@@ -325,8 +326,19 @@ public class BattleEngine {
 	        // if attack lands
 			if (isHit(atk, move)) {
 												
-				if (move.getMType().equals("Status")) 
-					statusMove(trg, move);					
+				if (move.getMType().equals("Status")) {
+					
+					if (move.getName().equals("Teleport")) {
+
+						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
+						clearContent();
+						
+						Sleeper.print("The battle is over!", 1700);
+						System.exit(0);
+					}
+					
+					statusMove(trg, move);
+				}
 				else if (move.getMType().equals("Attribute")) 	
 					attributeMove(atk, trg, move);
 				else {						
@@ -561,8 +573,26 @@ public class BattleEngine {
 		// default value
 		double effect = 1.0;
 		
-		// if target has multiple types
-		if (pokemon[trg].getTypes() != null) {
+		// if target is single types
+		if (pokemon[trg].getTypes() == null) {
+			
+			// if vulnerable, retrieve and return vulnerable value
+			for (TypeEngine vulnType : pokemon[trg].getType().getVulnerability()) {		
+				if (vulnType.toString().equals(type.toString())) {
+					effect = vulnType.getStrength();
+					return effect;
+				}
+			}			
+			// if resistant, retrieve and return resistance value
+			for (TypeEngine resType : pokemon[trg].getType().getResistance()) {			
+				if (resType.toString().equals(type.toString())) {
+					effect = resType.getStrength();
+					return effect;
+				}			
+			}		
+		}
+		// if target is multi type
+		else {
 			
 			// for each type in target
 			for (TypeEngine targetType : pokemon[trg].getTypes()) {		
@@ -592,24 +622,6 @@ public class BattleEngine {
 			// vulnerable and resistant cancel out
 			if (effect == 0.75)	
 				effect = 1;
-		}
-		// if target is single type
-		else {
-			
-			// if vulnerable, retrieve and return vulnerable value
-			for (TypeEngine vulnType : pokemon[trg].getType().getVulnerability()) {		
-				if (vulnType.toString().equals(type.toString())) {
-					effect = vulnType.getStrength();
-					return effect;
-				}
-			}			
-			// if resistant, retrieve and return resistance value
-			for (TypeEngine resType : pokemon[trg].getType().getResistance()) {			
-				if (resType.toString().equals(type.toString())) {
-					effect = resType.getStrength();
-					return effect;
-				}			
-			}		
 		}			
 						
 		return effect;
@@ -740,7 +752,7 @@ public class BattleEngine {
 
 	/** CLEAR SCREEN METHOD **/	
 	private static void clearContent() {		
-		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/
 

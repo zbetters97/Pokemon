@@ -38,11 +38,13 @@ public class MainMenu {
 		defaultLevel = -1;
 		file =  "12battle-pc-first";
 		
-		players = selectMode();		
+		players = selectMode();
+	
 		name1 = inputName(1);
 		name2 = (players == 1 ) ? "Red" : inputName(2);
+	
+		selectPartySize();
 		
-		selectPartySize();		
 		selectParty();
 		
 		menuMusic.stopMusic();
@@ -445,7 +447,19 @@ public class MainMenu {
 	  **/
 	private static void selectParty() {
 		
-		int c = 0, choice = 0;		
+		int c = 0, choice = 0;	
+		/*
+		party1.add(Pokedex.getPokemon(4));
+		party1.add(Pokedex.getPokemon(29));
+		party1.add(Pokedex.getPokemon(32));
+		party1.add(Pokedex.getPokemon(33));
+		
+		party2.add(Pokedex.getPokemon(0));
+		party2.add(Pokedex.getPokemon(7));
+		party2.add(Pokedex.getPokemon(1));
+		party2.add(Pokedex.getPokemon(15));
+		*/
+		
 		while (c < partySize * 2) {
 								
 			int counter = displayPokemon();
@@ -485,8 +499,10 @@ public class MainMenu {
 			// assign fighter to party found at given index
 			Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
 			
-			if (c % 2 == 0) party1.add(selectedPokemon);
-			else party2.add(selectedPokemon);
+			if (c % 2 == 0) 
+				party1.add(selectedPokemon);
+			else 
+				party2.add(selectedPokemon);
 			
 			// play pokemon cry
 			SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
@@ -549,7 +565,7 @@ public class MainMenu {
 		
 	/** CLEAR SCREEN METHOD **/	
 	private static void clearContent() {		
-		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/
 }

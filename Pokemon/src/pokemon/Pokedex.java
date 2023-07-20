@@ -11,7 +11,7 @@ import status.StatusEngine;
 import types.TypeEngine;
 
 /*** POKEDEX ENUM CLASS ***/
-public enum Pokedex implements PokedexInterface {
+public enum Pokedex {
 	
 	/** INITIALIZE ENUMS **/
 	// stat reference: https://www.serebii.net/
@@ -151,7 +151,7 @@ public enum Pokedex implements PokedexInterface {
 	/** END CONSTRUCTORS **/
 	
 	/** MAP MOVES POKEMON METHOD **/
-	public static Pokedex mapMoves(Pokedex pokemon) {
+	private static Pokedex mapMoves(Pokedex pokemon) {
 		
 		// map of pokemon and corresponding move set
 		Map<Pokedex, List<Moves>> pokeMap = new HashMap<>();
@@ -347,8 +347,7 @@ public enum Pokedex implements PokedexInterface {
 		return s;
 	}
 	
-	public int getLevel() {	return level; }
-	
+	public int getLevel() {	return level; }	
 	public void setLevel(int level) { 	
 		
 		// don't initiate twice on same pokemon
@@ -527,7 +526,7 @@ public enum Pokedex implements PokedexInterface {
 		else if (level == 2) 
 			System.out.println(this.name + "'s " + stat + " greatly rose!");
 		else if (level >= 3)
-			System.out.println(this.name + "'s " + stat + " drastically!");
+			System.out.println(this.name + "'s " + stat + " drastically rose!");
 		else if (level == -1)
 			System.out.println(this.name + "'s " + stat + " fell!");
 		else if (level == -2)

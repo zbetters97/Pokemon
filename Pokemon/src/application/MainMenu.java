@@ -81,7 +81,7 @@ public class MainMenu {
 				switch (choice) {
 					case 1: clearContent(); return choice;
 					case 2: clearContent(); return choice;
-					case 3: clearContent(); settingsMenu();	clearContent();					
+					case 3: clearContent(); settingsMenu();			
 						System.out.println("PLEASE SELECT MODE:\n"
 								+ "[1] ONE PLAYER\n"
 								+ "[2] TWO PLAYER\n"
@@ -98,6 +98,7 @@ public class MainMenu {
 				}
 			}
 			catch (Exception e) {
+				System.out.println(e);
 				Sleeper.print("ERROR: Input must be a number!");
 				System.out.print(">");
 				input.next();
@@ -127,10 +128,43 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: clearContent(); musicSetting(); return;
-					case 2: clearContent(); textSetting(); return;
-					case 3: clearContent(); soundSetting(); return;
-					case 4: clearContent(); levelSetting(); return;
+					case 1: clearContent(); musicSetting(); clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n"
+								+ "[1] MUSIC\n"
+								+ "[2] TEXT SPEED\n"
+								+ "[3] SOUNDS\n"
+								+ "[4] LEVELS\n"
+								+ "[5] BACK");
+						System.out.print(">");
+						break;
+						
+					case 2: clearContent(); textSetting(); clearContent();
+					System.out.println("PLEASE SELECT AN OPTION:\n"
+								+ "[1] MUSIC\n"
+								+ "[2] TEXT SPEED\n"
+								+ "[3] SOUNDS\n"
+								+ "[4] LEVELS\n"
+								+ "[5] BACK");
+						System.out.print(">");
+						break;
+					case 3: clearContent(); soundSetting(); clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n"
+								+ "[1] MUSIC\n"
+								+ "[2] TEXT SPEED\n"
+								+ "[3] SOUNDS\n"
+								+ "[4] LEVELS\n"
+								+ "[5] BACK");
+						System.out.print(">");
+						break;
+					case 4: clearContent(); levelSetting(); clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n"
+								+ "[1] MUSIC\n"
+								+ "[2] TEXT SPEED\n"
+								+ "[3] SOUNDS\n"
+								+ "[4] LEVELS\n"
+								+ "[5] BACK");
+						System.out.print(">");
+						break;
 					case 5: clearContent(); clearContent(); return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -139,6 +173,7 @@ public class MainMenu {
 				}
 			}
 			catch (Exception e) {
+				System.out.println(e);
 				Sleeper.print("ERROR: Input must be a number!");
 				System.out.print(">");
 				input.next();
@@ -325,7 +360,7 @@ public class MainMenu {
 				+ "[2] 25\n"
 				+ "[3] 50\n"
 				+ "[4] 100\n"
-				+ "[5] OFF\n"
+				+ "[5] DISABLED\n"
 				+ "[6] BACK");
 		System.out.print(">");
 		
@@ -355,7 +390,7 @@ public class MainMenu {
 					return;
 				case 5:
 					defaultLevel = -1;
-					Sleeper.print("DEFAULT LEVEL TURNED OFF", 1200);
+					Sleeper.print("DEFAULT LEVEL DISABLED", 1200);
 					return;
 				case 6:
 					clearContent();
@@ -448,17 +483,6 @@ public class MainMenu {
 	private static void selectParty() {
 		
 		int c = 0, choice = 0;	
-		/*
-		party1.add(Pokedex.getPokemon(4));
-		party1.add(Pokedex.getPokemon(29));
-		party1.add(Pokedex.getPokemon(32));
-		party1.add(Pokedex.getPokemon(33));
-		
-		party2.add(Pokedex.getPokemon(0));
-		party2.add(Pokedex.getPokemon(7));
-		party2.add(Pokedex.getPokemon(1));
-		party2.add(Pokedex.getPokemon(15));
-		*/
 		
 		while (c < partySize * 2) {
 								

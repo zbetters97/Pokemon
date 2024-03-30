@@ -5,7 +5,6 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-
 /*** SOUND CARD CLASS ***/
 public class SoundCard {
 	
@@ -19,6 +18,7 @@ public class SoundCard {
 			// retrieve sound file based on argument given
 			String path = new File("").getAbsolutePath() + File.separator + "lib" + 
 					File.separator + "sounds" + File.separator + soundfile + ".wav";	
+			
 		    AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
        
 		    music = AudioSystem.getClip();

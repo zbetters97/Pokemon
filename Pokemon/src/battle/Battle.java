@@ -51,7 +51,7 @@ public class Battle {
 		
 		pokemon1 = pokemonParty1.get(0); 
 		pokemon2 = pokemonParty2.get(0);
-		
+						
 		battle = new BattleEngine(pokemon1, pokemon2);
 				
 		turn();
@@ -354,64 +354,70 @@ public class Battle {
 				// if party is single type
 				if (party.getTypes() == null) {
 					
-					// loop through each type in target pokemon
-					for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {				
-					
-						// if target is single type
-						if (pokemon1.getTypes() == null) {	
+					// if target is single type
+					if (pokemon1.getTypes() == null) {	
+						
+						// loop through each type in target pokemon
+						for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {	
 							
 							// if type matches target's vulnerability
 							if (vulnType.toString().equals(party.getType().toString()))
 								pokemonList.put(party, party.getLevel());
-						}						
-						// if target is multi type
-						else {			
-							
-							// for each type in target
-							for (TypeEngine type : pokemon1.getTypes()) {
-								
-								// loop through each vulnerability in type
-								for (TypeEngine vuln : type.getVulnerability()) {									
-	
-									// if type matches target's vulnerability
-									if (vuln.toString().equals(party.getType().toString()))
-										pokemonList.put(party, party.getLevel());
-								}
-							}						
 						}
-					}
+					}					
+					// if target is multi type
+					else {			
+						
+						// for each type in target
+						for (TypeEngine type : pokemon1.getTypes()) {
+							
+							// loop through each vulnerability in type
+							for (TypeEngine vuln : type.getVulnerability()) {									
+
+								// if type matches target's vulnerability
+								if (vuln.toString().equals(party.getType().toString()))
+									pokemonList.put(party, party.getLevel());
+							}
+						}						
+					}					
 				}				
 				// if party is multi type
 				else { 
 										
-					// loop through each party type
-					for (TypeEngine partyType : party.getTypes()) {
+					// if target is single type
+					if (pokemon1.getTypes() == null) {	
 						
-						// loop through each vulnerability in target type
-						for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {			
+						// for each type in party
+						for (TypeEngine type : party.getTypes()) {
 							
-							// if target is single type
-							if (pokemon1.getTypes() == null) {
-								
+							// loop through each vulnerability in target pokemon
+							for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {	
+							
 								// if type matches target's vulnerability
-								if (vulnType.toString().equals(partyType.toString()))
+								if (vulnType.toString().equals(type.toString()))
 									pokemonList.put(party, party.getLevel());
-							}												
-							// if target is multi type
-							else {
-								
-								// for each type in target
-								for (TypeEngine type : pokemon1.getTypes()) {
-									
-									// loop through each vulnerability in type
-									for (TypeEngine vuln : type.getVulnerability()) {									
-	
-										// if type matches target's vulnerability
-										if (vuln.toString().equals(partyType.toString()))
-											pokemonList.put(party, party.getLevel());
-									}		
-								}
 							}
+						}
+						
+						
+					}					
+					// if target is multi type
+					else {			
+						
+						// for each type in party
+						for (TypeEngine parType : party.getTypes()) {
+
+							// for each type in target
+							for (TypeEngine tarType : pokemon1.getTypes()) {
+								
+								// loop through each vulnerability in type
+								for (TypeEngine vuln : tarType.getVulnerability()) {									
+	
+									// if type matches target's vulnerability
+									if (vuln.toString().equals(parType.toString()))
+										pokemonList.put(party, party.getLevel());
+								}
+							}		
 						}
 					}
 				}

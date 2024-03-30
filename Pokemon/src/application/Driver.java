@@ -227,6 +227,10 @@
  * 7/20/2023:
  * 		-Added CPU AI to select next best Pokemon in party
  * 		-Reduced clear content from 70 lines to 60
+ * 3/29/2024:
+ * 		-Cleaned up Settings menu functionality
+ * 		-Fixed bug in CPU select next Pokemon logic
+ * 		-Reworded Default Level Settings
  */	
 
 package application;

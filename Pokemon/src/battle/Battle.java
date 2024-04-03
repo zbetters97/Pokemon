@@ -21,7 +21,9 @@ public class Battle {
 	// create static scanner to receive user input	
 	private static Scanner input = new Scanner(System.in);	
 	private String name1, name2;
-	private int numPlayers;
+	private int numPlayers;	
+	private int[] playerOneItems, playerTwoItems;
+	
 	private static Pokedex pokemon1, pokemon2;
 	private ArrayList<Pokedex> pokemonParty1, pokemonParty2;
 	private BattleEngine battle;
@@ -36,7 +38,11 @@ public class Battle {
 		if (numPlayers < 1) numPlayers = 1;
 		else if (2 < numPlayers) numPlayers = 2;		
 		this.numPlayers = numPlayers;
-				
+		
+		// arrays to track item counts
+		this.playerOneItems = new int[]{3, 2, 1};
+		this.playerTwoItems = new int[]{3, 2, 1};
+		
 		this.pokemonParty1 = pokemonParty1;
 		this.pokemonParty2 = pokemonParty2;
 	}
@@ -200,8 +206,9 @@ public class Battle {
 						" | ACC " + m.getAccuracy() + " | TYPE " + m.getType());
 								
 			}
-			System.out.println("[" + ++counter + "] INFO");
-			System.out.println("[" + ++counter + "] SWAP");
+			System.out.println("[" + ++counter + "] MOVES INFO");
+			System.out.println("[" + ++counter + "] SWAP POKEMON");
+			System.out.println("[" + ++counter + "] USE AN ITEM");
 			System.out.println("[" + ++counter + "] RUN");
 			System.out.print(">");			
 			
@@ -209,23 +216,24 @@ public class Battle {
 				int choice = input.nextInt();
 				
 				// if choice is a valid move option
-				if (0 < choice && choice < counter - 2) {
+				if (0 < choice && choice < counter - 3) {
 					
 					Moves selectedMove = checkMove(choice, fighter.getMoveSet());
 					
 					if (selectedMove != null)
 						return selectedMove;
 				}
-				else if (choice == counter - 2) {
+				else if (choice == counter - 3) {
 					clearContent();
 					displayInfo(fighter);
 				}
-				else if (choice == counter - 1) {
+				else if (choice == counter - 2) {
 					
 					clearContent();
 					
 					Pokedex temp = swapFighter(player);
 					
+					// if player didn't select the BACK option
 					if (temp != null) {
 						if (player == 1) {
 							pokemon1 = temp;
@@ -238,11 +246,18 @@ public class Battle {
 						return null;
 					}					
 				}
+				else if (choice == counter - 1) {
+					
+					clearContent();		
+					
+					if (displayItems(fighter, player))
+						return null;
+				}
 				else if (choice == counter) {
 					clearContent();	
 					SoundCard.play("battle" + File.separator + "run");
 					Sleeper.print("Got away safely!", 1200);
-					System.exit(0);
+					System.exit(1);
 				}
 				else {
 					Sleeper.print("This is not a move!"); 	
@@ -257,78 +272,6 @@ public class Battle {
 		}
 	}
 	/** END DISPLAY MOVE METHOD **/
-
-	/** SWAP FIGHTER METHOD
-	  * Prompt user to choose another Pokemon in party to swap in
-	  * @param int current player
-	  * @return Pokedex new fighter
-	  **/
-	private Pokedex swapFighter(int player) {
-		
-		Sleeper.print("CHOOSE A POKEMON.", 700);
-		
-		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
-		
-		int counter = 0;
-		for (Pokedex p : pokemonParty) {	
-			System.out.printf("[" + ++counter + "] " + p.getName() + 
-				" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
-				((p.getType() == null) ? p.printTypes() : p.getType()) + 
-				"\n", p.getLevel());
-		}
-		System.out.println("[" + ++counter + "] BACK");
-		System.out.print(">");
-		
-		int choice = 0;
-		
-		while (true) {				
-			try { 
-				choice = input.nextInt(); 
-				
-				// choice must be a number from 0 to last element in list	
-												
-				if (0 < choice && choice < counter) {
-															
-					Pokedex newFighter = pokemonParty.get(choice - 1);
-					
-					if (newFighter.getName().equals(pokemon1.getName())) {
-						Sleeper.print(pokemon1.getName() + " is already in battle!");
-						System.out.print(">");
-					}
-					else {					
-						clearContent();
-						
-						if (player == 1)
-							Sleeper.print(name1 + ": GO, " + newFighter.getName() + "!");
-						else
-							Sleeper.print(name2 + ": GO, " + newFighter.getName() + "!");
-						
-						SoundCard.play("pokedex" + File.separator + newFighter.getName());
-						Sleeper.pause(1700);	
-						
-						clearContent();						
-						
-						return newFighter;	
-					}
-				}
-				else if (choice == counter) {
-					clearContent();
-					displayHP();
-					return null;			
-				}
-				else {
-					Sleeper.print("ERROR: This is not a valid selection!");
-					System.out.print(">");
-				}
-			}
-			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
-				System.out.print(">");
-				input.next();
-			}
-		}
-	}
-	/** END SWAP FIGHTER METHOD **/
 		
 	/** GET MOVE INFO METHOD
 	  * Print out description of each move in moveset 
@@ -372,7 +315,206 @@ public class Battle {
 			input.next();
 		}		
 	}
-	/** END GET MOVE INFO METHOD **/
+	/** END GET MOVE INFO METHOD **/	
+
+	/** SWAP FIGHTER METHOD
+	  * Prompt user to choose another Pokemon in party to swap in
+	  * @param int current player
+	  * @return Pokedex new fighter
+	  **/
+	private Pokedex swapFighter(int player) {
+		
+		Sleeper.print("SELECT A POKEMON TO SWAP IN:", 700);
+		
+		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
+		
+		int counter = 0;
+		for (Pokedex p : pokemonParty) {	
+			System.out.printf("[" + ++counter + "] " + p.getName() + 
+				" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
+				((p.getType() == null) ? p.printTypes() : p.getType()) + 
+				"\n", p.getLevel());
+		}
+		System.out.println("[" + ++counter + "] BACK");
+		System.out.print(">");
+		
+		int choice = 0;
+		
+		while (true) {				
+			try { 
+				choice = input.nextInt(); 
+				
+				// choice must be a number from 0 to last element in list													
+				if (0 < choice && choice < counter) {
+															
+					Pokedex newFighter = pokemonParty.get(choice - 1);
+					
+					if (newFighter.getName().equals(pokemon1.getName())) {
+						Sleeper.print(pokemon1.getName() + " is already in battle!");
+						System.out.print(">");
+					}
+					else {					
+						clearContent();
+						
+						if (player == 1)
+							Sleeper.print(name1 + ": GO, " + newFighter.getName() + "!");
+						else
+							Sleeper.print(name2 + ": GO, " + newFighter.getName() + "!");
+						
+						SoundCard.play("pokedex" + File.separator + newFighter.getName());
+						Sleeper.pause(1700);	
+						
+						clearContent();						
+						
+						return newFighter;	
+					}
+				}
+				else if (choice == counter) {
+					clearContent();
+					displayHP();
+					return null;			
+				}
+				else {
+					Sleeper.print("ERROR: This is not a valid selection!");
+					System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}
+	}
+	/** END SWAP FIGHTER METHOD **/
+	
+	/** DISPLAY ITEMS METHOD
+	  * Prompt user to select an item to heal Pokemon
+	  * @param Pokedex current fighter, int player
+	  * @return boolean if player selected BACK
+	  **/
+	private boolean displayItems(Pokedex fighter, int player) {
+		
+		// rolling counter to track items in player inventory
+		int iCount[];		
+		if (player == 1) iCount = playerOneItems;
+		else iCount = playerTwoItems;
+		
+		Sleeper.print("PLEASE SELECT AN ITEM TO USE ON " + fighter.getName() + ":", 700);
+		System.out.println("[1] POTION (x" + iCount[0] + ")\n"
+				+ "[2] HYPER POTION (x" + iCount[1] + ")\n"
+				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n"
+				+ "[4] BACK");
+		System.out.print(">");
+		
+		// loop until BACK is selected
+		int choice = 0;
+		while (true) {
+			
+			try { 
+				choice = input.nextInt(); 
+				
+				switch (choice) {
+					case 1: 
+						if (iCount[0] != 0) {
+							iCount[0] -= 1;
+							
+							clearContent(); 
+							healFighter(20, player);						
+							clearContent();
+							
+							return true;
+						}
+						else {
+							Sleeper.print("THERE ARE NO POTIONS LEFT!"); 
+							System.out.print(">");
+						}
+						break;						
+					case 2: 
+						if (iCount[1] != 0) {
+							iCount[1] -= 1;
+							
+							clearContent(); 
+							healFighter(120, player);						
+							clearContent();	
+							
+							return true;
+						}
+						else {
+							Sleeper.print("THERE ARE NO HYPER POTIONS LEFT!"); 
+							System.out.print(">");
+						}
+						break;
+					case 3: 
+						if (iCount[2] != 0) {
+							iCount[2] -= 1;
+							
+							clearContent();
+							healFighter(1000, player);		
+							clearContent();
+							
+							return true;
+						}
+						else {
+							Sleeper.print("THERE ARE NO FULL RESTORES LEFT!"); 
+							System.out.print(">");
+						}
+						break;
+					case 4: 
+						clearContent(); 
+						displayHP();
+						return false;
+					default:
+						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						System.out.print(">");
+						break;
+				}
+				if (player == 1) playerOneItems = iCount;
+				else playerTwoItems = iCount;
+			}
+			catch (Exception e) {
+				System.out.println(e);
+				Sleeper.print("ERROR: Input must be a number!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	/** END DISPLAY ITEMS METHOD **/
+	
+	/** HEAL FIGHTER METHOD
+	  * Applies potion healing to Pokemon HP
+	  * @param int hp to heal, int player
+	  **/
+	private void healFighter(int heal, int player) {
+		
+		Pokedex fighter = (player == 1) ? pokemon1 : pokemon2;
+		
+		int newHP = fighter.getHP() + heal;
+		
+		if (newHP > fighter.getBHP()) 
+			newHP = fighter.getBHP();		
+		
+		fighter.setHP(newHP);
+		
+		switch (heal) {
+			case 20:
+				Sleeper.print(((player == 1) ? name1 : name2) + "'s POTION restored " + 
+					fighter.getName() + "'s health!", 1700);
+				break;
+			case 120:
+				Sleeper.print(((player == 1) ? name1 : name2) + "'s HYPER POTION restored " + 
+						fighter.getName() + "'s health!", 1700);
+				break;
+			case 1000:
+				Sleeper.print(((player == 1) ? name1 : name2) + "'s FULL RESTORE restored " + 
+					fighter.getName() + "'s health!", 1700);
+				break;
+			default:
+				break;
+		}
+	}
+	/** END HEAL FIGHTER METHOD **/
 	
 	/** CHOOSE NEXT POKEMON METHOD
 	  * Prompt user to choose next Pokemon in party 

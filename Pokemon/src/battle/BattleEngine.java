@@ -91,7 +91,7 @@ public class BattleEngine {
 		// for each move in attacker's move set
 		for (Moves move : pokemon[1].getMoveSet()) {
 			
-			if (!move.isToSelf()) {
+			if (!move.isToSelf() && move.getpp() != 0) {
 				
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
@@ -108,7 +108,7 @@ public class BattleEngine {
 			int val = 1 + (int)(Math.random() * ((3 - 1) + 1));
 			if (val == 1) {
 				
-				int ranMove = 1 + (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));		
+				int ranMove = 1 + (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));	
 				ranMove -= 1;
 				
 				bestMove = pokemon[1].getMoveSet().get(ranMove);

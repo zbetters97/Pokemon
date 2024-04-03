@@ -235,8 +235,12 @@
  * 		-Added turn waiting functionality (ex: Solar Beam, Dig, Fly)
  * 		-Added the moves Dig and Fly
  * 		-Added 33% chance CPU does not select most powerful move
- * 4/3/2024:
  * 		-Implemented early stages of swap fighter functionality
+ * 4/3/2024:
+ * 		-Modified swap fighter functionality
+ * 		-Added potions to menu options
+ * 		-Reworded menu options
+ * 		-Cleaned up formatting
  */	
 
 package application;

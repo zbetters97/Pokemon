@@ -42,7 +42,7 @@ public class MainMenu {
 	
 		name1 = inputName(1);
 		name2 = (players == 1 ) ? "Red" : inputName(2);
-	
+		
 		selectPartySize();
 		
 		selectParty();

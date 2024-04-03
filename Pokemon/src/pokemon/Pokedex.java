@@ -166,8 +166,8 @@ public enum Pokedex {
         pokeMap.put(CHARMANDER, Arrays.asList(Moves.SCRATCH, Moves.EMBER, Moves.GROWL));
 		pokeMap.put(CHARMELEON, Arrays.asList(Moves.SLASH, Moves.QUICKATTACK, Moves.EMBER, 
 				Moves.FIREFANG));
-        pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONCLAW, Moves.DRAGONBREATH, Moves.FLAMETHROWER,
-        	Moves.FLAREBLITZ));
+        pokeMap.put(CHARIZARD, Arrays.asList(Moves.DRAGONBREATH, Moves.FLAMETHROWER, Moves.FLAREBLITZ,
+        	Moves.FLY));
         
 		pokeMap.put(SQUIRTLE, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.TAILWHIP));
         pokeMap.put(WARTORTLE, Arrays.asList(Moves.QUICKATTACK, Moves.WATERGUN, Moves.WATERPULSE));
@@ -193,8 +193,8 @@ public enum Pokedex {
         pokeMap.put(GEODUDE, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.DEFENSECURL));
         pokeMap.put(GRAVELER, Arrays.asList(Moves.TACKLE, Moves.ROCKTHROW, Moves.ROLLOUT, 
         		Moves.DEFENSECURL));
-        pokeMap.put(GOLEM, Arrays.asList(Moves.ROLLOUT, Moves.HEAVYSLAM, Moves.EARTHQUAKE,
-        		Moves.DOUBLEEDGE));
+        pokeMap.put(GOLEM, Arrays.asList(Moves.HEAVYSLAM, Moves.EARTHQUAKE, Moves.DOUBLEEDGE, 
+        		Moves.DIG));
         
         pokeMap.put(GASTLY, Arrays.asList(Moves.LICK, Moves.PAYBACK, Moves.HYPNOSIS));   
         pokeMap.put(HAUNTER, Arrays.asList(Moves.PAYBACK, Moves.HEX, Moves.CONFUSERAY,

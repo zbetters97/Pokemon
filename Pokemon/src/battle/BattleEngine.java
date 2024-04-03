@@ -31,7 +31,7 @@ public class BattleEngine {
 	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
 		
 		// array to hold fighting pokemon
-		pokemon = new Pokedex[2];
+		pokemon = new Pokedex[12];
 		
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
@@ -42,8 +42,38 @@ public class BattleEngine {
 	 * Swap in battle pokemon with new pokemon
 	 * @param new pokemon to swap in, int spot
 	 **/
-	public void swapPokemon(Pokedex newPokemon, int spot) {
-		pokemon[spot] = newPokemon;
+	public void swapPokemon(Pokedex newPokemon, int player) {
+						
+		int slot = 0;
+		
+		// loop through list of battle pokemon and find open slot
+		while (pokemon[slot] != null) {
+			
+			// if chosen pokemon exists in list...
+			if (pokemon[slot].getName() == newPokemon.getName()) {
+				
+				// re-assign to fighter slot
+				pokemon[player] = pokemon[slot];
+				
+				// and remove original slot
+				pokemon[slot] = null;
+				
+				return;
+			}
+			slot ++;
+			
+			// if reached end of list, break loop
+			if (slot == pokemon.length)
+				break;
+		}
+		
+		// if slot is open, assign new fighter...
+		pokemon[slot] = newPokemon;			
+		Pokedex temp = pokemon[player];
+		
+		// and swap fighter to old slot
+		pokemon[player] = pokemon[slot];
+		pokemon[slot] = temp;
 	}
 	/** END SWAP POKEMON METHOD **/
 	
@@ -62,6 +92,7 @@ public class BattleEngine {
 		for (Moves move : pokemon[1].getMoveSet()) {
 			
 			if (!move.isToSelf()) {
+				
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
 				
@@ -71,8 +102,20 @@ public class BattleEngine {
 		}
 		
 		// find max value in moves list based on value
-		if (!moves.isEmpty())			
-			bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
+		if (!moves.isEmpty()) {
+			
+			// 33% chance CPU selects random move instead of most powerful move
+			int val = 1 + (int)(Math.random() * ((3 - 1) + 1));
+			if (val == 1) {
+				
+				int ranMove = 1 + (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));		
+				ranMove -= 1;
+				
+				bestMove = pokemon[1].getMoveSet().get(ranMove);
+			}
+			else
+				bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
+		}
 		else
 			bestMove = pokemon[1].getMoveSet().get(0);
 		
@@ -88,15 +131,28 @@ public class BattleEngine {
 		
 		// if both pokemon are alive
 		if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
-				
+			
+			int numTurn = 0;			
+			
+			if (move1 == null && move2 == null)
+				numTurn = 3;
+			else if (move1 == null)
+				numTurn = 4;
+			else if (move2 == null)
+				numTurn = 5;
 			// 1 if pokemon1 moves first, 2 if pokemon2 moves first
-			int numTurn = getTurn(move1, move2);
+			else
+				numTurn = getTurn(move1, move2);
 			
 			if (numTurn == 1) 
 				turn(0, 1, move1, move2);	
-			else 
+			else if (numTurn == 2)
 				turn(1, 0, move2, move1);	
-										
+			else if (numTurn == 4)
+				turn(1, 0, move2);
+			else if (numTurn == 5)
+				turn(0, 1, move1);
+		
 			// check if either fighter has status damage
 			statusDamage();
 		}
@@ -141,18 +197,117 @@ public class BattleEngine {
 	private void turn(int pk1, int pk2, Moves move1, Moves move2) {
 
 		// if attacker can fight
-		if (canTurn(pk1)) 
-			attack(pk1, pk2, move1);
+		if (canTurn(pk1)) {
+			
+			// if move takes 2 turns
+			if (move1.getNumTurns() == 2) {
+				
+				// output delay string
+				Sleeper.print(pokemon[pk1].getName() + " used " + move1.getName() + "!", 1200);
+				Sleeper.print(move1.getDelay(), 1200);		
+								
+				// reduce number of turns to wait
+				move1.setNumTurns(1);
+				
+				clearContent();
+			}
+			// if move takes 2 turns but is ready
+			else if (move1.getNumTurns() == 1) {
+				
+				// reset turns to wait
+				move1.setNumTurns(2);
+				
+				attack(pk1, pk2, move1, move2);
+			}
+			else 
+				attack(pk1, pk2, move1, move2);
+		}
 		
 		// target becomes attacker if battle not over
 		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
 					
 			// if target can fight
-			if (canTurn(pk2)) 
-				attack(pk2, pk1, move2);			
+			if (canTurn(pk2)) {
+				
+				// if move takes 2 turns
+				if (move2.getNumTurns() == 2) {
+					
+					// output delay string
+					Sleeper.print(pokemon[pk2].getName() + " used " + move2.getName() + "!", 1200);
+					Sleeper.print(move2.getDelay(), 1200);
+					clearContent();
+					
+					// reduce number of turns to wait
+					move2.setNumTurns(1);
+				}
+				// if move takes 2 turns but is ready
+				else if (move2.getNumTurns() == 1) {
+					
+					// reset turns to wait
+					move2.setNumTurns(2);
+					
+					attack(pk2, pk1, move2, move1);
+				}
+				else 
+					attack(pk2, pk1, move2, move1);
+			}
 		}
 	}
-	/** END TURN METHOD **/
+	/** END TURN METHOD **/	
+	
+	
+	private void turn(int pk1, int pk2, Moves move) {
+		
+		// if target can fight
+		if (canTurn(pk1)) {
+			
+			// if move takes 2 turns
+			if (move.getNumTurns() == 2) {
+				
+				// output delay string
+				Sleeper.print(pokemon[pk1].getName() + " used " + move.getName() + "!", 1200);
+				Sleeper.print(move.getDelay(), 1200);
+				clearContent();
+				
+				// reduce number of turns to wait
+				move.setNumTurns(1);
+			}
+			// if move takes 2 turns but is ready
+			else if (move.getNumTurns() == 1) {
+				
+				// reset turns to wait
+				move.setNumTurns(2);
+				
+				attack(pk1, pk2, move, null);
+			}
+			else 
+				attack(pk1, pk2, move, null);
+		}
+	}
+	/** END TURN METHOD **/	
+	
+	
+
+	/** HAS DELAYED MOVE METHOD
+	 * Check if a move is waiting and return which player 
+	 * @param trainer 1 move, trainer 2 move
+	 * @return 3 if both, 1 if player 1, 2 if player 2
+	 **/
+	public int hasDelayedMove(Moves move1, Moves move2) {		
+		
+		if (move1 == null || move2 == null)
+			return 0;
+		
+		if (move1.getNumTurns() == 1 && move2.getNumTurns() == 1)
+			return 3;
+		else if (move1.getNumTurns() == 1)
+			return 1;
+		else if (move2.getNumTurns() == 1)
+			return 2;
+		
+		return 0;
+	}
+	/** END DELAYED MOVE METHOD **/	
 	
 	/** CAN TURN METHOD 
 	 * Check status condition to check if pokemon is able to turn 
@@ -207,7 +362,7 @@ public class BattleEngine {
 					return true;
 			}
 		}	
-		else
+		else 
 			return true;
 	}
 	/** END CAN TURN METHOD **/	
@@ -312,7 +467,7 @@ public class BattleEngine {
 	 * Handle selected move, calculate damage, and apply it to target
 	 * @param number of attacker, number of target, move of attacker
 	 **/
-	private void attack(int atk, int trg, Moves move) {
+	private void attack(int atk, int trg, Moves move, Moves trgMove) {
 		
 		// confirm move exists in fighter's moveset
 		if (moveIsValid(atk, move)) {
@@ -321,10 +476,10 @@ public class BattleEngine {
 			SoundCard.play("//moves//" + move.getName(), true);
 			
 			// decrease move pp
-			move.setpp(move.getpp() - 1);			
-				        
+			move.setpp(move.getpp() - 1);	
+			
 	        // if attack lands
-			if (isHit(atk, move)) {
+			if (isHit(atk, move, trgMove)) {
 												
 				if (move.getMType().equals("Status")) {
 					
@@ -410,6 +565,7 @@ public class BattleEngine {
 	 * @return true if valid, false if not
 	 **/
 	private boolean moveIsValid(int atk, Moves move) {
+		
 		// loop through fighter's moveset
 		for (Moves m : pokemon[atk].getMoveSet()) {
 			
@@ -482,7 +638,14 @@ public class BattleEngine {
 	 * @param number of attacker, selected move
 	 * @return true if attack lands, false if not
 	 **/
-	private boolean isHit(int atk, Moves move) {
+	private boolean isHit(int atk, Moves move, Moves trgMove) {
+		
+		if (trgMove == null)
+			return true;
+		
+		// if target used delayed move and delayed move protects target		
+		if (trgMove.getNumTurns() == 1 && !trgMove.getCanHit())
+			return false;
 				
 		// if move never misses, return true
 		if (move.getAccuracy() == -1) { return true; }

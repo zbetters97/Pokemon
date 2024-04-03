@@ -231,6 +231,12 @@
  * 		-Cleaned up Settings menu functionality
  * 		-Fixed bug in CPU select next Pokemon logic
  * 		-Reworded Default Level Settings
+ * 4/2/2024:
+ * 		-Added turn waiting functionality (ex: Solar Beam, Dig, Fly)
+ * 		-Added the moves Dig and Fly
+ * 		-Added 33% chance CPU does not select most powerful move
+ * 4/3/2024:
+ * 		-Implemented early stages of swap fighter functionality
  */	
 
 package application;

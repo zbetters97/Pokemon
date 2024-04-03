@@ -24,6 +24,7 @@ public enum Moves {
 	CRUNCH ("Crunch", "Physical", TypeEngine.dark, 15, 80, 100, "The user crunches up the foe with sharp fangs."),
 	DARKPULSE ("Dark Pulse", "Special", TypeEngine.dark, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
 	DEFENSECURL ("Defense Curl", "Attribute", TypeEngine.normal, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
+	DIG ("Dig", "Physical", TypeEngine.flying, 10, 80, 100, 2, false, "The Pokemon dug into the ground!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
 	DOUBLEEDGE ("Double Edge", "Physical", TypeEngine.steel, 10, 80, 100, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
 	DOUBLEKICK ("Double Kick", "Physical", TypeEngine.fighting, 35, 60, 100, "The foe is quickly kicked twice in succession using both feet."),
 	DRAGONBREATH ("Dragon Breath", "Special", TypeEngine.dragon, 20, 60, 100, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target."),
@@ -38,6 +39,7 @@ public enum Moves {
 	FLAMETHROWER ("Flamethrower", "Special", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 135, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
 	FLAREBLITZ ("Flare Blitz", "Physical", TypeEngine.fire, StatusEngine.burn, 0.10, 15, 180, 100, "The foe is scorched with an intense blast of fire. The target may also be left with a burn."),
 	FLASHCANNON ("Flash Cannon", "Special", TypeEngine.steel, 10, 80, 100, "The user gathers all its light energy and releases it at once."),
+	FLY ("Fly", "Physical", TypeEngine.flying, 15, 90, 95, 2, false, "The Pokemon took flight!", "The user soars, then strikes on the second turn. It can also be used for flying to any familiar town."),
 	GIGADRAIN ("Giga Drain", "Special", TypeEngine.grass, 10, 60, 100, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target."),
 	GROWL ("Growl", "Attribute", TypeEngine.normal, false, 40, 100, -1, Arrays.asList("attack"), "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered."),
 	HEAVYSLAM ("Heavy Slam", "Physical", TypeEngine.normal, 20, 80, 75, "The user slams into the target with its heavy body."),
@@ -76,7 +78,7 @@ public enum Moves {
 	SKYUPPERCUT ("Sky Uppercut", "Physical", TypeEngine.fighting, 15, 120, 100, "The user attacks the foe with an uppercut thrown skyward with force."),
 	SLAM ("Slam", "Physical", TypeEngine.normal, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
 	SLASH ("Slash", "Physical", TypeEngine.normal, 20, 70, 100, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
-	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
+	SOLARBEAM ("Solar Beam", "Special", TypeEngine.grass, 10, 180, 100, 2, true, "Solar Beam is charging...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
 	SURF ("Surf", "Special", TypeEngine.water, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing water."),
 	TACKLE ("Tackle", "Physical", TypeEngine.normal, 35, 40, 100, "A physical attack in which the user charges and slams into the foe with its whole body."),
 	TAILWHIP ("Tail Whip", "Attribute", TypeEngine.normal, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),
@@ -110,11 +112,35 @@ public enum Moves {
 	private int accuracy;
 	private int power;
 	private int level;
+	private int numTurns;
+	private boolean canHit;
+	private String delay;
 	private List<String> stats;
 	private boolean goFirst;
 	/** END INITIALIZE VALUES **/
 	
 	/** CONSTRUCTORS **/
+	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.pp = pp;
+		this.accuracy = accuracy;
+		this.power = power;
+		this.info = info;
+	}	
+	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, int numTurns, boolean canHit, String delay, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.pp = pp;
+		this.power = power;
+		this.accuracy = accuracy;
+		this.numTurns = numTurns;
+		this.canHit = canHit;
+		this.delay = delay;
+		this.info = info;
+	}	
 	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst, String info) {
 		this.name = name;
 		this.mtype = mtype;
@@ -123,15 +149,6 @@ public enum Moves {
 		this.power = power;
 		this.accuracy = accuracy;
 		this.goFirst = goFirst;
-		this.info = info;
-	}	
-	Moves (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, String info) {
-		this.name = name;
-		this.mtype = mtype;
-		this.type = type;
-		this.pp = pp;
-		this.accuracy = accuracy;
-		this.power = power;
 		this.info = info;
 	}	
 	Moves (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy, String info) {
@@ -200,6 +217,15 @@ public enum Moves {
 	public int getPower() {	return power; }
 	public void setPower(int power) { this.power = power; }
 	
+	public int getNumTurns() {	return numTurns; }
+	public void setNumTurns(int numTurns) { this.numTurns = numTurns; }
+	
+	public boolean getCanHit() { return canHit; }
+	public void setCanHit(boolean canHit) { this.canHit = canHit; }
+	
+	public String getDelay() { return delay; }
+	public void setDelay(String delay) { this.delay = delay; }
+	
 	public String getInfo() {	return info; }
 	public void setInfo(String info) { this.info = info; }
 	
@@ -211,6 +237,5 @@ public enum Moves {
 	
 	public List<String> getStats() { return stats; }
 	public void setStats(List<String> stats) { this.stats = stats; }
-	/** END GETTERS AND SETTERS **/
 }
 /*** EDN POKEDEX ENUM CLASS ***/

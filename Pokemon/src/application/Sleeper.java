@@ -3,6 +3,7 @@ package application;
 /*** SLEEPER CLASS ***/
 public class Sleeper {
 	
+	// default text speed
 	private static int speed = 15;
 	
 	/** SET SPEED METHOD **/

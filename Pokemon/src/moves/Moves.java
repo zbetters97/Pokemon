@@ -24,7 +24,7 @@ public enum Moves {
 	CRUNCH ("Crunch", "Physical", TypeEngine.dark, 15, 80, 100, "The user crunches up the foe with sharp fangs."),
 	DARKPULSE ("Dark Pulse", "Special", TypeEngine.dark, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
 	DEFENSECURL ("Defense Curl", "Attribute", TypeEngine.normal, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
-	DIG ("Dig", "Physical", TypeEngine.flying, 10, 80, 100, 2, false, "The Pokemon dug into the ground!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
+	DIG ("Dig", "Physical", TypeEngine.ground, 10, 80, 100, 2, false, "The Pokemon dug into the ground!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
 	DOUBLEEDGE ("Double Edge", "Physical", TypeEngine.steel, 10, 80, 100, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
 	DOUBLEKICK ("Double Kick", "Physical", TypeEngine.fighting, 35, 60, 100, "The foe is quickly kicked twice in succession using both feet."),
 	DRAGONBREATH ("Dragon Breath", "Special", TypeEngine.dragon, 20, 60, 100, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target."),

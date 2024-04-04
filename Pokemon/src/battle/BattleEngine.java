@@ -18,6 +18,7 @@ public class BattleEngine {
 	
 	private Pokedex winningPokemon;
 	private Pokedex[] pokemon;
+	private int[] cpuItems;
 	public boolean swap = false;
 	
 	/** GETTERS AND SETTERS **/
@@ -35,6 +36,8 @@ public class BattleEngine {
 		
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
+		
+		this.cpuItems = new int[]{3, 2};
 	}
 	/** END CONSTRUCTOR **/
 
@@ -82,6 +85,48 @@ public class BattleEngine {
 	 * @return most powerful move
 	 **/
 	public Moves cpuSelectMove() {
+								
+		// if cpu health is low
+		boolean isHPLow = ((double) pokemon[1].getHP() / pokemon[1].getBHP() < 0.20);
+		if (isHPLow) {
+						
+			int newHP;
+						
+			// if super potion fully heals
+			if (pokemon[1].getHP() + 60 >= pokemon[1].getBHP()) {
+				
+				// if super potion is available
+				if (cpuItems[0] != 0) {
+					
+					// use super potion
+					newHP = pokemon[1].getHP() + 60;
+					cpuItems[0] -= 1;
+					
+					if (newHP > pokemon[1].getBHP()) 
+						newHP = pokemon[1].getBHP();	
+					
+					pokemon[1].setHP(newHP);
+					
+					// no move selected
+					return null;
+				}
+				// if hyper potion is available
+				if (cpuItems[1] != 0) {
+					
+					// use hyper potion
+					newHP = pokemon[1].getHP() + 120;
+					cpuItems[0] -= 1;
+					
+					if (newHP > pokemon[1].getBHP()) 
+						newHP = pokemon[1].getBHP();	
+					
+					pokemon[1].setHP(newHP);
+					
+					// no move selected
+					return null;
+				}
+			}		
+		}
 		
 		Moves bestMove;
 		

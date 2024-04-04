@@ -241,6 +241,13 @@
  * 		-Added potions to menu options
  * 		-Reworded menu options
  * 		-Cleaned up formatting
+ * 4/4/2024:
+ * 		-Added CPU Super / Hyper potion functionality
+ * 		-Added menu select sound effect to other menu options
+ * 		-Changed "BACK" to "<- BACK" in menu options
+ * 		-Reworded QUIT menu option to POWER OFF
+ * 		-Fixed Dig's type engine from flying to ground
+ * 		-Cleaned up comments and formatting
  */	
 
 package application;

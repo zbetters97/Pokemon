@@ -27,24 +27,26 @@ public class MainMenu {
 	  **/
 	public static void load() {
 		
-		clearContent();	
+		// arraylists to hold Pokemon party for both players
+		party1 = new ArrayList<>(); party2 = new ArrayList<>();
 		
-		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
+		// default level -1 if not set
+		defaultLevel = -1;
+		file =  "15battle-ssbm-stadium";
+		
+		// menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
 		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
 		menuMusic.playMusic();
 
-		// default values	
-		party1 = new ArrayList<>(); party2 = new ArrayList<>();
-		defaultLevel = -1;
-		file =  "12battle-pc-first";
+		clearContent();	
 		
-		players = selectMode();
-	
+		// players can only be set to 1 or 2
+		players = mainMenu();
+		
 		name1 = inputName(1);
 		name2 = (players == 1 ) ? "Red" : inputName(2);
 		
-		selectPartySize();
-		
+		selectPartySize();		
 		selectParty();
 		
 		menuMusic.stopMusic();
@@ -62,13 +64,13 @@ public class MainMenu {
 	  * Prompt player to select a setting from the main menu
 	  * @return choice
 	  **/
-	private static int selectMode() {
+	private static int mainMenu() {
 								
-		System.out.println("PLEASE SELECT MODE:\n"
+		System.out.println("PLEASE SELECT MODE:\n\n"
 				+ "[1] ONE PLAYER\n"
 				+ "[2] TWO PLAYER\n"
 				+ "[3] SETTINGS\n"
-				+ "[4] QUIT");
+				+ "[4] POWER OFF");
 		System.out.print(">");
 		
 		// loop until QUIT is selected
@@ -81,16 +83,20 @@ public class MainMenu {
 				switch (choice) {
 					case 1: clearContent(); return choice;
 					case 2: clearContent(); return choice;
-					case 3: clearContent(); settingsMenu();			
-						System.out.println("PLEASE SELECT MODE:\n"
+					case 3: 
+						clearContent(); 					
+						settingsMenu();			
+						System.out.println("PLEASE SELECT MODE:\n\n"
 								+ "[1] ONE PLAYER\n"
 								+ "[2] TWO PLAYER\n"
 								+ "[3] SETTINGS\n"
-								+ "[4] QUIT");
+								+ "[4] POWER OFF");
 						System.out.print(">");
 						break;
 					case 4: 
-						Sleeper.print("Shutting down..."); 
+						clearContent();
+						Sleeper.setSpeed(60);
+						Sleeper.print("SHUTTING DOWN...", 1700); 
 						System.exit(0); 
 					default: 
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -98,7 +104,6 @@ public class MainMenu {
 				}
 			}
 			catch (Exception e) {
-				System.out.println(e);
 				Sleeper.print("ERROR: Input must be a number!");
 				System.out.print(">");
 				input.next();
@@ -112,12 +117,12 @@ public class MainMenu {
 	  **/
 	private static void settingsMenu() {
 		
-		System.out.println("PLEASE SELECT AN OPTION:\n"
+		System.out.println("PLEASE SELECT AN OPTION:\n\n"
 				+ "[1] MUSIC\n"
 				+ "[2] TEXT SPEED\n"
 				+ "[3] SOUNDS\n"
 				+ "[4] LEVELS\n"
-				+ "[5] BACK");
+				+ "[5] <- BACK");
 		System.out.print(">");
 		
 		// loop until BACK is selected
@@ -128,44 +133,55 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: clearContent(); musicSetting(); clearContent();
-						System.out.println("PLEASE SELECT AN OPTION:\n"
+					case 1: 
+						clearContent(); 
+						musicSetting(); 
+						clearContent();						
+						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] MUSIC\n"
 								+ "[2] TEXT SPEED\n"
 								+ "[3] SOUNDS\n"
 								+ "[4] LEVELS\n"
-								+ "[5] BACK");
+								+ "[5] <- BACK");
 						System.out.print(">");
-						break;
-						
-					case 2: clearContent(); textSetting(); clearContent();
-					System.out.println("PLEASE SELECT AN OPTION:\n"
+						break;						
+					case 2: 
+						clearContent(); 
+						textSetting(); 
+						clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] MUSIC\n"
 								+ "[2] TEXT SPEED\n"
 								+ "[3] SOUNDS\n"
 								+ "[4] LEVELS\n"
-								+ "[5] BACK");
+								+ "[5] <- BACK");
 						System.out.print(">");
 						break;
-					case 3: clearContent(); soundSetting(); clearContent();
-						System.out.println("PLEASE SELECT AN OPTION:\n"
+					case 3: 
+						clearContent(); 
+						soundSetting(); 
+						clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] MUSIC\n"
 								+ "[2] TEXT SPEED\n"
 								+ "[3] SOUNDS\n"
 								+ "[4] LEVELS\n"
-								+ "[5] BACK");
+								+ "[5] <- BACK");
 						System.out.print(">");
 						break;
-					case 4: clearContent(); levelSetting(); clearContent();
-						System.out.println("PLEASE SELECT AN OPTION:\n"
+					case 4: 
+						clearContent();
+						levelSetting(); 
+						clearContent();
+						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] MUSIC\n"
 								+ "[2] TEXT SPEED\n"
 								+ "[3] SOUNDS\n"
 								+ "[4] LEVELS\n"
-								+ "[5] BACK");
+								+ "[5] <- BACK");
 						System.out.print(">");
 						break;
-					case 5: clearContent(); clearContent(); return;
+					case 5: clearContent(); return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
 						System.out.print(">");
@@ -173,7 +189,6 @@ public class MainMenu {
 				}
 			}
 			catch (Exception e) {
-				System.out.println(e);
 				Sleeper.print("ERROR: Input must be a number!");
 				System.out.print(">");
 				input.next();
@@ -194,43 +209,45 @@ public class MainMenu {
 		LinkedHashMap<Integer, String> musicDict = new LinkedHashMap<>();
 		
 		// get all songs from music folder
-		String path = new File("").getAbsolutePath() + File.separator + "lib" + 
+		String musicPath = new File("").getAbsolutePath() + File.separator + "lib" + 
 				File.separator + "sounds" + File.separator + "music";
-		File directoryPath = new File(path);
+		File musicDirectory = new File(musicPath);
 		
 		// store all music files into array
-		File filesList[] = directoryPath.listFiles();
+		File musicFiles[] = musicDirectory.listFiles();
 		
 		// for each song in directory		
-		for (int i = 0; i < filesList.length; i++) {			
+		for (int i = 0; i < musicFiles.length; i++) {			
 			
-			// add song names to list
-			String music = filesList[i].getName();
+			// add song name to list
+			String music = musicFiles[i].getName();
 			musicDict.put(i, music);
 			
 			// format music
-			String song = filesList[i].getName()
+			String song = musicFiles[i].getName()
 					.replace("battle-", "")
 					.replace(".wav", "")
 					.replace("-", ": ")
 					.replace("_", ", ")
 					.toUpperCase();
 			
-			// add space after song index
-			StringBuilder nSong = new StringBuilder(song);
-			nSong.insert(2, ']'); nSong.insert(3, ' ');	
+			// add closing bracket and space after song index #
+			StringBuilder formattedSong = new StringBuilder(song);
+			formattedSong.insert(2, ']'); formattedSong.insert(3, ' ');	
 			
 			// add to array list
-			musicList.add(nSong.toString());
+			musicList.add(formattedSong.toString());
 			Collections.sort(musicList);
 		}		
 		
-		Sleeper.print("PLEASE SELECT MUSIC:", 700);		
+		Sleeper.print("PLEASE SELECT MUSIC:\n", 700);		
 		
 		System.out.println("[00] NONE");
+		
 		for (int i = 0; i < musicList.size(); i++) 
-			System.out.println("[" + musicList.get(i));		
-		System.out.println("[18] BACK");			
+			System.out.println("[" + musicList.get(i));	
+		
+		System.out.println("[" + (musicList.size() + 1) + "] <- BACK");		
 		System.out.print(">");
 		
 		while (true) {
@@ -270,7 +287,7 @@ public class MainMenu {
 	  **/
 	private static void textSetting() {
 				
-		System.out.println("TEXT SPEED:\n"
+		System.out.println("TEXT SPEED:\n\n"
 				+ "[1] SLOW\n"
 				+ "[2] MEDIUM\n"
 				+ "[3] FAST");
@@ -315,7 +332,7 @@ public class MainMenu {
 	  **/
 	private static void soundSetting() {
 				
-		System.out.println("SOUND EFFECTS:\n"
+		System.out.println("SOUND EFFECTS:\n\n"
 				+ "[1] ON\n"
 				+ "[2] OFF");
 		System.out.print(">");
@@ -355,13 +372,13 @@ public class MainMenu {
 	  **/
 	private static void levelSetting() {
 					
-		System.out.println("DEFAULT LEVELS:\n"
+		System.out.println("DEFAULT LEVELS:\n\n"
 				+ "[1] 10\n"
 				+ "[2] 25\n"
 				+ "[3] 50\n"
 				+ "[4] 100\n"
 				+ "[5] DISABLED\n"
-				+ "[6] BACK");
+				+ "[6] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -523,13 +540,13 @@ public class MainMenu {
 			// assign fighter to party found at given index
 			Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
 			
+			// play pokemon cry
+			SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
+			
 			if (c % 2 == 0) 
 				party1.add(selectedPokemon);
 			else 
 				party2.add(selectedPokemon);
-			
-			// play pokemon cry
-			SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
 		
 			c++; clearContent();
 		}
@@ -542,7 +559,7 @@ public class MainMenu {
 	  **/
 	private static int displayPokemon() {
 		
-		int counter = 0;			
+		int counter = 0;		
 		for (Pokedex p : Pokedex.getPokedex()) {	
 			
 			p.setLevel(defaultLevel);

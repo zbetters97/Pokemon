@@ -52,9 +52,11 @@ public class SoundCard {
 		
 		if (active) {
 			try {
+				
 				// retrieve sound file based on argument given
 				String path = new File("").getAbsolutePath() + File.separator + "lib" + 
 						File.separator + "sounds" + File.separator + arg + ".wav";	
+				
 	            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
 	            
 	            Clip c = AudioSystem.getClip();            

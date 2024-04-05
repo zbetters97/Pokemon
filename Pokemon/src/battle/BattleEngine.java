@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.lang.Math;
 
 import application.Sleeper;
 import application.SoundCard;
@@ -85,47 +86,38 @@ public class BattleEngine {
 	 * @return most powerful move
 	 **/
 	public Moves cpuSelectMove() {
-								
+				
 		// if cpu health is low
 		boolean isHPLow = ((double) pokemon[1].getHP() / pokemon[1].getBHP() < 0.20);
 		if (isHPLow) {
-						
-			int newHP;
-						
+							
 			// if super potion fully heals
 			if (pokemon[1].getHP() + 60 >= pokemon[1].getBHP()) {
 				
 				// if super potion is available
 				if (cpuItems[0] != 0) {
-					
-					// use super potion
-					newHP = pokemon[1].getHP() + 60;
-					cpuItems[0] -= 1;
-					
-					if (newHP > pokemon[1].getBHP()) 
-						newHP = pokemon[1].getBHP();	
-					
-					pokemon[1].setHP(newHP);
-					
-					// no move selected
+					healCPU(60, 0);
 					return null;
 				}
 				// if hyper potion is available
-				if (cpuItems[1] != 0) {
-					
-					// use hyper potion
-					newHP = pokemon[1].getHP() + 120;
-					cpuItems[0] -= 1;
-					
-					if (newHP > pokemon[1].getBHP()) 
-						newHP = pokemon[1].getBHP();	
-					
-					pokemon[1].setHP(newHP);
-					
-					// no move selected
+				if (cpuItems[1] != 0) {					
+					healCPU(120, 1);		
 					return null;
 				}
 			}		
+			// try hyper potion instead
+			else {
+				// if hyper potion is available
+				if (cpuItems[1] != 0) {
+					healCPU(120, 1);
+					return null;
+				}
+				// if super potion is available
+				if (cpuItems[0] != 0) {					
+					healCPU(60, 0);		
+					return null;
+				}
+			}
 		}
 		
 		Moves bestMove;
@@ -167,6 +159,24 @@ public class BattleEngine {
 		return bestMove;
 	}
 	/** END CPU SELECT MOVE METHOD **/
+	
+	/** HEAL CPU METHOD 
+	 * Restore health of CPU Pokemon
+	 * @param potion healing hp
+	 **/
+	private void healCPU(int newHP, int item) {
+		
+		int hp = pokemon[1].getHP() + newHP;
+		cpuItems[item] -= 1;
+		
+		if (hp > pokemon[1].getBHP()) 
+			hp = pokemon[1].getBHP();	
+		
+		pokemon[1].setHP(hp);
+		
+		return;
+	}
+	/** END HEAL CPU METHOD **/
 	
 	/** MOVE METHOD 
 	 * Find which trainer moves first and initiate turn

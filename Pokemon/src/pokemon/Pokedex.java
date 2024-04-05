@@ -53,7 +53,11 @@ public enum Pokedex {
 	BLAZIKEN ("Blaziken", 257, Arrays.asList(TypeEngine.fire, TypeEngine.fighting), 36, 80, 120, 70, 110, 70, 80, -1, 265, 3),
 	MUDKIP ("Mudkip", 258, TypeEngine.water, 5, 50, 70, 50, 50, 50, 40, 16, 62, 1),
 	MARSHTOMP ("Marshtomp", 259, Arrays.asList(TypeEngine.water, TypeEngine.ground), 16, 70, 85, 70, 60, 70, 50, 36, 142, 2),
-	SWAMPERT ("Swampert", 260, Arrays.asList(TypeEngine.water, TypeEngine.ground), 36, 100, 110, 90, 85, 90, 60, -1, 268, 3);	
+	SWAMPERT ("Swampert", 260, Arrays.asList(TypeEngine.water, TypeEngine.ground), 36, 100, 110, 90, 85, 90, 60, -1, 268, 3),
+	KYOGRE ("Kyogre", 382, TypeEngine.water, 50, 100, 100, 90, 150, 140, 90, -1, 335, 3), 
+	GROUDON ("Groudon", 383, TypeEngine.ground, 50, 100, 150, 140, 100, 90, 90, -1, 335, 3),
+	RAYQUAZA ("Rayquaza", 384, Arrays.asList(TypeEngine.dragon, TypeEngine.flying), 50, 105, 150, 90, 150, 90, 95, -1, 340, 3);
+	
 	/** END INITIALIZE ENUMS **/
 		
 	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
@@ -233,6 +237,12 @@ public enum Pokedex {
         pokeMap.put(SWAMPERT, Arrays.asList(Moves.SURF, Moves.MUDBOMB, Moves.MUDDYWATER, 
         		Moves.EARTHQUAKE));
         
+        pokeMap.put(KYOGRE, Arrays.asList(Moves.HYDROPUMP, Moves.SURF, Moves.THUNDER, 
+        		Moves.CALMMIND));
+        pokeMap.put(GROUDON, Arrays.asList(Moves.EARTHQUAKE, Moves.SOLARBEAM, Moves.FIREFANG, 
+        		Moves.DRAGONCLAW));
+        pokeMap.put(RAYQUAZA, Arrays.asList(Moves.DRAGONCLAW, Moves.FLY, Moves.EXTREMESPEED, 
+        		Moves.BLIZZARD));        
         
         // if pokemon not already mapped to moveset
         if (pokemon.getMoveSet().isEmpty()) {
@@ -343,6 +353,16 @@ public enum Pokedex {
 			 s += t.toString();		
 			 if (i-- != 0)
 				 s += " / ";
+		}
+		return s;
+	}
+	public String printTypesShort() {
+		String s = "";		
+		int i = types.size() - 1;
+		for (TypeEngine t : types) {
+			 s += t.toString().charAt(0);		
+			 if (i-- != 0)
+				 s += "/";
 		}
 		return s;
 	}

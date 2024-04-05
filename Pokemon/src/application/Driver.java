@@ -248,6 +248,13 @@
  * 		-Reworded QUIT menu option to POWER OFF
  * 		-Fixed Dig's type engine from flying to ground
  * 		-Cleaned up comments and formatting
+ * 4/5/2024:
+ * 		-Added select starting fighter functionality
+ * 		-Added CPU random party select functionality
+ * 		-Added the following Pokemon: Kyogre, Groudon, and Rayquaza
+ * 		-Added Blizzard and Extreme Speed
+ * 		-Added new song: PC Multiplayer Battle
+ * 		-Fixed broken move sound effect files
  */	
 
 package application;

@@ -38,18 +38,22 @@ public class SoundCard {
 	
 	/** PLAY/STOP MUSIC METHODS **/
 	public void playMusic() {
-		music.start();
-		music.loop(Clip.LOOP_CONTINUOUSLY);
+		try {
+			music.start();
+			music.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+		catch (Exception e) {}
 	}			
 	public void stopMusic() {
-		music.stop();
+		try { music.stop(); }
+		catch (Exception e) { }
 	}
 	/** END PLAY/STOP MUSIC METHODS **/
 	
 	/** SOUND CARD METHOD **/
 	// optional parameter to wait until finished playing //
 	public static void play(String arg, boolean... hold) {
-		
+						
 		if (active) {
 			try {
 				

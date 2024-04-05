@@ -26,12 +26,12 @@ public class Battle {
 	private int[] playerOneItems, playerTwoItems;
 	
 	private static Pokedex pokemon1, pokemon2;
-	private ArrayList<Pokedex> pokemonParty1, pokemonParty2;
+	private ArrayList<Pokedex> party1, party2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
 	public Battle(String name1, String name2, int numPlayers, 
-			ArrayList<Pokedex> pokemonParty1, ArrayList<Pokedex> pokemonParty2) {
+			ArrayList<Pokedex> party1, ArrayList<Pokedex> party2) {
 		
 		this.name1 = name1; this.name2 = name2;
 		
@@ -47,8 +47,8 @@ public class Battle {
 		this.playerOneItems = new int[]{3, 2, 1};
 		this.playerTwoItems = new int[]{3, 2, 1};
 		
-		this.pokemonParty1 = pokemonParty1;
-		this.pokemonParty2 = pokemonParty2;
+		this.party1 = party1;
+		this.party2 = party2;
 	}
 	/** END CONSTRUCTOR **/
 	
@@ -57,10 +57,8 @@ public class Battle {
 	  **/
 	public void start() {
 		
-		clearContent();	
-		
-		pokemon1 = pokemonParty1.get(0); 
-		pokemon2 = pokemonParty2.get(0);
+		pokemon1 = party1.get(0); 
+		pokemon2 = party2.get(0);
 						
 		battle = new BattleEngine(pokemon1, pokemon2);
 				
@@ -181,8 +179,7 @@ public class Battle {
 					SoundCard.play(select);
 					clearContent();
 					
-					displayInfo(fighter);
-					
+					displayInfo(fighter);					
 					displayMoves(fighter);
 				}
 				// swap fighter
@@ -260,12 +257,12 @@ public class Battle {
 			System.out.println("[" + ++counter + "] " + m.getName() + " : PP " + m.getpp() + 
 					((m.getPower() == 0) ? "" : " | PWR " + m.getPower()) + 
 					" | ACC " + m.getAccuracy() + " | TYPE " + m.getType());
-							
 		}
-		System.out.println("[" + ++counter + "] MOVES INFO");
+		
+		System.out.println("\n[" + ++counter + "] MOVES INFO");
 		System.out.println("[" + ++counter + "] SWAP POKEMON");
 		System.out.println("[" + ++counter + "] USE AN ITEM");
-		System.out.println("[" + ++counter + "] RUN");
+		System.out.println("\n[" + ++counter + "] RUN");
 		System.out.print(">");	
 		
 		return counter;
@@ -280,11 +277,11 @@ public class Battle {
 		clearContent();
 		
 		System.out.print(name1 + "'s PARTY: ");
-		for (Pokedex p : pokemonParty1)
+		for (Pokedex p : party1)
 			System.out.print(p.getName() + " ");
 		
 		System.out.print("\n" + name2 + "'s PARTY: ");		
-		for (Pokedex p : pokemonParty2)
+		for (Pokedex p : party2)
 			System.out.print(p.getName() + " ");
 		
 		Printer printHP = (name, pokemon) -> {
@@ -379,7 +376,7 @@ public class Battle {
 		
 		Sleeper.print("SELECT A POKEMON TO SWAP IN:\n", 700);
 		
-		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
+		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		int counter = 0;
 		for (Pokedex p : pokemonParty) {	
@@ -474,8 +471,7 @@ public class Battle {
 							iCount[0] -= 1;
 						
 							clearContent(); 
-							healFighter(20, player);						
-							clearContent();
+							healFighter(20, player);
 							
 							return true;
 						}
@@ -586,16 +582,16 @@ public class Battle {
 		if (playerTwoWinner) {
 			
 			// remove from player 1 party			
-			for (Pokedex p : pokemonParty1) {
+			for (Pokedex p : party1) {
 				
 				if (p.getIndex() == pokemon1.getIndex()) {
-					pokemonParty1.remove(p);
+					party1.remove(p);
 					break;
 				}
 			}
 			
 			// if no pokemon left
-			if (pokemonParty1.isEmpty()) {
+			if (party1.isEmpty()) {
 				announceWinner(name2, name1, battle.getMoney(0));				
 				return true;
 			}
@@ -605,16 +601,14 @@ public class Battle {
 				
 				// ask which pokemon to sub in and swap
 				choice = listNextFighter(1);
-				pokemon1 = pokemonParty1.get(choice - 1);
+				pokemon1 = party1.get(choice - 1);
 				battle.swapPokemon(pokemon1, 0);
 				
 				clearContent();
 				
 				Sleeper.print(name1 + ": GO, " + pokemon1.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
-				Sleeper.pause(1700);	
-				
-				clearContent();
+				Sleeper.pause(1700);
 				
 				return false;
 			}
@@ -623,16 +617,16 @@ public class Battle {
 		else {		
 			
 			// remove from party 2
-			for (Pokedex p : pokemonParty2) {
+			for (Pokedex p : party2) {
 				
 				if (p.getIndex() == pokemon2.getIndex()) {
-					pokemonParty2.remove(p);
+					party2.remove(p);
 					break;
 				}
 			}
 			
 			// if no pokemon left
-			if (pokemonParty2.isEmpty()) {
+			if (party2.isEmpty()) {
 				announceWinner(name1, name2, battle.getMoney(1));	
 				return true;
 			}
@@ -644,7 +638,7 @@ public class Battle {
 					
 					// ask which pokemon to sub in and swap
 					choice = listNextFighter(2);
-					pokemon2 = pokemonParty2.get(choice - 1);
+					pokemon2 = party2.get(choice - 1);
 				}
 				else 
 					pokemon2 = cpuSelectNextPokemon();
@@ -652,11 +646,10 @@ public class Battle {
 				battle.swapPokemon(pokemon2, 1);
 				
 				clearContent();
-				
+								
 				Sleeper.print(name2 + ": GO, " + pokemon2.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
-				clearContent();
 				
 				return false;
 			}		
@@ -672,7 +665,7 @@ public class Battle {
 		
 		Sleeper.print("CHOOSE A POKEMON:\n", 700);
 		
-		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? pokemonParty1 : pokemonParty2;
+		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		int counter = 0;
 		for (Pokedex p : pokemonParty) {						
@@ -718,10 +711,10 @@ public class Battle {
 		Map<Pokedex, Integer> pokemonList = new HashMap<>();
 		
 		// if more than 1 pokemon in CPU party
-		if (pokemonParty2.size() > 1) {
+		if (party2.size() > 1) {
 			
 			// loop through each pokemon in party
-			for (Pokedex party : pokemonParty2) {
+			for (Pokedex party : party2) {
 				
 				// if party is single type
 				if (party.getTypes() == null) {
@@ -797,14 +790,14 @@ public class Battle {
 		}
 		// if 1 pokemon remaining in party
 		else 
-			return pokemonParty2.get(0);
+			return party2.get(0);
 		
 		// find best pokemon candidate based on max level
 		if (!pokemonList.isEmpty()) 
 			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
 		else {			
 			// loop through party and find highest level pokemon
-			for (Pokedex p : pokemonParty2) 
+			for (Pokedex p : party2) 
 				pokemonList.put(p, p.getLevel());
 			
 			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
@@ -827,7 +820,7 @@ public class Battle {
 	/** END ANNOUNCE WINNER METHOD **/
 
 	/** CLEAR SCREEN METHOD **/	
-	private static void clearContent() {		
+	private static void clearContent() {	
 		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/

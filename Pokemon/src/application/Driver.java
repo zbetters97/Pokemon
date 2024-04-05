@@ -253,8 +253,10 @@
  * 		-Added CPU random party select functionality
  * 		-Added the following Pokemon: Kyogre, Groudon, and Rayquaza
  * 		-Added Blizzard and Extreme Speed
- * 		-Added new song: PC Multiplayer Battle
- * 		-Fixed broken move sound effect files
+ * 		-Added new song: PC Multi-player Battle
+ * 		-Modified menu wording / formatting
+ * 		-Fixed broken move sound effect files * 		
+ * 		-Fixed bug in party select menu
  */	
 
 package application;

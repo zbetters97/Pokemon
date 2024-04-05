@@ -35,8 +35,8 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file =  "14battle-pc-multi";
-		cpuSelect = true;
+		file =  "12battle-pc-first";
+		cpuSelect = false;
 		
 		// menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
 		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
@@ -131,9 +131,9 @@ public class MainMenu {
 		System.out.println("PLEASE SELECT AN OPTION:\n\n"
 				+ "[1] LEVELS\n"
 				+ "[2] CPU PARTY\n"
-				+ "[3] MUSIC\n"
+				+ "[3] BATTLE MUSIC\n"
 				+ "[4] SOUNDS\n"
-				+ "[5] TEXT SPEED\n"
+				+ "[5] TEXT SPEED\n\n"
 				+ "[6] <- BACK");
 		System.out.print(">");
 		
@@ -152,9 +152,9 @@ public class MainMenu {
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
-								+ "[3] MUSIC\n"
+								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n"
+								+ "[5] TEXT SPEED\n\n"
 								+ "[6] <- BACK");
 						System.out.print(">");
 						break;						
@@ -165,9 +165,9 @@ public class MainMenu {
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
-								+ "[3] MUSIC\n"
+								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n"
+								+ "[5] TEXT SPEED\n\n"
 								+ "[6] <- BACK");
 						System.out.print(">");
 						break;
@@ -178,9 +178,9 @@ public class MainMenu {
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
-								+ "[3] MUSIC\n"
+								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n"
+								+ "[5] TEXT SPEED\n\n"
 								+ "[6] <- BACK");
 						System.out.print(">");
 						break;
@@ -191,9 +191,9 @@ public class MainMenu {
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
-								+ "[3] MUSIC\n"
+								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n"
+								+ "[5] TEXT SPEED\n\n"
 								+ "[6] <- BACK");
 						System.out.print(">");
 						break;
@@ -204,9 +204,9 @@ public class MainMenu {
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
-								+ "[3] MUSIC\n"
+								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n"
+								+ "[5] TEXT SPEED\n\n"
 								+ "[6] <- BACK");
 						System.out.print(">");
 						break;
@@ -237,7 +237,7 @@ public class MainMenu {
 				+ "[2] 25\n"
 				+ "[3] 50\n"
 				+ "[4] 100\n"
-				+ "[5] DISABLED\n"
+				+ "[5] DISABLED\n\n"
 				+ "[6] <- BACK");
 		System.out.print(">");
 		
@@ -290,7 +290,8 @@ public class MainMenu {
 		
 		System.out.println("CPU PARTY SELECTION:\n\n"
 				+ "[1] MANUAL\n"
-				+ "[2] RANDOM");
+				+ "[2] RANDOM\n\n"
+				+ "[3] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -307,6 +308,8 @@ public class MainMenu {
 					case 2:
 						cpuSelect = true;
 						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
+						return;
+					case 3:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -364,14 +367,13 @@ public class MainMenu {
 			Collections.sort(musicList);
 		}		
 		
-		Sleeper.print("PLEASE SELECT MUSIC:\n", 700);		
-		
-		System.out.println("[00] NONE");
+		System.out.println("BATTLE MUSIC:\n");
 		
 		for (int i = 0; i < musicList.size(); i++) 
 			System.out.println("[" + musicList.get(i));	
 		
-		System.out.println("[" + (musicList.size() + 1) + "] <- BACK");		
+		System.out.println("[00] NONE");
+		System.out.println("\n[" + (musicList.size() + 1) + "] <- BACK");		
 		System.out.print(">");
 		
 		while (true) {
@@ -413,7 +415,8 @@ public class MainMenu {
 				
 		System.out.println("SOUND EFFECTS:\n\n"
 				+ "[1] ON\n"
-				+ "[2] OFF");
+				+ "[2] OFF\n\n"
+				+ "[3] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -430,6 +433,8 @@ public class MainMenu {
 					case 2:
 						SoundCard.setActive(false);
 						Sleeper.print("SOUND EFFECTS TURNED OFF", 1200); 
+						return;
+					case 3:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -453,7 +458,8 @@ public class MainMenu {
 		System.out.println("TEXT SPEED:\n\n"
 				+ "[1] SLOW\n"
 				+ "[2] MEDIUM\n"
-				+ "[3] FAST");
+				+ "[3] FAST\n\n"
+				+ "[4] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -474,6 +480,8 @@ public class MainMenu {
 					case 3:
 						Sleeper.setSpeed(15);
 						Sleeper.print("TEXT SPEED SET TO FAST", 1200); 
+						return;
+					case 4:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -508,7 +516,7 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				clearContent();
-				Sleeper.print("WELCOME TO THE WORLD OF POKEMON, " + name + "!", 1500);
+				Sleeper.print("WELCOME TO THE WORLD OF POKEMON, " + name + "!", 1200);
 				clearContent();
 				
 				return name;
@@ -564,7 +572,7 @@ public class MainMenu {
 		
 		int turn = 1, choice = 0;	
 		
-		while (turn < (partySize * 2) - 1) {
+		while (turn < (partySize * 2) + 1) {
 			
 			int counter = displayParty();
 			

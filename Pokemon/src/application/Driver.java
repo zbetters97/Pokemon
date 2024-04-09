@@ -255,8 +255,14 @@
  * 		-Added Blizzard and Extreme Speed
  * 		-Added new song: PC Multi-player Battle
  * 		-Modified menu wording / formatting
- * 		-Fixed broken move sound effect files * 		
+ * 		-Fixed broken move sound effect files 		
  * 		-Fixed bug in party select menu
+ * 4/8/2024:
+ * 		-Fixed bug in attribute-change moves (Muddy Water, Mud Bomb, etc)
+ * 		-Cleaned up attribute and status move logic
+ * 		-Cleaned up coding
+ * 4/9/2024:
+ * 		-Added debug mode option in Main Menu
  */	
 
 package application;

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import application.Sleeper;
 import moves.Moves;
 import status.StatusEngine;
 import types.TypeEngine;
@@ -70,6 +71,7 @@ public enum Pokedex {
 	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg, accuracyStg;
 	private StatusEngine status;
 	private boolean isAlive;
+	static Sleeper sleeper;
 	
 	private int statusCounter, statusLimit;
 	/** END INITIALIZE VALUES **/
@@ -234,10 +236,10 @@ public enum Pokedex {
         pokeMap.put(MUDKIP, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.GROWL)); 
         pokeMap.put(MARSHTOMP, Arrays.asList(Moves.TACKLE, Moves.WATERGUN, Moves.MUDSHOT, 
         		Moves.MUDSLAP)); 
-        pokeMap.put(SWAMPERT, Arrays.asList(Moves.SURF, Moves.MUDBOMB, Moves.MUDDYWATER, 
+        pokeMap.put(SWAMPERT, Arrays.asList(Moves.SURF, Moves.MUDDYWATER, Moves.MUDBOMB, 
         		Moves.EARTHQUAKE));
         
-        pokeMap.put(KYOGRE, Arrays.asList(Moves.HYDROPUMP, Moves.SURF, Moves.THUNDER, 
+        pokeMap.put(KYOGRE, Arrays.asList(Moves.SURF, Moves.HYDROPUMP, Moves.THUNDER, 
         		Moves.CALMMIND));
         pokeMap.put(GROUDON, Arrays.asList(Moves.EARTHQUAKE, Moves.SOLARBEAM, Moves.FIREFANG, 
         		Moves.DRAGONCLAW));

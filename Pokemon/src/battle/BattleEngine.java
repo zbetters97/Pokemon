@@ -53,13 +53,13 @@ public class BattleEngine {
 		// loop through list of battle pokemon and find open slot
 		while (pokemon[slot] != null) {
 			
-			// if chosen pokemon exists in list...
+			// if chosen pokemon exists in list
 			if (pokemon[slot].getName() == newPokemon.getName()) {
 				
 				// re-assign to fighter slot
 				pokemon[player] = pokemon[slot];
 				
-				// and remove original slot
+				// remove original slot
 				pokemon[slot] = null;
 				
 				return;
@@ -71,11 +71,11 @@ public class BattleEngine {
 				break;
 		}
 		
-		// if slot is open, assign new fighter...
+		// if slot is open, assign new fighter
 		pokemon[slot] = newPokemon;			
 		Pokedex temp = pokemon[player];
 		
-		// and swap fighter to old slot
+		// swap fighter to old slot
 		pokemon[player] = pokemon[slot];
 		pokemon[slot] = temp;
 	}
@@ -94,29 +94,15 @@ public class BattleEngine {
 			// if super potion fully heals
 			if (pokemon[1].getHP() + 60 >= pokemon[1].getBHP()) {
 				
-				// if super potion is available
-				if (cpuItems[0] != 0) {
-					healCPU(60, 0);
-					return null;
-				}
-				// if hyper potion is available
-				if (cpuItems[1] != 0) {					
-					healCPU(120, 1);		
-					return null;
-				}
+				// try super potion first
+				if (healCPU(60, 0)) return null;
+				if (healCPU(120, 1)) return null;
 			}		
 			// try hyper potion instead
 			else {
-				// if hyper potion is available
-				if (cpuItems[1] != 0) {
-					healCPU(120, 1);
-					return null;
-				}
-				// if super potion is available
-				if (cpuItems[0] != 0) {					
-					healCPU(60, 0);		
-					return null;
-				}
+				// try hyper potion first
+				if (healCPU(120, 1)) return null;
+				if (healCPU(60, 0)) return null;
 			}
 		}
 		
@@ -141,20 +127,21 @@ public class BattleEngine {
 		// find max value in moves list based on value
 		if (!moves.isEmpty()) {
 			
-			// 33% chance CPU selects random move instead of most powerful move
+			// 33% chance CPU selects random move instead of most powerful
 			int val = 1 + (int)(Math.random() * ((3 - 1) + 1));
 			if (val == 1) {
 				
-				int ranMove = 1 + (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));	
-				ranMove -= 1;
-				
+				int ranMove = (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));				
 				bestMove = pokemon[1].getMoveSet().get(ranMove);
 			}
 			else
 				bestMove = Collections.max(moves.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
 		}
-		else
-			bestMove = pokemon[1].getMoveSet().get(0);
+		// if list is empty, select random move
+		else {
+			int ranMove = (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));				
+			bestMove = pokemon[1].getMoveSet().get(ranMove);
+		}
 		
 		return bestMove;
 	}
@@ -163,18 +150,24 @@ public class BattleEngine {
 	/** HEAL CPU METHOD 
 	 * Restore health of CPU Pokemon
 	 * @param potion healing hp
+	 * @return true if item is available, false if not
 	 **/
-	private void healCPU(int newHP, int item) {
+	private boolean healCPU(int newHP, int item) {
 		
-		int hp = pokemon[1].getHP() + newHP;
-		cpuItems[item] -= 1;
+		// if cpu has items
+		if (cpuItems[item] != 0) {
 		
-		if (hp > pokemon[1].getBHP()) 
-			hp = pokemon[1].getBHP();	
-		
-		pokemon[1].setHP(hp);
-		
-		return;
+			int hp = pokemon[1].getHP() + newHP;
+			cpuItems[item] -= 1;
+			
+			if (hp > pokemon[1].getBHP()) 
+				hp = pokemon[1].getBHP();	
+			
+			pokemon[1].setHP(hp);
+			return true;
+		}
+		else 
+			return false;
 	}
 	/** END HEAL CPU METHOD **/
 	
@@ -189,24 +182,26 @@ public class BattleEngine {
 			
 			int numTurn = 0;			
 			
+			// 1 if trainer 1 moves first, 2 if trainer 2 moves first
+			// 3 if only trainer 2, 4 if only trainer 1, 5 if neither
 			if (move1 == null && move2 == null)
-				numTurn = 3;
-			else if (move1 == null)
-				numTurn = 4;
-			else if (move2 == null)
 				numTurn = 5;
-			// 1 if pokemon1 moves first, 2 if pokemon2 moves first
+			else if (move1 == null)
+				numTurn = 3;
+			else if (move2 == null)
+				numTurn = 4;
 			else
 				numTurn = getTurn(move1, move2);
 			
+			// do nothing if numTurn == 5
 			if (numTurn == 1) 
 				turn(0, 1, move1, move2);	
 			else if (numTurn == 2)
 				turn(1, 0, move2, move1);	
+			else if (numTurn == 3)
+				turn(1, 0, move2, null);
 			else if (numTurn == 4)
-				turn(1, 0, move2);
-			else if (numTurn == 5)
-				turn(0, 1, move1);
+				turn(0, 1, move1, null);
 		
 			// check if either fighter has status damage
 			statusDamage();
@@ -223,6 +218,7 @@ public class BattleEngine {
 		
 		// if both moves go first (EX: Quick Attack)
 		if (move1.getGoFirst() && move2.getGoFirst()) {			
+			
 			// if pokemon1 is faster (pokemon1 has advantage if equal)
 			if (pokemon[0].getSpeed() >= pokemon[1].getSpeed()) 
 				return 1;
@@ -252,134 +248,37 @@ public class BattleEngine {
 	private void turn(int pk1, int pk2, Moves move1, Moves move2) {
 
 		// if attacker can fight
-		if (canTurn(pk1)) {
-			
-			// if move takes 2 turns
-			if (move1.getNumTurns() == 2) {
-				
-				// output delay string
-				Sleeper.print(pokemon[pk1].getName() + " used " + move1.getName() + "!", 1200);
-				Sleeper.print(move1.getDelay(), 1200);		
-								
-				// reduce number of turns to wait
-				move1.setNumTurns(1);
-				
-				clearContent();
-			}
-			// if move takes 2 turns but is ready
-			else if (move1.getNumTurns() == 1) {
-				
-				// reset turns to wait
-				move1.setNumTurns(2);
-				
-				attack(pk1, pk2, move1, move2);
-			}
-			else 
-				attack(pk1, pk2, move1, move2);
-		}
+		if (canTurn(pk1))
+			useTurn(pk1, pk2, move1, move2);
 		
 		// target becomes attacker if battle not over
 		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
 					
 			// if target can fight
-			if (canTurn(pk2)) {
-				
-				// if move takes 2 turns
-				if (move2.getNumTurns() == 2) {
-					
-					// output delay string
-					Sleeper.print(pokemon[pk2].getName() + " used " + move2.getName() + "!", 1200);
-					Sleeper.print(move2.getDelay(), 1200);
-					clearContent();
-					
-					// reduce number of turns to wait
-					move2.setNumTurns(1);
-				}
-				// if move takes 2 turns but is ready
-				else if (move2.getNumTurns() == 1) {
-					
-					// reset turns to wait
-					move2.setNumTurns(2);
-					
-					attack(pk2, pk1, move2, move1);
-				}
-				else 
-					attack(pk2, pk1, move2, move1);
-			}
+			if (canTurn(pk2))
+				useTurn(pk2, pk1, move2, move1);
 		}
 	}
 	/** END TURN METHOD **/	
-	
-	
-	private void turn(int pk1, int pk2, Moves move) {
-		
-		// if target can fight
-		if (canTurn(pk1)) {
-			
-			// if move takes 2 turns
-			if (move.getNumTurns() == 2) {
-				
-				// output delay string
-				Sleeper.print(pokemon[pk1].getName() + " used " + move.getName() + "!", 1200);
-				Sleeper.print(move.getDelay(), 1200);
-				clearContent();
-				
-				// reduce number of turns to wait
-				move.setNumTurns(1);
-			}
-			// if move takes 2 turns but is ready
-			else if (move.getNumTurns() == 1) {
-				
-				// reset turns to wait
-				move.setNumTurns(2);
-				
-				attack(pk1, pk2, move, null);
-			}
-			else 
-				attack(pk1, pk2, move, null);
-		}
-	}
-	/** END TURN METHOD **/	
-	
-	
-
-	/** HAS DELAYED MOVE METHOD
-	 * Check if a move is waiting and return which player 
-	 * @param trainer 1 move, trainer 2 move
-	 * @return 3 if both, 1 if player 1, 2 if player 2
-	 **/
-	public int hasDelayedMove(Moves move1, Moves move2) {		
-		
-		if (move1 == null || move2 == null)
-			return 0;
-		
-		if (move1.getNumTurns() == 1 && move2.getNumTurns() == 1)
-			return 3;
-		else if (move1.getNumTurns() == 1)
-			return 1;
-		else if (move2.getNumTurns() == 1)
-			return 2;
-		
-		return 0;
-	}
-	/** END DELAYED MOVE METHOD **/	
 	
 	/** CAN TURN METHOD 
 	 * Check status condition to check if pokemon is able to turn 
-	 * @param number of attacking pokemon
+	 * @param int attacking pokemon
 	 * @return true if can turn, false if can't
 	 **/ 
 	private boolean canTurn(int atk) {
 		
 		int val = 0;
 		
+		// if attacker has status effect
 		if (pokemon[atk].getStatus() != null) {
 			
-			// check pokemon status
+			// check which status
 			switch (pokemon[atk].getStatus().getName()) {
 			
 				case "PRZ":		
 					
+					// 1/4 chance can't move due to PAR
 					val = 1 + (int)(Math.random() * ((4 - 1) + 1));
 					if (val == 1) {						
 						SoundCard.playStatus(pokemon[atk].getStatus().getName());
@@ -393,6 +292,7 @@ public class BattleEngine {
 					
 				case "FRZ":
 					
+					// 1/5 chance attacker can thaw from ice
 					val = 1 + (int)(Math.random() * ((5 - 1) + 1));
 					if (val == 1) {
 						Sleeper.print(pokemon[atk].getName() + " thawed from the ice!", 1700);
@@ -407,14 +307,9 @@ public class BattleEngine {
 						return false;						
 					}
 					
-				case "SLP":
-					return getEffect(atk);		
-					
-				case "CNF":
-					return getEffect(atk);
-					
-				default:
-					return true;
+				case "SLP": return getEffect(atk);
+				case "CNF": return getEffect(atk);
+				default: return true;
 			}
 		}	
 		else 
@@ -424,8 +319,8 @@ public class BattleEngine {
 	
 	/**  GET EFFECT METHOD 
 	 * Check if pokemon is asleep or confused
-	 * @param number of attacking pokemon
-	 * @return true if can't turn based on effect (confused or asleep)
+	 * @param int pokemon
+	 * @return true if can't turn, false if can turn
 	 **/
 	private boolean getEffect(int pkm) {
 		
@@ -448,7 +343,10 @@ public class BattleEngine {
 		
 			return true;
 		}
+		// pokemon still under status condition
 		else {
+			
+			// increase counter
 			pokemon[pkm].setStatusCounter(pokemon[pkm].getStatusCounter() + 1);
 			
 			if (status.equals("SLP")) {				
@@ -463,20 +361,71 @@ public class BattleEngine {
 				Sleeper.print(pokemon[pkm].getName() + " is confused!", 1700);
 				clearContent();
 				
+				// if pokemon hurt itself in confusion
 				if (confusionDamage(pkm)) 
 					return false;
 				else 
 					return true;				
 			}
+			// default return value
 			return false;
 		}
 	}
 	/**  END GET EFFECT METHOD **/
 	
+	/** STATUS DAMAGE METHOD 
+	 * Check if either pokemon has status condition and apply damage
+	 **/
+	private void statusDamage() {
+		
+		StatusEffect condition = (Pokedex p) -> {
+			
+			if (p.getStatus() != null) {				
+				
+				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
+					
+					// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects			
+					int damage = (int) (p.getHP() * 0.16);
+					int newHP = p.getHP() - damage;		
+					
+					if (newHP <= 0) {
+						newHP = 0;
+						p.setAlive(false);
+					}
+					
+					p.setHP(newHP);			
+					
+					SoundCard.playStatus(p.getStatus().getName());
+					Sleeper.print(p.getName() + " is hurt from the " + 
+						p.getStatus().getEffect().toLowerCase() + "!", 1700);
+					clearContent();	
+										
+					return damage;
+				}							
+			}
+			return 0;
+		};
+		
+		if (pokemon[0].isAlive()) {
+			int damage = condition.dealDamage(pokemon[0]);
+
+			if (!pokemon[0].isAlive())
+				defeated(1, 0, damage);
+		}
+		
+		if (pokemon[1].isAlive()) {
+			int damage = condition.dealDamage(pokemon[1]);
+
+			if (!pokemon[1].isAlive())
+				defeated(0, 1, damage);
+		}		
+	}
+	/** END STATUS DAMAGE METHOD **/
+	
 	/** CALCULATE CONFUSION DAMAGE DEALT METHOD 
 	 * Check if pokemon takes confusion damage
 	 * @param number of attacking pokemon
-	 * @return true if pokemon hurts itself
+	 * @return true if pokemon hurts self, false if not
 	 **/
 	private boolean confusionDamage(int atk) {
 		
@@ -493,7 +442,8 @@ public class BattleEngine {
 			double D = pokemon[atk].getDefense();
 					
 			// confusion damage reference: https://pokemonlp.fandom.com/wiki/Confusion_(status)
-			int damage = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * power * (A / D)) / 50)) + 2));
+			int damage = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * 
+				power * (A / D)) / 50)) + 2));
 		
 			SoundCard.playHit(1.0);	
 			Sleeper.print(pokemon[atk].getName() + " hurt itself in confusion!", 1700);
@@ -501,6 +451,7 @@ public class BattleEngine {
 			
 			int hp = pokemon[atk].getHP() - damage;
 			
+			// pokemon defeated itself in confusion damage
 			if (hp <= 0) {
 				hp = 0;			
 				pokemon[atk].setHP(hp);
@@ -508,6 +459,7 @@ public class BattleEngine {
 				defeated(trg, atk, damage);				
 				return true;
 			}
+			// apply confusion damage
 			else {
 				pokemon[atk].setHP(hp);				
 				return true;	
@@ -518,7 +470,65 @@ public class BattleEngine {
 	}
 	/** END CALCULATE CONFUSION DAMAGE DEALT METHOD **/	
 	
-	/** START ATTACK METHOD 
+	/** USE TURN METHOD 
+	 * Initiate attack with available moves
+	 * @param int attacker, int target, Moves attacker move, Moves target move
+	 **/	
+	private void useTurn(int atk, int trg, Moves atkMove, Moves trgMove) {
+		
+		// move is not delayed
+		if (atkMove.getTurns() == 0) { 
+			attack(atk, trg, atkMove, trgMove);
+		}
+		// move has delay
+		else {
+			
+			// move is used for first time
+			if (atkMove.getTurns() == atkMove.getNumTurns()) {
+			
+				// output delay string
+				Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 1200);
+				Sleeper.print(atkMove.getDelay(), 1200);		
+				
+				// reduce number of turns to wait
+				atkMove.setTurns(atkMove.getTurns() - 1);	
+				
+				clearContent();
+			}
+			// if delayed move is ready
+			else if (atkMove.getTurns() == 1) {
+				
+				// reset turns to wait
+				atkMove.setTurns(atkMove.getNumTurns());
+				
+				attack(atk, trg, atkMove, trgMove);
+			}
+		}			
+	}		
+	/** END USE TURN METHOD **/
+
+	/** HAS DELAYED MOVE METHOD
+	 * Check if a move is waiting and return which player 
+	 * @param trainer 1 move, trainer 2 move
+	 * @return 3 if both, 1 if player 1, 2 if player 2, 0 default
+	 **/
+	public int hasDelayedMove(Moves move1, Moves move2) {		
+		
+		if (move1 == null || move2 == null)
+			return 0;
+		
+		if (move1.getTurns() == 1 && move2.getTurns() == 1)
+			return 3;
+		else if (move1.getTurns() == 1)
+			return 1;
+		else if (move2.getTurns() == 1)
+			return 2;
+		
+		return 0;
+	}
+	/** END DELAYED MOVE METHOD **/	
+	
+	/** ATTACK METHOD 
 	 * Handle selected move, calculate damage, and apply it to target
 	 * @param number of attacker, number of target, move of attacker
 	 **/
@@ -535,7 +545,8 @@ public class BattleEngine {
 			
 	        // if attack lands
 			if (isHit(atk, move, trgMove)) {
-												
+				
+				// move has a status affect
 				if (move.getMType().equals("Status")) {
 					
 					if (move.getName().equals("Teleport")) {
@@ -546,12 +557,17 @@ public class BattleEngine {
 						Sleeper.print("The battle is over!", 1700);
 						System.exit(0);
 					}
-					
-					statusMove(trg, move);
+					else
+						statusMove(trg, move);
 				}
+				
+				// move has an attribute affect
 				else if (move.getMType().equals("Attribute")) 	
 					attributeMove(atk, trg, move);
-				else {						
+				
+				// move is damage-dealing
+				else {				
+					
 					// get critical damage (1/255 chance)
 					double crit = isCritical();			
 									
@@ -563,12 +579,13 @@ public class BattleEngine {
 						Sleeper.print("It had no effect!", 1700);
 						clearContent();
 					}
-					else {						
+					else {				
+						
 						// if critical hit
 						if (crit == 1.5) 
 							Sleeper.print("A critical hit!", 1700);
-						
-						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);
+					
+						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);					
 						
 						if (move.getName() == "Absorb" || move.getName() == "Giga Drain") {
 							
@@ -580,24 +597,34 @@ public class BattleEngine {
 							pokemon[atk].setHP(gainedHP + pokemon[atk].getHP());	
 							Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1700);
 						}
-						
+												
 						// if damage is fatal
-						if (damage >= pokemon[trg].getHP()) {
+						if (damage >= pokemon[trg].getHP())	{
 							dealDamage(trg, damage);
 							defeated(atk, trg, damage);
 						}
+						
+						// fighter survives hit
 						else {
+							
 							dealDamage(trg, damage);
 							
-							// move causes status effect
-							if (move.getProbability() != null) {
-								
-								// chance for status effect
+							// move causes attribute or status effect
+							if (move.getProbability() != null) {								
+															
+								// chance for effect to apply
 								if (new Random().nextDouble() <= move.getProbability()) {
-									pokemon[trg].setStatus(move.getEffect());
 									
-									Sleeper.print(pokemon[trg].getName() + " is " + 
-											pokemon[trg].getStatus().getCondition() + "!", 1700);
+									if (move.getStats() != null) 
+										attributeMove(atk, trg, move);
+									else {			
+										if (pokemon[trg].getStatus() == null) {
+											pokemon[trg].setStatus(move.getEffect());
+											
+											Sleeper.print(pokemon[trg].getName() + " is " + 
+												pokemon[trg].getStatus().getCondition() + "!", 1700);
+										}
+									}
 								}							
 							}						
 							clearContent();
@@ -617,7 +644,7 @@ public class BattleEngine {
 	/** START MOVE IS VALID METHOD 
 	 * Confirm selected move is a valid option
 	 * @param number of attacker, selected move
-	 * @return true if valid, false if not
+	 * @return true if found, false if not
 	 **/
 	private boolean moveIsValid(int atk, Moves move) {
 		
@@ -631,6 +658,34 @@ public class BattleEngine {
 		return false;
 	}
 	/** END MOVE IS VALID METHOD **/
+	
+	/** IS HIT METHOD 
+	 * Calculates if move lands on target
+	 * @param number of attacker, selected move
+	 * @return true if attack lands, false if not
+	 **/
+	private boolean isHit(int atk, Moves move, Moves trgMove) {
+		
+		if (trgMove == null)
+			return true;
+		
+		// if target used delayed move and delayed move protects target		
+		if (trgMove.getTurns() == 1 && !trgMove.getCanHit())
+			return false;
+				
+		// if move never misses, return true
+		if (move.getAccuracy() == -1) 
+			return true; 
+		
+		double accuracy = move.getAccuracy() * pokemon[atk].getAccuracy();
+		
+		Random r = new Random();
+		float chance = r.nextFloat();
+		
+		// chance of missing is accuracy value / 100
+		return (chance <= ((float) accuracy / 100)) ? true : false;
+	}
+	/** END IS HIT METHOD **/
 	
 	/** STATUS MOVE METHOD 
 	 * Adds status effect to pokemon if not already
@@ -687,33 +742,6 @@ public class BattleEngine {
 		clearContent();
 	}
 	/** END ATTRIBUTE MOVE METHOD **/
-
-	/** IS HIT METHOD 
-	 * Calculates if move lands on target
-	 * @param number of attacker, selected move
-	 * @return true if attack lands, false if not
-	 **/
-	private boolean isHit(int atk, Moves move, Moves trgMove) {
-		
-		if (trgMove == null)
-			return true;
-		
-		// if target used delayed move and delayed move protects target		
-		if (trgMove.getNumTurns() == 1 && !trgMove.getCanHit())
-			return false;
-				
-		// if move never misses, return true
-		if (move.getAccuracy() == -1) { return true; }
-		
-		double accuracy = move.getAccuracy() * pokemon[atk].getAccuracy();
-		
-		Random r = new Random();
-		float chance = r.nextFloat();
-		
-		// chance of missing is accuracy value / 100
-		return (chance <= ((float) accuracy / 100)) ? true : false;
-	}
-	/** END IS HIT METHOD **/
 	
 	/** IS CRITICAL METHOD 
 	 * Returns value of critical (1 / 255 chance)
@@ -774,8 +802,7 @@ public class BattleEngine {
 			damageDealt = pokemon[trg].getHP();
 		
 		// don't play sound if cpu is calling method
-		if (!cpu) 
-			SoundCard.playHit(type);
+		if (!cpu) SoundCard.playHit(type);
 		
 		return damageDealt;
 	}
@@ -862,55 +889,6 @@ public class BattleEngine {
 		pokemon[trg].setHP(result);
 	}
 	/** END DEAL DAMAGE METHOD **/
-
-	/** STATUS DAMAGE METHOD 
-	 * Check if either pokemon has status condition and apply damage
-	 **/
-	private void statusDamage() {
-		
-		StatusEffect condition = (Pokedex p) -> {
-			
-			if (p.getStatus() != null) {				
-				
-				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
-					
-					// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects			
-					int damage = (int) (p.getHP() * 0.16);
-					int newHP = p.getHP() - damage;		
-					
-					if (newHP <= 0) {
-						newHP = 0;
-						p.setAlive(false);
-					}
-					
-					p.setHP(newHP);			
-					
-					SoundCard.playStatus(p.getStatus().getName());
-					Sleeper.print(p.getName() + " is hurt from the " + 
-						p.getStatus().getEffect().toLowerCase() + "!", 1700);
-					clearContent();	
-										
-					return damage;
-				}							
-			}
-			return 0;
-		};
-		
-		if (pokemon[0].isAlive()) {
-			int damage = condition.dealDamage(pokemon[0]);
-
-			if (!pokemon[0].isAlive())
-				defeated(1, 0, damage);
-		}
-		
-		if (pokemon[1].isAlive()) {
-			int damage = condition.dealDamage(pokemon[1]);
-
-			if (!pokemon[1].isAlive())
-				defeated(0, 1, damage);
-		}		
-	}
-	/** END STATUS DAMAGE METHOD **/
 	
 	/** POKEMON DEFEATED METHOD 
 	 * Assigns xp gained and announces winner and loser

@@ -47,8 +47,18 @@ public class MainMenu {
 		// players can only be set to 1 or 2
 		players = mainMenu();
 		
-		name1 = inputName(1);
-		name2 = (players == 1 ) ? "Red" : inputName(2);
+		// debug mode
+		if (players == 5) {
+			players = 1;
+			name1 = "P1";
+			name2 = "P2";
+			defaultLevel = 50;
+			SoundCard.setActive(false);
+		}
+		else {	
+			name1 = inputName(1);
+			name2 = (players == 1 ) ? "Red" : inputName(2);
+		}
 		
 		selectPartySize();		
 		selectParty();
@@ -109,6 +119,10 @@ public class MainMenu {
 						Sleeper.setSpeed(60);
 						Sleeper.print("SHUTTING DOWN...", 1700); 
 						System.exit(0); 
+					// debug mode
+					case 5:
+						clearContent();
+						return 5;
 					default: 
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
 						System.out.print(">");

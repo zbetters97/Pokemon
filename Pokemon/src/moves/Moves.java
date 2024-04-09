@@ -57,10 +57,10 @@ public enum Moves {
 	LICK ("Lick", "Physical", TypeEngine.ghost, StatusEngine.paralyze, 0.10, 30, 45, 100, "The foe is licked with a long tongue, causing damage. It may also paralyze the target."),
 	LOWKICK ("Low Kick", "Physical", TypeEngine.fighting, 20, 40, 100, "A powerful low kick that makes the foe fall over. It inflicts greater damage on heavier foes."),
 	LOWSWEEP ("Low Sweep", "Physical", TypeEngine.fighting, 20, 95, 100, "The user makes a swift attack on the target's legs."),
-	MUDBOMB ("Mud Bomb", "Special", TypeEngine.ground, false, 10, 65, 85, Arrays.asList("accuracy"), "The user launches a hard-packed mud ball to attack. It may also lower the target's accuracy."),
-	MUDSHOT ("Mud Shot", "Special", TypeEngine.ground, false, 15, 55, 95, Arrays.asList("defense"), "The user attacks by hurling a blob of mud at the foe. It also reduces the target's Speed."),
-	MUDSLAP ("Mud Slap", "Special", TypeEngine.ground, false, 10, 20, 100, Arrays.asList("accuracy"), "The user hurls mud in the foe's face to inflict damage and lower its accuracy."),
-	MUDDYWATER ("Muddy Water", "Special", TypeEngine.water, false, 10, 95, 85, Arrays.asList("accuracy"), "The user attacks by shooting out muddy water. It may also lower the foe's accuracy."),
+	MUDBOMB ("Mud Bomb", "Special", TypeEngine.ground, false, 0.30, 10, 65, 85, -1, Arrays.asList("accuracy"), "The user launches a hard-packed mud ball to attack. It may also lower the target's accuracy."),
+	MUDSHOT ("Mud Shot", "Special", TypeEngine.ground, false, 1.0, 15, 55, 95, -1, Arrays.asList("speed"), "The user attacks by hurling a blob of mud at the foe. It also reduces the target's Speed."),
+	MUDSLAP ("Mud Slap", "Special", TypeEngine.ground, false, 1.0, 10, 20, 100, -1, Arrays.asList("accuracy"), "The user hurls mud in the foe's face to inflict damage and lower its accuracy."),
+	MUDDYWATER ("Muddy Water", "Special", TypeEngine.water, false, 0.30, 10, 95, 85, -1, Arrays.asList("accuracy"), "The user attacks by shooting out muddy water. It may also lower the foe's accuracy."),
 	PAYBACK ("Payback", "Physical", TypeEngine.dark, 10, 50, 100, "If the user can use this attack after the foe attacks, its power is doubled."),
 	PETALBLIZZARD ("Petal Blizzard", "Physical", TypeEngine.grass, 15, 135, 100, "The user stirs up a violent petal blizzard and attacks everything around it."),
 	PLAYNICE ("Play Nice", "Attribute", TypeEngine.normal, false, 20, -1, -1, Arrays.asList("attack"), "The user and the target become friends, and the target loses its will to fight. This lowers the target's Attack stat."),
@@ -114,6 +114,7 @@ public enum Moves {
 	private int accuracy;
 	private int power;
 	private int level;
+	private int turns;
 	private int numTurns;
 	private boolean canHit;
 	private String delay;
@@ -138,6 +139,7 @@ public enum Moves {
 		this.pp = pp;
 		this.power = power;
 		this.accuracy = accuracy;
+		this.turns = numTurns;
 		this.numTurns = numTurns;
 		this.canHit = canHit;
 		this.delay = delay;
@@ -183,6 +185,19 @@ public enum Moves {
 		this.level = level;
 		this.stats = stats;
 		this.info = info;
+	}	
+	Moves (String name, String mtype, TypeEngine type, boolean toSelf, Double probability, int pp, int power, int accuracy, int level, List<String> stats, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.toSelf = toSelf;
+		this.probability = probability;
+		this.pp = pp;
+		this.power = power;
+		this.accuracy = accuracy;
+		this.level = level;
+		this.stats = stats;
+		this.info = info;
 	}
 	/** END CONSTRUCTORS **/
 	
@@ -218,6 +233,9 @@ public enum Moves {
 
 	public int getPower() {	return power; }
 	public void setPower(int power) { this.power = power; }
+	
+	public int getTurns() {	return turns; }
+	public void setTurns(int turns) { this.turns = turns; }
 	
 	public int getNumTurns() {	return numTurns; }
 	public void setNumTurns(int numTurns) { this.numTurns = numTurns; }

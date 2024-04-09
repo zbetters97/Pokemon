@@ -385,7 +385,7 @@ public class Battle {
 				((p.getType() == null) ? p.printTypes() : p.getType()) + 
 				"\n", p.getLevel());
 		}
-		System.out.println("[" + ++counter + "] <- BACK");
+		System.out.println("\n[" + ++counter + "] <- BACK");
 		System.out.print(">");
 		
 		int choice = 0;
@@ -452,7 +452,7 @@ public class Battle {
 		Sleeper.print("SELECT AN ITEM TO USE ON " + fighter.getName() + ":\n", 700);
 		System.out.println("[1] POTION (x" + iCount[0] + ")\n"
 				+ "[2] HYPER POTION (x" + iCount[1] + ")\n"
-				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n"
+				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n\n"
 				+ "[4] <- BACK");
 		System.out.print(">");
 		
@@ -792,15 +792,20 @@ public class Battle {
 		else 
 			return party2.get(0);
 		
-		// find best pokemon candidate based on max level
-		if (!pokemonList.isEmpty()) 
-			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey(); 	
+		Pokedex bestPokemon;
+		
+		// find best pokemon based on max level
+		if (!pokemonList.isEmpty()) {
+			bestPokemon = Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+			return bestPokemon;
+		}
 		else {			
 			// loop through party and find highest level pokemon
 			for (Pokedex p : party2) 
 				pokemonList.put(p, p.getLevel());
 			
-			return Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+			bestPokemon = Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+			return bestPokemon;
 		}
 	}
 	/** END CPU SELECT NEXT POKEMON METHOD **/

@@ -171,11 +171,47 @@ public class BattleEngine {
 	}
 	/** END HEAL CPU METHOD **/
 	
+	/** GET DELAYED MOVE METHOD
+	 * Check if a move is waiting and return which player 
+	 * @param trainer 1 move, trainer 2 move
+	 * @return 3 if both, 1 if player 1, 2 if player 2, 0 if neither
+	 **/
+	public int getDelayedMove(Moves move1, Moves move2) {		
+		
+		// if both moves are active
+		if (move1 != null && move2 != null) {	
+			
+			//both players are waiting
+			if (move1.getTurns() == 1 && move2.getTurns() == 1)
+				return 3;
+			
+			else if (move1.getTurns() == 1)
+				return 1;
+			else if (move2.getTurns() == 1)
+				return 2;
+		}
+		// if only player 1 is active
+		else if (move1 != null) {
+			if (move1.getTurns() == 1)
+				return 1;
+		}
+		// if only player 2 is active
+		else if (move2 != null) {
+			if (move2.getTurns() == 1)
+				return 2;
+		}
+		
+		return 0;
+	}
+	/** END GET DELAYED MOVE METHOD **/	
+	
 	/** MOVE METHOD 
 	 * Find which trainer moves first and initiate turn
 	 * @param trainer 1 move, trainer 2 move
 	 **/
 	public void move(Moves move1, Moves move2) {
+		
+		clearContent();	
 		
 		// if both pokemon are alive
 		if (pokemon[0].isAlive() && pokemon[1].isAlive()) {
@@ -206,6 +242,8 @@ public class BattleEngine {
 			// check if either fighter has status damage
 			statusDamage();
 		}
+		
+		clearContent();	
 	}
 	/** END MOVE METHOD **/
 	
@@ -248,14 +286,14 @@ public class BattleEngine {
 	private void turn(int pk1, int pk2, Moves move1, Moves move2) {
 
 		// if attacker can fight
-		if (canTurn(pk1))
+		if (canTurn(pk1) && move1 != null)
 			useTurn(pk1, pk2, move1, move2);
 		
 		// target becomes attacker if battle not over
 		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
 					
 			// if target can fight
-			if (canTurn(pk2))
+			if (canTurn(pk2) && move2 != null)
 				useTurn(pk2, pk1, move2, move1);
 		}
 	}
@@ -477,9 +515,8 @@ public class BattleEngine {
 	private void useTurn(int atk, int trg, Moves atkMove, Moves trgMove) {
 		
 		// move is not delayed
-		if (atkMove.getTurns() == 0) { 
+		if (atkMove.getTurns() == 0) 
 			attack(atk, trg, atkMove, trgMove);
-		}
 		// move has delay
 		else {
 			
@@ -488,7 +525,7 @@ public class BattleEngine {
 			
 				// output delay string
 				Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 1200);
-				Sleeper.print(atkMove.getDelay(), 1200);		
+				Sleeper.print(atkMove.getDelay(pokemon[atk].getName()), 1200);		
 				
 				// reduce number of turns to wait
 				atkMove.setTurns(atkMove.getTurns() - 1);	
@@ -506,27 +543,6 @@ public class BattleEngine {
 		}			
 	}		
 	/** END USE TURN METHOD **/
-
-	/** HAS DELAYED MOVE METHOD
-	 * Check if a move is waiting and return which player 
-	 * @param trainer 1 move, trainer 2 move
-	 * @return 3 if both, 1 if player 1, 2 if player 2, 0 default
-	 **/
-	public int hasDelayedMove(Moves move1, Moves move2) {		
-		
-		if (move1 == null || move2 == null)
-			return 0;
-		
-		if (move1.getTurns() == 1 && move2.getTurns() == 1)
-			return 3;
-		else if (move1.getTurns() == 1)
-			return 1;
-		else if (move2.getTurns() == 1)
-			return 2;
-		
-		return 0;
-	}
-	/** END DELAYED MOVE METHOD **/	
 	
 	/** ATTACK METHOD 
 	 * Handle selected move, calculate damage, and apply it to target
@@ -547,24 +563,19 @@ public class BattleEngine {
 			if (isHit(atk, move, trgMove)) {
 				
 				// move has a status affect
-				if (move.getMType().equals("Status")) {
-					
-					if (move.getName().equals("Teleport")) {
-
-						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
-						clearContent();
-						
-						Sleeper.print("The battle is over!", 1700);
-						System.exit(0);
-					}
-					else
-						statusMove(trg, move);
-				}
-				
+				if (move.getMType().equals("Status"))
+					statusMove(trg, move);				
 				// move has an attribute affect
 				else if (move.getMType().equals("Attribute")) 	
 					attributeMove(atk, trg, move);
-				
+				// move is in other category
+				else if (move.getMType().equals("Other")) {
+					if (move.getName().equals("Teleport")) {
+
+						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
+						System.exit(0);
+					}
+				}				
 				// move is damage-dealing
 				else {				
 					
@@ -719,6 +730,8 @@ public class BattleEngine {
 		
 		// if move changes self attributes
 		if (move.isToSelf()) {
+			
+			
 			
 			// loop through each specified attribute to be changed
 			for (String stat : move.getStats()) 

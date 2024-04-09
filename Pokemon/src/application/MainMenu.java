@@ -148,7 +148,7 @@ public class MainMenu {
 				+ "[3] BATTLE MUSIC\n"
 				+ "[4] SOUNDS\n"
 				+ "[5] TEXT SPEED\n\n"
-				+ "[6] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		// loop until BACK is selected
@@ -169,7 +169,7 @@ public class MainMenu {
 								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
-								+ "[6] <- BACK");
+								+ "[0] <- BACK");
 						System.out.print(">");
 						break;						
 					case 2: 
@@ -182,7 +182,7 @@ public class MainMenu {
 								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
-								+ "[6] <- BACK");
+								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 3: 
@@ -195,7 +195,7 @@ public class MainMenu {
 								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
-								+ "[6] <- BACK");
+								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 4: 
@@ -208,7 +208,7 @@ public class MainMenu {
 								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
-								+ "[6] <- BACK");
+								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 5:
@@ -221,10 +221,10 @@ public class MainMenu {
 								+ "[3] BATTLE MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
-								+ "[6] <- BACK");
+								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
-					case 6: clearContent(); return;
+					case 0: clearContent(); return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
 						System.out.print(">");
@@ -252,7 +252,7 @@ public class MainMenu {
 				+ "[3] 50\n"
 				+ "[4] 100\n"
 				+ "[5] DISABLED\n\n"
-				+ "[6] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -283,7 +283,7 @@ public class MainMenu {
 					defaultLevel = -1;
 					Sleeper.print("DEFAULT LEVEL DISABLED", 1200);
 					return;
-				case 6:
+				case 0:
 					return;
 				default:
 					Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -305,7 +305,7 @@ public class MainMenu {
 		System.out.println("CPU PARTY SELECTION:\n\n"
 				+ "[1] MANUAL\n"
 				+ "[2] RANDOM\n\n"
-				+ "[3] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -323,7 +323,7 @@ public class MainMenu {
 						cpuSelect = true;
 						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
 						return;
-					case 3:
+					case 0:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -386,8 +386,8 @@ public class MainMenu {
 		for (int i = 0; i < musicList.size(); i++) 
 			System.out.println("[" + musicList.get(i));	
 		
-		System.out.println("[00] NONE");
-		System.out.println("\n[" + (musicList.size() + 1) + "] <- BACK");		
+		System.out.println("[" + (musicList.size() + 1) + "] NONE");
+		System.out.println("\n[0] <- BACK");			
 		System.out.print(">");
 		
 		while (true) {
@@ -401,12 +401,12 @@ public class MainMenu {
 					Sleeper.print("NEW MUSIC SELECTED", 1200);
 					return;
 				}					
-				else if (choice == 0) {
+				else if (choice == musicDict.size() + 1) {
 					file = null;
 					Sleeper.print("MUSIC TURNED OFF", 1200);
 					return;
 				}
-				else if (choice == musicDict.size() + 1)
+				else if (choice == 0)
 					return;
 				else {
 					Sleeper.print("ERROR: Input must be a valid selection!");
@@ -430,7 +430,7 @@ public class MainMenu {
 		System.out.println("SOUND EFFECTS:\n\n"
 				+ "[1] ON\n"
 				+ "[2] OFF\n\n"
-				+ "[3] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -448,7 +448,7 @@ public class MainMenu {
 						SoundCard.setActive(false);
 						Sleeper.print("SOUND EFFECTS TURNED OFF", 1200); 
 						return;
-					case 3:
+					case 0:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 
@@ -473,7 +473,7 @@ public class MainMenu {
 				+ "[1] SLOW\n"
 				+ "[2] MEDIUM\n"
 				+ "[3] FAST\n\n"
-				+ "[4] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		while (true) {
@@ -495,7 +495,7 @@ public class MainMenu {
 						Sleeper.setSpeed(15);
 						Sleeper.print("TEXT SPEED SET TO FAST", 1200); 
 						return;
-					case 4:
+					case 0:
 						return;
 					default:
 						Sleeper.print("ERROR: Input must be a valid selection!"); 

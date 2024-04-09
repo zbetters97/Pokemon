@@ -263,6 +263,9 @@
  * 		-Cleaned up coding
  * 4/9/2024:
  * 		-Added debug mode option in Main Menu
+ * 		-Changed BACK option to always be 0
+ * 		-Fixed bug in move wait logic
+ * 		-Cleaned up coding
  */	
 
 package application;

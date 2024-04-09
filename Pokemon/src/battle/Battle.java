@@ -67,48 +67,39 @@ public class Battle {
 	/** END MAIN METHOD **/
 		
 	/** TURN METHOD
-	  * Call displayParty(), displayHP(), and displayMoves() 
 	  **/
 	private void turn() {
 		
-		Moves move1, move2;
+		Moves move1 = null, move2 = null;
 		
 		// loop until winner (return statement)
 		while (true) {
 			
-			if (numPlayers == 1) {			
-				move1 = selectMove(pokemon1, 1);					
-				move2 = battle.cpuSelectMove();	
+			// check if a move is pending
+			int delayedMove = battle.getDelayedMove(move1, move2);
+			
+			// no move is delayed
+			if (delayedMove == 0) {
 				
-				// if cpu used hyper potion
-				if (move2 == null) {
-					clearContent();
-					Sleeper.print(name2+ "'s POTION restored " + 
-						pokemon2.getName() + "'s health!", 1700);
+				if (numPlayers == 1) {			
+					move1 = selectMove(pokemon1, 1);					
+					move2 = battle.cpuSelectMove();	
+					
+					// if cpu used hyper potion
+					if (move2 == null) {
+						clearContent();
+						Sleeper.print(name2+ "'s POTION restored " + 
+							pokemon2.getName() + "'s health!", 1700);
+					}
+				}
+				else {
+					move1 = selectMove(pokemon1, 1);				
+					move2 = selectMove(pokemon2, 2);
 				}
 			}
+			// a move is delayed
 			else {
-				move1 = selectMove(pokemon1, 1);				
-				move2 = selectMove(pokemon2, 2);
-			}
-						
-			clearContent();			
-			battle.move(move1, move2);				
-			clearContent();
-			
-			// if a pokemon is defeated
-			if (battle.hasWinner()) {
-				
-				// if no pokemon left in party
-				if (chooseNextFighter())
-					return;
-			}
-			
-			// check if a move is pending
-			int delayedMove = battle.hasDelayedMove(move1, move2);			
-			if (delayedMove != 0) {
-								
-				// if player 1 is waiting for move, skip and get move from cpu or player 2
+				// if player 1 is waiting for move, skip and get cpu or player 2 move
 				if (delayedMove == 1) {
 					
 					if (numPlayers == 1) {
@@ -125,23 +116,24 @@ public class Battle {
 					else
 						move2 = selectMove(pokemon2, 2);
 				}				
-				// if player 2 is waiting for move, skip and get move from player 1
+				// if player 2 is waiting for move, skip and get player 1 move
 				else if (delayedMove == 2)
-					move1 = selectMove(pokemon1, 1);
+					move1 = selectMove(pokemon1, 1);				
+				// if both are waiting for move, keep existing moves
+			}
+			
+			battle.move(move1, move2);		
+			
+			// if a pokemon is defeated
+			if (battle.hasWinner()) {
 				
-				//if both are waiting for move, keep existing moves
+				// 0 if party empty, 1 if p1 defeated, 2 if p2 defeated
+				int next = chooseNextFighter();
 				
-				clearContent();
-				battle.move(move1, move2);
-				clearContent();
-				
-				// if a pokemon is defeated
-				if (battle.hasWinner()) {
-					
-					// if no pokemon left in party
-					if (chooseNextFighter())
-						return;
-				}
+				// remove move from battle
+				if (next == 0) return;
+				else if (next == 1) move1 = null;
+				else if (next == 2) move2 = null;
 			}
 		}
 	}
@@ -374,7 +366,7 @@ public class Battle {
 	  **/
 	private Pokedex swapFighter(int player) {
 		
-		Sleeper.print("SELECT A POKEMON TO SWAP IN:\n", 700);
+		System.out.println("SELECT A POKEMON TO SWAP IN:\n");
 		
 		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? party1 : party2;
 		
@@ -385,7 +377,7 @@ public class Battle {
 				((p.getType() == null) ? p.printTypes() : p.getType()) + 
 				"\n", p.getLevel());
 		}
-		System.out.println("\n[" + ++counter + "] <- BACK");
+		System.out.println("\n[0] <- BACK");
 		System.out.print(">");
 		
 		int choice = 0;
@@ -419,7 +411,7 @@ public class Battle {
 						return newFighter;	
 					}
 				}
-				else if (choice == counter) {
+				else if (choice == 0) {
 					SoundCard.play(select);
 					return null;			
 				}
@@ -449,11 +441,11 @@ public class Battle {
 		if (player == 1) iCount = playerOneItems;
 		else iCount = playerTwoItems;
 		
-		Sleeper.print("SELECT AN ITEM TO USE ON " + fighter.getName() + ":\n", 700);
+		System.out.println("SELECT AN ITEM TO USE ON " + fighter.getName() + ":\n");
 		System.out.println("[1] POTION (x" + iCount[0] + ")\n"
 				+ "[2] HYPER POTION (x" + iCount[1] + ")\n"
 				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n\n"
-				+ "[4] <- BACK");
+				+ "[0] <- BACK");
 		System.out.print(">");
 		
 		// loop until BACK is selected
@@ -514,7 +506,7 @@ public class Battle {
 							System.out.print(">");
 						}
 						break;
-					case 4: 
+					case 0: 
 						SoundCard.play(select);
 						return false;
 					default:
@@ -570,20 +562,20 @@ public class Battle {
 	}
 	/** END HEAL FIGHTER METHOD **/
 	
-	/** CHOOSE NEXT POKEMON METHOD
-	  * Prompt user to choose next Pokemon in party 
+	/** CHOOSE NEXT FIGHTER METHOD
+	  * Announce winner if party empty, get next fighter if not
+	  * @return 0 if party empty, 1 if p1 defeated, 2 if p2 defeated
 	  **/
-	public boolean chooseNextFighter() {
+	public int chooseNextFighter() {
 		
-		boolean playerTwoWinner = battle.getWinningPokemon().getName().equals(pokemon2.getName());
 		int choice;
 		
-		// if player 2 defeated player 1
+		// true if player2 defeated player 1
+		boolean playerTwoWinner = battle.getWinningPokemon().getName().equals(pokemon2.getName());
 		if (playerTwoWinner) {
 			
 			// remove from player 1 party			
-			for (Pokedex p : party1) {
-				
+			for (Pokedex p : party1) {				
 				if (p.getIndex() == pokemon1.getIndex()) {
 					party1.remove(p);
 					break;
@@ -593,7 +585,7 @@ public class Battle {
 			// if no pokemon left
 			if (party1.isEmpty()) {
 				announceWinner(name2, name1, battle.getMoney(0));				
-				return true;
+				return 0;
 			}
 			else {			
 				// reset winner
@@ -610,15 +602,14 @@ public class Battle {
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);
 				
-				return false;
+				return 1;
 			}
 		}
 		// if player 1 defeated player 2
-		else {		
+		else {				
 			
 			// remove from party 2
-			for (Pokedex p : party2) {
-				
+			for (Pokedex p : party2) {				
 				if (p.getIndex() == pokemon2.getIndex()) {
 					party2.remove(p);
 					break;
@@ -628,7 +619,7 @@ public class Battle {
 			// if no pokemon left
 			if (party2.isEmpty()) {
 				announceWinner(name1, name2, battle.getMoney(1));	
-				return true;
+				return 0;
 			}
 			else {			
 				// reset winner
@@ -651,7 +642,7 @@ public class Battle {
 				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
 				
-				return false;
+				return 2;
 			}		
 		}
 	}	

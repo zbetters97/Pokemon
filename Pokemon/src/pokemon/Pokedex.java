@@ -163,88 +163,88 @@ public enum Pokedex {
 		// map of pokemon and corresponding move set
 		Map<Pokedex, List<Move>> pokeMap = new HashMap<>();
 		// set default moves for each pokemon
-        pokeMap.put(BULBASAUR, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.VINEWHIP, 25), new Move(MovesEngine.GROWL, 40)));
-        pokeMap.put(IVYSAUR, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.POISONPOWDER, 45), new Move(MovesEngine.VINEWHIP, 25),
-        		new Move(MovesEngine.RAZORLEAF, 25)));
-		pokeMap.put(VENUSAUR, Arrays.asList(new Move(MovesEngine.TAKEDOWN, 20), new Move(MovesEngine.DOUBLEEDGE, 10), new Move(MovesEngine.PETALBLIZZARD, 15),
-				new Move(MovesEngine.SOLARBEAM, 10, 2)));
+        pokeMap.put(BULBASAUR, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.VINEWHIP), new Move(MovesEngine.GROWL)));
+        pokeMap.put(IVYSAUR, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.POISONPOWDER, 45), new Move(MovesEngine.VINEWHIP),
+        		new Move(MovesEngine.RAZORLEAF)));
+		pokeMap.put(VENUSAUR, Arrays.asList(new Move(MovesEngine.TAKEDOWN), new Move(MovesEngine.DOUBLEEDGE), new Move(MovesEngine.PETALBLIZZARD),
+				new Move(MovesEngine.SOLARBEAM, 2)));
 		
-        pokeMap.put(CHARMANDER, Arrays.asList(new Move(MovesEngine.SCRATCH, 35), new Move(MovesEngine.EMBER, 25), new Move(MovesEngine.GROWL, 40)));
-		pokeMap.put(CHARMELEON, Arrays.asList(new Move(MovesEngine.SLASH, 20), new Move(MovesEngine.QUICKATTACK, 30), new Move(MovesEngine.EMBER, 25), 
-				new Move(MovesEngine.FIREFANG, 15)));
-        pokeMap.put(CHARIZARD, Arrays.asList(new Move(MovesEngine.DRAGONBREATH, 20), new Move(MovesEngine.FLAMETHROWER, 15), new Move(MovesEngine.FLAREBLITZ, 15),
-        	new Move(MovesEngine.FLY, 15, 2)));
+        pokeMap.put(CHARMANDER, Arrays.asList(new Move(MovesEngine.SCRATCH), new Move(MovesEngine.EMBER), new Move(MovesEngine.GROWL)));
+		pokeMap.put(CHARMELEON, Arrays.asList(new Move(MovesEngine.SLASH), new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.EMBER), 
+				new Move(MovesEngine.FIREFANG)));
+        pokeMap.put(CHARIZARD, Arrays.asList(new Move(MovesEngine.DRAGONBREATH), new Move(MovesEngine.FLAMETHROWER), new Move(MovesEngine.FLAREBLITZ),
+        	new Move(MovesEngine.FLY, 2)));
         
-		pokeMap.put(SQUIRTLE, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.TAILWHIP, 30)));
-        pokeMap.put(WARTORTLE, Arrays.asList(new Move(MovesEngine.QUICKATTACK, 30), new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.WATERPULSE, 20)));
-        pokeMap.put(BLASTOISE, Arrays.asList(new Move(MovesEngine.FLASHCANNON, 10), new Move(MovesEngine.AQUATAIL, 10), 
-        		new Move(MovesEngine.WATERPULSE, 20), new Move(MovesEngine.HYDROPUMP, 5)));
+		pokeMap.put(SQUIRTLE, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.WATERGUN), new Move(MovesEngine.TAILWHIP)));
+        pokeMap.put(WARTORTLE, Arrays.asList(new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.WATERGUN), new Move(MovesEngine.WATERPULSE)));
+        pokeMap.put(BLASTOISE, Arrays.asList(new Move(MovesEngine.FLASHCANNON), new Move(MovesEngine.AQUATAIL), 
+        		new Move(MovesEngine.WATERPULSE), new Move(MovesEngine.HYDROPUMP)));
         
-        pokeMap.put(PIKACHU, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.THUNDERWAVE, 20), new Move(MovesEngine.THUNDERSHOCK, 40),
-        		new Move(MovesEngine.PLAYNICE, 20)));
-        pokeMap.put(RAICHU, Arrays.asList(new Move(MovesEngine.QUICKATTACK, 30), new Move(MovesEngine.SLAM, 20), new Move(MovesEngine.THUNDERPUNCH, 15),
-        		new Move(MovesEngine.THUNDERBOLT, 15)));    
+        pokeMap.put(PIKACHU, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.THUNDERWAVE), new Move(MovesEngine.THUNDERSHOCK),
+        		new Move(MovesEngine.PLAYNICE)));
+        pokeMap.put(RAICHU, Arrays.asList(new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.SLAM), new Move(MovesEngine.THUNDERPUNCH),
+        		new Move(MovesEngine.THUNDERBOLT)));    
         
-        pokeMap.put(ABRA, Arrays.asList(new Move(MovesEngine.TELEPORT, 20)));
-        pokeMap.put(KADABRA, Arrays.asList(new Move(MovesEngine.CONFUSION, 25), new Move(MovesEngine.PSYBEAM, 20), new Move(MovesEngine.KINESIS, 15)));
-        pokeMap.put(ALAKAZAM, Arrays.asList(new Move(MovesEngine.PSYCHIC, 10), new Move(MovesEngine.CONFUSION, 25), new Move(MovesEngine.PSYCHOCUT, 20), 
-        		new Move(MovesEngine.CALMMIND, 20)));     
+        pokeMap.put(ABRA, Arrays.asList(new Move(MovesEngine.TELEPORT)));
+        pokeMap.put(KADABRA, Arrays.asList(new Move(MovesEngine.CONFUSION), new Move(MovesEngine.PSYBEAM), new Move(MovesEngine.KINESIS)));
+        pokeMap.put(ALAKAZAM, Arrays.asList(new Move(MovesEngine.PSYCHIC), new Move(MovesEngine.CONFUSION), new Move(MovesEngine.PSYCHOCUT), 
+        		new Move(MovesEngine.CALMMIND)));     
         
-        pokeMap.put(MACHOP, Arrays.asList(new Move(MovesEngine.LOWKICK, 20), new Move(MovesEngine.LOWSWEEP, 20), new Move(MovesEngine.KNOCKOFF, 20))); 
-        pokeMap.put(MACHOKE, Arrays.asList(new Move(MovesEngine.LOWKICK, 20), new Move(MovesEngine.LOWSWEEP,20), new Move(MovesEngine.VITALTHROW, 10),
-        		new Move(MovesEngine.SEISMICTOSS, 20))); 
-        pokeMap.put(MACHAMP, Arrays.asList(new Move(MovesEngine.VITALTHROW, 10), new Move(MovesEngine.SEISMICTOSS, 20), new Move(MovesEngine.DYNAMICPUNCH, 5),
-        		new Move(MovesEngine.CROSSCHOP, 5))); 
+        pokeMap.put(MACHOP, Arrays.asList(new Move(MovesEngine.LOWKICK), new Move(MovesEngine.LOWSWEEP), new Move(MovesEngine.KNOCKOFF))); 
+        pokeMap.put(MACHOKE, Arrays.asList(new Move(MovesEngine.LOWKICK), new Move(MovesEngine.LOWSWEEP,20), new Move(MovesEngine.VITALTHROW),
+        		new Move(MovesEngine.SEISMICTOSS))); 
+        pokeMap.put(MACHAMP, Arrays.asList(new Move(MovesEngine.VITALTHROW), new Move(MovesEngine.SEISMICTOSS), new Move(MovesEngine.DYNAMICPUNCH),
+        		new Move(MovesEngine.CROSSCHOP))); 
         
-        pokeMap.put(GEODUDE, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.ROCKTHROW, 15), new Move(MovesEngine.DEFENSECURL, 40)));
-        pokeMap.put(GRAVELER, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.ROCKTHROW, 15), new Move(MovesEngine.ROLLOUT, 20),
-        		new Move(MovesEngine.DEFENSECURL, 40)));
-        pokeMap.put(GOLEM, Arrays.asList(new Move(MovesEngine.HEAVYSLAM, 20), new Move(MovesEngine.EARTHQUAKE, 10), new Move(MovesEngine.DOUBLEEDGE, 10),
-        		new Move(MovesEngine.DIG, 10, 2)));
+        pokeMap.put(GEODUDE, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.ROCKTHROW), new Move(MovesEngine.DEFENSECURL)));
+        pokeMap.put(GRAVELER, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.ROCKTHROW), new Move(MovesEngine.ROLLOUT),
+        		new Move(MovesEngine.DEFENSECURL)));
+        pokeMap.put(GOLEM, Arrays.asList(new Move(MovesEngine.HEAVYSLAM), new Move(MovesEngine.EARTHQUAKE), new Move(MovesEngine.DOUBLEEDGE),
+        		new Move(MovesEngine.DIG, 2)));
         
-        pokeMap.put(GASTLY, Arrays.asList(new Move(MovesEngine.LICK, 30), new Move(MovesEngine.PAYBACK, 10), new Move(MovesEngine.HYPNOSIS, 20)));   
-        pokeMap.put(HAUNTER, Arrays.asList(new Move(MovesEngine.PAYBACK, 10), new Move(MovesEngine.HEX, 10), new Move(MovesEngine.CONFUSERAY, 10),
-        		new Move(MovesEngine.DARKPULSE, 15)));   
-        pokeMap.put(GENGAR, Arrays.asList(new Move(MovesEngine.HEX, 10), new Move(MovesEngine.DARKPULSE, 15), new Move(MovesEngine.SHADOWBALL, 15),
-        		new Move(MovesEngine.SHADOWPUNCH, 20))); 
+        pokeMap.put(GASTLY, Arrays.asList(new Move(MovesEngine.LICK), new Move(MovesEngine.PAYBACK), new Move(MovesEngine.HYPNOSIS)));   
+        pokeMap.put(HAUNTER, Arrays.asList(new Move(MovesEngine.PAYBACK), new Move(MovesEngine.HEX), new Move(MovesEngine.CONFUSERAY),
+        		new Move(MovesEngine.DARKPULSE)));   
+        pokeMap.put(GENGAR, Arrays.asList(new Move(MovesEngine.HEX), new Move(MovesEngine.DARKPULSE), new Move(MovesEngine.SHADOWBALL),
+        		new Move(MovesEngine.SHADOWPUNCH))); 
         
-        pokeMap.put(HORSEA, Arrays.asList(new Move(MovesEngine.BUBBLE, 30), new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.LEER, 30))); 
-        pokeMap.put(SEADRA, Arrays.asList(new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.TWISTER, 20), new Move(MovesEngine.HYDROPUMP, 5),
-        		new Move(MovesEngine.AGILITY, 30))); 
-        pokeMap.put(KINGDRA, Arrays.asList(new Move(MovesEngine.SURF, 15), new Move(MovesEngine.HYDROPUMP, 5), new Move(MovesEngine.DRAGONPULSE, 10),
-        		new Move(MovesEngine.AGILITY, 30))); 
+        pokeMap.put(HORSEA, Arrays.asList(new Move(MovesEngine.BUBBLE), new Move(MovesEngine.WATERGUN), new Move(MovesEngine.LEER))); 
+        pokeMap.put(SEADRA, Arrays.asList(new Move(MovesEngine.WATERGUN), new Move(MovesEngine.TWISTER), new Move(MovesEngine.HYDROPUMP),
+        		new Move(MovesEngine.AGILITY))); 
+        pokeMap.put(KINGDRA, Arrays.asList(new Move(MovesEngine.SURF), new Move(MovesEngine.HYDROPUMP), new Move(MovesEngine.DRAGONPULSE),
+        		new Move(MovesEngine.AGILITY))); 
         
-        pokeMap.put(RAIKOU, Arrays.asList(new Move(MovesEngine.CRUNCH, 15), new Move(MovesEngine.THUNDERFANG, 15), new Move(MovesEngine.THUNDER, 10),
-        		new Move(MovesEngine.CALMMIND, 20)));
-        pokeMap.put(ENTEI, Arrays.asList(new Move(MovesEngine.EXTRASENSORY, 30), new Move(MovesEngine.FIREFANG, 15), new Move(MovesEngine.FLAMETHROWER, 15),
-        		new Move(MovesEngine.CALMMIND, 20)));
-        pokeMap.put(SUICINE, Arrays.asList(new Move(MovesEngine.AURORABEAM, 20), new Move(MovesEngine.ICEFANG, 15), new Move(MovesEngine.HYDROPUMP, 5),
-        		new Move(MovesEngine.CALMMIND, 20)));
+        pokeMap.put(RAIKOU, Arrays.asList(new Move(MovesEngine.CRUNCH), new Move(MovesEngine.THUNDERFANG), new Move(MovesEngine.THUNDER),
+        		new Move(MovesEngine.CALMMIND)));
+        pokeMap.put(ENTEI, Arrays.asList(new Move(MovesEngine.EXTRASENSORY), new Move(MovesEngine.FIREFANG), new Move(MovesEngine.FLAMETHROWER),
+        		new Move(MovesEngine.CALMMIND)));
+        pokeMap.put(SUICINE, Arrays.asList(new Move(MovesEngine.AURORABEAM), new Move(MovesEngine.ICEFANG), new Move(MovesEngine.HYDROPUMP),
+        		new Move(MovesEngine.CALMMIND)));
         
-        pokeMap.put(TREECKO, Arrays.asList(new Move(MovesEngine.ABSORB, 20), new Move(MovesEngine.QUICKATTACK, 30), new Move(MovesEngine.LEER, 30))); 
-        pokeMap.put(GROVYLE, Arrays.asList(new Move(MovesEngine.QUICKATTACK, 30), new Move(MovesEngine.LEAFBLADE, 15), new Move(MovesEngine.ABSORB, 20),
-        		new Move(MovesEngine.AGILITY, 30))); 
-        pokeMap.put(SCEPTILE, Arrays.asList(new Move(MovesEngine.LEAFBLADE, 15), new Move(MovesEngine.LEAFSTORM, 5), new Move(MovesEngine.GIGADRAIN, 10),
-        		new Move(MovesEngine.AGILITY, 30))); 
+        pokeMap.put(TREECKO, Arrays.asList(new Move(MovesEngine.ABSORB), new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.LEER))); 
+        pokeMap.put(GROVYLE, Arrays.asList(new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.LEAFBLADE), new Move(MovesEngine.ABSORB),
+        		new Move(MovesEngine.AGILITY))); 
+        pokeMap.put(SCEPTILE, Arrays.asList(new Move(MovesEngine.LEAFBLADE), new Move(MovesEngine.LEAFSTORM), new Move(MovesEngine.GIGADRAIN),
+        		new Move(MovesEngine.AGILITY))); 
         
-        pokeMap.put(TORCHIC, Arrays.asList(new Move(MovesEngine.EMBER, 25), new Move(MovesEngine.SCRATCH, 35), new Move(MovesEngine.GROWL, 40))); 
-        pokeMap.put(COMBUSKEN, Arrays.asList(new Move(MovesEngine.EMBER, 25), new Move(MovesEngine.DOUBLEKICK, 35), new Move(MovesEngine.SLASH, 20), 
-        		new Move(MovesEngine.GROWL, 40))); 
-        pokeMap.put(BLAZIKEN, Arrays.asList(new Move(MovesEngine.FIREPUNCH, 15), new Move(MovesEngine.BLAZEKICK, 10), new Move(MovesEngine.SKYUPPERCUT, 15),
-        		new Move(MovesEngine.FLAREBLITZ, 15))); 
+        pokeMap.put(TORCHIC, Arrays.asList(new Move(MovesEngine.EMBER), new Move(MovesEngine.SCRATCH), new Move(MovesEngine.GROWL))); 
+        pokeMap.put(COMBUSKEN, Arrays.asList(new Move(MovesEngine.EMBER), new Move(MovesEngine.DOUBLEKICK), new Move(MovesEngine.SLASH), 
+        		new Move(MovesEngine.GROWL))); 
+        pokeMap.put(BLAZIKEN, Arrays.asList(new Move(MovesEngine.FIREPUNCH), new Move(MovesEngine.BLAZEKICK), new Move(MovesEngine.SKYUPPERCUT),
+        		new Move(MovesEngine.FLAREBLITZ))); 
         
-        pokeMap.put(MUDKIP, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.GROWL, 40))); 
-        pokeMap.put(MARSHTOMP, Arrays.asList(new Move(MovesEngine.TACKLE, 35), new Move(MovesEngine.WATERGUN, 25), new Move(MovesEngine.MUDSHOT, 15),
-        		new Move(MovesEngine.MUDSLAP, 10))); 
-        pokeMap.put(SWAMPERT, Arrays.asList(new Move(MovesEngine.SURF, 15), new Move(MovesEngine.MUDDYWATER, 10), new Move(MovesEngine.MUDBOMB, 10),
-        		new Move(MovesEngine.EARTHQUAKE, 10)));
+        pokeMap.put(MUDKIP, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.WATERGUN), new Move(MovesEngine.GROWL))); 
+        pokeMap.put(MARSHTOMP, Arrays.asList(new Move(MovesEngine.TACKLE), new Move(MovesEngine.WATERGUN), new Move(MovesEngine.MUDSHOT),
+        		new Move(MovesEngine.MUDSLAP))); 
+        pokeMap.put(SWAMPERT, Arrays.asList(new Move(MovesEngine.SURF), new Move(MovesEngine.MUDDYWATER), new Move(MovesEngine.MUDBOMB),
+        		new Move(MovesEngine.EARTHQUAKE)));
         
-        pokeMap.put(KYOGRE, Arrays.asList(new Move(MovesEngine.SURF, 15), new Move(MovesEngine.HYDROPUMP, 5), new Move(MovesEngine.THUNDER, 10),
-        		new Move(MovesEngine.CALMMIND, 20)));
-        pokeMap.put(GROUDON, Arrays.asList(new Move(MovesEngine.EARTHQUAKE, 10), new Move(MovesEngine.SOLARBEAM, 10, 2), new Move(MovesEngine.FIREFANG, 15),
-        		new Move(MovesEngine.DRAGONCLAW, 15)));
-        pokeMap.put(RAYQUAZA, Arrays.asList(new Move(MovesEngine.DRAGONCLAW, 15), new Move(MovesEngine.FLY, 15, 2), new Move(MovesEngine.EXTREMESPEED, 5),
-        		new Move(MovesEngine.BLIZZARD, 5))); 
+        pokeMap.put(KYOGRE, Arrays.asList(new Move(MovesEngine.SURF), new Move(MovesEngine.HYDROPUMP), new Move(MovesEngine.THUNDER),
+        		new Move(MovesEngine.CALMMIND)));
+        pokeMap.put(GROUDON, Arrays.asList(new Move(MovesEngine.EARTHQUAKE), new Move(MovesEngine.SOLARBEAM, 2), new Move(MovesEngine.FIREFANG),
+        		new Move(MovesEngine.DRAGONCLAW)));
+        pokeMap.put(RAYQUAZA, Arrays.asList(new Move(MovesEngine.DRAGONCLAW), new Move(MovesEngine.FLY, 2), new Move(MovesEngine.EXTREMESPEED),
+        		new Move(MovesEngine.BLIZZARD))); 
         
         // if pokemon not already mapped to moveset
         if (pokemon.getMoveSet().isEmpty()) {
@@ -362,7 +362,8 @@ public enum Pokedex {
 		String s = "";		
 		int i = types.size() - 1;
 		for (TypeEngine t : types) {
-			 s += t.toString().charAt(0);		
+			 s += t.toString().charAt(0);
+			 s += t.toString().toLowerCase().charAt(1);
 			 if (i-- != 0)
 				 s += "/";
 		}

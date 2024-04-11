@@ -274,6 +274,10 @@
  * 		-Added new Move class that creates unique objects out of Moves Enums
  * 		-Fixed move PP logic error
  * 		-Renamed Moves class to MoveEngine and cleaned coding
+ * 		-Modified Move class so PP is found in MovesEngine
+ * 		-Added Pokemon logo to Main Menu
+ * 		-Added Professor Oak ascii art to battle setup menu
+ * 		-Added hidden phrases at name select screen
  */	
 
 package application;

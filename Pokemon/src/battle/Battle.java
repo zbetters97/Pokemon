@@ -219,12 +219,14 @@ public class Battle {
 					System.exit(0);
 				}
 				else {
+					SoundCard.play(select);	
 					Sleeper.print("This is not a move!"); 	
 					System.out.print(">");
 				}
 			}
 			catch (InputMismatchException e) { 
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);	
+				Sleeper.print("This is not a move!");
 				System.out.print(">");
 				input.next();
 			}
@@ -346,7 +348,7 @@ public class Battle {
 				info.replace(i, i + 1, "\n");
 			}
 			
-			System.out.println(move.getName().toUpperCase() + " : PP " + move.getbpp() + 
+			System.out.println(move.getName().toUpperCase() + " : PP " + move.getpp() + 
 					((move.getMove().getPower() == 0) ? "" : " | PWR " + move.getMove().getPower()) + 
 					" | ACC " + move.getMove().getAccuracy() + " | TYPE " + move.getMove().getType());
 			
@@ -364,12 +366,14 @@ public class Battle {
 				SoundCard.play(select);	
 			}
 			else {
-				Sleeper.print("ERROR: This is not a valid selection!");
+				SoundCard.play(select);	
+				Sleeper.print("This is not a valid selection!");
 				System.out.print(">");
 			}
 		}
 		catch (InputMismatchException e) { 
-			Sleeper.print("Input must be a number!");
+			SoundCard.play(select);	
+			Sleeper.print("This is not a valid selection!");
 			System.out.print(">");
 			input.next();
 		}		
@@ -449,12 +453,14 @@ public class Battle {
 					return null;			
 				}
 				else {
-					Sleeper.print("ERROR: This is not a valid selection!");
+					SoundCard.play(select);	
+					Sleeper.print("This is not a valid selection!");
 					System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);	
+				Sleeper.print("This is not a valid selection!");
 				System.out.print(">");
 				input.next();
 			}
@@ -487,11 +493,10 @@ public class Battle {
 			
 			try { 
 				choice = input.nextInt(); 
+				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: 
-						SoundCard.play(select);
-						
+					case 1: 												
 						if (iCount[0] != 0) {
 							iCount[0] -= 1;
 						
@@ -505,9 +510,7 @@ public class Battle {
 							System.out.print(">");
 						}
 						break;						
-					case 2: 
-						SoundCard.play(select);
-						
+					case 2: 						
 						if (iCount[1] != 0) {
 							iCount[1] -= 1;
 							
@@ -522,9 +525,7 @@ public class Battle {
 							System.out.print(">");
 						}
 						break;
-					case 3: 
-						SoundCard.play(select);
-						
+					case 3: 						
 						if (iCount[2] != 0) {
 							iCount[2] -= 1;
 							
@@ -540,10 +541,9 @@ public class Battle {
 						}
 						break;
 					case 0: 
-						SoundCard.play(select);
 						return false;
 					default:
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("This is not a valid selection!"); 
 						System.out.print(">");
 						break;
 				}
@@ -553,7 +553,8 @@ public class Battle {
 					playerTwoItems = iCount;
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);	
+				Sleeper.print("This is not a valid selection!"); 
 				System.out.print(">");
 				input.next();
 			}
@@ -719,12 +720,14 @@ public class Battle {
 				if (0 < choice && choice <= counter) 
 					return choice;									
 				else {
-					Sleeper.print("ERROR: This is not a valid selection!");
+					SoundCard.play(select);
+					Sleeper.print("This is not a valid selection!"); 
 					System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("This is not a valid selection!"); 
 				System.out.print(">");
 				input.next();
 			}

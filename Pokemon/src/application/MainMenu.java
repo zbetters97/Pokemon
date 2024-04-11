@@ -38,11 +38,11 @@ public class MainMenu {
 		file =  "13battle-pc-normal";
 		cpuSelect = false;
 		
-		// menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
+		menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
 		menuMusic.playMusic();
-
-		clearContent();	
+		
+		clearContent();			
 		
 		// players can only be set to 1 or 2
 		players = mainMenu();
@@ -81,12 +81,54 @@ public class MainMenu {
 	}
 	/** END LOAD METHOD **/
 	
+	private static void printLogo() {
+		System.out.println("                                  ,'\\\r\n"
+				+ "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
+				+ "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\r\n"
+				+ "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\r\n"
+				+ " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\r\n"
+				+ "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\r\n"
+				+ "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\r\n"
+				+ "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\r\n"
+				+ "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\r\n"
+				+ "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\r\n"
+				+ "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\r\n"
+				+ "                                `'                            '-._|\n\n");
+	}
+	private static void printOak() {
+		System.out.println("⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠀⠘⠯⠙⠛⠛⠉⠛⠛⠛⠲⠤⠤⡀⠀⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⢲⣖⠤⠀⣄⣀⠤⠀⠀⠀⠀⠀⠀⠓⡄⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠰⢮⣀⣯⠉⠉⠹⢦⡼⠉⠉⠹⢇⠲⡇⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠀⠀⠿⢷⣥⣄⣦⢠⡄⡀⣠⣤⣾⠾⡃⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠀⢸⠀⡆⢹⣍⣿⠈⠙⣿⣉⠏⢹⠀⡇⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠀⠀⠙⢿⡇⢀⣛⣃⣀⠀⡄⢀⡸⠋⠀⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠀⠀⠀⢀⣵⣶⣿⠉⠉⣷⣿⣮⡀⠀⠀⠀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⣠⣦⣟⠋⠀⣤⣿⣿⣉⣉⡠⠇⠈⣦⢄⣀⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⣯⣥⡉⢓⢢⡞⠛⢩⣬⣭⣥⣦⣤⠿⠀⠀⢴⠀⠀⠀\r\n"
+				+ "⠀⠀⢀⠟⢹⣿⠿⡿⠏⢉⣿⣿⣯⡗⣿⡏⠉⠶⡀⢀⠰⡇⠀⠀\r\n"
+				+ "⠀⢠⡼⠤⠼⣿⠦⠃⠘⠛⠛⣻⣿⣿⣽⡇⠀⠶⠀⢸⠀⠓⡄⠀\r\n"
+				+ "⠠⡜⠁⠀⠀⢹⣄⠀⠀⠐⣶⣿⣿⡿⣿⡇⠰⠀⠀⢸⠀⠀⡇⠀\r\n"
+				+ "⠘⢇⡀⠀⠀⠈⣿⣿⣶⣶⠉⠉⠁⠀⣷⠸⠁⠀⠀⢸⠀⠀⢱⡆\r\n"
+				+ "⠀⠀⠙⠛⡟⠛⠷⠟⢻⣧⣤⣀⣠⣤⡟⠀⠀⠀⠀⢸⡁⢠⡜⠃\r\n"
+				+ "⠀⠀⠀⡀⢃⣀⠀⠀⢸⣿⣿⣉⣹⣿⣧⡀⠀⣀⠒⠚⣦⠏⠁⠀\r\n"
+				+ "⠀⠀⠀⡿⠀⠀⣿⠀⢸⣿⣾⣿⢧⣻⣼⡇⠀⣿⠀⠀⣽⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⣟⠀⠀⣿⠀⢸⣯⢿⡟⢻⡷⣾⡇⠀⣿⠀⠀⢾⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⣿⠱⠤⠿⠀⣸⣿⠿⡇⢸⣷⣻⡇⠀⠿⠤⠌⣿⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⢳⣦⣤⣼⣿⠁⣴⠃⠘⣷⣿⣧⣤⣤⣴⡞⠉⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⢸⣿⣽⣏⡁⠀⣿⠀⠀⣿⡷⠿⣍⣉⣹⡇⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⣿⡿⠿⢿⡿⠿⣿⠇⠠⣟⣻⣿⡿⠿⢿⣿⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⣏⣡⣤⣜⣣⣤⠛⠀⠀⠛⣿⣋⣡⣤⠘⢻⠀⠀⠀⠀\r\n"
+				+ "⠀⠀⠀⠀⠈⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠁⠀⠀⠀⠀\n");
+	}
+	
 	/** SELECT PLAYERS METHOD
 	  * Prompt player to select a setting from the main menu
 	  * @return choice
 	  **/
 	private static int mainMenu() {
-								
+		
+		printLogo();		
 		System.out.println("PLEASE SELECT MODE:\n\n"
 				+ "[1] ONE PLAYER\n"
 				+ "[2] TWO PLAYER\n"
@@ -106,7 +148,8 @@ public class MainMenu {
 					case 2: clearContent(); return choice;
 					case 3: 
 						clearContent(); 					
-						settingsMenu();			
+						settingsMenu();	
+						printLogo();
 						System.out.println("PLEASE SELECT MODE:\n\n"
 								+ "[1] ONE PLAYER\n"
 								+ "[2] TWO PLAYER\n"
@@ -124,12 +167,13 @@ public class MainMenu {
 						clearContent();
 						return 5;
 					default: 
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("Input must be a menu option!"); 
 						System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -141,7 +185,7 @@ public class MainMenu {
 	  * Settings main menu 
 	  **/
 	private static void settingsMenu() {
-		
+		printLogo();
 		System.out.println("PLEASE SELECT AN OPTION:\n\n"
 				+ "[1] LEVELS\n"
 				+ "[2] CPU PARTY\n"
@@ -161,8 +205,10 @@ public class MainMenu {
 				switch (choice) {
 					case 1: 
 						clearContent(); 
+						printLogo();
 						levelSetting(); 
-						clearContent();						
+						clearContent();	
+						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
@@ -174,8 +220,10 @@ public class MainMenu {
 						break;						
 					case 2: 
 						clearContent(); 
+						printLogo();
 						partySetting(); 
 						clearContent();
+						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
@@ -187,8 +235,10 @@ public class MainMenu {
 						break;
 					case 3: 
 						clearContent(); 
+						printLogo();
 						musicSetting(); 
 						clearContent();
+						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
@@ -200,8 +250,10 @@ public class MainMenu {
 						break;
 					case 4: 
 						clearContent();
+						printLogo();
 						soundSetting(); 
 						clearContent();
+						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
 								+ "[2] CPU PARTY\n"
@@ -213,6 +265,7 @@ public class MainMenu {
 						break;
 					case 5:
 						clearContent();
+						printLogo();
 						textSetting();
 						clearContent();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
@@ -226,14 +279,14 @@ public class MainMenu {
 						break;
 					case 0: clearContent(); return;
 					default:
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("Input must be a menu option!"); 
 						System.out.print(">");
 						break;
 				}
 			}
 			catch (Exception e) {
-				System.out.println(e);
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -286,13 +339,14 @@ public class MainMenu {
 				case 0:
 					return;
 				default:
-					Sleeper.print("ERROR: Input must be a valid selection!"); 
+					Sleeper.print("Input must be a menu option!"); 
 					System.out.print(">");
 					break;
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -326,12 +380,13 @@ public class MainMenu {
 					case 0:
 						return;
 					default:
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("Input must be a menu option!"); 
 						System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!!");
 				System.out.print(">");
 				input.next();
 			}
@@ -409,12 +464,13 @@ public class MainMenu {
 				else if (choice == 0)
 					return;
 				else {
-					Sleeper.print("ERROR: Input must be a valid selection!");
+					Sleeper.print("Input must be a menu option!");
 					System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a valid selection!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -451,12 +507,13 @@ public class MainMenu {
 					case 0:
 						return;
 					default:
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("Input must be a menu option!");
 						System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -498,13 +555,14 @@ public class MainMenu {
 					case 0:
 						return;
 					default:
-						Sleeper.print("ERROR: Input must be a valid selection!"); 
+						Sleeper.print("Input must be a menu option!");
 						System.out.print(">");
 						break;
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
 				System.out.print(">");
 				input.next();
 			}
@@ -519,7 +577,8 @@ public class MainMenu {
 	  **/
 	private static String inputName(int player) {
 				
-		Sleeper.print("WHAT IS YOUR NAME, TRAINER " + player + "?");
+		printOak();
+		Sleeper.print("PR. OAK: What's your name, trainer " + player + "?");
 		System.out.print(">");
 		
 		// loop until QUIT is selected
@@ -529,14 +588,29 @@ public class MainMenu {
 				String name = input.next(); 
 				SoundCard.play(select);
 				
+				String greeting;
+				
+				if (name.equals("Ash"))
+					greeting = "PR. OAK: Ash! Good to see you again :)";
+				else if (name.equals("Oak"))
+					greeting = "PR. OAK: Would you happen to also be a professor?";
+				else if (name.equals("Zachary")) 
+					greeting = "PR. OAK: Woah! I am honored to be in the presense of my creator!";
+				else if (name.equals("Jenna"))
+					greeting = "PR. OAK: What a lovely sounding name!";
+				else 
+					greeting = "PR. OAK: Welcome to the world of POKEMON, " + name + "!";									
+				
 				clearContent();
-				Sleeper.print("WELCOME TO THE WORLD OF POKEMON, " + name + "!", 1200);
+				printOak();
+				Sleeper.print(greeting, 1200);
 				clearContent();
 				
 				return name;
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Something went wrong!");
+				SoundCard.play(select);
+				Sleeper.print("Something went wrong! Please try again!");
 				System.out.print(">");
 				input.next();
 			}
@@ -549,7 +623,8 @@ public class MainMenu {
 	  **/
 	private static void selectPartySize() {
 					
-		Sleeper.print("PLEASE SELECT PARTY SIZE (1-6):");
+		printOak();
+		Sleeper.print("PR. OAK: What will be the size of your POKEMON party? (1-6)");
 		System.out.print(">");
 		
 		// loop until Quit is selected
@@ -564,15 +639,15 @@ public class MainMenu {
 					clearContent();	
 					return;
 				}
-				else if (choice == 7) { 
-					Sleeper.print("Shutting down..."); 
-					System.exit(0); 
-				}	
-				else 
-					Sleeper.print("ERROR: Input must be a valid selection!"); 
+				else {
+					Sleeper.print("Input must be between 1-6!"); 
+					System.out.print(">");
+				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a valid number!");
+				System.out.print(">");
 				input.next();
 			}
 		}
@@ -591,16 +666,16 @@ public class MainMenu {
 			int counter = displayParty();
 			
 			if (!cpuSelect || players == 2) {
-				System.out.println("\n\n" + ((turn % 2 != 0) ? name1 : name2) + 
-						", PLEASE SELECT YOUR POKEMON PARTY:");
+				System.out.println("\n\nPR. OAK: " + ((turn % 2 != 0) ? name1 : name2) + 
+						", Please choose your POKEMON:");
 				System.out.print(">");
 			}
 			else if (cpuSelect && turn % 2 != 0) {
-				System.out.println("\n\n" + name1 + ", PLEASE SELECT YOUR POKEMON PARTY:");
+				System.out.println("\n\nPR. OAK: " + name1 + ", Please choose your POKEMON:");
 				System.out.print(">");
 			}
 			if (cpuSelect && turn % 2 == 0 && players == 1) {
-				System.out.println("\n\n" + name2 + ", PLEASE SELECT YOUR POKEMON PARTY:");
+				System.out.println("\n\nPR. OAK: " + name2 + ", Please choose your POKEMON:");
 				System.out.print("");
 				Sleeper.pause(1700);
 				choice = cpuSelectParty(counter);
@@ -625,12 +700,14 @@ public class MainMenu {
 								break;
 						}
 						else {
-							Sleeper.print("ERROR: This is not a valid selection!");
+							SoundCard.play(select);
+							Sleeper.print("Input must be a valid selection!");
 							System.out.print(">");
 						}
 					}
 					catch (Exception e) {
-						Sleeper.print("ERROR: Input must be a number!");
+						SoundCard.play(select);
+						Sleeper.print("Input must be a valid selection!");
 						System.out.print(">");
 						input.next();
 					}
@@ -709,14 +786,16 @@ public class MainMenu {
 		System.out.print("\n" + name1 + "'s PARTY: ");
 		for (Pokedex p : party1) {
 			System.out.print(p.getName() + "(" + 
-				((p.getTypes() == null) ? p.getType().toString().charAt(0) : 
+				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" + 
+					p.getType().toString().toLowerCase().charAt(1) : 
 					p.printTypesShort()) + ") ");
 		}
 		
 		System.out.print("\n" + name2 + "'s PARTY: ");			
 		for (Pokedex p : party2) {
 			System.out.print(p.getName() + "(" + 
-				((p.getTypes() == null) ? p.getType().toString().charAt(0) : 
+				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" +
+					p.getType().toString().toLowerCase().charAt(1) : 
 					p.printTypesShort()) + ") ");
 		}
 		
@@ -734,6 +813,8 @@ public class MainMenu {
 		// assign temp party to player 1 or player 2 party
 		ArrayList<Pokedex> party = (player == 1) ? party1 : party2;
 		
+		printOak();
+		
 		System.out.print(name1 + "'s PARTY: ");
 		for (Pokedex p : party1)
 			System.out.print(p.getName() + " ");
@@ -742,12 +823,15 @@ public class MainMenu {
 		for (Pokedex p : party2)
 			System.out.print(p.getName() + " ");
 		
-		System.out.println("\n\n" + ((player == 1) ? name1 : name2) + 
-				", PLEASE SELECT YOUR STARTING FIGHTER:\n");	
+		System.out.println("\n\nPR. OAK: " + ((player == 1) ? name1 : name2) + 
+				", Please choose your starting fighter:\n");	
 		
 		int counter = 1;
 		for (Pokedex pokemon : party) { 
-			System.out.print("[" + counter + "] " + pokemon.getName() + "\n");
+			System.out.print("[" + counter + "] " + pokemon.getName() + "(" + 
+					((pokemon.getTypes() == null) ? pokemon.getType().toString().charAt(0) + "" + 
+					pokemon.getType().toString().toLowerCase().charAt(1) : 
+					pokemon.printTypesShort()) + ")\n");
 			counter++;
 		}	
 		System.out.print(">");
@@ -757,6 +841,7 @@ public class MainMenu {
 			try { 
 				
 				int choice = input.nextInt(); 
+				SoundCard.play(select);
 				
 				// if choice is within party size
 				if (1 <= choice && choice < counter) {
@@ -779,12 +864,13 @@ public class MainMenu {
 					}
 				}
 				else {
-					Sleeper.print("ERROR: This is not a valid selection!");
+					Sleeper.print("Input must be a valid selection!");
 					System.out.print(">");
 				}
 			}
 			catch (Exception e) {
-				Sleeper.print("ERROR: Input must be a number!");
+				SoundCard.play(select);
+				Sleeper.print("Input must be a valid selection!");
 				System.out.print(">");
 				input.next();
 			}

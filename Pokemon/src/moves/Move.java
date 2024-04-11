@@ -12,14 +12,14 @@ public class Move {
 	/** END INITIALIZE VALUES **/
 	
 	/** CONSTRUCTORS **/
-	public Move (MovesEngine move, int pp) {		
+	public Move (MovesEngine move) {		
 		this.move = move;
-		this.pp = pp;
+		this.pp = move.getpp();
 		this.bpp = pp;
 	}	
-	public Move (MovesEngine move, int pp, int numTurns) {
+	public Move (MovesEngine move, int numTurns) {
 		this.move = move;
-		this.pp = pp;
+		this.pp = move.getpp();
 		this.bpp = pp;
 		this.numTurns = numTurns;
 		this.turns = numTurns;

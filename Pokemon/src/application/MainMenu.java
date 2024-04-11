@@ -35,7 +35,7 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file =  "12battle-pc-first";
+		file =  "13battle-pc-normal";
 		cpuSelect = false;
 		
 		// menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
@@ -688,7 +688,6 @@ public class MainMenu {
 	private static int displayParty() {
 		
 		System.out.println("--- AVAILABLE POKEMON FOR BATTLE ---\n");
-		
 		int counter = 0;		
 		for (Pokedex p : Pokedex.getPokedex()) {	
 			

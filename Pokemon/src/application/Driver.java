@@ -266,6 +266,14 @@
  * 		-Changed BACK option to always be 0
  * 		-Fixed bug in move wait logic
  * 		-Cleaned up coding
+ * 4/10/2024:
+ * 		-Changed swap functionality to not display current fighter
+ * 		-Cleaned up displayMoves formatting
+ * 		-Fixed bug in swap fighter logic
+ * 4/11/2024:
+ * 		-Added new Move class that creates unique objects out of Moves Enums
+ * 		-Fixed move PP logic error
+ * 		-Renamed Moves class to MoveEngine and cleaned coding
  */	
 
 package application;

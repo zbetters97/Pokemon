@@ -10,7 +10,7 @@ import java.lang.Math;
 
 import application.Sleeper;
 import application.SoundCard;
-import moves.Moves;
+import moves.Move;
 import pokemon.Pokedex;
 import types.TypeEngine;
 
@@ -85,7 +85,7 @@ public class BattleEngine {
 	 * Find which move will cause most damage
 	 * @return most powerful move
 	 **/
-	public Moves cpuSelectMove() {
+	public Move cpuSelectMove() {
 				
 		// if cpu health is low
 		boolean isHPLow = ((double) pokemon[1].getHP() / pokemon[1].getBHP() < 0.20);
@@ -106,15 +106,15 @@ public class BattleEngine {
 			}
 		}
 		
-		Moves bestMove;
+		Move bestMove;
 		
 		// holds Map of Move and Damage Points
-		Map<Moves, Integer> moves = new HashMap<>();
+		Map<Move, Integer> moves = new HashMap<>();
 		
 		// for each move in attacker's move set
-		for (Moves move : pokemon[1].getMoveSet()) {
+		for (Move move : pokemon[1].getMoveSet()) {
 			
-			if (!move.isToSelf() && move.getpp() != 0) {
+			if (!move.getMove().isToSelf() && move.getpp() != 0) {
 				
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
@@ -176,28 +176,28 @@ public class BattleEngine {
 	 * @param trainer 1 move, trainer 2 move
 	 * @return 3 if both, 1 if player 1, 2 if player 2, 0 if neither
 	 **/
-	public int getDelayedMove(Moves move1, Moves move2) {		
+	public int getDelayedMove(Move move1, Move move2) {		
 		
 		// if both moves are active
 		if (move1 != null && move2 != null) {	
 			
 			//both players are waiting
-			if (move1.getTurns() == 1 && move2.getTurns() == 1)
+			if (move1.getTurns() != move1.getNumTurns() && move2.getTurns() != move2.getNumTurns())
 				return 3;
 			
-			else if (move1.getTurns() == 1)
+			else if (move1.getTurns() != move1.getNumTurns())
 				return 1;
-			else if (move2.getTurns() == 1)
+			else if (move2.getTurns() != move2.getNumTurns())
 				return 2;
 		}
 		// if only player 1 is active
 		else if (move1 != null) {
-			if (move1.getTurns() == 1)
+			if (move1.getTurns() != move1.getNumTurns())
 				return 1;
 		}
 		// if only player 2 is active
 		else if (move2 != null) {
-			if (move2.getTurns() == 1)
+			if (move2.getTurns() != move2.getNumTurns())
 				return 2;
 		}
 		
@@ -209,7 +209,7 @@ public class BattleEngine {
 	 * Find which trainer moves first and initiate turn
 	 * @param trainer 1 move, trainer 2 move
 	 **/
-	public void move(Moves move1, Moves move2) {
+	public void move(Move move1, Move move2) {
 		
 		clearContent();	
 		
@@ -252,10 +252,10 @@ public class BattleEngine {
 	 * @param trainer 1 move, trainer 2 move
 	 * @return 1 if trainer 1 moves first, 2 if trainer 2 moves first
 	 **/
-	private int getTurn(Moves move1, Moves move2) {
+	private int getTurn(Move move1, Move move2) {
 		
 		// if both moves go first (EX: Quick Attack)
-		if (move1.getGoFirst() && move2.getGoFirst()) {			
+		if (move1.getMove().getGoFirst() && move2.getMove().getGoFirst()) {			
 			
 			// if pokemon1 is faster (pokemon1 has advantage if equal)
 			if (pokemon[0].getSpeed() >= pokemon[1].getSpeed()) 
@@ -264,10 +264,10 @@ public class BattleEngine {
 				return 2;
 		}
 		// if only move1 goes first (EX: Quick Attack)
-		else if (move1.getGoFirst()) 
+		else if (move1.getMove().getGoFirst()) 
 			return 1;
 		// if only move2 goes first (EX: Quick Attack)
-		else if (move2.getGoFirst()) 
+		else if (move2.getMove().getGoFirst()) 
 			return 2;
 		else {
 			// if pokemon1 is faster (if equal, pokemon1 has advantage)
@@ -283,7 +283,7 @@ public class BattleEngine {
 	 * Dictate which trainer's turn it is
 	 * @param trainer 1 pokemon, trainer 1 move, trainer 2 move
 	 **/
-	private void turn(int pk1, int pk2, Moves move1, Moves move2) {
+	private void turn(int pk1, int pk2, Move move1, Move move2) {
 
 		// if attacker can fight
 		if (canTurn(pk1) && move1 != null)
@@ -474,8 +474,8 @@ public class BattleEngine {
 		if (val == 1) {					
 			
 			double level = pokemon[atk].getLevel();
-			double power = Moves.CONFUSE.getPower();
-			
+			//double power = Move.CONFUSE.getPower();
+			double power = 1.0;
 			double A = pokemon[atk].getAttack();
 			double D = pokemon[atk].getDefense();
 					
@@ -512,7 +512,7 @@ public class BattleEngine {
 	 * Initiate attack with available moves
 	 * @param int attacker, int target, Moves attacker move, Moves target move
 	 **/	
-	private void useTurn(int atk, int trg, Moves atkMove, Moves trgMove) {
+	private void useTurn(int atk, int trg, Move atkMove, Move trgMove) {
 		
 		// move is not delayed
 		if (atkMove.getTurns() == 0) 
@@ -522,10 +522,9 @@ public class BattleEngine {
 			
 			// move is used for first time
 			if (atkMove.getTurns() == atkMove.getNumTurns()) {
-			
-				// output delay string
+				
 				Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 1200);
-				Sleeper.print(atkMove.getDelay(pokemon[atk].getName()), 1200);		
+				Sleeper.print(atkMove.getMove().getDelay(pokemon[atk].getName()), 1200);	
 				
 				// reduce number of turns to wait
 				atkMove.setTurns(atkMove.getTurns() - 1);	
@@ -548,13 +547,13 @@ public class BattleEngine {
 	 * Handle selected move, calculate damage, and apply it to target
 	 * @param number of attacker, number of target, move of attacker
 	 **/
-	private void attack(int atk, int trg, Moves move, Moves trgMove) {
+	private void attack(int atk, int trg, Move move, Move trgMove) {
 		
 		// confirm move exists in fighter's moveset
 		if (moveIsValid(atk, move)) {
 			
-			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 500);
-			SoundCard.play("//moves//" + move.getName(), true);
+			Sleeper.print(pokemon[atk].getName() + " used " + move.getMove().getName() + "!", 500);
+			SoundCard.play("//moves//" + move.getMove().getName(), true);
 			
 			// decrease move pp
 			move.setpp(move.getpp() - 1);	
@@ -563,14 +562,14 @@ public class BattleEngine {
 			if (isHit(atk, move, trgMove)) {
 				
 				// move has a status affect
-				if (move.getMType().equals("Status"))
+				if (move.getMove().getMType().equals("Status"))
 					statusMove(trg, move);				
 				// move has an attribute affect
-				else if (move.getMType().equals("Attribute")) 	
+				else if (move.getMove().getMType().equals("Attribute")) 	
 					attributeMove(atk, trg, move);
 				// move is in other category
-				else if (move.getMType().equals("Other")) {
-					if (move.getName().equals("Teleport")) {
+				else if (move.getMove().getMType().equals("Other")) {
+					if (move.getMove().getName().equals("Teleport")) {
 
 						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
 						System.exit(0);
@@ -598,7 +597,7 @@ public class BattleEngine {
 					
 						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);					
 						
-						if (move.getName() == "Absorb" || move.getName() == "Giga Drain") {
+						if (move.getMove().getName() == "Absorb" || move.getMove().getName() == "Giga Drain") {
 							
 							int gainedHP = (damage / 2);
 							
@@ -621,16 +620,16 @@ public class BattleEngine {
 							dealDamage(trg, damage);
 							
 							// move causes attribute or status effect
-							if (move.getProbability() != null) {								
+							if (move.getMove().getProbability() != null) {								
 															
 								// chance for effect to apply
-								if (new Random().nextDouble() <= move.getProbability()) {
+								if (new Random().nextDouble() <= move.getMove().getProbability()) {
 									
-									if (move.getStats() != null) 
+									if (move.getMove().getStats() != null) 
 										attributeMove(atk, trg, move);
 									else {			
 										if (pokemon[trg].getStatus() == null) {
-											pokemon[trg].setStatus(move.getEffect());
+											pokemon[trg].setStatus(move.getMove().getEffect());
 											
 											Sleeper.print(pokemon[trg].getName() + " is " + 
 												pokemon[trg].getStatus().getCondition() + "!", 1700);
@@ -657,13 +656,13 @@ public class BattleEngine {
 	 * @param number of attacker, selected move
 	 * @return true if found, false if not
 	 **/
-	private boolean moveIsValid(int atk, Moves move) {
+	private boolean moveIsValid(int atk, Move move) {
 		
 		// loop through fighter's moveset
-		for (Moves m : pokemon[atk].getMoveSet()) {
+		for (Move m : pokemon[atk].getMoveSet()) {
 			
 			// if chosen move is found
-			if (m.getName().equals(move.getName()))
+			if (m.getName().equals(move.getMove().getName()))
 				return true;
 		}
 		return false;
@@ -675,20 +674,20 @@ public class BattleEngine {
 	 * @param number of attacker, selected move
 	 * @return true if attack lands, false if not
 	 **/
-	private boolean isHit(int atk, Moves move, Moves trgMove) {
+	private boolean isHit(int atk, Move move, Move trgMove) {
 		
 		if (trgMove == null)
 			return true;
 		
 		// if target used delayed move and delayed move protects target		
-		if (trgMove.getTurns() == 1 && !trgMove.getCanHit())
+		if (trgMove.getTurns() == 1 && !trgMove.getMove().getCanHit())
 			return false;
 				
 		// if move never misses, return true
-		if (move.getAccuracy() == -1) 
+		if (move.getMove().getAccuracy() == -1) 
 			return true; 
 		
-		double accuracy = move.getAccuracy() * pokemon[atk].getAccuracy();
+		double accuracy = move.getMove().getAccuracy() * pokemon[atk].getAccuracy();
 		
 		Random r = new Random();
 		float chance = r.nextFloat();
@@ -702,12 +701,12 @@ public class BattleEngine {
 	 * Adds status effect to pokemon if not already
 	 * @param number of target, selected move
 	 **/
-	private void statusMove(int trg, Moves move) {
+	private void statusMove(int trg, Move move) {
 		
 		// if pokemon does not already have status affect
 		if (pokemon[trg].getStatus() == null) {
 			
-			pokemon[trg].setStatus(move.getEffect());	
+			pokemon[trg].setStatus(move.getMove().getEffect());	
 			
 			Sleeper.print(pokemon[trg].getName() + " is " + 
 					pokemon[trg].getStatus().getCondition() + "!", 1700);
@@ -726,26 +725,26 @@ public class BattleEngine {
 	 * Raise or lower stat of target or to self
 	 * @param number of target, selected move
 	 **/
-	private void attributeMove(int atk, int trg, Moves move) {
+	private void attributeMove(int atk, int trg, Move move) {
 		
 		// if move changes self attributes
-		if (move.isToSelf()) {
+		if (move.getMove().isToSelf()) {
 			
 			
 			
 			// loop through each specified attribute to be changed
-			for (String stat : move.getStats()) 
-				pokemon[atk].changeStat(stat, move.getLevel());	
+			for (String stat : move.getMove().getStats()) 
+				pokemon[atk].changeStat(stat, move.getMove().getLevel());	
 		}
 		// if move changes target attributes
 		else {
 			// loop through each specified attribute to be changed
-			for (String stat : move.getStats()) 
-				pokemon[trg].changeStat(stat, move.getLevel());	
+			for (String stat : move.getMove().getStats()) 
+				pokemon[trg].changeStat(stat, move.getMove().getLevel());	
 		}
 		
 		// attributes raised
-		if (move.getLevel() > 0) 
+		if (move.getMove().getLevel() > 0) 
 			SoundCard.play("//battle//stat-up", true);
 		// attributes lowered
 		else 
@@ -773,17 +772,17 @@ public class BattleEngine {
 	 * @param number of attacker, number of target, selected move, critical damage, cpu true/false
 	 * @return damage calculated
 	 **/
-	private int calculateDamage(int atk, int trg, Moves move, double crit, boolean cpu) {
+	private int calculateDamage(int atk, int trg, Move move, double crit, boolean cpu) {
 		
 		double level = pokemon[atk].getLevel();		
-		double power = (move.getPower() == -1) ? level : move.getPower();		
+		double power = (move.getMove().getPower() == -1) ? level : move.getMove().getPower();		
 		double A = 1.0, D = 1.0, STAB = 1.0, type = 1.0;
 
-		if (move.getMType().equals("Special")) {
+		if (move.getMove().getMType().equals("Special")) {
 			A = pokemon[atk].getSpAttack();
 			D = pokemon[trg].getSpDefense();
 		}
-		else if (move.getMType().equals("Physical")) {
+		else if (move.getMove().getMType().equals("Physical")) {
 			A = pokemon[atk].getAttack();
 			D = pokemon[trg].getDefense();
 		}
@@ -795,16 +794,16 @@ public class BattleEngine {
 			for (TypeEngine t : pokemon[atk].getTypes()) {
 				
 				// if same type move
-				if (move.getType() == t) {
+				if (move.getMove().getType() == t) {
 					STAB = 1.5;
 					break;
 				}
 			}
 		}
 		else
-			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
+			STAB = move.getMove().getType() == pokemon[atk].getType() ? 1.5 : 1.0;
 
-		type = effectiveness(trg, move.getType());	
+		type = effectiveness(trg, move.getMove().getType());	
 
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
 		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * 

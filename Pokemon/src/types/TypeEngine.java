@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import application.Style;
+
 /*** TYPE CLASS ***/
 public class TypeEngine implements TypeInterface {
-
 	public static TypeEngine normal, fire, water, electric, grass, ice, fighting, 
 							poison, ground, flying, psychic, bug, rock, 
 							ghost, dragon, dark, steel, fairy;
-							
+			
  	private List<TypeEngine> resistance;
     private List<TypeEngine> vulnerability; 
     public ArrayList<TypeEngine> types;
@@ -18,6 +19,7 @@ public class TypeEngine implements TypeInterface {
     private TypeInterface.Type type;
     private Double strength;
 
+    /** CONSTRUCTOR **/
     public TypeEngine(TypeInterface.Type type, Double strength) {
     	
         this.type = type;
@@ -31,6 +33,7 @@ public class TypeEngine implements TypeInterface {
 									fighting, poison, ground, flying, psychic, 
 									bug, rock, ghost, dragon, dark, steel, fairy));
     }
+    /** END CONSTRUCTOR **/
 
 	static {		
 		/*** TYPE CHART REFERENCE: https://pokemondb.net/type ***/
@@ -177,6 +180,70 @@ public class TypeEngine implements TypeInterface {
     	for (TypeInterface.Type type : typeList) {
     		 vulnerability.add(new TypeEngine(type, strength));
     	}       
+    }
+    
+    public String printType() {
+    	
+    	String color = "";
+    	
+    	switch (this.type.toString()) {
+	    	case ("NORMAL"): 
+	    		color = Style.ITAL; 
+	    		break;    	
+	    	case ("FIRE"): 
+	    		color = Style.RED ; 
+	    		break;
+	    	case ("WATER"): 
+	    		color = Style.BLUE ; 
+	    		break;
+	    	case ("ELECTRIC"): 
+	    		color = Style.YELLOW ; 
+	    		break;
+	    	case ("GRASS"): 
+	    		color = Style.GREEN ;
+	    		break;
+	    	case ("ICE"): 
+	    		color = Style.WHITE ; 
+	    		break;
+	    	case ("FIGHTING"): 
+	    		color = Style.BOLD ; 
+	    		break;
+	    	case ("POISON"): 
+	    		color = Style.PURPLE ; 
+	    		break;
+	    	case ("GROUND"): 
+	    		color = Style.GREEN ; 
+	    		break;
+	    	case ("FLYING"): 
+	    		color = Style.CYAN ; 
+	    		break;
+	    	case ("PSYCHIC"): 
+	    		color = Style.PINK ; 
+	    		break;
+	    	case ("BUG"): 
+	    		color = Style.YELLOW ; 
+	    		break;
+	    	case ("ROCK"): 
+	    		color = Style.YELLOW ; 
+	    		break;
+	    	case ("GHOST"): 
+	    		color = Style.GRAY ; 
+	    		break;
+	    	case ("DRAGON"): 
+	    		color = Style.BLUE ; 
+	    		break;
+	    	case ("DARK"): 
+	    		color = Style.BLACK ; 
+	    		break;
+	    	case ("STEEL"): 
+	    		color = Style.WHITE ; 
+	    		break;
+	    	case ("FAIRY"): 
+	    		color = Style.PINK; 
+	    		break;
+	    }
+    	
+    	return color + this.type.toString() + Style.END;
     }
     
     public ArrayList<TypeEngine> getTypeEngine() { return types; }

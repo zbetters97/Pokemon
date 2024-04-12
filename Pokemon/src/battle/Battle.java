@@ -14,11 +14,11 @@ import pokemon.Pokedex;
 import types.TypeEngine;
 import application.Sleeper;
 import application.SoundCard;
+import application.Style;
 
 /*** BATTLE CLASS ***/
 public class Battle {
 	
-	// create static scanner to receive user input	
 	private static Scanner input = new Scanner(System.in);	
 	private static String select = "menu" + File.separator + "select";
 	private String name1, name2;
@@ -153,12 +153,11 @@ public class Battle {
 			
 			try { 
 
-				int choice = input.nextInt();
+				int choice = input.nextInt();				
+				SoundCard.play(select);	
 				
 				// if choice is a valid move option
 				if (0 < choice && choice < counter - 3) {
-					
-					SoundCard.play(select);	
 					
 					// find move from fighter and return
 					Move selectedMove = checkMove(choice, fighter.getMoveSet());
@@ -169,7 +168,6 @@ public class Battle {
 				}
 				// display moves info
 				else if (choice == counter - 3) {
-					SoundCard.play(select);
 					clearContent();
 					
 					displayInfo(fighter);					
@@ -177,8 +175,7 @@ public class Battle {
 				}
 				// display items
 				else if (choice == counter - 2) {
-					
-					SoundCard.play(select);					
+								
 					clearContent();		
 					
 					if (displayItems(fighter, player))
@@ -188,8 +185,7 @@ public class Battle {
 				}
 				// swap fighter
 				else if (choice == counter - 1) {
-					
-					SoundCard.play(select);										
+													
 					clearContent();
 					
 					Pokedex temp = swapFighter(player);
@@ -213,13 +209,19 @@ public class Battle {
 				// display items
 				// run away
 				else if (choice == counter) {
-					clearContent();	
-					SoundCard.play("battle" + File.separator + "run");
-					Sleeper.print("GOT AWAY SAFELY!", 1700);
-					System.exit(0);
+					
+					if (numPlayers == 2) {
+						Sleeper.print("You shouldn't run from a trainer battle!"); 
+						System.out.print(">");
+					}
+					else {
+						clearContent();	
+						SoundCard.play("battle" + File.separator + "run");
+						Sleeper.print("GOT AWAY SAFELY!", 1700);
+						System.exit(0);
+					}
 				}
 				else {
-					SoundCard.play(select);	
 					Sleeper.print("This is not a move!"); 	
 					System.out.print(">");
 				}
@@ -249,20 +251,21 @@ public class Battle {
 		
 		// find longest move name in set
 		int mLength = 0;		
-		for (int i = 1; i < fighter.getMoveSet().size(); ++i) {			
-		   if (fighter.getMoveSet().get(i).getName().length() > mLength)			   
-		      mLength = fighter.getMoveSet().get(i).getName().length();
+		for (int i = 0; i < fighter.getMoveSet().size(); i++) {			
+		    if (fighter.getMoveSet().get(i).getName().length() > mLength)			   
+		    	mLength = fighter.getMoveSet().get(i).getName().length();
 		}		
 		
+		// find longest type name in set
 		int tLength = 0;		
-		for (int i = 1; i < fighter.getMoveSet().size(); ++i) {			
-		   if (fighter.getMoveSet().get(i).getMove().getType().toString().length() > tLength)			   
-		      tLength = fighter.getMoveSet().get(i).getMove().getType().toString().length();
+		for (int i = 0; i < fighter.getMoveSet().size(); i++) {			
+			if (fighter.getMoveSet().get(i).getMove().getType().toString().length() > tLength)			   
+				tLength = fighter.getMoveSet().get(i).getMove().getType().toString().length();
 		}		
 		
 		// display all moves				
-		for (Move m : fighter.getMoveSet()) {			
-			System.out.printf("[%d] %-" + (mLength+1) + "s{ %-" + (tLength+1) + "s| PP %2d/%2d }\n", 
+		for (Move m : fighter.getMoveSet()) {
+			System.out.printf("[%d] %-" + (mLength + 1) + "s{ %-" + (tLength + 1) + "s| PP %2d/%2d }\n", 
 				++counter, m.getName(), m.getMove().getType(), m.getpp(), m.getbpp());
 		}
 		
@@ -283,31 +286,50 @@ public class Battle {
 		
 		clearContent();
 		
-		System.out.print(name1 + "'s PARTY: ");
-		for (Pokedex p : party1)
-			System.out.print(p.getName() + " ");
-		
-		System.out.print("\n" + name2 + "'s PARTY: ");		
-		for (Pokedex p : party2)
-			System.out.print(p.getName() + " ");
-		
-		Printer printHP = (name, pokemon) -> {
+		Printer printHP = (name, pokemon, size) -> {
+			
+			String color;
+			
+			// display party
+			System.out.print("\n" + name + "'s PARTY: ");			
+			for (int i = 0; i < 6; i++) {
+				if (i < size) color = Style.RED;
+				else color = Style.GRAY;
+				System.out.print(color + "○ " + Style.END);
+			}	
 			
 			// display attributes
-			System.out.print("\n\n(" + name + ")\n" + pokemon.getName() + 
-				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().getName() + ")" : "") + 
+			System.out.print("\n" + Style.BOLD + pokemon.getName() + Style.END +
+				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().printName() + ")" : "") + 
 				" : HP " + pokemon.getHP() + "/" + pokemon.getBHP() + " | Lv " + pokemon.getLevel() + 
-				" | " + ((pokemon.getTypes() == null) ? pokemon.getType() : pokemon.printTypes()));	
+				" | " + ((pokemon.getTypes() == null) ? pokemon.getType().printType() : pokemon.printTypes()));	
 			
 			// display HP
-			for (int i = 0; i < pokemon.getHP(); i++) {
-				if (i % 50 == 0) System.out.println();		
-				System.out.print(".");
+			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();			
+			for (int i = 0; i < pokemon.getBHP(); i++) {
+				
+				if (i % 50 == 0) System.out.println();
+				
+				if (i < pokemon.getHP()) {
+					
+					// change color of hp based on percentage remaining
+					if (remainHP > .50) 
+						color = Style.GREEN;
+					else if (remainHP > .25) 
+						color = Style.YELLOW;
+					else 
+						color = Style.RED;		
+				}
+				else 
+					color = Style.GRAY;
+					
+				System.out.print(color + "." + Style.END);
 			}
+			System.out.println();
 		};
 		
-		printHP.print(name1, pokemon1);
-		printHP.print(name2, pokemon2);
+		printHP.print(name1, pokemon1, party1.size());
+		printHP.print(name2, pokemon2, party2.size());
 		
 	}
 	/** END PRINT BATTLE METHOD **/
@@ -345,14 +367,16 @@ public class Battle {
 			// add new line after 40 characters
 			int i = 0;				
 			while ((i = info.indexOf(" ", i + 40)) != -1) {
-				info.replace(i, i + 1, "\n");
+				info.replace(i, i + 1, "\n\t");
 			}
 			
 			System.out.println(move.getName().toUpperCase() + " : PP " + move.getpp() + 
 					((move.getMove().getPower() == 0) ? "" : " | PWR " + move.getMove().getPower()) + 
-					" | ACC " + move.getMove().getAccuracy() + " | TYPE " + move.getMove().getType());
+					(move.getMove().isToSelf() ? "" : " | ACC " + move.getMove().getAccuracy()) + 
+					" | TYPE " + move.getMove().getType().printType() +
+					(move.getMove().getEffect() == null ? "" : " | STA " + move.getMove().getEffect().printName()));
 			
-			System.out.println("\"" + info.toString() + "\"\n");
+			System.out.println("\t\"" + info.toString() + "\"\n");
 		}
 		
 		System.out.println("[0] <- BACK");
@@ -403,7 +427,7 @@ public class Battle {
 			
 			System.out.printf("[" + ++counter + "] " + p.getName() + 
 				" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
-				((p.getType() == null) ? p.printTypes() : p.getType()) + 
+				((p.getType() == null) ? p.printTypes() : p.getType().printType()) + 
 				"\n", p.getLevel());
 		}
 		System.out.println("\n[0] <- BACK");
@@ -428,13 +452,13 @@ public class Battle {
 						clearContent();
 						
 						if (player == 1) {
-							Sleeper.print(name1 + ": " + pokemonParty.get(0) + ", switch out! Come back!");
+							Sleeper.print(name1 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party1, 0, choice - 1);
 							Sleeper.print(name1 + ": GO! " + newFighter.getName() + "!");
 						}
 						else {
-							Sleeper.print(name2 + ": " + pokemonParty.get(0) + ", switch out! Come back!");
+							Sleeper.print(name2 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party2, 0, choice - 1);
 							Sleeper.print(name2 + ": GO! " + newFighter.getName() + "!");
@@ -704,7 +728,7 @@ public class Battle {
 		for (Pokedex p : pokemonParty) {						
 				System.out.printf("[" + ++counter + "] " + p.getName() + 
 					" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
-					((p.getType() == null) ? p.printTypes() : p.getType()) + 
+					((p.getType() == null) ? p.printTypes() : p.getType().printType()) + 
 					"\n", p.getLevel());	
 		}
 		
@@ -869,6 +893,6 @@ public class Battle {
 /*** LAMBDA INTERFACE ***/
 @FunctionalInterface
 interface Printer {
-	public void print(String trainer, Pokedex pokemon);
+	public void print(String trainer, Pokedex pokemon, int size);
 }
 /*** END LAMBDA INTERFACE ***/

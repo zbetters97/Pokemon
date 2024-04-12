@@ -15,7 +15,6 @@ import pokemon.Pokedex;
 /*** MAIN MENU CLASS ***/
 public class MainMenu {
 	
-	// scanner to receive user input
 	static Sleeper sleeper;	
 	static Scanner input = new Scanner(System.in);
 	static String select = "menu" + File.separator + "select";
@@ -35,11 +34,11 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file =  "13battle-pc-normal";
+		file =  "02battle-rs-gym";
 		cpuSelect = false;
 		
-		menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		//menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
+		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
 		menuMusic.playMusic();
 		
 		clearContent();			
@@ -53,14 +52,14 @@ public class MainMenu {
 			name1 = "P1";
 			name2 = "P2";
 			defaultLevel = 50;
+			partySize = 3;
 			SoundCard.setActive(false);
 		}
 		else {	
 			name1 = inputName(1);
 			name2 = (players == 1 ) ? "Red" : inputName(2);
+			selectPartySize();	
 		}
-		
-		selectPartySize();		
 		selectParty();
 		
 		if (partySize > 1) {				
@@ -81,8 +80,10 @@ public class MainMenu {
 	}
 	/** END LOAD METHOD **/
 	
+	/** PRINT LOGO & OAK METHODS **/
 	private static void printLogo() {
-		System.out.println("                                  ,'\\\r\n"
+		System.out.println(Style.YELLOW
+				+ "                                  ,'\\\r\n"
 				+ "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
 				+ "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\r\n"
 				+ "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\r\n"
@@ -93,10 +94,12 @@ public class MainMenu {
 				+ "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\r\n"
 				+ "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\r\n"
 				+ "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\r\n"
-				+ "                                `'                            '-._|\n\n");
+				+ "                                `'                            '-._|\n\n" + 
+				Style.END);
 	}
 	private static void printOak() {
-		System.out.println("⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\r\n"
+		System.out.println(Style.CYAN 
+				+ "⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⠀⠘⠯⠙⠛⠛⠉⠛⠛⠛⠲⠤⠤⡀⠀⠀⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⢲⣖⠤⠀⣄⣀⠤⠀⠀⠀⠀⠀⠀⠓⡄⠀⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⠰⢮⣀⣯⠉⠉⠹⢦⡼⠉⠉⠹⢇⠲⡇⠀⠀⠀⠀⠀\r\n"
@@ -119,8 +122,10 @@ public class MainMenu {
 				+ "⠀⠀⠀⠀⢸⣿⣽⣏⡁⠀⣿⠀⠀⣿⡷⠿⣍⣉⣹⡇⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⣿⡿⠿⢿⡿⠿⣿⠇⠠⣟⣻⣿⡿⠿⢿⣿⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⣏⣡⣤⣜⣣⣤⠛⠀⠀⠛⣿⣋⣡⣤⠘⢻⠀⠀⠀⠀\r\n"
-				+ "⠀⠀⠀⠀⠈⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠁⠀⠀⠀⠀\n");
+				+ "⠀⠀⠀⠀⠈⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠁⠀⠀⠀⠀\n" 
+				+ Style.END);
 	}
+	/** END PRINT LOGO & OAK METHODS **/
 	
 	/** SELECT PLAYERS METHOD
 	  * Prompt player to select a setting from the main menu
@@ -185,6 +190,7 @@ public class MainMenu {
 	  * Settings main menu 
 	  **/
 	private static void settingsMenu() {
+		
 		printLogo();
 		System.out.println("PLEASE SELECT AN OPTION:\n\n"
 				+ "[1] LEVELS\n"
@@ -354,6 +360,9 @@ public class MainMenu {
 	}
 	/** END LEVEL SETTING METHOD **/
 	
+	/** PARTY SETTING METHOD 
+	  *	Prompt player to select which method the cpu will select party
+	  **/
 	private static void partySetting() {
 		
 		System.out.println("CPU PARTY SELECTION:\n\n"
@@ -392,6 +401,7 @@ public class MainMenu {
 			}
 		}	
 	}
+	/** END PARTY SETTING METHOD **/
 	
 	/** SELECT MUSIC METHOD
 	  * Prompt player to select a new song to play during battle 
@@ -779,29 +789,40 @@ public class MainMenu {
 			
 			// if pokemon has multiple types
 			System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
-					((p.getTypes() == null) ? p.getType() : p.printTypes()) + 
+					((p.getTypes() == null) ? p.getType().printType() : p.printTypes()) + 
 					"\n", ++counter, p.getLevel());	
 		}
 		
-		System.out.print("\n" + name1 + "'s PARTY: ");
-		for (Pokedex p : party1) {
-			System.out.print(p.getName() + "(" + 
-				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" + 
-					p.getType().toString().toLowerCase().charAt(1) : 
-					p.printTypesShort()) + ") ");
-		}
-		
-		System.out.print("\n" + name2 + "'s PARTY: ");			
-		for (Pokedex p : party2) {
-			System.out.print(p.getName() + "(" + 
-				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" +
-					p.getType().toString().toLowerCase().charAt(1) : 
-					p.printTypesShort()) + ") ");
-		}
+		printParty();
 		
 		return counter;
 	}
 	/** END DISPLAY POKEMON METHOD **/
+	
+	private static void printParty() {
+		
+		int n = 0;
+		System.out.print("\n" + name1 + "'s PARTY:\t");
+		for (Pokedex p : party1) {
+			if (n == 3) { System.out.println(); System.out.print("\t\t"); }
+			System.out.print(p.getName() + "(" + 
+				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" + 
+					p.getType().toString().toLowerCase().charAt(1) : 
+					p.printTypesShort()) + ") ");
+			n++;
+		}
+		
+		n = 0;
+		System.out.print("\n\n" + name2 + "'s PARTY:\t");	
+		for (Pokedex p : party2) {
+			if (n == 3) { System.out.println(); System.out.print("\t\t"); }
+			System.out.print(p.getName() + "(" + 
+				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" +
+					p.getType().toString().toLowerCase().charAt(1) : 
+					p.printTypesShort()) + ") ");
+			n++;
+		}
+	}
 	
 	/** SELECT STARTER METHOD
 	  * Prompt player to select starting fighter from party 
@@ -814,17 +835,10 @@ public class MainMenu {
 		ArrayList<Pokedex> party = (player == 1) ? party1 : party2;
 		
 		printOak();
-		
-		System.out.print(name1 + "'s PARTY: ");
-		for (Pokedex p : party1)
-			System.out.print(p.getName() + " ");
-		
-		System.out.print("\n" + name2 + "'s PARTY: ");		
-		for (Pokedex p : party2)
-			System.out.print(p.getName() + " ");
+		printParty();
 		
 		System.out.println("\n\nPR. OAK: " + ((player == 1) ? name1 : name2) + 
-				", Please choose your starting fighter:\n");	
+				", Please select your starting fighter:\n");	
 		
 		int counter = 1;
 		for (Pokedex pokemon : party) { 

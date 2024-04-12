@@ -278,6 +278,14 @@
  * 		-Added Pokemon logo to Main Menu
  * 		-Added Professor Oak ascii art to battle setup menu
  * 		-Added hidden phrases at name select screen
+ * 4/12/2024:
+ * 		-Modified displayInfo to not print accuracy if move is to self
+ * 		-Reformatted printBattleInfo to be more faithful to the series		
+ * 		-Added delay in trainer print lines
+ * 		-Added color to Pokemon and Oak print
+ * 		-Added color to Pokemon and Move types
+ * 		-Added logic to update color of HP based on percentage remaining
+ * 		-Fixed bug in displayMove formatting
  */	
 
 package application;

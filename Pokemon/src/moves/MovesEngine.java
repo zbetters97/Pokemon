@@ -99,7 +99,6 @@ public enum MovesEngine {
 	WATERPULSE ("Water Pulse", "Special", TypeEngine.water, 20, 90, 100, "The user attacks the foe with a pulsing blast of water. It may also confuse the foe."),
 	XSCISSOR ("X-scissor", "Physical", TypeEngine.bug, 15, 80, 100, "The user slashes at the foe by crossing its scythes or claws as if they were a pair of scissors.");
 	/** END INITIALIZE ENUMS **/
-	/** END INITIALIZE ENUMS **/
 	
 	/** INITIALIZE VALUES **/
 	private String name;
@@ -107,10 +106,9 @@ public enum MovesEngine {
 	private int pp;
 	private TypeEngine type;
 	private StatusEngine effect;
-	private Double probability;
-	
-	private String info;
-	
+	private Double probability;	
+	private boolean goFirst;
+	private String info;	
 	private boolean toSelf;
 	private int accuracy;
 	private int power;
@@ -118,7 +116,6 @@ public enum MovesEngine {
 	private boolean canHit;
 	private String delay;
 	private List<String> stats;
-	private boolean goFirst;
 	/** END INITIALIZE VALUES **/
 	
 	/** CONSTRUCTORS **/
@@ -129,6 +126,16 @@ public enum MovesEngine {
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
+		this.info = info;
+	}	
+	MovesEngine (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.pp = pp;		
+		this.power = power;
+		this.accuracy = accuracy;
+		this.goFirst = goFirst;
 		this.info = info;
 	}	
 	MovesEngine (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean canHit, String delay, String info) {
@@ -142,14 +149,13 @@ public enum MovesEngine {
 		this.delay = delay;
 		this.info = info;
 	}	
-	MovesEngine (String name, String mtype, TypeEngine type, int pp, int power, int accuracy, boolean goFirst, String info) {
+	MovesEngine (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy, String info) {
 		this.name = name;
 		this.mtype = mtype;
 		this.type = type;
-		this.pp = pp;		
-		this.power = power;
+		this.effect = effect;
+		this.pp = pp;
 		this.accuracy = accuracy;
-		this.goFirst = goFirst;
 		this.info = info;
 	}	
 	MovesEngine (String name, String mtype, TypeEngine type, StatusEngine effect, Double probability, int pp, int power, int accuracy, String info) {
@@ -160,15 +166,6 @@ public enum MovesEngine {
 		this.probability = probability;
 		this.pp = pp;
 		this.power = power;
-		this.accuracy = accuracy;
-		this.info = info;
-	}	
-	MovesEngine (String name, String mtype, TypeEngine type, StatusEngine effect, int pp, int accuracy, String info) {
-		this.name = name;
-		this.mtype = mtype;
-		this.type = type;
-		this.effect = effect;
-		this.pp = pp;
 		this.accuracy = accuracy;
 		this.info = info;
 	}	
@@ -205,19 +202,18 @@ public enum MovesEngine {
 	public int getpp() { return pp; }
 	public StatusEngine getEffect() { return effect; }	
 	public Double getProbability() { return probability; }	
-	public boolean isToSelf() { return toSelf; }
-	
+	public boolean isToSelf() { return toSelf; }	
 	public int getAccuracy() { 
 		if (accuracy == -1) return 100;
 		else return accuracy; 
 	}
-
 	public int getPower() {	return power; }	
+	public boolean getGoFirst() { return goFirst; }	
 	public boolean getCanHit() { return canHit; }	
 	public String getDelay(String name) { return name + " " + delay; }	
 	public String getInfo() {	return info; }	
-	public boolean getGoFirst() { return goFirst; }	
 	public int getLevel() { return level; }	
 	public List<String> getStats() { return stats; }
+	/** END GETTERS **/
 }
 /*** END MOVESENGINE ENUM ***/

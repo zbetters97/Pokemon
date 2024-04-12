@@ -59,10 +59,9 @@ public enum Pokedex {
 	KYOGRE ("Kyogre", 382, TypeEngine.water, 50, 100, 100, 90, 150, 140, 90, -1, 335, 3), 
 	GROUDON ("Groudon", 383, TypeEngine.ground, 50, 100, 150, 140, 100, 90, 90, -1, 335, 3),
 	RAYQUAZA ("Rayquaza", 384, Arrays.asList(TypeEngine.dragon, TypeEngine.flying), 50, 105, 150, 90, 150, 90, 95, -1, 340, 3);
-	
 	/** END INITIALIZE ENUMS **/
 		
-	/** INITIALIZE VALUES FOR POKEMON TO HOLD **/
+	/** INITIALIZE VALUES**/
 	private String name;
 	private int index;
 	protected TypeEngine type;
@@ -337,22 +336,19 @@ public enum Pokedex {
 	
 	/** GETTERS AND SETTERS **/
 	public String getName() { return name.toUpperCase(); }
-	public void setName(String name) { this.name = name; }
-	
+	public void setName(String name) { this.name = name; }	
 	public int getIndex() {	return index; }
 	public void setIndex(int index) { this.index = index; }
 
 	public TypeEngine getType() { return type; }
-	public void setType(TypeEngine type) { this.type = type; }
-	
+	public void setType(TypeEngine type) { this.type = type; }	
 	public List<TypeEngine> getTypes() { return types; }	
-	public void setTypes(List<TypeEngine> types) { this.types = types; }
-	
+	public void setTypes(List<TypeEngine> types) { this.types = types; }	
 	public String printTypes() {
 		String s = "";		
 		int i = types.size() - 1;
 		for (TypeEngine t : types) {
-			 s += t.toString();		
+			 s += t.printType();		
 			 if (i-- != 0)
 				 s += " / ";
 		}
@@ -380,34 +376,28 @@ public enum Pokedex {
 			this.bhp = hp;
 		}
 	}
-
 	public int getXP() { return xp; }
 	public void setXP(int xp) {	this.xp = xp; }
 
 	public int getHP() { return hp; }
-	public void setHP(int hp) {	this.hp = hp; }
-	
+	public void setHP(int hp) {	this.hp = hp; }	
 	public int getBHP() { return bhp; }
 	public void setBHP(int bhp) {	this.bhp = bhp; }
 
 	public double getSpeed() { return speed; }
 	public void setSpeed(int speed) { this.speed = speed; }
-
 	public double getAttack() { return attack; }
 	public void setAttack(int attack) {	this.attack = attack; }
-
 	public double getDefense() { return defense; }
 	public void setDefense(int defense) { this.defense = defense; }
-
+	
 	public double getSpAttack() { return spAttack; }
 	public void setSpAttack(int spAttack) { this.spAttack = spAttack; }
-
 	public double getSpDefense() {	return spDefense; }
-	public void setSpDefense(int spDefense) { this.spDefense = spDefense; }
-	
+	public void setSpDefense(int spDefense) { this.spDefense = spDefense; }	
 	public double getAccuracy() { return accuracy; }
 	public void setAccuracy(int accuracy) { this.accuracy = accuracy; }
-
+	
 	public int getSpeedStg() { return speedStg; }
 	public void setSpeedStg(int speedStg) { this.speedStg = speedStg; }
 	public int getAttackStg() { return attackStg; }
@@ -422,28 +412,25 @@ public enum Pokedex {
 	public void setAccuracyStg(int accuracyStg) { this.accuracyStg = accuracyStg; }
 	
 	public int getEvLevel() { return evLevel; }
-	public void setEvLevel(int evLevel) { this.evLevel = evLevel; }
-	
-	public StatusEngine getStatus() { return status; }
-	public void setStatus(StatusEngine status) { this.status = status; }
-	
+	public void setEvLevel(int evLevel) { this.evLevel = evLevel; }	
 	public int getEV() { return ev; }
-	public void setEV(int ev) { this.ev = ev; }
-	
+	public void setEV(int ev) { this.ev = ev; }	
 	public int getIV() { return iv; }
 	public void setIV(int iv) { this.iv = iv; }
 
-	public boolean isAlive() { return isAlive; }
-	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }
-	
+	public StatusEngine getStatus() { return status; }
+	public void setStatus(StatusEngine status) { this.status = status; }	
 	public int getStatusCounter() { return statusCounter; }
-	public void setStatusCounter(int statusCounter) { this.statusCounter = statusCounter; }
-	
+	public void setStatusCounter(int statusCounter) { this.statusCounter = statusCounter; }	
 	public int getStatusLimit() { return statusLimit; }
 	public void setStatusLimit(int statusLimit) { this.statusLimit = statusLimit; }
 	
 	public ArrayList<Move> getMoveSet() { return moveSet; }
 	public void setMoveSet(ArrayList<Move> moveSet) { this.moveSet = moveSet; }
+	
+	public boolean isAlive() { return isAlive; }
+	public void setAlive(boolean isAlive) {	this.isAlive = isAlive; }
+	/** END GETTERS AND SETTERS **/
 	
 	public void changeStat(String stat, int level) {	
 		
@@ -540,8 +527,6 @@ public enum Pokedex {
 				break;
 		}
 	}
-	/** END GETTERS AND SETTERS **/
-	
 	private void outputChange(String stat, int level) {
 		
 		if (level == 1)

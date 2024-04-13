@@ -40,24 +40,12 @@ public class StatusEngine implements StatusInterface {
 		String color = "";
 		
 		switch (this.effect.toString()) {  	
-	    	case ("PARALYZE"): 
-	    		color = Style.YELLOW;
-	    		break;
-	    	case ("POISON"): 
-	    		color = Style.PURPLE;
-	    		break;
-	    	case ("CONFUSE"): 
-	    		color = Style.PINK;
-	    		break;
-	    	case ("BURN"): 
-	    		color = Style.RED;
-	    		break;
-	    	case ("FREEZE"): 
-	    		color = Style.BLUE;
-	    		break;
-	    	case ("SLEEP"): 
-	    		color = Style.WHITE;
-	    		break;
+	    	case ("PARALYZE"): color = Style.YELLOW; break;
+	    	case ("POISON"): color = Style.PURPLE; break;
+	    	case ("CONFUSE"): color = Style.PINK; break;
+	    	case ("BURN"): color = Style.RED; break;
+	    	case ("FREEZE"): color = Style.BLUE; break;
+	    	case ("SLEEP"): color = Style.WHITE; break;
 		}		
 		return color + this.name + Style.END; 
 	}

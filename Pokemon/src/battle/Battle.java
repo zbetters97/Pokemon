@@ -321,7 +321,7 @@ public class Battle {
 						color = Style.RED;		
 				}
 				else 
-					color = Style.GRAY;
+					color = Style.BLACK;
 					
 				System.out.print(color + "." + Style.END);
 			}
@@ -455,13 +455,13 @@ public class Battle {
 							Sleeper.print(name1 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party1, 0, choice - 1);
-							Sleeper.print(name1 + ": GO! " + newFighter.getName() + "!");
+							Sleeper.print(name1 + ": Go! " + newFighter.getName() + "!");
 						}
 						else {
 							Sleeper.print(name2 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party2, 0, choice - 1);
-							Sleeper.print(name2 + ": GO! " + newFighter.getName() + "!");
+							Sleeper.print(name2 + ": Go! " + newFighter.getName() + "!");
 						}
 						
 						SoundCard.play("pokedex" + File.separator + newFighter.getName());
@@ -659,7 +659,7 @@ public class Battle {
 				
 				clearContent();
 				
-				Sleeper.print(name1 + ": GO! " + pokemon1.getName() + "!");
+				Sleeper.print(name1 + ": Go! " + pokemon1.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);
 				
@@ -704,7 +704,7 @@ public class Battle {
 				
 				clearContent();
 								
-				Sleeper.print(name2 + ": GO! " + pokemon2.getName() + "!");
+				Sleeper.print(name2 + ": Go! " + pokemon2.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
 				

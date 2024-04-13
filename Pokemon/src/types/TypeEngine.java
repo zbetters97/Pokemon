@@ -187,60 +187,24 @@ public class TypeEngine implements TypeInterface {
     	String color = "";
     	
     	switch (this.type.toString()) {
-	    	case ("NORMAL"): 
-	    		color = Style.ITAL; 
-	    		break;    	
-	    	case ("FIRE"): 
-	    		color = Style.RED ; 
-	    		break;
-	    	case ("WATER"): 
-	    		color = Style.BLUE ; 
-	    		break;
-	    	case ("ELECTRIC"): 
-	    		color = Style.YELLOW ; 
-	    		break;
-	    	case ("GRASS"): 
-	    		color = Style.GREEN ;
-	    		break;
-	    	case ("ICE"): 
-	    		color = Style.WHITE ; 
-	    		break;
-	    	case ("FIGHTING"): 
-	    		color = Style.BOLD ; 
-	    		break;
-	    	case ("POISON"): 
-	    		color = Style.PURPLE ; 
-	    		break;
-	    	case ("GROUND"): 
-	    		color = Style.GREEN ; 
-	    		break;
-	    	case ("FLYING"): 
-	    		color = Style.CYAN ; 
-	    		break;
-	    	case ("PSYCHIC"): 
-	    		color = Style.PINK ; 
-	    		break;
-	    	case ("BUG"): 
-	    		color = Style.YELLOW ; 
-	    		break;
-	    	case ("ROCK"): 
-	    		color = Style.YELLOW ; 
-	    		break;
-	    	case ("GHOST"): 
-	    		color = Style.GRAY ; 
-	    		break;
-	    	case ("DRAGON"): 
-	    		color = Style.BLUE ; 
-	    		break;
-	    	case ("DARK"): 
-	    		color = Style.BLACK ; 
-	    		break;
-	    	case ("STEEL"): 
-	    		color = Style.WHITE ; 
-	    		break;
-	    	case ("FAIRY"): 
-	    		color = Style.PINK; 
-	    		break;
+	    	case ("NORMAL"): color = Style.ITAL; break;    	
+	    	case ("FIRE"): color = Style.RED; break;
+	    	case ("WATER"): color = Style.BLUE; break;
+	    	case ("ELECTRIC"): color = Style.YELLOW; break;
+	    	case ("GRASS"): color = Style.GREEN; break;
+	    	case ("ICE"): color = Style.WHITE; break;
+	    	case ("FIGHTING"): color = Style.BOLD; break;
+	    	case ("POISON"): color = Style.PURPLE; break;
+	    	case ("GROUND"): color = Style.GREEN; break;
+	    	case ("FLYING"): color = Style.CYAN; break;
+	    	case ("PSYCHIC"): color = Style.PINK; break;
+	    	case ("BUG"): color = Style.YELLOW; break;
+	    	case ("ROCK"): color = Style.YELLOW; break;
+	    	case ("GHOST"): color = Style.GRAY; break;
+	    	case ("DRAGON"): color = Style.BLUE; break;
+	    	case ("DARK"): color = Style.BLACK; break;
+	    	case ("STEEL"): color = Style.WHITE; break;
+	    	case ("FAIRY"): color = Style.PINK; break;
 	    }
     	
     	return color + this.type.toString() + Style.END;

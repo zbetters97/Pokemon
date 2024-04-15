@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.lang.Math;
 
 import battle.Battle;
-import configuration.*;
+import config.*;
 import pokemon.Pokemon;
 
 /*** MAIN MENU CLASS ***/
@@ -22,7 +23,7 @@ public class MainMenu {
 	static String file, name1, name2;
 	static SoundCard menuMusic, bgmusic;
 	static int defaultLevel, players, partySize;
-	static boolean cpuSelect;
+	static int cpuSelect;
 	static ArrayList<Pokemon> party1, party2;
 
 	/** LOAD METHOD
@@ -36,7 +37,7 @@ public class MainMenu {
 		// setting defaults
 		defaultLevel = -1;
 		file =  "02battle-rs-gym";
-		cpuSelect = false;
+		cpuSelect = 1;
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
@@ -52,7 +53,7 @@ public class MainMenu {
 			name1 = "P1";
 			name2 = "P2";
 			defaultLevel = 50;
-			partySize = 3;
+			partySize = 1;
 			SoundCard.setActive(false);
 		}
 		else {	
@@ -358,8 +359,9 @@ public class MainMenu {
 	private static void partySetting() {
 		
 		System.out.println("CPU PARTY SELECTION:\n\n"
-				+ "[1] MANUAL\n"
-				+ "[2] RANDOM\n\n"
+				+ "[1] RANDOM\n"
+				+ "[2] MANUAL\n"
+				+ "[3] DIFFICULT\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
 		
@@ -369,14 +371,19 @@ public class MainMenu {
 				int choice = input.nextInt(); 
 				SoundCard.play(select);
 				
+				// -1 for random, 0 for manual, 1 for difficult
 				switch (choice) {
 					case 1:
-						cpuSelect = false;
-						Sleeper.print("CPU PARTY SELECTION SET TO MANUAL", 1200); 
+						cpuSelect = -1;
+						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
 						return;
 					case 2:
-						cpuSelect = true;
-						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
+						cpuSelect = 0;
+						Sleeper.print("CPU PARTY SELECTION SET TO MANUAL", 1200); 
+						return;
+					case 3:
+						cpuSelect = 1;
+						Sleeper.print("CPU PARTY SELECTION SET TO DIFFICULT", 1200); 
 						return;
 					case 0:
 						return;
@@ -666,20 +673,21 @@ public class MainMenu {
 			
 			int counter = displayParty();
 			
-			if (!cpuSelect || players == 2) {
+			if (cpuSelect == 0 || players == 2) {
 				System.out.println("\n\n(PR. OAK) " + ((turn % 2 != 0) ? name1 : name2) + 
 						", Please choose your POKEMON:");
 				System.out.print(">");
 			}
-			else if (cpuSelect && turn % 2 != 0) {
+			else if (cpuSelect != 0 && turn % 2 != 0) {
 				System.out.println("\n\n(PR. OAK) " + name1 + ", Please choose your POKEMON:");
 				System.out.print(">");
 			}
-			if (cpuSelect && turn % 2 == 0 && players == 1) {
+			if (cpuSelect != 0 && turn % 2 == 0 && players == 1) {
 				System.out.println("\n\n(PR. OAK) " + name2 + ", Please choose your POKEMON:");
 				System.out.print("");
 				Sleeper.pause(1700);
 				choice = cpuSelectParty(counter);
+				
 				clearContent();
 			}				
 			else {	
@@ -728,18 +736,52 @@ public class MainMenu {
 	  **/
 	private static int cpuSelectParty(int counter) {
 		
-		int choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
-		
-		while (true) {
+		// cpu selects party at random
+		if (cpuSelect == -1) {
+			int choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
 			
-			if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
-					party2.contains(Pokemon.getPokemon(choice - 1))) {	
+			while (true) {
 				
-				choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
+				if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
+						party2.contains(Pokemon.getPokemon(choice - 1))) {	
+					
+					choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
+				}
+				else
+					return choice;
 			}
-			else
-				return choice;
 		}
+		// cpu selects party strategically
+		else {			
+			// make copy of pokedex
+			List<Pokemon> bestList = new ArrayList<>(Pokemon.getPokedex());
+			
+			//sort copy list first by level, then hp, then attack, and send highest values to top (0)
+			Collections.sort(bestList, Comparator.comparing(Pokemon::getLevel)
+		            .thenComparing(Pokemon::getHP)
+		            .thenComparing(Pokemon::getAttack).reversed());
+			
+			// loop until return
+			int i = 0;
+			while (true) {
+												
+				// get best pokemon
+				Pokemon choice = bestList.get(i);
+				
+				// if pokemon already chosen
+				if (party1.contains(choice) || party2.contains(choice))
+					i++;
+				else {
+					// loop unsorted list and return index
+					int c = 0;
+					for (Pokemon p : Pokemon.getPokedex()) {
+						if (p.getName().equals(choice.getName())) return c + 1;
+						else c++;
+					}
+				}
+			}
+		}
+		
 	}
 	/** END CPU SELECT PARTY METHOD **/
 	

@@ -303,6 +303,12 @@
  * 		-Renamed TypeEngine class to Type and condensed coding
  * 		-Renamed StatusEngine class to Status and condensed coding
  * 		-Moved Nature, Status, and Type class to new properties package
+ * 		-Moved Sleeper, SoundCard, and Style to new config package
+ * 		-Added full restore to CPU item list
+ * 		-Added CPU smart party select
+ * 		-Patched Suicune's battle cry
+ * 		-Fixed Electric text color bug
+ * 		-Fixed bug in check for resistance method
  */	
 
 package application;

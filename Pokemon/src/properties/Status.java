@@ -1,6 +1,6 @@
 package properties;
 
-import configuration.Style;
+import config.Style;
 
 /*** STATUS CLASS ***/
 public enum Status {

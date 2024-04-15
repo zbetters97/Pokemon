@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import config.*;
+
 import java.lang.Math;
 
-import configuration.*;
 import moves.Move;
 import pokemon.Pokemon;
 import properties.Type;
@@ -38,7 +39,7 @@ public class BattleEngine {
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
 		
-		this.cpuItems = new int[]{3, 2};
+		this.cpuItems = new int[]{3, 2, 1};
 	}
 	/** END CONSTRUCTOR **/
 
@@ -97,10 +98,18 @@ public class BattleEngine {
 				// try super potion first
 				if (healCPU(60, 0)) return null;
 				if (healCPU(120, 1)) return null;
+				if (healCPU(999, 2)) return null;
 			}		
-			// try hyper potion instead
-			else {
+			// if hyper potion fully heals
+			else if (pokemon[1].getHP() + 120 >= pokemon[1].getBHP()) {
 				// try hyper potion first
+				if (healCPU(120, 1)) return null;
+				if (healCPU(999, 2)) return null;
+				if (healCPU(60, 0)) return null;
+			}
+			// try full restore first
+			else {
+				if (healCPU(999, 2)) return null;
 				if (healCPU(120, 1)) return null;
 				if (healCPU(60, 0)) return null;
 			}
@@ -871,7 +880,7 @@ public class BattleEngine {
 					
 					// if found, multiply by effect and move to next loop
 					if (resType.getName().equals(type.getName())) {
-						effect *= resType.getResistance().get(resType);
+						effect *= targetType.getResistance().get(resType);
 						break resistanceLoop;
 					}
 				}
@@ -912,6 +921,7 @@ public class BattleEngine {
 		this.setWinningPokemon(pokemon[win]);
 		
 		int xp = calculateXP(lsr);
+		pokemon[win].setXP(pokemon[win].getBXP() + xp);
 		
 		clearContent();
 		

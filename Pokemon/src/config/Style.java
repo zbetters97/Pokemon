@@ -1,4 +1,4 @@
-package configuration;
+package config;
 
 /*** STYLE CLASS ***/
 public class Style {

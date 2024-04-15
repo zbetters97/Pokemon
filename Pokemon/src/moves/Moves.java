@@ -71,6 +71,7 @@ public enum Moves {
 	RAZORLEAF ("Razor Leaf", "Physical", Type.GRASS, 25, 80, 95, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio."),
 	ROCKTHROW ("Rock Throw", "Physical", Type.ROCK, 15, 75, 90, "The user picks up and throws a small ROCK at the foe to attack."),
 	ROLLOUT ("Rollout", "Physical", Type.ROCK, 20, 45, 90, "The user continually rolls into the foe over five turns."),
+	SCARYFACE ("Scary Face", "Attribute", Type.NORMAL, false, 10, 90, -2, Arrays.asList("speed"), "The user frightens the foe with a scary face to sharply reduce its Speed stat."),
 	SCRATCH ("Scratch", "Physical", Type.NORMAL, 35, 40, 100, "Hard, pointed, and sharp claws rake the foe to inflict damage."),
 	SEISMICTOSS ("Seismic Toss", "Physical", Type.FIGHTING, 20, 50, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
 	SHADOWBALL ("Shadow Ball", "Special", Type.GHOST, 15, 120, 100, "The user hurls a shadowy blob at the foe."),

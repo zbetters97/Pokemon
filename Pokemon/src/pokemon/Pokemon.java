@@ -6,16 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import configuration.Sleeper;
+import config.Sleeper;
 import moves.*;
 import properties.*;
 
 /*** POKEDEX ENUM CLASS ***/
 public enum Pokemon {
 	
-	/** INITIALIZE ENUMS **/
-	// stat reference: https://www.serebii.net/
-	// exp / ev values reference: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield
+	/*** STAT REFERECE https://www.serebii.net/pokemon/ ***/
+	/*** EXP / EV REFERENCE https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield ***/
+	
 	BULBASAUR ("Bulbasaur", 1, Type.GRASS, 5, 45, 49, 49, 65, 65, 45, 16, 64, 1),
 	IVYSAUR ("Ivysaur", 2, Arrays.asList(Type.GRASS, Type.POISON), 16, 60, 62, 63, 80, 80, 60, 32, 141, 2),
 	VENUSAUR ("Venusaur", 3, Arrays.asList(Type.GRASS, Type.POISON), 36, 80, 82, 83, 100, 100, 80, -1, 208, 3),
@@ -65,7 +65,7 @@ public enum Pokemon {
 	private Type type;
 	private Nature nature;
 	private List<Type> types;
-	private int level, bhp, hp, evLevel, xp, ev, iv;
+	private int level, bhp, hp, evLevel, xp, bxp, ev, iv;
 	private double speed, attack, defense, spAttack, spDefense, accuracy;	
 	private int speedStg, attackStg, defenseStg, spAttackStg, spDefenseStg, accuracyStg;
 	private Status status;
@@ -111,7 +111,7 @@ public enum Pokemon {
 		this.spDefenseStg = 0;
 		this.accuracyStg = 0;
 		
-		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.types = null;	
+		this.evLevel = evLevel; this.xp = xp; this.bxp = xp; this.ev = ev; this.types = null;	
 		this.status = null;
 		this.isAlive = true;	
 		
@@ -148,7 +148,7 @@ public enum Pokemon {
 		this.spDefenseStg = 0;
 		this.accuracyStg = 0;
 		
-		this.evLevel = evLevel; this.xp = xp; this.ev = ev; this.type = null;
+		this.evLevel = evLevel; this.xp = xp; this.bxp = xp; this.ev = ev; this.type = null;
 		this.status = null;
 		this.isAlive = true;	
 		
@@ -195,7 +195,7 @@ public enum Pokemon {
         pokeMap.put(MACHOP, Arrays.asList(new Move(Moves.LOWKICK), new Move(Moves.LOWSWEEP), new Move(Moves.KNOCKOFF))); 
         pokeMap.put(MACHOKE, Arrays.asList(new Move(Moves.LOWKICK), new Move(Moves.LOWSWEEP,20), new Move(Moves.VITALTHROW),
         		new Move(Moves.SEISMICTOSS))); 
-        pokeMap.put(MACHAMP, Arrays.asList(new Move(Moves.VITALTHROW), new Move(Moves.SEISMICTOSS), new Move(Moves.DYNAMICPUNCH),
+        pokeMap.put(MACHAMP, Arrays.asList(new Move(Moves.SCARYFACE), new Move(Moves.SEISMICTOSS), new Move(Moves.DYNAMICPUNCH),
         		new Move(Moves.CROSSCHOP))); 
         
         pokeMap.put(GEODUDE, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.ROCKTHROW), new Move(Moves.DEFENSECURL)));
@@ -410,8 +410,14 @@ public enum Pokemon {
 			this.bhp = hp;
 		}
 	}
+	
+	public Nature getNature() { return nature; }
+	public void setNature(Nature nature) { this.nature = nature; }
+	
 	public int getXP() { return xp; }
 	public void setXP(int xp) {	this.xp = xp; }
+	public int getBXP() { return bxp; }
+	public void setBXP(int bxp) {	this.bxp = bxp; }
 
 	public int getHP() { return hp; }
 	public void setHP(int hp) {	this.hp = hp; }	

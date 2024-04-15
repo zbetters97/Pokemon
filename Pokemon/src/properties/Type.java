@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
-import configuration.Style;
+import config.Style;
 
 /*** TYPE CLASS ***/
 public enum Type {
@@ -13,7 +13,7 @@ public enum Type {
 	NORMAL ("Normal", 0.5), 
 	FIRE ("Fire", 0.5), 
 	WATER ("Water", 0.5), 
-	ELECTRIC ("ELECTRIC", 0.5), 
+	ELECTRIC ("Electric", 0.5), 
 	GRASS ("Grass", 0.5), 
 	ICE ("Ice", 0.5), 
 	FIGHTING ("Fighting", 0.5),

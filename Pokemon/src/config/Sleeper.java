@@ -1,4 +1,4 @@
-package configuration;
+package config;
 
 /*** SLEEPER CLASS ***/
 public class Sleeper {

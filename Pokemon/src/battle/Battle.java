@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
-import configuration.*;
+import config.*;
 import moves.Move;
 import pokemon.Pokemon;
 import properties.Type;
@@ -273,7 +273,7 @@ public class Battle {
 		System.out.println("[" + ++counter + "] POKEMON");
 		System.out.println("\n[" + ++counter + "] RUN");
 		System.out.print(">");	
-		
+			
 		return counter;
 	}
 	/** END DISPLAY MOVES METHOD **/
@@ -553,7 +553,7 @@ public class Battle {
 							iCount[2] -= 1;
 							
 							clearContent();
-							healFighter(1000, player);		
+							healFighter(999, player);		
 							clearContent();
 							
 							return true;

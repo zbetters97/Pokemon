@@ -10,7 +10,8 @@ import java.util.Scanner;
 import java.lang.Math;
 
 import battle.Battle;
-import pokemon.Pokedex;
+import configuration.*;
+import pokemon.Pokemon;
 
 /*** MAIN MENU CLASS ***/
 public class MainMenu {
@@ -22,7 +23,7 @@ public class MainMenu {
 	static SoundCard menuMusic, bgmusic;
 	static int defaultLevel, players, partySize;
 	static boolean cpuSelect;
-	static ArrayList<Pokedex> party1, party2;
+	static ArrayList<Pokemon> party1, party2;
 
 	/** LOAD METHOD
 	  * Method called from Driver 
@@ -691,8 +692,8 @@ public class MainMenu {
 						if (0 < choice && choice <= counter) {
 							
 							// chosen Pokemon must not have already been selected by either trainer
-							if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
-									party2.contains(Pokedex.getPokemon(choice - 1))) {					
+							if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
+									party2.contains(Pokemon.getPokemon(choice - 1))) {					
 								Sleeper.print("This Pokemon has already been chosen!");
 								System.out.print(">");
 							}
@@ -731,8 +732,8 @@ public class MainMenu {
 		
 		while (true) {
 			
-			if (party1.contains(Pokedex.getPokemon(choice - 1)) || 
-					party2.contains(Pokedex.getPokemon(choice - 1))) {	
+			if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
+					party2.contains(Pokemon.getPokemon(choice - 1))) {	
 				
 				choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
 			}
@@ -749,7 +750,7 @@ public class MainMenu {
 	private static void assignParty(int choice, int turn) {
 		
 		// assign fighter to party found at given index
-		Pokedex selectedPokemon = Pokedex.getPokemon(choice - 1);
+		Pokemon selectedPokemon = Pokemon.getPokemon(choice - 1);
 		
 		// play pokemon cry
 		SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
@@ -766,13 +767,13 @@ public class MainMenu {
 		
 		System.out.println("--- AVAILABLE POKEMON FOR BATTLE ---\n");
 		int counter = 0;		
-		for (Pokedex p : Pokedex.getPokedex()) {	
+		for (Pokemon p : Pokemon.getPokedex()) {	
 			
 			p.setLevel(defaultLevel);
 			
 			// don't display Pokemon who are already chosen					
-			if (party1.contains(Pokedex.getPokemon(counter)) || 
-					party2.contains(Pokedex.getPokemon(counter))) {
+			if (party1.contains(Pokemon.getPokemon(counter)) || 
+					party2.contains(Pokemon.getPokemon(counter))) {
 				counter++;
 				continue;
 			}
@@ -794,7 +795,7 @@ public class MainMenu {
 		
 		int n = 0;
 		System.out.print("\n" + name1 + "'s PARTY:\t");
-		for (Pokedex p : party1) {
+		for (Pokemon p : party1) {
 			if (n == 3) { 
 				System.out.println(); 
 				System.out.print("\t\t"); 
@@ -808,7 +809,7 @@ public class MainMenu {
 		
 		n = 0;
 		System.out.print("\n" + name2 + "'s PARTY:\t");	
-		for (Pokedex p : party2) {
+		for (Pokemon p : party2) {
 			if (n == 3) { 
 				System.out.println(); 
 				System.out.print("\t\t"); 
@@ -827,10 +828,10 @@ public class MainMenu {
 	  * @param Integer player number
 	  * @return ArrayList<Pokedex> swapped party
 	  **/
-	private static ArrayList<Pokedex> selectStarter(int player) {
+	private static ArrayList<Pokemon> selectStarter(int player) {
 
 		// assign temp party to player 1 or player 2 party
-		ArrayList<Pokedex> party = (player == 1) ? party1 : party2;
+		ArrayList<Pokemon> party = (player == 1) ? party1 : party2;
 		
 		printOak();
 		printParty();
@@ -839,7 +840,7 @@ public class MainMenu {
 				", Please select your starting fighter:\n");	
 		
 		int counter = 1;
-		for (Pokedex pokemon : party) { 
+		for (Pokemon pokemon : party) { 
 			System.out.print("[" + counter + "] " + pokemon.getName() + "(" + 
 					((pokemon.getTypes() == null) ? pokemon.getType().toString().charAt(0) + "" + 
 					pokemon.getType().toString().toLowerCase().charAt(1) : 
@@ -896,8 +897,8 @@ public class MainMenu {
 	private static void cpuSelectStarter() {
 		
 		// find best pokemon in cpu party based on Level, then HP, then Defense
-		Pokedex bestFighter = Collections.max(party2, Comparator.comparingInt(Pokedex::getLevel)
-				.thenComparing(Pokedex::getHP).thenComparing(Pokedex::getDefense));
+		Pokemon bestFighter = Collections.max(party2, Comparator.comparingInt(Pokemon::getLevel)
+				.thenComparing(Pokemon::getHP).thenComparing(Pokemon::getDefense));
 
 		// find index of best pokemon
 		int choice = party2.indexOf(bestFighter);	

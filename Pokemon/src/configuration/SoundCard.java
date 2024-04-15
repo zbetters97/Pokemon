@@ -1,10 +1,11 @@
-package application;
+package configuration;
 
 import java.io.File;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+
 /*** SOUND CARD CLASS ***/
 public class SoundCard {
 	

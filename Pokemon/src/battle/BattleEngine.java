@@ -6,34 +6,34 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import java.lang.Math;
 
-import application.Sleeper;
-import application.SoundCard;
+import configuration.*;
 import moves.Move;
-import pokemon.Pokedex;
-import types.TypeEngine;
+import pokemon.Pokemon;
+import properties.Type;
 
 /*** BATTLE ENGINE CLASS ***/
 public class BattleEngine {
 	
-	private Pokedex winningPokemon;
-	private Pokedex[] pokemon;
+	private Pokemon winningPokemon;
+	private Pokemon[] pokemon;
 	private int[] cpuItems;
 	public boolean swap = false;
 	
 	/** GETTERS AND SETTERS **/
-	public Pokedex getWinningPokemon() { return winningPokemon; }
-	public void setWinningPokemon(Pokedex winningPokemon) { this.winningPokemon = winningPokemon; }
+	public Pokemon getWinningPokemon() { return winningPokemon; }
+	public void setWinningPokemon(Pokemon winningPokemon) { this.winningPokemon = winningPokemon; }
 	/** END GETTERS AND SETTERS **/
 	
 	/** CONSTRUCTOR 
 	 * @param trainer 1 pokemon, trainer 2 pokemon
 	 **/
-	public BattleEngine(Pokedex pokemon1, Pokedex pokemon2) {
+	public BattleEngine(Pokemon pokemon1, Pokemon pokemon2) {
 		
 		// array to hold fighting pokemon
-		pokemon = new Pokedex[12];
+		pokemon = new Pokemon[12];
 		
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
@@ -46,7 +46,7 @@ public class BattleEngine {
 	 * Swap in battle pokemon with new pokemon
 	 * @param new pokemon to swap in, int spot
 	 **/
-	public void swapPokemon(Pokedex newPokemon, int player) {
+	public void swapPokemon(Pokemon newPokemon, int player) {
 						
 		int slot = 0;
 		
@@ -73,7 +73,7 @@ public class BattleEngine {
 		
 		// if slot is open, assign new fighter
 		pokemon[slot] = newPokemon;			
-		Pokedex temp = pokemon[player];
+		Pokemon temp = pokemon[player];
 		
 		// swap fighter to old slot
 		pokemon[player] = pokemon[slot];
@@ -312,7 +312,7 @@ public class BattleEngine {
 		if (pokemon[atk].getStatus() != null) {
 			
 			// check which status
-			switch (pokemon[atk].getStatus().getName()) {
+			switch (pokemon[atk].getStatus().getAbreviation()) {
 			
 				case "PRZ":		
 					
@@ -362,7 +362,7 @@ public class BattleEngine {
 	 **/
 	private boolean getEffect(int pkm) {
 		
-		String status = pokemon[pkm].getStatus().getName();		
+		String status = pokemon[pkm].getStatus().getAbreviation();		
 		
 		// if first move under condition, set number of moves until free
 		if (pokemon[pkm].getStatusLimit() == 0) 
@@ -416,11 +416,11 @@ public class BattleEngine {
 	 **/
 	private void statusDamage() {
 		
-		StatusEffect condition = (Pokedex p) -> {
+		StatusEffect condition = (Pokemon p) -> {
 			
 			if (p.getStatus() != null) {				
 				
-				if (p.getStatus().getName().equals("PSN") || p.getStatus().getName().equals("BRN")) {
+				if (p.getStatus().getAbreviation().equals("PSN") || p.getStatus().getAbreviation().equals("BRN")) {
 					
 					// status effects reference: https://pokemon.fandom.com/wiki/Status_Effects			
 					int damage = (int) (p.getHP() * 0.16);
@@ -433,9 +433,9 @@ public class BattleEngine {
 					
 					p.setHP(newHP);			
 					
-					SoundCard.playStatus(p.getStatus().getName());
+					SoundCard.playStatus(p.getStatus().getAbreviation());
 					Sleeper.print(p.getName() + " is hurt from the " + 
-						p.getStatus().getEffect().toLowerCase() + "!", 1700);
+						p.getStatus().getName().toLowerCase() + "!", 1700);
 					clearContent();	
 										
 					return damage;
@@ -791,7 +791,7 @@ public class BattleEngine {
 		if (pokemon[atk].getTypes() != null) {	
 			
 			// cycle through each type of attacker
-			for (TypeEngine t : pokemon[atk].getTypes()) {
+			for (Type t : pokemon[atk].getTypes()) {
 				
 				// if same type move
 				if (move.getMove().getType() == t) {
@@ -825,7 +825,7 @@ public class BattleEngine {
 	 * @param number of target, type of selected move
 	 * @return effectiveness
 	 **/
-	private double effectiveness(int trg, TypeEngine type) {
+	private double effectiveness(int trg, Type type) {
 		
 		// default value
 		double effect = 1.0;
@@ -833,17 +833,17 @@ public class BattleEngine {
 		// if target is single types
 		if (pokemon[trg].getTypes() == null) {
 			
-			// if vulnerable, retrieve and return vulnerable value
-			for (TypeEngine vulnType : pokemon[trg].getType().getVulnerability()) {		
-				if (vulnType.toString().equals(type.toString())) {
-					effect = vulnType.getStrength();
+			// if vulnerable, retrieve and return vulnerable value		
+			for (Type vulnType : pokemon[trg].getType().getVulnerability().keySet()) {		
+				if (vulnType.getName().equals(type.getName())) {
+					effect = pokemon[trg].getType().getVulnerability().get(vulnType);
 					return effect;
 				}
 			}			
 			// if resistant, retrieve and return resistance value
-			for (TypeEngine resType : pokemon[trg].getType().getResistance()) {			
-				if (resType.toString().equals(type.toString())) {
-					effect = resType.getStrength();
+			for (Type resType : pokemon[trg].getType().getResistance().keySet()) {			
+				if (resType.getName().equals(type.getName())) {
+					effect = pokemon[trg].getType().getResistance().get(resType);
 					return effect;
 				}			
 			}		
@@ -852,26 +852,26 @@ public class BattleEngine {
 		else {
 			
 			// for each type in target
-			for (TypeEngine targetType : pokemon[trg].getTypes()) {		
+			for (Type targetType : pokemon[trg].getTypes()) {		
 				
-				// for each vulnerability
+				// for each vulnerability			
 				vulnerabilityLoop:
-				for (TypeEngine vulnType : targetType.getVulnerability()) {		
+				for (Type vulnType : targetType.getVulnerability().keySet()) {		
 					
 					// if found, multiply by effect and move to next loop
-					if (vulnType.toString().equals(type.toString())) {						
-						effect *= vulnType.getStrength();						
+					if (vulnType.getName().equals(type.getName())) {						
+						effect *= targetType.getVulnerability().get(vulnType);		
 						break vulnerabilityLoop;
 					}
 				}	
 				
 				// for each resistance
 				resistanceLoop:
-				for (TypeEngine resType : targetType.getResistance()) {		
+				for (Type resType : targetType.getResistance().keySet()) {		
 					
 					// if found, multiply by effect and move to next loop
-					if (resType.toString().equals(type.toString())) {
-						effect *= resType.getStrength();
+					if (resType.getName().equals(type.getName())) {
+						effect *= resType.getResistance().get(resType);
 						break resistanceLoop;
 					}
 				}
@@ -969,7 +969,7 @@ public class BattleEngine {
 
 @FunctionalInterface
 interface StatusEffect {
-	public int dealDamage(Pokedex pokemon);
+	public int dealDamage(Pokemon pokemon);
 }
 
 @FunctionalInterface

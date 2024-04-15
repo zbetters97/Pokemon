@@ -9,12 +9,10 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
+import configuration.*;
 import moves.Move;
-import pokemon.Pokedex;
-import types.TypeEngine;
-import application.Sleeper;
-import application.SoundCard;
-import application.Style;
+import pokemon.Pokemon;
+import properties.Type;
 
 /*** BATTLE CLASS ***/
 public class Battle {
@@ -25,13 +23,13 @@ public class Battle {
 	private int numPlayers;	
 	private int[] playerOneItems, playerTwoItems;
 	
-	private static Pokedex pokemon1, pokemon2;
-	private ArrayList<Pokedex> party1, party2;
+	private static Pokemon pokemon1, pokemon2;
+	private ArrayList<Pokemon> party1, party2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
 	public Battle(String name1, String name2, int numPlayers, 
-			ArrayList<Pokedex> party1, ArrayList<Pokedex> party2) {
+			ArrayList<Pokemon> party1, ArrayList<Pokemon> party2) {
 		
 		this.name1 = name1; this.name2 = name2;
 		
@@ -143,10 +141,10 @@ public class Battle {
 	
 	/** SELECT MOVE METHOD
 	  * Print out fighter moveset and return chosen move 
-	  * @param Pokedex current fighter, int number of player
+	  * @param Pokemon current fighter, int number of player
 	  * @return selected move
 	  **/
-	private Move selectMove(Pokedex fighter, int player) {
+	private Move selectMove(Pokemon fighter, int player) {
 		
 		int counter = displayMove(fighter);
 		
@@ -189,7 +187,7 @@ public class Battle {
 													
 					clearContent();
 					
-					Pokedex temp = swapFighter(player);
+					Pokemon temp = swapFighter(player);
 					
 					// if player didn't select the BACK option
 					if (temp != null) {
@@ -239,10 +237,10 @@ public class Battle {
 	
 	/** DISPLAY MOVES METHOD
 	  * Print out in-battle pokemon's moveset and return index of counter
-	  * @param Pokedex current fighter
+	  * @param Pokemon current fighter
 	  * @return int index of counter
 	  **/
-	private int displayMove(Pokedex fighter) {
+	private int displayMove(Pokemon fighter) {
 		
 		printBattleInfo();
 		
@@ -260,8 +258,8 @@ public class Battle {
 		// find longest type name in set
 		int tLength = 0;		
 		for (int i = 0; i < fighter.getMoveSet().size(); i++) {			
-			if (fighter.getMoveSet().get(i).getMove().getType().toString().length() > tLength)			   
-				tLength = fighter.getMoveSet().get(i).getMove().getType().toString().length();
+			if (fighter.getMoveSet().get(i).getMove().getType().getName().length() > tLength)			   
+				tLength = fighter.getMoveSet().get(i).getMove().getType().getName().length();
 		}		
 		
 		// display all moves				
@@ -355,9 +353,9 @@ public class Battle {
 		
 	/** GET MOVE INFO METHOD
 	  * Print out description of each move in moveset 
-	  * @param Pokedex current fighter
+	  * @param Pokemon current fighter
 	  **/
-	private void displayInfo(Pokedex fighter) {	
+	private void displayInfo(Pokemon fighter) {	
 				
 		System.out.println("MOVE DESCRIPTIONS:\n");
 		
@@ -410,9 +408,9 @@ public class Battle {
 	  * @param int current player
 	  * @return Pokedex new fighter
 	  **/
-	private Pokedex swapFighter(int player) {
+	private Pokemon swapFighter(int player) {
 		
-		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? party1 : party2;
+		ArrayList<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		// only 1 pokemon in party
 		if (pokemonParty.size() == 1) {
@@ -424,7 +422,7 @@ public class Battle {
 		
 		// skip first pokemon in party
 		int counter = 1;
-		for (Pokedex p : pokemonParty.subList(1, pokemonParty.size())) {	
+		for (Pokemon p : pokemonParty.subList(1, pokemonParty.size())) {	
 			
 			System.out.printf("[" + ++counter + "] " + p.getName() + 
 				" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
@@ -443,7 +441,7 @@ public class Battle {
 				// choice must be a number from 0 to last element in list													
 				if (1 < choice && choice <= counter) {
 															
-					Pokedex newFighter = pokemonParty.get(choice - 1);
+					Pokemon newFighter = pokemonParty.get(choice - 1);
 					
 					if (newFighter.getName().equals(pokemon1.getName())) {
 						Sleeper.print(pokemon1.getName() + " is already in battle!");
@@ -495,10 +493,10 @@ public class Battle {
 	
 	/** DISPLAY ITEMS METHOD
 	  * Prompt user to select an item to heal Pokemon
-	  * @param Pokedex current fighter, int player
+	  * @param Pokemon current fighter, int player
 	  * @return boolean if player selected BACK
 	  **/
-	private boolean displayItems(Pokedex fighter, int player) {
+	private boolean displayItems(Pokemon fighter, int player) {
 		
 		// rolling counter to track items in player inventory
 		int iCount[];		
@@ -593,7 +591,7 @@ public class Battle {
 	  **/
 	private void healFighter(int heal, int player) {
 		
-		Pokedex fighter = (player == 1) ? pokemon1 : pokemon2;
+		Pokemon fighter = (player == 1) ? pokemon1 : pokemon2;
 		
 		int newHP = fighter.getHP() + heal;
 		
@@ -636,7 +634,7 @@ public class Battle {
 		if (playerTwoWinner) {
 			
 			// remove from player 1 party			
-			for (Pokedex p : party1) {				
+			for (Pokemon p : party1) {				
 				if (p.getIndex() == pokemon1.getIndex()) {
 					party1.remove(p);
 					break;
@@ -673,7 +671,7 @@ public class Battle {
 		else {				
 			
 			// remove from party 2
-			for (Pokedex p : party2) {				
+			for (Pokemon p : party2) {				
 				if (p.getIndex() == pokemon2.getIndex()) {
 					party2.remove(p);
 					break;
@@ -725,10 +723,10 @@ public class Battle {
 		
 		Sleeper.print("CHOOSE A POKEMON:\n", 700);
 		
-		ArrayList<Pokedex> pokemonParty = (player == 1 ) ? party1 : party2;
+		ArrayList<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		int counter = 0;
-		for (Pokedex p : pokemonParty) {						
+		for (Pokemon p : pokemonParty) {						
 				System.out.printf("[" + ++counter + "] " + p.getName() + 
 					" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
 					((p.getType() == null) ? p.printTypes() : p.getType().printType()) + 
@@ -766,16 +764,16 @@ public class Battle {
 	 * Iterates through CPU party and finds best pokemon based on type and/or level
 	 * @return best Pokemon found in party
 	 **/
-	private Pokedex cpuSelectNextPokemon() {
+	private Pokemon cpuSelectNextPokemon() {
 		
 		// list to hold all candidates based on type effectiveness
-		Map<Pokedex, Integer> pokemonList = new HashMap<>();
+		Map<Pokemon, Integer> pokemonList = new HashMap<>();
 		
 		// if more than 1 pokemon in CPU party
 		if (party2.size() > 1) {
 			
 			// loop through each pokemon in party
-			for (Pokedex party : party2) {
+			for (Pokemon party : party2) {
 				
 				// if party is single type
 				if (party.getTypes() == null) {
@@ -784,10 +782,10 @@ public class Battle {
 					if (pokemon1.getTypes() == null) {	
 						
 						// loop through each type in target pokemon
-						for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {	
+						for (Type vulnType : pokemon1.getType().getVulnerability().keySet()) {	
 							
 							// if type matches target's vulnerability
-							if (vulnType.toString().equals(party.getType().toString()))
+							if (vulnType.getName().equals(party.getType().getName()))
 								pokemonList.put(party, party.getLevel());
 						}
 					}					
@@ -795,13 +793,13 @@ public class Battle {
 					else {			
 						
 						// for each type in target
-						for (TypeEngine type : pokemon1.getTypes()) {
+						for (Type type : pokemon1.getTypes()) {
 							
 							// loop through each vulnerability in type
-							for (TypeEngine vuln : type.getVulnerability()) {									
+							for (Type vuln : type.getVulnerability().keySet()) {									
 
 								// if type matches target's vulnerability
-								if (vuln.toString().equals(party.getType().toString()))
+								if (vuln.getName().equals(party.getType().getName()))
 									pokemonList.put(party, party.getLevel());
 							}
 						}						
@@ -814,13 +812,13 @@ public class Battle {
 					if (pokemon1.getTypes() == null) {	
 						
 						// for each type in party
-						for (TypeEngine type : party.getTypes()) {
+						for (Type type : party.getTypes()) {
 							
 							// loop through each vulnerability in target pokemon
-							for (TypeEngine vulnType : pokemon1.getType().getVulnerability()) {	
+							for (Type vulnType : pokemon1.getType().getVulnerability().keySet()) {	
 							
 								// if type matches target's vulnerability
-								if (vulnType.toString().equals(type.toString()))
+								if (vulnType.getName().equals(type.getName()))
 									pokemonList.put(party, party.getLevel());
 							}
 						}
@@ -831,16 +829,16 @@ public class Battle {
 					else {			
 						
 						// for each type in party
-						for (TypeEngine parType : party.getTypes()) {
+						for (Type parType : party.getTypes()) {
 
 							// for each type in target
-							for (TypeEngine tarType : pokemon1.getTypes()) {
+							for (Type tarType : pokemon1.getTypes()) {
 								
 								// loop through each vulnerability in type
-								for (TypeEngine vuln : tarType.getVulnerability()) {									
+								for (Type vuln : tarType.getVulnerability().keySet()) {									
 	
 									// if type matches target's vulnerability
-									if (vuln.toString().equals(parType.toString()))
+									if (vuln.getName().equals(parType.getName()))
 										pokemonList.put(party, party.getLevel());
 								}
 							}		
@@ -853,7 +851,7 @@ public class Battle {
 		else 
 			return party2.get(0);
 		
-		Pokedex bestPokemon;
+		Pokemon bestPokemon;
 		
 		// find best pokemon based on max level
 		if (!pokemonList.isEmpty()) {
@@ -862,7 +860,7 @@ public class Battle {
 		}
 		else {			
 			// loop through party and find highest level pokemon
-			for (Pokedex p : party2) 
+			for (Pokemon p : party2) 
 				pokemonList.put(p, p.getLevel());
 			
 			bestPokemon = Collections.max(pokemonList.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
@@ -896,6 +894,6 @@ public class Battle {
 /*** LAMBDA INTERFACE ***/
 @FunctionalInterface
 interface Printer {
-	public void print(String trainer, Pokedex pokemon, int size);
+	public void print(String trainer, Pokemon pokemon, int size);
 }
 /*** END LAMBDA INTERFACE ***/

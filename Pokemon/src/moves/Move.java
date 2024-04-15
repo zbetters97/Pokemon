@@ -4,7 +4,7 @@ package moves;
 public class Move {
 	
 	/** INITIALIZE VALUES FOR UNIQUE MOVES **/
-	private MovesEngine move;
+	private Moves move;
 	private int pp;
 	private int bpp;
 	private int numTurns;
@@ -12,12 +12,12 @@ public class Move {
 	/** END INITIALIZE VALUES **/
 	
 	/** CONSTRUCTORS **/
-	public Move (MovesEngine move) {		
+	public Move (Moves move) {		
 		this.move = move;
 		this.pp = move.getpp();
 		this.bpp = pp;
 	}	
-	public Move (MovesEngine move, int numTurns) {
+	public Move (Moves move, int numTurns) {
 		this.move = move;
 		this.pp = move.getpp();
 		this.bpp = pp;
@@ -27,7 +27,7 @@ public class Move {
 	/** END CONSTRUCTORS **/
 	
 	/** GETTERS AND SETTERS **/
-	public MovesEngine getMove() { return move; }	
+	public Moves getMove() { return move; }	
 	public String getName() { return move.getName(); }
 	
 	public int getpp() { return pp; }

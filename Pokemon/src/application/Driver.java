@@ -296,6 +296,13 @@
  * 		-Cleaned up coding
  * 4/14/2024:
  * 		-Added Nature class (non-functional)
+ * 4/15/2024:
+ * 		-Added functioning Nature attributes
+ * 		-Renamed Pokedex class to Pokemon
+ * 		-Renamed MoveEngine to Move
+ * 		-Renamed TypeEngine class to Type and condensed coding
+ * 		-Renamed StatusEngine class to Status and condensed coding
+ * 		-Moved Nature, Status, and Type class to new properties package
  */	
 
 package application;

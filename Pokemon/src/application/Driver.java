@@ -286,6 +286,16 @@
  * 		-Added color to Pokemon and Move types
  * 		-Added logic to update color of HP based on percentage remaining
  * 		-Fixed bug in displayMove formatting
+ * 4/13/2024:
+ * 		-Added faint sounds for Raikou, Entei, Suicune, Kyogre, 
+ * 			Grouodon, and Rayquaza
+ * 		-Added potion heal sound effect
+ * 		-Added R/S Elite Four battle music
+ * 		-Added R/S Victory Road menu music
+ * 		-Reworded menu options
+ * 		-Cleaned up coding
+ * 4/14/2024:
+ * 		-Added Nature class (non-functional)
  */	
 
 package application;

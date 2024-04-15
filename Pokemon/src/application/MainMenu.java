@@ -38,10 +38,9 @@ public class MainMenu {
 		cpuSelect = false;
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");		
-		menuMusic.playMusic();
-		
-		clearContent();			
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
+		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
+		menuMusic.playMusic();	
 		
 		// players can only be set to 1 or 2
 		players = mainMenu();
@@ -82,6 +81,7 @@ public class MainMenu {
 	
 	/** PRINT LOGO & OAK METHODS **/
 	private static void printLogo() {
+		clearContent();	
 		System.out.println(Style.YELLOW
 				+ "                                  ,'\\\r\n"
 				+ "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
@@ -98,6 +98,7 @@ public class MainMenu {
 				Style.END);
 	}
 	private static void printOak() {
+		clearContent();	
 		System.out.println(Style.CYAN 
 				+ "⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\r\n"
 				+ "⠀⠀⠀⠀⠀⠘⠯⠙⠛⠛⠉⠛⠛⠛⠲⠤⠤⡀⠀⠀⠀⠀⠀⠀\r\n"
@@ -149,10 +150,9 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: clearContent(); return choice;
-					case 2: clearContent(); return choice;
-					case 3: 
-						clearContent(); 					
+					case 1: return choice;
+					case 2: return choice;
+					case 3: 					
 						settingsMenu();	
 						printLogo();
 						System.out.println("PLEASE SELECT MODE:\n\n"
@@ -194,8 +194,8 @@ public class MainMenu {
 		printLogo();
 		System.out.println("PLEASE SELECT AN OPTION:\n\n"
 				+ "[1] LEVELS\n"
-				+ "[2] CPU PARTY\n"
-				+ "[3] BATTLE MUSIC\n"
+				+ "[2] CPU\n"
+				+ "[3] MUSIC\n"
 				+ "[4] SOUNDS\n"
 				+ "[5] TEXT SPEED\n\n"
 				+ "[0] <- BACK");
@@ -210,80 +210,71 @@ public class MainMenu {
 				
 				switch (choice) {
 					case 1: 
-						clearContent(); 
 						printLogo();
 						levelSetting(); 
-						clearContent();	
 						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
-								+ "[2] CPU PARTY\n"
-								+ "[3] BATTLE MUSIC\n"
+								+ "[2] CPU\n"
+								+ "[3] MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
 								+ "[0] <- BACK");
 						System.out.print(">");
 						break;						
 					case 2: 
-						clearContent(); 
 						printLogo();
 						partySetting(); 
-						clearContent();
 						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
-								+ "[2] CPU PARTY\n"
-								+ "[3] BATTLE MUSIC\n"
+								+ "[2] CPU\n"
+								+ "[3] MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
 								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 3: 
-						clearContent(); 
 						printLogo();
 						musicSetting(); 
-						clearContent();
 						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
-								+ "[2] CPU PARTY\n"
-								+ "[3] BATTLE MUSIC\n"
+								+ "[2] CPU\n"
+								+ "[3] MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
 								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 4: 
-						clearContent();
 						printLogo();
 						soundSetting(); 
-						clearContent();
 						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
-								+ "[2] CPU PARTY\n"
-								+ "[3] BATTLE MUSIC\n"
+								+ "[2] CPU\n"
+								+ "[3] MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
 								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
 					case 5:
-						clearContent();
 						printLogo();
 						textSetting();
-						clearContent();
+						printLogo();
 						System.out.println("PLEASE SELECT AN OPTION:\n\n"
 								+ "[1] LEVELS\n"
-								+ "[2] CPU PARTY\n"
-								+ "[3] BATTLE MUSIC\n"
+								+ "[2] CPU\n"
+								+ "[3] MUSIC\n"
 								+ "[4] SOUNDS\n"
 								+ "[5] TEXT SPEED\n\n"
 								+ "[0] <- BACK");
 						System.out.print(">");
 						break;
-					case 0: clearContent(); return;
+					case 0: return;
 					default:
 						Sleeper.print("Input must be a menu option!"); 
 						System.out.print(">");
@@ -435,6 +426,7 @@ public class MainMenu {
 					.replace(".wav", "")
 					.replace("-", ": ")
 					.replace("_", ", ")
+					.replace("&", " ")
 					.toUpperCase();
 			
 			// add closing bracket and space after song index #
@@ -588,7 +580,7 @@ public class MainMenu {
 	private static String inputName(int player) {
 				
 		printOak();
-		Sleeper.print("PR. OAK: What's your name, trainer " + player + "?");
+		Sleeper.print("(PR. OAK) What's your name, trainer " + player + "?");
 		System.out.print(">");
 		
 		// loop until QUIT is selected
@@ -601,20 +593,18 @@ public class MainMenu {
 				String greeting;
 				
 				if (name.equals("Ash"))
-					greeting = "PR. OAK: Ash! Good to see you again :)";
+					greeting = "(PR. OAK) Ash! Good to see you again :)";
 				else if (name.equals("Oak"))
-					greeting = "PR. OAK: Would you happen to also be a professor?";
+					greeting = "(PR. OAK) Would you happen to also be a professor?";
 				else if (name.equals("Zachary")) 
-					greeting = "PR. OAK: Woah! I am honored to be in the presense of my creator!";
+					greeting = "(PR. OAK) Woah! I am honored to be in the presense of my creator!";
 				else if (name.equals("Jenna"))
-					greeting = "PR. OAK: What a lovely sounding name!";
+					greeting = "(PR. OAK) What a lovely sounding name!";
 				else 
-					greeting = "PR. OAK: Welcome to the world of POKEMON, " + name + "!";									
+					greeting = "(PR. OAK) Welcome to the world of POKEMON, " + name + "!";									
 				
-				clearContent();
 				printOak();
 				Sleeper.print(greeting, 1200);
-				clearContent();
 				
 				return name;
 			}
@@ -634,7 +624,7 @@ public class MainMenu {
 	private static void selectPartySize() {
 					
 		printOak();
-		Sleeper.print("PR. OAK: What will be the size of your POKEMON party? (1-6)");
+		Sleeper.print("(PR. OAK) What will be the size of your POKEMON party? (1-6)");
 		System.out.print(">");
 		
 		// loop until Quit is selected
@@ -646,7 +636,7 @@ public class MainMenu {
 				
 				if (1 <= choice && choice <= 6) {
 					partySize = choice;
-					clearContent();	
+					clearContent();
 					return;
 				}
 				else {
@@ -676,16 +666,16 @@ public class MainMenu {
 			int counter = displayParty();
 			
 			if (!cpuSelect || players == 2) {
-				System.out.println("\n\nPR. OAK: " + ((turn % 2 != 0) ? name1 : name2) + 
+				System.out.println("\n\n(PR. OAK) " + ((turn % 2 != 0) ? name1 : name2) + 
 						", Please choose your POKEMON:");
 				System.out.print(">");
 			}
 			else if (cpuSelect && turn % 2 != 0) {
-				System.out.println("\n\nPR. OAK: " + name1 + ", Please choose your POKEMON:");
+				System.out.println("\n\n(PR. OAK) " + name1 + ", Please choose your POKEMON:");
 				System.out.print(">");
 			}
 			if (cpuSelect && turn % 2 == 0 && players == 1) {
-				System.out.println("\n\nPR. OAK: " + name2 + ", Please choose your POKEMON:");
+				System.out.println("\n\n(PR. OAK) " + name2 + ", Please choose your POKEMON:");
 				System.out.print("");
 				Sleeper.pause(1700);
 				choice = cpuSelectParty(counter);
@@ -799,12 +789,16 @@ public class MainMenu {
 	}
 	/** END DISPLAY POKEMON METHOD **/
 	
+	/** PRINT PARTY METHOD**/
 	private static void printParty() {
 		
 		int n = 0;
 		System.out.print("\n" + name1 + "'s PARTY:\t");
 		for (Pokedex p : party1) {
-			if (n == 3) { System.out.println(); System.out.print("\t\t"); }
+			if (n == 3) { 
+				System.out.println(); 
+				System.out.print("\t\t"); 
+			}
 			System.out.print(p.getName() + "(" + 
 				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" + 
 					p.getType().toString().toLowerCase().charAt(1) : 
@@ -813,9 +807,12 @@ public class MainMenu {
 		}
 		
 		n = 0;
-		System.out.print("\n\n" + name2 + "'s PARTY:\t");	
+		System.out.print("\n" + name2 + "'s PARTY:\t");	
 		for (Pokedex p : party2) {
-			if (n == 3) { System.out.println(); System.out.print("\t\t"); }
+			if (n == 3) { 
+				System.out.println(); 
+				System.out.print("\t\t"); 
+			}
 			System.out.print(p.getName() + "(" + 
 				((p.getTypes() == null) ? p.getType().toString().charAt(0) + "" +
 					p.getType().toString().toLowerCase().charAt(1) : 
@@ -823,6 +820,7 @@ public class MainMenu {
 			n++;
 		}
 	}
+	/** END PRINT PARTY METHOD **/
 	
 	/** SELECT STARTER METHOD
 	  * Prompt player to select starting fighter from party 
@@ -837,7 +835,7 @@ public class MainMenu {
 		printOak();
 		printParty();
 		
-		System.out.println("\n\nPR. OAK: " + ((player == 1) ? name1 : name2) + 
+		System.out.println("\n\n(PR. OAK) " + ((player == 1) ? name1 : name2) + 
 				", Please select your starting fighter:\n");	
 		
 		int counter = 1;
@@ -927,7 +925,7 @@ public class MainMenu {
 	/** END START GAME METHOD **/
 		
 	/** CLEAR SCREEN METHOD **/	
-	private static void clearContent() {		
+	private static void clearContent() {	
 		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/

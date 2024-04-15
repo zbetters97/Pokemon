@@ -46,7 +46,7 @@ public enum Pokedex {
 	KINGDRA ("Kingdra", 230, Arrays.asList(TypeEngine.water, TypeEngine.dragon), 40, 75, 95, 95, 95, 95, 85, -1, 270, 3),
 	RAIKOU ("Raikou", 243, TypeEngine.electric, 40, 90, 85, 75, 115, 100, 115, -1, 290, 3),
 	ENTEI ("Entei", 244, TypeEngine.fire, 40, 115, 115, 85, 90, 75, 100, -1, 290, 3),
-	SUICINE ("Suicine", 245, TypeEngine.water, 40, 100, 75, 115, 90, 115, 85, -1, 290, 3),
+	SUICUNE ("Suicune", 245, TypeEngine.water, 40, 100, 75, 115, 90, 115, 85, -1, 290, 3),
 	TREECKO ("Treecko", 252, TypeEngine.grass, 5, 40, 45, 35, 65, 55, 70, 16, 62, 1),
 	GROVYLE ("Grovyle", 253, TypeEngine.grass, 16, 50, 65, 45, 85, 65, 95, 36, 142, 2),
 	SCEPTILE ("Sceptile", 254, TypeEngine.grass, 36, 70, 85, 65, 105, 85, 120, -1, 265, 3),
@@ -102,6 +102,10 @@ public enum Pokedex {
 		this.spAttack = getStat.compute(spAttack, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level); 
 		this.spDefense = getStat.compute(spDefense, 1 + (int)(Math.random() * ((31 - 1) + 1)), ev, level);
 		this.accuracy = 1;
+		
+		// random Nature selection
+		//int num = 0 + (int)(Math.random() * ((5 - 0) + 0));
+		//Nature nature = Nature.getNatures().get(num);
 		
 		this.speedStg = 0;
 		this.attackStg = 0;
@@ -217,7 +221,7 @@ public enum Pokedex {
         		new Move(MovesEngine.CALMMIND)));
         pokeMap.put(ENTEI, Arrays.asList(new Move(MovesEngine.EXTRASENSORY), new Move(MovesEngine.FIREFANG), new Move(MovesEngine.FLAMETHROWER),
         		new Move(MovesEngine.CALMMIND)));
-        pokeMap.put(SUICINE, Arrays.asList(new Move(MovesEngine.AURORABEAM), new Move(MovesEngine.ICEFANG), new Move(MovesEngine.HYDROPUMP),
+        pokeMap.put(SUICUNE, Arrays.asList(new Move(MovesEngine.AURORABEAM), new Move(MovesEngine.ICEFANG), new Move(MovesEngine.HYDROPUMP),
         		new Move(MovesEngine.CALMMIND)));
         
         pokeMap.put(TREECKO, Arrays.asList(new Move(MovesEngine.ABSORB), new Move(MovesEngine.QUICKATTACK), new Move(MovesEngine.LEER))); 

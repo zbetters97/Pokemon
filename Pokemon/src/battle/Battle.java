@@ -88,6 +88,7 @@ public class Battle {
 					// if cpu used hyper potion
 					if (move2 == null) {
 						clearContent();
+						SoundCard.play("battle" + File.separator + "heal");
 						Sleeper.print(name2+ "'s POTION restored " + 
 							pokemon2.getName() + "'s health!", 1700);
 					}
@@ -452,16 +453,16 @@ public class Battle {
 						clearContent();
 						
 						if (player == 1) {
-							Sleeper.print(name1 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
+							Sleeper.print("(" + name1 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party1, 0, choice - 1);
-							Sleeper.print(name1 + ": Go! " + newFighter.getName() + "!");
+							Sleeper.print("(" + name1 + ") Go! " + newFighter.getName() + "!");
 						}
 						else {
-							Sleeper.print(name2 + ": " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
+							Sleeper.print("(" + name2 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
 							// switch spots in party
 							Collections.swap(party2, 0, choice - 1);
-							Sleeper.print(name2 + ": Go! " + newFighter.getName() + "!");
+							Sleeper.print("(" + name2 + ") Go! " + newFighter.getName() + "!");
 						}
 						
 						SoundCard.play("pokedex" + File.separator + newFighter.getName());
@@ -601,6 +602,8 @@ public class Battle {
 		
 		fighter.setHP(newHP);
 		
+		SoundCard.play("battle" + File.separator + "heal");
+		
 		switch (heal) {
 			case 20:
 				Sleeper.print(((player == 1) ? name1 : name2) + "'s POTION restored " + 
@@ -659,7 +662,7 @@ public class Battle {
 				
 				clearContent();
 				
-				Sleeper.print(name1 + ": Go! " + pokemon1.getName() + "!");
+				Sleeper.print("(" + name1 + ") Go! " + pokemon1.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);
 				
@@ -704,7 +707,7 @@ public class Battle {
 				
 				clearContent();
 								
-				Sleeper.print(name2 + ": Go! " + pokemon2.getName() + "!");
+				Sleeper.print("(" + name2 + ") Go! " + pokemon2.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
 				

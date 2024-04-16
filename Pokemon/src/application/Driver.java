@@ -309,6 +309,13 @@
  * 		-Patched Suicune's battle cry
  * 		-Fixed Electric text color bug
  * 		-Fixed bug in check for resistance method
+ * 4/16/2024:
+ * 		-Sorted battle music in descending order
+ * 		-Fixed Giga Drain and Absorb logic
+ * 		-Added Critical Hit modifiers
+ * 		-Changed Critical Hit base chance from 1/255 to 2/25 (or 4/25)
+ * 		-Reworded menu options
+ * 		-Cleaned up coding
  */	
 
 package application;

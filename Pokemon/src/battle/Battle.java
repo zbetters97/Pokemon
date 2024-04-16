@@ -258,14 +258,14 @@ public class Battle {
 		// find longest type name in set
 		int tLength = 0;		
 		for (int i = 0; i < fighter.getMoveSet().size(); i++) {			
-			if (fighter.getMoveSet().get(i).getMove().getType().getName().length() > tLength)			   
-				tLength = fighter.getMoveSet().get(i).getMove().getType().getName().length();
+			if (fighter.getMoveSet().get(i).getType().getName().length() > tLength)			   
+				tLength = fighter.getMoveSet().get(i).getType().getName().length();
 		}		
 		
 		// display all moves				
 		for (Move m : fighter.getMoveSet()) {
 			System.out.printf("[%d] %-" + (mLength + 1) + "s{ %-" + (tLength + 1) + "s| PP %2d/%2d }\n", 
-				++counter, m.getName(), m.getMove().getType(), m.getpp(), m.getbpp());
+				++counter, m.getName(), m.getType(), m.getpp(), m.getbpp());
 		}
 		
 		System.out.println("\n[" + ++counter + "] INFO");
@@ -361,7 +361,7 @@ public class Battle {
 		
 		for (Move move : fighter.getMoveSet()) {
 			
-			StringBuilder info = new StringBuilder(move.getMove().getInfo());
+			StringBuilder info = new StringBuilder(move.getInfo());
 			
 			// add new line after 40 characters
 			int i = 0;				
@@ -370,10 +370,10 @@ public class Battle {
 			}
 			
 			System.out.println(move.getName().toUpperCase() + " : PP " + move.getpp() + 
-					((move.getMove().getPower() == 0) ? "" : " | PWR " + move.getMove().getPower()) + 
-					(move.getMove().isToSelf() ? "" : " | ACC " + move.getMove().getAccuracy()) + 
-					" | TYPE " + move.getMove().getType().printType() +
-					(move.getMove().getEffect() == null ? "" : " | STA " + move.getMove().getEffect().printName()));
+					((move.getPower() == 0) ? "" : " | PWR " + move.getPower()) + 
+					(move.isToSelf() ? "" : " | ACC " + move.getAccuracy()) + 
+					" | TYPE " + move.getType().printType() +
+					(move.getEffect() == null ? "" : " | STA " + move.getEffect().printName()));
 			
 			System.out.println("\t\"" + info.toString() + "\"\n");
 		}

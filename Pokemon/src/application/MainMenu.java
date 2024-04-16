@@ -22,6 +22,11 @@ public class MainMenu {
 	static String select = "menu" + File.separator + "select";
 	static String file, name1, name2;
 	static SoundCard menuMusic, bgmusic;
+	
+	static LinkedHashMap<Integer, String> musicDict;
+	static ArrayList<String> musicList;
+	
+	
 	static int defaultLevel, players, partySize;
 	static int cpuSelect;
 	static ArrayList<Pokemon> party1, party2;
@@ -36,8 +41,13 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file =  "02battle-rs-gym";
-		cpuSelect = 1;
+		file = "01battle-rs-trainer";
+		cpuSelect = 0;
+		
+		// pull music from folder and assign to lists		
+		musicDict = new LinkedHashMap<>();
+		musicList = new ArrayList<>();
+		grabMusic();
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
@@ -61,11 +71,12 @@ public class MainMenu {
 			name2 = (players == 1 ) ? "Red" : inputName(2);
 			selectPartySize();	
 		}
+		
 		selectParty();
 		
-		if (partySize > 1) {				
+		if (partySize > 1) {
 			party1 = selectStarter(1);
-			
+				
 			if (players == 2) party2 = selectStarter(2);
 			else cpuSelectStarter();
 		}
@@ -130,19 +141,52 @@ public class MainMenu {
 	}
 	/** END PRINT LOGO & OAK METHODS **/
 	
+	/** GRAB MUSIC METHOD 
+	 * Store all music files from lib\sounds\music into two lists
+	 **/
+	private static void grabMusic() {
+		
+		// get all songs from music folder
+		String musicPath = new File("").getAbsolutePath() + File.separator + "lib" + 
+				File.separator + "sounds" + File.separator + "music";
+		File musicDirectory = new File(musicPath);
+		
+		// store all music files into array
+		File musicFiles[] = musicDirectory.listFiles();
+		
+		// for each song in directory		
+		for (int i = 0; i < musicFiles.length; i++) {			
+			
+			// add song name to list
+			musicDict.put(i, musicFiles[i].getName());
+			
+			// format music
+			String song = musicFiles[i].getName()
+					.replace("battle-", "")
+					.replace(".wav", "")
+					.replace("-", ": ")
+					.replace("_", ", ")
+					.replace("&", " ")
+					.toUpperCase();
+			
+			// add closing bracket and space after song index #
+			StringBuilder formattedSong = new StringBuilder(song);
+			formattedSong.insert(2, ']'); formattedSong.insert(3, ' ');	
+			
+			// add to array list and reverse sort
+			musicList.add(formattedSong.toString());
+			Collections.sort(musicList, Collections.reverseOrder());
+		}		
+	}
+	/** END GRAB MUSIC METHOD **/
+	
 	/** SELECT PLAYERS METHOD
 	  * Prompt player to select a setting from the main menu
-	  * @return choice
+	  * @return 1 for 1 Player, 2 for 2 Player, 5 for Debug mode
 	  **/
 	private static int mainMenu() {
 		
-		printLogo();		
-		System.out.println("PLEASE SELECT MODE:\n\n"
-				+ "[1] ONE PLAYER\n"
-				+ "[2] TWO PLAYER\n"
-				+ "[3] SETTINGS\n"
-				+ "[4] POWER OFF");
-		System.out.print(">");
+		displayMain();
 		
 		// loop until QUIT is selected
 		while (true) {
@@ -156,13 +200,7 @@ public class MainMenu {
 					case 2: return choice;
 					case 3: 					
 						settingsMenu();	
-						printLogo();
-						System.out.println("PLEASE SELECT MODE:\n\n"
-								+ "[1] ONE PLAYER\n"
-								+ "[2] TWO PLAYER\n"
-								+ "[3] SETTINGS\n"
-								+ "[4] POWER OFF");
-						System.out.print(">");
+						displayMain();
 						break;
 					case 4: 
 						clearContent();
@@ -188,20 +226,24 @@ public class MainMenu {
 	}
 	/** END SELECT PLAYERS METHOD **/
 	
+	/** DISPLAY MAIN MENU METHOD **/
+	private static void displayMain() {
+		printLogo();		
+		System.out.println("--MAIN MENU--\n\n"
+				+ "[1] ONE PLAYER\n"
+				+ "[2] TWO PLAYER\n"
+				+ "[3] SETTINGS\n"
+				+ "[4] POWER OFF");
+		System.out.print(">");
+	}
+	/** END DISPLAY MAIN MENU METHOD **/
+	
 	/** SETTINGS METHOD
 	  * Settings main menu 
 	  **/
 	private static void settingsMenu() {
 		
-		printLogo();
-		System.out.println("PLEASE SELECT AN OPTION:\n\n"
-				+ "[1] LEVELS\n"
-				+ "[2] CPU\n"
-				+ "[3] MUSIC\n"
-				+ "[4] SOUNDS\n"
-				+ "[5] TEXT SPEED\n\n"
-				+ "[0] <- BACK");
-		System.out.print(">");
+		displaySettings();
 		
 		// loop until BACK is selected
 		while (true) {
@@ -211,71 +253,11 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: 
-						printLogo();
-						levelSetting(); 
-						printLogo();
-						System.out.println("PLEASE SELECT AN OPTION:\n\n"
-								+ "[1] LEVELS\n"
-								+ "[2] CPU\n"
-								+ "[3] MUSIC\n"
-								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n\n"
-								+ "[0] <- BACK");
-						System.out.print(">");
-						break;						
-					case 2: 
-						printLogo();
-						partySetting(); 
-						printLogo();
-						System.out.println("PLEASE SELECT AN OPTION:\n\n"
-								+ "[1] LEVELS\n"
-								+ "[2] CPU\n"
-								+ "[3] MUSIC\n"
-								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n\n"
-								+ "[0] <- BACK");
-						System.out.print(">");
-						break;
-					case 3: 
-						printLogo();
-						musicSetting(); 
-						printLogo();
-						System.out.println("PLEASE SELECT AN OPTION:\n\n"
-								+ "[1] LEVELS\n"
-								+ "[2] CPU\n"
-								+ "[3] MUSIC\n"
-								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n\n"
-								+ "[0] <- BACK");
-						System.out.print(">");
-						break;
-					case 4: 
-						printLogo();
-						soundSetting(); 
-						printLogo();
-						System.out.println("PLEASE SELECT AN OPTION:\n\n"
-								+ "[1] LEVELS\n"
-								+ "[2] CPU\n"
-								+ "[3] MUSIC\n"
-								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n\n"
-								+ "[0] <- BACK");
-						System.out.print(">");
-						break;
-					case 5:
-						printLogo();
-						textSetting();
-						printLogo();
-						System.out.println("PLEASE SELECT AN OPTION:\n\n"
-								+ "[1] LEVELS\n"
-								+ "[2] CPU\n"
-								+ "[3] MUSIC\n"
-								+ "[4] SOUNDS\n"
-								+ "[5] TEXT SPEED\n\n"
-								+ "[0] <- BACK");
-						System.out.print(">");
-						break;
+					case 1: levelSetting(); displaySettings(); break;						
+					case 2: partySetting(); displaySettings(); break;
+					case 3: musicSetting(); displaySettings(); break;
+					case 4: soundSetting(); displaySettings(); break;
+					case 5: textSetting(); displaySettings(); break;
 					case 0: return;
 					default:
 						Sleeper.print("Input must be a menu option!"); 
@@ -293,12 +275,27 @@ public class MainMenu {
 	}
 	/** END SETTINGS METHOD **/
 	
+	/** DISPLAY SETTINGS MENU METHOD **/
+	private static void displaySettings() {
+		printLogo();
+		System.out.println("--SETTINGS--\n\n"
+				+ "[1] LEVELS\n"
+				+ "[2] CPU\n"
+				+ "[3] MUSIC\n"
+				+ "[4] SOUNDS\n"
+				+ "[5] TEXT SPEED\n\n"
+				+ "[0] <- BACK");
+		System.out.print(">");
+	}
+	/** END DISPLAY SETTINGS MENU METHOD **/
+	
 	/** LEVEL SETTING METHOD
 	  * Prompt player to select a default level for battle 
 	  **/
 	private static void levelSetting() {
-					
-		System.out.println("DEFAULT LEVELS:\n\n"
+		
+		printLogo(); 					
+		System.out.println("--DEFAULT LEVELS--\n\n"
 				+ "[1] 10\n"
 				+ "[2] 25\n"
 				+ "[3] 50\n"
@@ -314,33 +311,33 @@ public class MainMenu {
 				SoundCard.play(select);
 				
 				switch (choice) {
-				case 1:
-					defaultLevel = 10;
-					Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200); 
-					return;
-				case 2:
-					defaultLevel = 25;
-					Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
-					return;
-				case 3:
-					defaultLevel = 50;
-					Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
-					return;
-				case 4:
-					defaultLevel = 100;
-					Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
-					clearContent();
-					return;
-				case 5:
-					defaultLevel = -1;
-					Sleeper.print("DEFAULT LEVEL DISABLED", 1200);
-					return;
-				case 0:
-					return;
-				default:
-					Sleeper.print("Input must be a menu option!"); 
-					System.out.print(">");
-					break;
+					case 1:
+						defaultLevel = 10;
+						Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200); 
+						return;
+					case 2:
+						defaultLevel = 25;
+						Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
+						return;
+					case 3:
+						defaultLevel = 50;
+						Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
+						return;
+					case 4:
+						defaultLevel = 100;
+						Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
+						clearContent();
+						return;
+					case 5:
+						defaultLevel = -1;
+						Sleeper.print("DEFAULT LEVEL DISABLED", 1200);
+						return;
+					case 0:
+						return;
+					default:
+						Sleeper.print("Input must be a menu option!"); 
+						System.out.print(">");
+						break;
 				}
 			}
 			catch (Exception e) {
@@ -355,12 +352,14 @@ public class MainMenu {
 	
 	/** PARTY SETTING METHOD 
 	  *	Prompt player to select which method the cpu will select party
+	  * 0 for manual, -1 for random, 1 for difficult
 	  **/
 	private static void partySetting() {
 		
-		System.out.println("CPU PARTY SELECTION:\n\n"
-				+ "[1] RANDOM\n"
-				+ "[2] MANUAL\n"
+		printLogo();
+		System.out.println("--CPU PARTY SELECTION--\n\n"
+				+ "[1] MANUAL\n"
+				+ "[2] RANDOM\n"
 				+ "[3] DIFFICULT\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
@@ -370,16 +369,15 @@ public class MainMenu {
 			try { 
 				int choice = input.nextInt(); 
 				SoundCard.play(select);
-				
-				// -1 for random, 0 for manual, 1 for difficult
+			
 				switch (choice) {
 					case 1:
-						cpuSelect = -1;
-						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
-						return;
-					case 2:
 						cpuSelect = 0;
 						Sleeper.print("CPU PARTY SELECTION SET TO MANUAL", 1200); 
+						return;
+					case 2:
+						cpuSelect = -1;
+						Sleeper.print("CPU PARTY SELECTION SET TO RANDOM", 1200); 
 						return;
 					case 3:
 						cpuSelect = 1;
@@ -407,52 +405,17 @@ public class MainMenu {
 	  **/
 	private static void musicSetting() {
 		
-		// array list to hold music String
-		ArrayList<String> musicList = new ArrayList<>();
+		printLogo();
 		
-		// hashmap to hold music file and corresponding index
-		LinkedHashMap<Integer, String> musicDict = new LinkedHashMap<>();
+		System.out.println("--BATTLE MUSIC--\n");
 		
-		// get all songs from music folder
-		String musicPath = new File("").getAbsolutePath() + File.separator + "lib" + 
-				File.separator + "sounds" + File.separator + "music";
-		File musicDirectory = new File(musicPath);
-		
-		// store all music files into array
-		File musicFiles[] = musicDirectory.listFiles();
-		
-		// for each song in directory		
-		for (int i = 0; i < musicFiles.length; i++) {			
-			
-			// add song name to list
-			String music = musicFiles[i].getName();
-			musicDict.put(i, music);
-			
-			// format music
-			String song = musicFiles[i].getName()
-					.replace("battle-", "")
-					.replace(".wav", "")
-					.replace("-", ": ")
-					.replace("_", ", ")
-					.replace("&", " ")
-					.toUpperCase();
-			
-			// add closing bracket and space after song index #
-			StringBuilder formattedSong = new StringBuilder(song);
-			formattedSong.insert(2, ']'); formattedSong.insert(3, ' ');	
-			
-			// add to array list
-			musicList.add(formattedSong.toString());
-			Collections.sort(musicList);
-		}		
-		
-		System.out.println("BATTLE MUSIC:\n");
-		
+		// print music in descending order
 		for (int i = 0; i < musicList.size(); i++) 
 			System.out.println("[" + musicList.get(i));	
 		
-		System.out.println("[" + (musicList.size() + 1) + "] NONE");
-		System.out.println("\n[0] <- BACK");			
+		System.out.println(
+				"[01] NONE\n\n" + 
+				"[0] <- BACK");		
 		System.out.print(">");
 		
 		while (true) {
@@ -461,12 +424,12 @@ public class MainMenu {
 				int choice = input.nextInt(); 
 				SoundCard.play(select);
 				
-				if (0 < choice && choice <= musicDict.size()) {					
-					file = musicDict.get(choice - 1).replace(".wav", "");
-					Sleeper.print("NEW MUSIC SELECTED", 1200);
+				if (1 < choice && choice <= musicDict.size() + 1) {					
+					file = musicDict.get(choice - 2).replace(".wav", "");
+					Sleeper.print("NEW MUSIC SELECTED", 1200);					
 					return;
 				}					
-				else if (choice == musicDict.size() + 1) {
+				else if (choice == 1) {
 					file = null;
 					Sleeper.print("MUSIC TURNED OFF", 1200);
 					return;
@@ -485,15 +448,17 @@ public class MainMenu {
 				input.next();
 			}
 		}
-	}
+	}	
 	/** END SELECT MUSIC METHOD **/
+	
 	
 	/** SOUND SETTING METHOD
 	  * Prompt player to turn on or off sound effects 
 	  **/
 	private static void soundSetting() {
 				
-		System.out.println("SOUND EFFECTS:\n\n"
+		printLogo();
+		System.out.println("--SOUND EFFECTS--\n\n"
 				+ "[1] ON\n"
 				+ "[2] OFF\n\n"
 				+ "[0] <- BACK");
@@ -536,7 +501,8 @@ public class MainMenu {
 	  **/
 	private static void textSetting() {
 				
-		System.out.println("TEXT SPEED:\n\n"
+		printLogo();
+		System.out.println("--TEXT SPEED--\n\n"
 				+ "[1] SLOW\n"
 				+ "[2] MEDIUM\n"
 				+ "[3] FAST\n\n"
@@ -587,7 +553,7 @@ public class MainMenu {
 	  **/
 	private static String inputName(int player) {
 				
-		printOak();
+		printOak();		
 		Sleeper.print("(PR. OAK) What's your name, trainer " + player + "?");
 		System.out.print(">");
 		
@@ -600,6 +566,7 @@ public class MainMenu {
 				
 				String greeting;
 				
+				// hidden greetings based on player name
 				if (name.equals("Ash"))
 					greeting = "(PR. OAK) Ash! Good to see you again :)";
 				else if (name.equals("Oak"))
@@ -669,39 +636,41 @@ public class MainMenu {
 		
 		int turn = 1, choice = 0;	
 		
-		while (turn < (partySize * 2) + 1) {
+		while (turn <= (partySize * 2)) {
 			
 			int counter = displayParty();
 			
+			// if cpu is not selecting
 			if (cpuSelect == 0 || players == 2) {
 				System.out.println("\n\n(PR. OAK) " + ((turn % 2 != 0) ? name1 : name2) + 
 						", Please choose your POKEMON:");
 				System.out.print(">");
 			}
+			// if player 1 is selecting
 			else if (cpuSelect != 0 && turn % 2 != 0) {
 				System.out.println("\n\n(PR. OAK) " + name1 + ", Please choose your POKEMON:");
 				System.out.print(">");
 			}
+			// if cpu is selecting
 			if (cpuSelect != 0 && turn % 2 == 0 && players == 1) {
 				System.out.println("\n\n(PR. OAK) " + name2 + ", Please choose your POKEMON:");
 				System.out.print("");
+				
 				Sleeper.pause(1700);
 				choice = cpuSelectParty(counter);
 				
 				clearContent();
-			}				
+			}	
+			// cpu did not select
 			else {	
 				while (true) {		
 		
 					try { 
 						choice = input.nextInt(); 
 						
-						// choice must be a number from 0 to last element in list
 						if (0 < choice && choice <= counter) {
 							
-							// chosen Pokemon must not have already been selected by either trainer
-							if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
-									party2.contains(Pokemon.getPokemon(choice - 1))) {					
+							if (!isValidChoice(choice)) {				
 								Sleeper.print("This Pokemon has already been chosen!");
 								System.out.print(">");
 							}
@@ -709,7 +678,6 @@ public class MainMenu {
 								break;
 						}
 						else {
-							SoundCard.play(select);
 							Sleeper.print("Input must be a valid selection!");
 							System.out.print(">");
 						}
@@ -729,8 +697,56 @@ public class MainMenu {
 	}
 	/** END SELECT PARTY METHOD **/
 	
+	/** DISPLAY POKEMON METHOD
+	  * Display all unchosen pokemon for player to select for battle 
+	  * @return counter
+	  **/
+	private static int displayParty() {
+		
+		System.out.println("--- AVAILABLE POKEMON FOR BATTLE ---\n");
+		
+		int counter = 0;		
+		for (Pokemon p : Pokemon.getPokedex()) {	
+			
+			p.setLevel(defaultLevel);
+			
+			// skip Pokemon who were already chosen
+			if (party1.contains(Pokemon.getPokemon(counter)) || 
+					party2.contains(Pokemon.getPokemon(counter))) {
+				counter++;
+				continue;
+			}
+			
+			// if pokemon has multiple types
+			System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
+					((p.getTypes() == null) ? p.getType().printType() : p.printTypes()) + 
+					"\n", ++counter, p.getLevel());	
+		}
+		
+		printParty();
+		
+		return counter;
+	}
+	/** END DISPLAY POKEMON METHOD **/
+	
+	/** IS VALID CHOICE METHOD 
+	 * Checks if selected Pokemon already belongs in a party
+	 * @param Integer choice
+	 * @return True if not found in either party, False if found
+	 **/
+	private static boolean isValidChoice(int choice) {
+		
+		// chosen Pokemon must not have already been selected by either trainer
+		if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
+				party2.contains(Pokemon.getPokemon(choice - 1))) 			
+			return false;		
+		else
+			return true;
+	}
+	/** END IS VALID CHOICE METHOD **/
+	
 	/** CPU SELECT PARTY METHOD
-	  * Randomly select a pokemon from the available lsit
+	  * Randomly select a pokemon from the available list
 	  * @param Integer counter
 	  * @return Integer chosen pokemon index
 	  **/
@@ -740,19 +756,18 @@ public class MainMenu {
 		if (cpuSelect == -1) {
 			int choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
 			
+			// loop until random number is valid
 			while (true) {
 				
-				if (party1.contains(Pokemon.getPokemon(choice - 1)) || 
-						party2.contains(Pokemon.getPokemon(choice - 1))) {	
-					
-					choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
-				}
+				if (!isValidChoice(choice))					
+					choice = 1 + (int)(Math.random() * ((counter - 1) + 1));				
 				else
 					return choice;
 			}
 		}
 		// cpu selects party strategically
 		else {			
+			
 			// make copy of pokedex
 			List<Pokemon> bestList = new ArrayList<>(Pokemon.getPokedex());
 			
@@ -761,23 +776,19 @@ public class MainMenu {
 		            .thenComparing(Pokemon::getHP)
 		            .thenComparing(Pokemon::getAttack).reversed());
 			
-			// loop until return
 			int i = 0;
 			while (true) {
 												
 				// get best pokemon
 				Pokemon choice = bestList.get(i);
+				System.out.println(choice.getName());
 				
-				// if pokemon already chosen
+				// if pokemon already chosen, go to next and check again
 				if (party1.contains(choice) || party2.contains(choice))
 					i++;
 				else {
-					// loop unsorted list and return index
-					int c = 0;
-					for (Pokemon p : Pokemon.getPokedex()) {
-						if (p.getName().equals(choice.getName())) return c + 1;
-						else c++;
-					}
+					// return 1 + index of selected pokemon in Pokedex
+					return Pokemon.getPokedex().indexOf(choice) + 1;
 				}
 			}
 		}
@@ -797,40 +808,12 @@ public class MainMenu {
 		// play pokemon cry
 		SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
 		
-		if (turn % 2 != 0) party1.add(selectedPokemon);
-		else party2.add(selectedPokemon);
+		if (turn % 2 == 0) 
+			party2.add(selectedPokemon);
+		else 
+			party1.add(selectedPokemon);
 	}
-	
-	/** DISPLAY POKEMON METHOD
-	  * Display all unchosen pokemon for player to select for battle 
-	  * @return counter
-	  **/
-	private static int displayParty() {
-		
-		System.out.println("--- AVAILABLE POKEMON FOR BATTLE ---\n");
-		int counter = 0;		
-		for (Pokemon p : Pokemon.getPokedex()) {	
-			
-			p.setLevel(defaultLevel);
-			
-			// don't display Pokemon who are already chosen					
-			if (party1.contains(Pokemon.getPokemon(counter)) || 
-					party2.contains(Pokemon.getPokemon(counter))) {
-				counter++;
-				continue;
-			}
-			
-			// if pokemon has multiple types
-			System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
-					((p.getTypes() == null) ? p.getType().printType() : p.printTypes()) + 
-					"\n", ++counter, p.getLevel());	
-		}
-		
-		printParty();
-		
-		return counter;
-	}
-	/** END DISPLAY POKEMON METHOD **/
+	/** END ASSIGN PARTY METHOD **/
 	
 	/** PRINT PARTY METHOD**/
 	private static void printParty() {
@@ -868,7 +851,7 @@ public class MainMenu {
 	/** SELECT STARTER METHOD
 	  * Prompt player to select starting fighter from party 
 	  * @param Integer player number
-	  * @return ArrayList<Pokedex> swapped party
+	  * @return ArrayList swapped party
 	  **/
 	private static ArrayList<Pokemon> selectStarter(int player) {
 
@@ -876,8 +859,7 @@ public class MainMenu {
 		ArrayList<Pokemon> party = (player == 1) ? party1 : party2;
 		
 		printOak();
-		printParty();
-		
+		printParty();		
 		System.out.println("\n\n(PR. OAK) " + ((player == 1) ? name1 : name2) + 
 				", Please select your starting fighter:\n");	
 		
@@ -893,30 +875,17 @@ public class MainMenu {
 		
 		while (true) {				
 				
-			try { 
-				
+			try { 				
 				int choice = input.nextInt(); 
 				SoundCard.play(select);
 				
 				// if choice is within party size
 				if (1 <= choice && choice < counter) {
-					
-					if (player == 1) {
-						
-						// swap choice with pokemon at first slot
-						Collections.swap(party, 0, choice - 1);
-						
-						clearContent();
-						return party;
-					}
-					else {
-						
-						// swap choice with pokemon at first slot
-						Collections.swap(party, 0, choice - 1);
-						
-						clearContent();
-						return party;
-					}
+							
+					// swap choice with pokemon at first slot
+					Collections.swap(party, 0, choice - 1);						
+					clearContent();
+					return party;
 				}
 				else {
 					Sleeper.print("Input must be a valid selection!");
@@ -938,9 +907,9 @@ public class MainMenu {
 	 **/
 	private static void cpuSelectStarter() {
 		
-		// find best pokemon in cpu party based on Level, then HP, then Defense
+		// find best pokemon in cpu party based on level, then HP, then attack
 		Pokemon bestFighter = Collections.max(party2, Comparator.comparingInt(Pokemon::getLevel)
-				.thenComparing(Pokemon::getHP).thenComparing(Pokemon::getDefense));
+				.thenComparing(Pokemon::getHP).thenComparing(Pokemon::getAttack));
 
 		// find index of best pokemon
 		int choice = party2.indexOf(bestFighter);	

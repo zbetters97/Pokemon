@@ -13,13 +13,13 @@ public enum Moves {
 	AGILITY ("Agility", "Attribute", Type.PSYCHIC, true, 30, -1, 1, Arrays.asList("speed"), "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat."),
 	AQUATAIL ("Aqua Tail", "Physical", Type.WATER, 10, 135, 90, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm."),
 	AURORABEAM ("Aurora Beam", "Special", Type.ICE, 20, 65, 100, "The foe is hit with a rainbow-colored beam."),
-	BLAZEKICK ("Blaze Kick", "Physical", Type.FIRE, Status.BURN, 0.10, 10, 85, 90, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),
+	BLAZEKICK ("Blaze Kick", "Physical", Type.FIRE, Status.BURN, 0.10, 10, 85, 90, 1, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),
 	BLIZZARD ("Blizzard", "Special", Type.ICE, Status.FREEZE, 0.10, 5, 120, 70, "A howling blizzard is summoned to strike the foe. It may also freeze the target solid."),
 	BUBBLE ("Bubble", "Special", Type.WATER, 30, 20, 100, "A spray of countless bubbles is jetted at the foe."),
 	CALMMIND ("Calm Mind", "Attribute", Type.PSYCHIC, true, 20, -1, 1, Arrays.asList("sp. attack", "sp. defense"), "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats."),
 	CONFUSERAY ("Confuse Ray", "Status", Type.GHOST, Status.CONFUSE, 10, 100, "The foe is exposed to a sinister ray that triggers confusion."),
 	CONFUSION ("Confusion", "Special", Type.PSYCHIC, 25, 75, 100, "The foe is hit by a weak telekinetic force. It may also leave the foe confused."),
-	CROSSCHOP ("Cross Chop", "Physical", Type.FIGHTING, 5, 150, 80, "The user delivers a double chop with its forearms crossed. It has a high critical-hit ratio."),
+	CROSSCHOP ("Cross Chop", "Physical", Type.FIGHTING, 5, 150, 80, 1, "The user delivers a double chop with its forearms crossed. It has a high critical-hit ratio."),
 	CRUNCH ("Crunch", "Physical", Type.DARK, 15, 80, 100, "The user crunches up the foe with sharp fangs."),
 	DARKPULSE ("Dark Pulse", "Special", Type.DARK, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
 	DEFENSECURL ("Defense Curl", "Attribute", Type.NORMAL, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
@@ -49,7 +49,7 @@ public enum Moves {
 	ICEFANG ("Ice Fang", "Physical", Type.ICE, Status.FREEZE, 0.10, 15, 65, 95, "The user bites with cold-infused fangs. It may also make the foe freeze."),
 	KINESIS ("Kinesis", "Attribute", Type.PSYCHIC, false, 15, 80, -1, Arrays.asList("accuracy"), "The user distracts the foe by bending a spoon. It may lower the target's accuracy."),
 	KNOCKOFF ("Knock Off", "Physical", Type.DARK, 20, 65, 100, "The user slaps down the target's held item, preventing that item from being used in the battle."),
-	LEAFBLADE ("Leaf Blade", "Physical", Type.GRASS, 15, 90, 100, "The foe is slashed with a sharp leaf."),
+	LEAFBLADE ("Leaf Blade", "Physical", Type.GRASS, 15, 90, 100, 1, "The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily."),
 	LEAFSTORM ("Leaf Storm", "Special", Type.GRASS, 5, 140, 90, "A storm of sharp leaves is whipped up."),
 	LEER ("Leer", "Attribute", Type.NORMAL, false, 30, 100, -1, Arrays.asList("defense"), "The foe is given an intimidating leer with sharp eyes. The target's Defense stat is reduced."),
 	LICK ("Lick", "Physical", Type.GHOST, Status.PARALYZE, 0.10, 30, 45, 100, "The foe is licked with a long tongue, causing damage. It may also paralyze the target."),
@@ -66,9 +66,9 @@ public enum Moves {
 	POUND ("Pound", "Physical", Type.NORMAL, 35, 40, 100, "The foe is physically pounded with a long tail or a foreleg, etc."),
 	PSYBEAM ("Psybeam", "Special", Type.PSYCHIC, Status.CONFUSE, 1.0, 20, 95, 100, "The foe is attacked with a peculiar ray. It may also leave the target confused."),
 	PSYCHIC ("Psychic", "Special", Type.PSYCHIC, 10, 135, 100, "The foe is hit by a strong telekinetic force."),
-	PSYCHOCUT ("Psycho Cut", "Physical", Type.PSYCHIC, 20, 105, 100, "The user tears at the foe with blades formed by PSYCHIC power."),
+	PSYCHOCUT ("Psycho Cut", "Physical", Type.PSYCHIC, 20, 105, 100, 1, "The user tears at the foe with blades formed by PSYCHIC power. Critical hits land more easily."),
 	QUICKATTACK ("Quick Attack", "Physical", Type.NORMAL, 30, 40, 100, true, "The user lunges at the foe at a speed that makes it almost invisible. It is sure to strike first."),
-	RAZORLEAF ("Razor Leaf", "Physical", Type.GRASS, 25, 80, 95, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio."),
+	RAZORLEAF ("Razor Leaf", "Physical", Type.GRASS, 25, 80, 95, 1, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio."),
 	ROCKTHROW ("Rock Throw", "Physical", Type.ROCK, 15, 75, 90, "The user picks up and throws a small ROCK at the foe to attack."),
 	ROLLOUT ("Rollout", "Physical", Type.ROCK, 20, 45, 90, "The user continually rolls into the foe over five turns."),
 	SCARYFACE ("Scary Face", "Attribute", Type.NORMAL, false, 10, 90, -2, Arrays.asList("speed"), "The user frightens the foe with a scary face to sharply reduce its Speed stat."),
@@ -78,10 +78,10 @@ public enum Moves {
 	SHADOWPUNCH ("Shadow Punch", "Physical", Type.GHOST, 20, 90, -1, "The user throws a punch at the foe from the shadows. The punch lands without fail."),
 	SKYUPPERCUT ("Sky Uppercut", "Physical", Type.FIGHTING, 15, 120, 100, "The user attacks the foe with an uppercut thrown skyward with force."),
 	SLAM ("Slam", "Physical", Type.NORMAL, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
-	SLASH ("Slash", "Physical", Type.NORMAL, 20, 70, 100, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
+	SLASH ("Slash", "Physical", Type.NORMAL, 20, 70, 100, 1, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
 	SOLARBEAM ("Solar Beam", "Special", Type.GRASS, 10, 180, 100, true, "is charging Solar Beam...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
 	SURF ("Surf", "Special", Type.WATER, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing WATER."),
-	TACKLE ("Tackle", "Physical", Type.NORMAL, 35, 40, 100, "A physical attack in which the user charges and slams into the foe with its whole body."),
+	TACKLE ("Tackle", "Physical", Type.NORMAL, 35, 40, 95, "A physical attack in which the user charges and slams into the foe with its whole body."),
 	TAILWHIP ("Tail Whip", "Attribute", Type.NORMAL, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),
 	TAKEDOWN ("Take Down", "Physical", Type.NORMAL, 20, 90, 85, "A reckless, full-body charge attack for slamming into the foe. It also damages the user a little."),
 	TELEPORT ("Teleport", "Other", Type.PSYCHIC, 20, 0, -1, "Use it to flee from any wild Pokémon."),
@@ -100,20 +100,12 @@ public enum Moves {
 	/** END INITIALIZE ENUMS **/
 	
 	/** INITIALIZE VALUES **/
-	private String name;
-	private String mtype;
-	private int pp;
+	private String name, mtype, delay, info;
+	private int pp, accuracy, power, level, crit;
+	private boolean goFirst, toSelf, canHit;
 	private Type type;
 	private Status effect;
-	private Double probability;	
-	private boolean goFirst;
-	private String info;	
-	private boolean toSelf;
-	private int accuracy;
-	private int power;
-	private int level;
-	private boolean canHit;
-	private String delay;
+	private Double probability;		
 	private List<String> stats;
 	/** END INITIALIZE VALUES **/
 	
@@ -125,6 +117,16 @@ public enum Moves {
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
+		this.info = info;
+	}	
+	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, int crit, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.pp = pp;
+		this.accuracy = accuracy;
+		this.power = power;
+		this.crit = crit;
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, boolean goFirst, String info) {
@@ -168,6 +170,18 @@ public enum Moves {
 		this.accuracy = accuracy;
 		this.info = info;
 	}	
+	Moves (String name, String mtype, Type type, Status effect, Double probability, int pp, int power, int accuracy, int crit, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.effect = effect;
+		this.probability = probability;
+		this.pp = pp;
+		this.power = power;
+		this.accuracy = accuracy;
+		this.crit = crit;
+		this.info = info;
+	}	
 	Moves (String name, String mtype, Type type, boolean toSelf, int pp, int accuracy, int level, List<String> stats, String info) {
 		this.name = name;
 		this.mtype = mtype;
@@ -194,7 +208,7 @@ public enum Moves {
 	}
 	/** END CONSTRUCTORS **/
 	
-	/** GETTERS (NO ENUM SETTERS) **/
+	/** GETTERS **/
 	public String getName() { return name; }
 	public String getMType() { return mtype; }	
 	public Type getType() { return type; }
@@ -211,6 +225,7 @@ public enum Moves {
 	public boolean getCanHit() { return canHit; }	
 	public String getDelay(String name) { return name + " " + delay; }	
 	public String getInfo() {	return info; }	
+	public int getCrit() { return crit; }	
 	public int getLevel() { return level; }	
 	public List<String> getStats() { return stats; }
 	/** END GETTERS **/

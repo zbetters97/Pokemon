@@ -331,8 +331,8 @@ public enum Pokemon {
 		System.out.println("MOVESET FOR " + this.name + ":\n");
 		
 		for (Move move : moveSet) {
-			System.out.println(move.getName() + " : (TYPE: " + move.getMove().getType()  + "), (PP: " + move.getpp() + 
-					"), (PWR: " + move.getMove().getPower() + ")"	+ ", (ACC: " + move.getMove().getAccuracy() + ")");
+			System.out.println(move.getName() + " : (TYPE: " + move.getType()  + "), (PP: " + move.getpp() + 
+					"), (PWR: " + move.getPower() + ")"	+ ", (ACC: " + move.getAccuracy() + ")");
 		}
 	}
 	/** END LIST MOVE SET METHOD **/

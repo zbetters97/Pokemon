@@ -123,7 +123,7 @@ public class BattleEngine {
 		// for each move in attacker's move set
 		for (Move move : pokemon[1].getMoveSet()) {
 			
-			if (!move.getMove().isToSelf() && move.getpp() != 0) {
+			if (!move.isToSelf() && move.getpp() != 0) {
 				
 				// find damage value of each move
 				int damage = calculateDamage(1, 0, move, 1.0, true);
@@ -251,8 +251,6 @@ public class BattleEngine {
 			// check if either fighter has status damage
 			statusDamage();
 		}
-		
-		clearContent();	
 	}
 	/** END MOVE METHOD **/
 	
@@ -264,7 +262,7 @@ public class BattleEngine {
 	private int getTurn(Move move1, Move move2) {
 		
 		// if both moves go first (EX: Quick Attack)
-		if (move1.getMove().getGoFirst() && move2.getMove().getGoFirst()) {			
+		if (move1.getGoFirst() && move2.getGoFirst()) {			
 			
 			// if pokemon1 is faster (pokemon1 has advantage if equal)
 			if (pokemon[0].getSpeed() >= pokemon[1].getSpeed()) 
@@ -273,10 +271,10 @@ public class BattleEngine {
 				return 2;
 		}
 		// if only move1 goes first (EX: Quick Attack)
-		else if (move1.getMove().getGoFirst()) 
+		else if (move1.getGoFirst()) 
 			return 1;
 		// if only move2 goes first (EX: Quick Attack)
-		else if (move2.getMove().getGoFirst()) 
+		else if (move2.getGoFirst()) 
 			return 2;
 		else {
 			// if pokemon1 is faster (if equal, pokemon1 has advantage)
@@ -445,6 +443,7 @@ public class BattleEngine {
 					SoundCard.playStatus(p.getStatus().getAbreviation());
 					Sleeper.print(p.getName() + " is hurt from the " + 
 						p.getStatus().getName().toLowerCase() + "!", 1700);
+					
 					clearContent();	
 										
 					return damage;
@@ -533,7 +532,7 @@ public class BattleEngine {
 			if (atkMove.getTurns() == atkMove.getNumTurns()) {
 				
 				Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 1200);
-				Sleeper.print(atkMove.getMove().getDelay(pokemon[atk].getName()), 1200);	
+				Sleeper.print(atkMove.getDelay(pokemon[atk].getName()), 1200);	
 				
 				// reduce number of turns to wait
 				atkMove.setTurns(atkMove.getTurns() - 1);	
@@ -561,8 +560,8 @@ public class BattleEngine {
 		// confirm move exists in fighter's moveset
 		if (moveIsValid(atk, move)) {
 			
-			Sleeper.print(pokemon[atk].getName() + " used " + move.getMove().getName() + "!", 500);
-			SoundCard.play("//moves//" + move.getMove().getName(), true);
+			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 500);
+			SoundCard.play("//moves//" + move.getName(), true);
 			
 			// decrease move pp
 			move.setpp(move.getpp() - 1);	
@@ -571,14 +570,14 @@ public class BattleEngine {
 			if (isHit(atk, move, trgMove)) {
 				
 				// move has a status affect
-				if (move.getMove().getMType().equals("Status"))
+				if (move.getMType().equals("Status"))
 					statusMove(trg, move);				
 				// move has an attribute affect
-				else if (move.getMove().getMType().equals("Attribute")) 	
+				else if (move.getMType().equals("Attribute")) 	
 					attributeMove(atk, trg, move);
 				// move is in other category
-				else if (move.getMove().getMType().equals("Other")) {
-					if (move.getMove().getName().equals("Teleport")) {
+				else if (move.getMType().equals("Other")) {
+					if (move.getName().equals("Teleport")) {
 
 						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
 						System.exit(0);
@@ -587,9 +586,9 @@ public class BattleEngine {
 				// move is damage-dealing
 				else {				
 					
-					// get critical damage (1/255 chance)
-					double crit = isCritical();			
-									
+					// get critical damage (1 or 1.5)
+					double crit = isCritical(move);
+					
 					// calculate damage to be dealt
 					int damage = calculateDamage(atk, trg, move, crit, false);
 							
@@ -606,15 +605,27 @@ public class BattleEngine {
 					
 						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);					
 						
-						if (move.getMove().getName() == "Absorb" || move.getMove().getName() == "Giga Drain") {
+						if (move.getName() == "Absorb" || move.getName() == "Giga Drain") {
 							
 							int gainedHP = (damage / 2);
 							
-							if (gainedHP > pokemon[atk].getBHP())
-								gainedHP = pokemon[atk].getBHP();
-							
-							pokemon[atk].setHP(gainedHP + pokemon[atk].getHP());	
-							Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1700);
+							// if attacker not at full health
+							if (pokemon[atk].getHP() != pokemon[atk].getBHP()) {
+								
+								// if gained hp is greater than total hp
+								if (gainedHP + pokemon[atk].getHP() > pokemon[atk].getBHP()) {
+									
+									// gained hp is set to amount need to hit hp limit									
+									gainedHP = pokemon[atk].getBHP() - pokemon[atk].getHP();
+									
+									// refill hp to limit
+									pokemon[atk].setHP(pokemon[atk].getBHP());
+								}
+								else 
+									pokemon[atk].setHP(gainedHP + pokemon[atk].getHP()); 
+								
+								Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1700);
+							}
 						}
 												
 						// if damage is fatal
@@ -629,16 +640,16 @@ public class BattleEngine {
 							dealDamage(trg, damage);
 							
 							// move causes attribute or status effect
-							if (move.getMove().getProbability() != null) {								
+							if (move.getProbability() != null) {								
 															
 								// chance for effect to apply
-								if (new Random().nextDouble() <= move.getMove().getProbability()) {
+								if (new Random().nextDouble() <= move.getProbability()) {
 									
-									if (move.getMove().getStats() != null) 
+									if (move.getStats() != null) 
 										attributeMove(atk, trg, move);
 									else {			
 										if (pokemon[trg].getStatus() == null) {
-											pokemon[trg].setStatus(move.getMove().getEffect());
+											pokemon[trg].setStatus(move.getEffect());
 											
 											Sleeper.print(pokemon[trg].getName() + " is " + 
 												pokemon[trg].getStatus().getCondition() + "!", 1700);
@@ -671,7 +682,7 @@ public class BattleEngine {
 		for (Move m : pokemon[atk].getMoveSet()) {
 			
 			// if chosen move is found
-			if (m.getName().equals(move.getMove().getName()))
+			if (m.getName().equals(move.getName()))
 				return true;
 		}
 		return false;
@@ -689,14 +700,14 @@ public class BattleEngine {
 			return true;
 		
 		// if target used delayed move and delayed move protects target		
-		if (trgMove.getTurns() == 1 && !trgMove.getMove().getCanHit())
+		if (trgMove.getTurns() == 1 && !trgMove.getCanHit())
 			return false;
 				
 		// if move never misses, return true
-		if (move.getMove().getAccuracy() == -1) 
+		if (move.getAccuracy() == -1) 
 			return true; 
 		
-		double accuracy = move.getMove().getAccuracy() * pokemon[atk].getAccuracy();
+		double accuracy = move.getAccuracy() * pokemon[atk].getAccuracy();
 		
 		Random r = new Random();
 		float chance = r.nextFloat();
@@ -715,7 +726,7 @@ public class BattleEngine {
 		// if pokemon does not already have status affect
 		if (pokemon[trg].getStatus() == null) {
 			
-			pokemon[trg].setStatus(move.getMove().getEffect());	
+			pokemon[trg].setStatus(move.getEffect());	
 			
 			Sleeper.print(pokemon[trg].getName() + " is " + 
 					pokemon[trg].getStatus().getCondition() + "!", 1700);
@@ -737,23 +748,21 @@ public class BattleEngine {
 	private void attributeMove(int atk, int trg, Move move) {
 		
 		// if move changes self attributes
-		if (move.getMove().isToSelf()) {
-			
-			
+		if (move.isToSelf()) {
 			
 			// loop through each specified attribute to be changed
-			for (String stat : move.getMove().getStats()) 
-				pokemon[atk].changeStat(stat, move.getMove().getLevel());	
+			for (String stat : move.getStats()) 
+				pokemon[atk].changeStat(stat, move.getLevel());	
 		}
 		// if move changes target attributes
 		else {
 			// loop through each specified attribute to be changed
-			for (String stat : move.getMove().getStats()) 
-				pokemon[trg].changeStat(stat, move.getMove().getLevel());	
+			for (String stat : move.getStats()) 
+				pokemon[trg].changeStat(stat, move.getLevel());	
 		}
 		
 		// attributes raised
-		if (move.getMove().getLevel() > 0) 
+		if (move.getLevel() > 0) 
 			SoundCard.play("//battle//stat-up", true);
 		// attributes lowered
 		else 
@@ -768,11 +777,15 @@ public class BattleEngine {
 	 * Returns value of critical (1 / 255 chance)
 	 * @return critical value
 	 **/
-	private double isCritical() {	
+	private double isCritical(Move move) {			
+		/** CRITICAL HIT REFERENCE: https://www.serebii.net/games/criticalhits.shtml (GEN II-V) **/
 		
-		// 1/255 chance of landing critical hit
-		Random r = new Random();		
-		return (r.nextFloat() <= ((float) 1 / 255)) ? 1.5 : 1;
+		int chance = 2;
+		if (move.getCrit() == 1) 
+			chance = 4;
+		
+		Random r = new Random();
+		return (r.nextFloat() <= ((float) chance / 25)) ? 1.5 : 1;
 	}
 	/** END IS CRITICAL METHOD **/
 	
@@ -784,14 +797,14 @@ public class BattleEngine {
 	private int calculateDamage(int atk, int trg, Move move, double crit, boolean cpu) {
 		
 		double level = pokemon[atk].getLevel();		
-		double power = (move.getMove().getPower() == -1) ? level : move.getMove().getPower();		
+		double power = (move.getPower() == -1) ? level : move.getPower();		
 		double A = 1.0, D = 1.0, STAB = 1.0, type = 1.0;
 
-		if (move.getMove().getMType().equals("Special")) {
+		if (move.getMType().equals("Special")) {
 			A = pokemon[atk].getSpAttack();
 			D = pokemon[trg].getSpDefense();
 		}
-		else if (move.getMove().getMType().equals("Physical")) {
+		else if (move.getMType().equals("Physical")) {
 			A = pokemon[atk].getAttack();
 			D = pokemon[trg].getDefense();
 		}
@@ -803,16 +816,16 @@ public class BattleEngine {
 			for (Type t : pokemon[atk].getTypes()) {
 				
 				// if same type move
-				if (move.getMove().getType() == t) {
+				if (move.getType() == t) {
 					STAB = 1.5;
 					break;
 				}
 			}
 		}
 		else
-			STAB = move.getMove().getType() == pokemon[atk].getType() ? 1.5 : 1.0;
+			STAB = move.getType() == pokemon[atk].getType() ? 1.5 : 1.0;
 
-		type = effectiveness(trg, move.getMove().getType());	
+		type = effectiveness(trg, move.getType());	
 
 		// damage formula reference: https://bulbapedia.bulbagarden.net/wiki/Damage (GEN IV)
 		int damageDealt = (int)((Math.floor(((((Math.floor((2 * level) / 5)) + 2) * 
@@ -925,10 +938,11 @@ public class BattleEngine {
 		
 		clearContent();
 		
-		// Pokemon faint cries from: https://www.youtube.com/watch?v=XSlE9IF_S84
 		SoundCard.play("pokedex" + File.separator + "faint" + File.separator + pokemon[lsr].getName());		
 		Sleeper.print(pokemon[lsr].getName() + " fainted!", 1700);			
 		Sleeper.print(pokemon[win].getName() + " gained " + xp + " Exp. Points!", 1700);
+		
+		clearContent();
 		
 		return;
 	}
@@ -969,7 +983,7 @@ public class BattleEngine {
 	/** END GET MONEY METHOD **/
 
 	/** CLEAR SCREEN METHOD **/	
-	private static void clearContent() {		
+	private static void clearContent() {	
 		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/

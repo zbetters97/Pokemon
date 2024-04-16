@@ -189,7 +189,7 @@ public enum Type {
 	    	case ("Ice"): color = Style.WHITE; break;
 	    	case ("Fighting"): color = Style.BOLD; break;
 	    	case ("Poison"): color = Style.PURPLE; break;
-	    	case ("Ground"): color = Style.GREEN; break;
+	    	case ("Ground"): color = Style.GRAY; break;
 	    	case ("FLYING"): color = Style.CYAN; break;
 	    	case ("Psychic"): color = Style.PINK; break;
 	    	case ("Bug"): color = Style.YELLOW; break;

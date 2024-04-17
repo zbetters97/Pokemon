@@ -75,10 +75,10 @@ public enum Pokemon {
 	private int statusCounter, statusLimit;
 	/** END INITIALIZE VALUES **/
 	
-	// initialize arraylist to hold moves of given pokemon
-	private ArrayList<Move> moveSet;
+	// initialize list to hold moves of given pokemon
+	private List<Move> moveSet;
 	
-	// initialize arraylist to hold all enums in pokemon class
+	// initialize list to hold all enums in pokemon class
 	private static List<Pokemon> POKEDEX = Arrays.asList(Pokemon.values());
 
 	/** CONSTRUCTORS **/
@@ -465,7 +465,7 @@ public enum Pokemon {
 	public int getStatusLimit() { return statusLimit; }
 	public void setStatusLimit(int statusLimit) { this.statusLimit = statusLimit; }
 	
-	public ArrayList<Move> getMoveSet() { return moveSet; }
+	public List<Move> getMoveSet() { return moveSet; }
 	public void setMoveSet(ArrayList<Move> moveSet) { this.moveSet = moveSet; }
 	
 	public boolean isAlive() { return isAlive; }

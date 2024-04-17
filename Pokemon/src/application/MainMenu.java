@@ -24,12 +24,11 @@ public class MainMenu {
 	static SoundCard menuMusic, bgmusic;
 	
 	static LinkedHashMap<Integer, String> musicDict;
-	static ArrayList<String> musicList;
-	
+	static List<String> musicList;
 	
 	static int defaultLevel, players, partySize;
 	static int cpuSelect;
-	static ArrayList<Pokemon> party1, party2;
+	static List<Pokemon> party1, party2;
 
 	/** LOAD METHOD
 	  * Method called from Driver 
@@ -41,7 +40,7 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file = "01battle-rs-trainer";
+		file = "02battle-rs-trainer";
 		cpuSelect = 0;
 		
 		// pull music from folder and assign to lists		
@@ -50,8 +49,8 @@ public class MainMenu {
 		grabMusic();
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
-		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
+		menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
 		menuMusic.playMusic();	
 		
 		// players can only be set to 1 or 2
@@ -300,7 +299,8 @@ public class MainMenu {
 				+ "[2] 25\n"
 				+ "[3] 50\n"
 				+ "[4] 100\n"
-				+ "[5] DISABLED\n\n"
+				+ "[5] CUSTOM\n"
+				+ "[6] DISABLED\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
 		
@@ -329,6 +329,33 @@ public class MainMenu {
 						clearContent();
 						return;
 					case 5:
+						Sleeper.print("Please enter a default level (1-100):");
+						System.out.print(">");
+						
+						while (true) {
+							
+							try { 
+								choice = input.nextInt(); 
+								SoundCard.play(select);
+								
+								if (1 <= choice && choice <= 100) {
+									defaultLevel = choice;
+									Sleeper.print("DEFAULT LEVEL SET TO " + defaultLevel, 1200);
+									return;	
+								}
+								else {
+									Sleeper.print("Input must be a number between 1 and 100!");
+									System.out.print(">");
+								}								
+							}						
+							catch (Exception e) {
+								SoundCard.play(select);
+								Sleeper.print("Input must be a number between 1 and 100!");
+								System.out.print(">");
+								input.next();
+							}
+						}
+					case 6:
 						defaultLevel = -1;
 						Sleeper.print("DEFAULT LEVEL DISABLED", 1200);
 						return;
@@ -450,7 +477,6 @@ public class MainMenu {
 		}
 	}	
 	/** END SELECT MUSIC METHOD **/
-	
 	
 	/** SOUND SETTING METHOD
 	  * Prompt player to turn on or off sound effects 
@@ -770,6 +796,7 @@ public class MainMenu {
 			
 			// make copy of pokedex
 			List<Pokemon> bestList = new ArrayList<>(Pokemon.getPokedex());
+
 			
 			//sort copy list first by level, then hp, then attack, and send highest values to top (0)
 			Collections.sort(bestList, Comparator.comparing(Pokemon::getLevel)
@@ -781,7 +808,6 @@ public class MainMenu {
 												
 				// get best pokemon
 				Pokemon choice = bestList.get(i);
-				System.out.println(choice.getName());
 				
 				// if pokemon already chosen, go to next and check again
 				if (party1.contains(choice) || party2.contains(choice))
@@ -853,10 +879,10 @@ public class MainMenu {
 	  * @param Integer player number
 	  * @return ArrayList swapped party
 	  **/
-	private static ArrayList<Pokemon> selectStarter(int player) {
+	private static List<Pokemon> selectStarter(int player) {
 
 		// assign temp party to player 1 or player 2 party
-		ArrayList<Pokemon> party = (player == 1) ? party1 : party2;
+		List<Pokemon> party = (player == 1) ? party1 : party2;
 		
 		printOak();
 		printParty();		

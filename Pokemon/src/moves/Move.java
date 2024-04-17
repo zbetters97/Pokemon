@@ -52,6 +52,7 @@ public class Move {
 	public String getMType() { return move.getMType(); }	
 	public Type getType() { return move.getType(); }
 	public Status getEffect() { return move.getEffect(); }	
+	public Double getSelfInflict() { return move.getSelfInflict(); }	
 	public Double getProbability() { return move.getProbability(); }	
 	public boolean isToSelf() { return move.isToSelf(); }	
 	public int getAccuracy() { 

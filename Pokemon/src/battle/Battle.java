@@ -1,11 +1,11 @@
 package battle;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -24,12 +24,12 @@ public class Battle {
 	private int[] playerOneItems, playerTwoItems;
 	
 	private static Pokemon pokemon1, pokemon2;
-	private ArrayList<Pokemon> party1, party2;
+	private List<Pokemon> party1, party2;
 	private BattleEngine battle;
 	
 	/** CONSTRUCTOR **/
 	public Battle(String name1, String name2, int numPlayers, 
-			ArrayList<Pokemon> party1, ArrayList<Pokemon> party2) {
+			List<Pokemon> party1, List<Pokemon> party2) {
 		
 		this.name1 = name1; this.name2 = name2;
 		
@@ -70,7 +70,7 @@ public class Battle {
 		
 		Move move1 = null, move2 = null;
 		
-		// loop until winner (return statement)
+		// loop until winner
 		while (true) {
 			
 			// check if a move is pending
@@ -121,7 +121,6 @@ public class Battle {
 				// if both are waiting for move, keep existing moves
 			}
 			
-
 			battle.move(move1, move2);		
 			
 			// if a pokemon is defeated
@@ -338,7 +337,7 @@ public class Battle {
 	  * @param choice, ArrayList of Move moveSet
 	  * @return move at given choice
 	  **/
-	private Move checkMove(int choice, ArrayList<Move> moveSet) {	
+	private Move checkMove(int choice,List<Move> moveSet) {	
 		
 		// if move has pp
 		if (moveSet.get(choice - 1).getpp() > 0) 
@@ -369,8 +368,8 @@ public class Battle {
 				info.replace(i, i + 1, "\n\t");
 			}
 			
-			System.out.println(move.getName().toUpperCase() + " : PP " + move.getpp() + 
-					((move.getPower() == 0) ? "" : " | PWR " + move.getPower()) + 
+			System.out.println(move.getName() + " : PP " + move.getpp() + 
+					((move.getPower() <= 0) ? "" : " | PWR " + move.getPower()) + 
 					(move.isToSelf() ? "" : " | ACC " + move.getAccuracy()) + 
 					" | TYPE " + move.getType().printType() +
 					(move.getEffect() == null ? "" : " | STA " + move.getEffect().printName()));
@@ -410,7 +409,7 @@ public class Battle {
 	  **/
 	private Pokemon swapFighter(int player) {
 		
-		ArrayList<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
+		List<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		// only 1 pokemon in party
 		if (pokemonParty.size() == 1) {
@@ -723,7 +722,7 @@ public class Battle {
 		
 		Sleeper.print("CHOOSE A POKEMON:\n", 700);
 		
-		ArrayList<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
+		List<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		int counter = 0;
 		for (Pokemon p : pokemonParty) {						

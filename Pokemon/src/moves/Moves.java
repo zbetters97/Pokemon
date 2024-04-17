@@ -1,7 +1,7 @@
 package moves;
+
 import java.util.Arrays;
 import java.util.List;
-
 import properties.*;
 
 /*** MOVES ENUM ***/
@@ -10,7 +10,7 @@ public enum Moves {
 	
 	CONFUSE("Confuse", "Physical", Type.NORMAL, 1, 40, -1, null),
 	ABSORB ("Absorb", "Special", Type.GRASS, 20, 20, 100, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target."),
-	AGILITY ("Agility", "Attribute", Type.PSYCHIC, true, 30, -1, 1, Arrays.asList("speed"), "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat."),
+	AGILITY ("Agility", "Attribute", Type.PSYCHIC, true, 30, -1, 1, Arrays.asList("speed"), "The user relaxes and lightens its body to move faster. It sharply boosts the Sspeed stat."),
 	AQUATAIL ("Aqua Tail", "Physical", Type.WATER, 10, 135, 90, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm."),
 	AURORABEAM ("Aurora Beam", "Special", Type.ICE, 20, 65, 100, "The foe is hit with a rainbow-colored beam."),
 	BLAZEKICK ("Blaze Kick", "Physical", Type.FIRE, Status.BURN, 0.10, 10, 85, 90, 1, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),
@@ -24,7 +24,7 @@ public enum Moves {
 	DARKPULSE ("Dark Pulse", "Special", Type.DARK, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
 	DEFENSECURL ("Defense Curl", "Attribute", Type.NORMAL, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
 	DIG ("Dig", "Physical", Type.GROUND, 10, 80, 100, false, "dug into the GROUND!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
-	DOUBLEEDGE ("Double Edge", "Physical", Type.STEEL, 10, 80, 100, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
+	DOUBLEEDGE ("Double Edge", "Physical", Type.STEEL, 10, 80, 100, 0.25, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
 	DOUBLEKICK ("Double Kick", "Physical", Type.FIGHTING, 35, 60, 100, "The foe is quickly kicked twice in succession using both feet."),
 	DRAGONBREATH ("Dragon Breath", "Special", Type.DRAGON, 20, 60, 100, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target."),
 	DRAGONCLAW ("Dragon Claw", "Physical", Type.DRAGON, 15, 80, 100, "The user slashes the foe with huge, sharp claws."),
@@ -44,7 +44,7 @@ public enum Moves {
 	GROWL ("Growl", "Attribute", Type.NORMAL, false, 40, 100, -1, Arrays.asList("attack"), "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered."),
 	HEAVYSLAM ("Heavy Slam", "Physical", Type.NORMAL, 20, 80, 75, "The user slams into the target with its heavy body."),
 	HEX ("Hex", "Special", Type.GHOST, 10, 95, 100, "This relentless attack does massive damage to a target affected by status conditions."),
-	HYDROPUMP ("Hydro Pump", "Special", Type.WATER, 5, 165, 80, "The foe is blasted by a huge volume of WATER launched under great pressure."),
+	HYDROPUMP ("Hydro Pump", "Special", Type.WATER, 5, 165, 80, "The foe is blasted by a huge volume of water launched under great pressure."),
 	HYPNOSIS ("Hypnosis", "Status", Type.PSYCHIC, Status.SLEEP, 20, 60, "The user employs hypnotic suggestion to make the target fall into a deep sleep."),
 	ICEFANG ("Ice Fang", "Physical", Type.ICE, Status.FREEZE, 0.10, 15, 65, 95, "The user bites with cold-infused fangs. It may also make the foe freeze."),
 	KINESIS ("Kinesis", "Attribute", Type.PSYCHIC, false, 15, 80, -1, Arrays.asList("accuracy"), "The user distracts the foe by bending a spoon. It may lower the target's accuracy."),
@@ -66,35 +66,35 @@ public enum Moves {
 	POUND ("Pound", "Physical", Type.NORMAL, 35, 40, 100, "The foe is physically pounded with a long tail or a foreleg, etc."),
 	PSYBEAM ("Psybeam", "Special", Type.PSYCHIC, Status.CONFUSE, 1.0, 20, 95, 100, "The foe is attacked with a peculiar ray. It may also leave the target confused."),
 	PSYCHIC ("Psychic", "Special", Type.PSYCHIC, 10, 135, 100, "The foe is hit by a strong telekinetic force."),
-	PSYCHOCUT ("Psycho Cut", "Physical", Type.PSYCHIC, 20, 105, 100, 1, "The user tears at the foe with blades formed by PSYCHIC power. Critical hits land more easily."),
+	PSYCHOCUT ("Psycho Cut", "Physical", Type.PSYCHIC, 20, 105, 100, 1, "The user tears at the foe with blades formed by psychic power. Critical hits land more easily."),
 	QUICKATTACK ("Quick Attack", "Physical", Type.NORMAL, 30, 40, 100, true, "The user lunges at the foe at a speed that makes it almost invisible. It is sure to strike first."),
 	RAZORLEAF ("Razor Leaf", "Physical", Type.GRASS, 25, 80, 95, 1, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio."),
 	ROCKTHROW ("Rock Throw", "Physical", Type.ROCK, 15, 75, 90, "The user picks up and throws a small ROCK at the foe to attack."),
 	ROLLOUT ("Rollout", "Physical", Type.ROCK, 20, 45, 90, "The user continually rolls into the foe over five turns."),
 	SCARYFACE ("Scary Face", "Attribute", Type.NORMAL, false, 10, 90, -2, Arrays.asList("speed"), "The user frightens the foe with a scary face to sharply reduce its Speed stat."),
 	SCRATCH ("Scratch", "Physical", Type.NORMAL, 35, 40, 100, "Hard, pointed, and sharp claws rake the foe to inflict damage."),
-	SEISMICTOSS ("Seismic Toss", "Physical", Type.FIGHTING, 20, 50, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
+	SEISMICTOSS ("Seismic Toss", "Physical", Type.FIGHTING, 20, -1, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
 	SHADOWBALL ("Shadow Ball", "Special", Type.GHOST, 15, 120, 100, "The user hurls a shadowy blob at the foe."),
 	SHADOWPUNCH ("Shadow Punch", "Physical", Type.GHOST, 20, 90, -1, "The user throws a punch at the foe from the shadows. The punch lands without fail."),
 	SKYUPPERCUT ("Sky Uppercut", "Physical", Type.FIGHTING, 15, 120, 100, "The user attacks the foe with an uppercut thrown skyward with force."),
 	SLAM ("Slam", "Physical", Type.NORMAL, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
 	SLASH ("Slash", "Physical", Type.NORMAL, 20, 70, 100, 1, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
 	SOLARBEAM ("Solar Beam", "Special", Type.GRASS, 10, 180, 100, true, "is charging Solar Beam...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
-	SURF ("Surf", "Special", Type.WATER, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing WATER."),
+	SURF ("Surf", "Special", Type.WATER, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing water."),
 	TACKLE ("Tackle", "Physical", Type.NORMAL, 35, 40, 95, "A physical attack in which the user charges and slams into the foe with its whole body."),
 	TAILWHIP ("Tail Whip", "Attribute", Type.NORMAL, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),
-	TAKEDOWN ("Take Down", "Physical", Type.NORMAL, 20, 90, 85, "A reckless, full-body charge attack for slamming into the foe. It also damages the user a little."),
+	TAKEDOWN ("Take Down", "Physical", Type.NORMAL, 20, 90, 85, 0.25, "A reckless, full-body charge attack for slamming into the foe. It also damages the user a little."),
 	TELEPORT ("Teleport", "Other", Type.PSYCHIC, 20, 0, -1, "Use it to flee from any wild Pokémon."),
 	THUNDER ("Thunder", "Special", Type.ELECTRIC, Status.PARALYZE, 0.10, 10, 120, 70, "A wicked thunderbolt is dropped on the foe to inflict damage. It may also leave the target paralyzed."),
 	THUNDERBOLT ("Thunder Bolt", "Special", Type.ELECTRIC, Status.PARALYZE, 0.10, 15, 135, 100, "A strong ELECTRIC blast is loosed at the foe. It may also leave the foe paralyzed."),
 	THUNDERFANG ("Thunder Fang", "Physical", Type.ELECTRIC, Status.PARALYZE, 0.10, 15, 65, 95, "The user bites with electrified fangs. It may also make the foe paralyzed."),
 	THUNDERPUNCH ("Thunder Punch", "Physical", Type.ELECTRIC, Status.PARALYZE, 0.10, 15, 110, 100, "The foe is punched with an electrified fist. It may leave the target with paralysis."),
-	THUNDERSHOCK ("Thunder Shock", "Special", Type.ELECTRIC, Status.PARALYZE, 0.10, 40, 60, 100, "A jolt of ELECTRICity is hurled at the foe to inflict damage. It may also leave the foe paralyzed."),
-	THUNDERWAVE ("Thunder Wave", "Status", Type.ELECTRIC, Status.PARALYZE, 20, 90, "A weak ELECTRIC charge is launched at the foe. It causes paralysis if it hits."),
+	THUNDERSHOCK ("Thunder Shock", "Special", Type.ELECTRIC, Status.PARALYZE, 0.10, 40, 60, 100, "A jolt of electric is hurled at the foe to inflict damage. It may also leave the foe paralyzed."),
+	THUNDERWAVE ("Thunder Wave", "Status", Type.ELECTRIC, Status.PARALYZE, 20, 90, "A weak eletric charge is launched at the foe. It causes paralysis if it hits."),
 	TWISTER ("Twister", "Special", Type.DRAGON, 20, 40, 100, "The user whips up a vicious tornado to tear at the foe."),
 	VINEWHIP ("Vine Whip", "Physical", Type.GRASS, 25, 65, 100, "The foe is struck with slender, whiplike vines to inflict damage."),
 	VITALTHROW ("Vital Throw", "Physical", Type.FIGHTING, 10, 105, -1, "The user allows the foe to attack first. In return, this throw move is guaranteed not to miss."),
-	WATERGUN ("Water Gun", "Special", Type.WATER, 25, 60, 100, "The foe is blasted with a forceful shot of WATER."),
+	WATERGUN ("Water Gun", "Special", Type.WATER, 25, 60, 100, "The foe is blasted with a forceful shot of water."),
 	WATERPULSE ("Water Pulse", "Special", Type.WATER, 20, 90, 100, "The user attacks the foe with a pulsing blast of WATER. It may also confuse the foe."),
 	XSCISSOR ("X-scissor", "Physical", Type.BUG, 15, 80, 100, "The user slashes at the foe by crossing its scythes or claws as if they were a pair of scissors.");
 	/** END INITIALIZE ENUMS **/
@@ -105,7 +105,7 @@ public enum Moves {
 	private boolean goFirst, toSelf, canHit;
 	private Type type;
 	private Status effect;
-	private Double probability;		
+	private Double probability, selfInflict;		
 	private List<String> stats;
 	/** END INITIALIZE VALUES **/
 	
@@ -117,6 +117,16 @@ public enum Moves {
 		this.pp = pp;
 		this.accuracy = accuracy;
 		this.power = power;
+		this.info = info;
+	}	
+	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, double selfInflict, String info) {
+		this.name = name;
+		this.mtype = mtype;
+		this.type = type;
+		this.pp = pp;
+		this.accuracy = accuracy;
+		this.power = power;
+		this.selfInflict = selfInflict;
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, int crit, String info) {
@@ -209,12 +219,13 @@ public enum Moves {
 	/** END CONSTRUCTORS **/
 	
 	/** GETTERS **/
-	public String getName() { return name; }
+	public String getName() { return name.toUpperCase(); }
 	public String getMType() { return mtype; }	
 	public Type getType() { return type; }
 	public int getpp() { return pp; }
 	public Status getEffect() { return effect; }	
 	public Double getProbability() { return probability; }	
+	public Double getSelfInflict() { return selfInflict; }	
 	public boolean isToSelf() { return toSelf; }	
 	public int getAccuracy() { 
 		if (accuracy == -1) return 100;

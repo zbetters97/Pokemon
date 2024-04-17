@@ -313,8 +313,15 @@
  * 		-Sorted battle music in descending order
  * 		-Fixed Giga Drain and Absorb logic
  * 		-Added Critical Hit modifiers
- * 		-Changed Critical Hit base chance from 1/255 to 2/25 (or 4/25)
+ * 		-Changed critical hit base chance from 1/255 to 2/25 (or 4/25)
  * 		-Reworded menu options
+ * 		-Cleaned up coding
+ * 4/17/2024:
+ * 		-Added recoil damage functionality
+ * 		-Added Seismic Toss functionality
+ * 		-Added default level custom option
+ * 		-Added 50/50 chance of who goes first if speeds are equal
+ * 		-Changed Moves getName() to return toUpperCase()
  * 		-Cleaned up coding
  */	
 

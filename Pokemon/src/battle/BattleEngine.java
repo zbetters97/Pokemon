@@ -259,7 +259,7 @@ public class BattleEngine {
 	 * @param trainer 1 move, trainer 2 move
 	 * @return 1 if trainer 1 moves first, 2 if trainer 2 moves first
 	 **/
-	private int getTurn(Move move1, Move move2) {
+	private int getTurn(Move move1, Move move2) {		
 		
 		// if both moves go first (EX: Quick Attack)
 		if (move1.getGoFirst() && move2.getGoFirst()) {			
@@ -277,10 +277,15 @@ public class BattleEngine {
 		else if (move2.getGoFirst()) 
 			return 2;
 		else {
-			// if pokemon1 is faster (if equal, pokemon1 has advantage)
-			if (pokemon[0].getSpeed() >= pokemon[1].getSpeed())
+			// if pokemon1 is faster
+			if (pokemon[0].getSpeed() > pokemon[1].getSpeed())
 				return 1;
-			else 
+			// if both pokemon have equal speed, coin flip decides
+			else if (pokemon[0].getSpeed() == pokemon[1].getSpeed()) {
+				Random r = new Random();
+				return (r.nextFloat() <= ((float) 1 / 2)) ? 1 : 2;
+			}
+			else
 				return 2;
 		}
 	}
@@ -292,14 +297,14 @@ public class BattleEngine {
 	 **/
 	private void turn(int pk1, int pk2, Move move1, Move move2) {
 
-		// if attacker can fight
+		// if attacker can fight and has fighting move
 		if (canTurn(pk1) && move1 != null)
 			useTurn(pk1, pk2, move1, move2);
 		
 		// target becomes attacker if battle not over
 		if (pokemon[pk1].isAlive() && pokemon[pk2].isAlive()) {
 					
-			// if target can fight
+			// if target can fight and has fighting move
 			if (canTurn(pk2) && move2 != null)
 				useTurn(pk2, pk1, move2, move1);
 		}
@@ -523,8 +528,16 @@ public class BattleEngine {
 	private void useTurn(int atk, int trg, Move atkMove, Move trgMove) {
 		
 		// move is not delayed
-		if (atkMove.getTurns() == 0) 
+		if (atkMove.getTurns() == 0) {
+			
+			Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 500);
+			SoundCard.play("//moves//" + atkMove.getName(), true);
+			
+			// decrease move pp
+			atkMove.setpp(atkMove.getpp() - 1);
+			
 			attack(atk, trg, atkMove, trgMove);
+		}
 		// move has delay
 		else {
 			
@@ -556,138 +569,80 @@ public class BattleEngine {
 	 * @param number of attacker, number of target, move of attacker
 	 **/
 	private void attack(int atk, int trg, Move move, Move trgMove) {
-		
-		// confirm move exists in fighter's moveset
-		if (moveIsValid(atk, move)) {
-			
-			Sleeper.print(pokemon[atk].getName() + " used " + move.getName() + "!", 500);
-			SoundCard.play("//moves//" + move.getName(), true);
-			
-			// decrease move pp
-			move.setpp(move.getpp() - 1);	
-			
-	        // if attack lands
-			if (isHit(atk, move, trgMove)) {
 				
-				// move has a status affect
-				if (move.getMType().equals("Status"))
-					statusMove(trg, move);				
-				// move has an attribute affect
-				else if (move.getMType().equals("Attribute")) 	
-					attributeMove(atk, trg, move);
-				// move is in other category
-				else if (move.getMType().equals("Other")) {
-					if (move.getName().equals("Teleport")) {
-
+        // if attack lands
+		if (isHit(atk, move, trgMove)) {
+			
+			// move has a status affect
+			if (move.getMType().equals("Status"))
+				statusMove(trg, move);				
+			
+			// move has an attribute affect
+			else if (move.getMType().equals("Attribute")) 	
+				attributeMove(atk, trg, move);
+			
+			// move is in other category
+			else if (move.getMType().equals("Other")) {
+				
+				switch (move.getName()) {
+					case "TELEPORT":	
 						Sleeper.print(pokemon[atk].getName() + " teleported away!", 1700);
 						System.exit(0);
-					}
-				}				
-				// move is damage-dealing
+						break;						
+					default:
+						break;
+				}		
+			}
+			// move is damage-dealing
+			else {				
+				
+				// get critical damage (1 or 1.5)
+				double crit = isCritical(move);
+				int damage = 1;
+				
+				// logic for seismic toss
+				if (move.getPower() == -1)
+					 damage = pokemon[atk].getLevel();
+				else
+					damage = calculateDamage(atk, trg, move, crit, false);
+						
+				// no damage dealt
+				if (damage == 0) {
+					Sleeper.print("It had no effect!", 1700);
+					clearContent();
+				}
 				else {				
 					
-					// get critical damage (1 or 1.5)
-					double crit = isCritical(move);
+					// if critical hit
+					if (crit == 1.5) 
+						Sleeper.print("A critical hit!", 1700);
+				
+					Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);	
 					
-					// calculate damage to be dealt
-					int damage = calculateDamage(atk, trg, move, crit, false);
-							
-					// no damage dealt
-					if (damage == 0) {
-						Sleeper.print("It had no effect!", 1700);
+					absorbHP(atk, trg, move, damage);
+											
+					// if damage is fatal
+					if (damage >= pokemon[trg].getHP())	{
+						dealDamage(trg, damage);
+						defeated(atk, trg, damage);
+					}						
+					// fighter survives hit
+					else {							
+						dealDamage(trg, damage);							
+						applyEffect(atk, trg, move);							
+						isRecoil(atk, trg, move, damage);
 						clearContent();
 					}
-					else {				
-						
-						// if critical hit
-						if (crit == 1.5) 
-							Sleeper.print("A critical hit!", 1700);
-					
-						Sleeper.print(pokemon[trg].getName() + " took " + damage + " damage!", 1700);					
-						
-						if (move.getName() == "Absorb" || move.getName() == "Giga Drain") {
-							
-							int gainedHP = (damage / 2);
-							
-							// if attacker not at full health
-							if (pokemon[atk].getHP() != pokemon[atk].getBHP()) {
-								
-								// if gained hp is greater than total hp
-								if (gainedHP + pokemon[atk].getHP() > pokemon[atk].getBHP()) {
-									
-									// gained hp is set to amount need to hit hp limit									
-									gainedHP = pokemon[atk].getBHP() - pokemon[atk].getHP();
-									
-									// refill hp to limit
-									pokemon[atk].setHP(pokemon[atk].getBHP());
-								}
-								else 
-									pokemon[atk].setHP(gainedHP + pokemon[atk].getHP()); 
-								
-								Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1700);
-							}
-						}
-												
-						// if damage is fatal
-						if (damage >= pokemon[trg].getHP())	{
-							dealDamage(trg, damage);
-							defeated(atk, trg, damage);
-						}
-						
-						// fighter survives hit
-						else {
-							
-							dealDamage(trg, damage);
-							
-							// move causes attribute or status effect
-							if (move.getProbability() != null) {								
-															
-								// chance for effect to apply
-								if (new Random().nextDouble() <= move.getProbability()) {
-									
-									if (move.getStats() != null) 
-										attributeMove(atk, trg, move);
-									else {			
-										if (pokemon[trg].getStatus() == null) {
-											pokemon[trg].setStatus(move.getEffect());
-											
-											Sleeper.print(pokemon[trg].getName() + " is " + 
-												pokemon[trg].getStatus().getCondition() + "!", 1700);
-										}
-									}
-								}							
-							}						
-							clearContent();
-						}
-					}	
-				}				
-			}
-			// attack missed
-			else {
-				Sleeper.print("The attack missed!", 1700);
-				clearContent();
+				}	
 			}				
-		}		
-	}
-	/** END ATTACK METHOD **/
-	
-	/** START MOVE IS VALID METHOD 
-	 * Confirm selected move is a valid option
-	 * @param number of attacker, selected move
-	 * @return true if found, false if not
-	 **/
-	private boolean moveIsValid(int atk, Move move) {
-		
-		// loop through fighter's moveset
-		for (Move m : pokemon[atk].getMoveSet()) {
-			
-			// if chosen move is found
-			if (m.getName().equals(move.getName()))
-				return true;
 		}
-		return false;
-	}
-	/** END MOVE IS VALID METHOD **/
+		// attack missed
+		else {
+			Sleeper.print("The attack missed!", 1700);
+			clearContent();
+		}				
+	}		
+	/** END ATTACK METHOD **/
 	
 	/** IS HIT METHOD 
 	 * Calculates if move lands on target
@@ -743,7 +698,7 @@ public class BattleEngine {
 	
 	/** ATTRIBUTE MOVE METHOD 
 	 * Raise or lower stat of target or to self
-	 * @param number of target, selected move
+	 * @param number of attacker, number of target, selected move
 	 **/
 	private void attributeMove(int atk, int trg, Move move) {
 		
@@ -788,6 +743,87 @@ public class BattleEngine {
 		return (r.nextFloat() <= ((float) chance / 25)) ? 1.5 : 1;
 	}
 	/** END IS CRITICAL METHOD **/
+	
+	/** ABSORB HP METHOD 
+	 * Increases attackers hp by damage dealt if move calls for it
+	 * @param number of attacker, number of target, selected move, int damage
+	 **/
+	private void absorbHP(int atk, int trg, Move move, int damage) {
+		
+		if (move.getName() == "ABSORB" || move.getName() == "GIGA DRAIN") {
+			
+			int gainedHP = (damage / 2);
+			
+			// if attacker not at full health
+			if (pokemon[atk].getHP() != pokemon[atk].getBHP()) {
+				
+				// if gained hp is greater than total hp
+				if (gainedHP + pokemon[atk].getHP() > pokemon[atk].getBHP()) {
+					
+					// gained hp is set to amount need to hit hp limit									
+					gainedHP = pokemon[atk].getBHP() - pokemon[atk].getHP();
+					
+					// refill hp to limit
+					pokemon[atk].setHP(pokemon[atk].getBHP());
+				}
+				else 
+					pokemon[atk].setHP(gainedHP + pokemon[atk].getHP()); 
+				
+				Sleeper.print(pokemon[atk].getName() + " absorbed " + gainedHP + " HP!", 1700);
+			}
+		}
+	}
+	/** END ABSORB HP METHOD **/
+	
+	/** APPLY EFFECT METHOD 
+	 * Applys attribute or status effect if move causes it
+	 * @param number of attacker, number of target, selected move
+	 **/
+	private void applyEffect(int atk, int trg, Move move) {
+		
+		// move causes attribute or status effect
+		if (move.getProbability() != null) {								
+										
+			// chance for effect to apply
+			if (new Random().nextDouble() <= move.getProbability()) {
+				
+				if (move.getStats() != null) 
+					attributeMove(atk, trg, move);
+				else {			
+					// if not already affected by a status effect
+					if (pokemon[trg].getStatus() == null) {
+						pokemon[trg].setStatus(move.getEffect());
+						
+						Sleeper.print(pokemon[trg].getName() + " is " + 
+							pokemon[trg].getStatus().getCondition() + "!", 1700);
+					}
+				}
+			}							
+		}
+	}
+	/** END APPLY EFFECT METHOD **/
+	
+	/** IS RECOIL METHOD 
+	 * Inflicts damage on attacker if move inflicts recoil
+	 * @param number of attacker, number of target, selected move, damage dealt
+	 **/
+	private void isRecoil(int atk, int trg, Move move, int damage) {
+		
+		if (move.getSelfInflict() != null) {								
+			damage = (int)(damage * move.getSelfInflict());	
+			
+			Sleeper.print(pokemon[atk].getName() + " was hit with " + damage + " recoil damage!", 1700);		
+			
+			// damage is fatal to attacker
+			if (damage >= pokemon[atk].getHP()) {
+				dealDamage(atk, damage);
+				defeated(trg, atk, damage);
+			}					
+			else
+				dealDamage(atk, damage);
+		}
+	}
+	/** END IS RECOIL METHOD **/
 	
 	/** CALCULATE DAMAGE DEALT METHOD
 	 * Calculates the damage dealt to the attacker 
@@ -987,7 +1023,6 @@ public class BattleEngine {
 		System.out.println(new String(new char[60]).replace("\0", "\r\n"));
 	}
 	/** END CLEAR SCREEN METHOD **/
-
 }
 /*** END BATTLE ENGINE CLASS ***/
 

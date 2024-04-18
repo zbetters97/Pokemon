@@ -88,34 +88,9 @@ public class BattleEngine {
 	 **/
 	public Move cpuSelectMove() {
 				
-		// if cpu health is low
-		boolean isHPLow = ((double) pokemon[1].getHP() / pokemon[1].getBHP() < 0.20);
-		if (isHPLow) {
-							
-			// if super potion fully heals
-			if (pokemon[1].getHP() + 60 >= pokemon[1].getBHP()) {
-				
-				// try super potion first
-				if (healCPU(60, 0)) return null;
-				if (healCPU(120, 1)) return null;
-				if (healCPU(999, 2)) return null;
-			}		
-			// if hyper potion fully heals
-			else if (pokemon[1].getHP() + 120 >= pokemon[1].getBHP()) {
-				// try hyper potion first
-				if (healCPU(120, 1)) return null;
-				if (healCPU(999, 2)) return null;
-				if (healCPU(60, 0)) return null;
-			}
-			// try full restore first
-			else {
-				if (healCPU(999, 2)) return null;
-				if (healCPU(120, 1)) return null;
-				if (healCPU(60, 0)) return null;
-			}
-		}
-		
-		Move bestMove;
+		// if cpu used potion, no move is selected
+		if (usePotion())
+			return null;
 		
 		// holds Map of Move and Damage Points
 		Map<Move, Integer> moves = new HashMap<>();
@@ -125,22 +100,23 @@ public class BattleEngine {
 			
 			if (!move.isToSelf() && move.getpp() != 0) {
 				
-				// find damage value of each move
+				// find damage value of each move (no crit is assumed)
 				int damage = calculateDamage(1, 0, move, 1.0, true);
 				
-				// add move and corresponding damage to list
+				// add move and corresponding damage value to k/v list
 				moves.put(move, damage);	
 			}		
 		}
 		
+		Move bestMove;
+		
 		// find max value in moves list based on value
 		if (!moves.isEmpty()) {
 			
-			// 33% chance CPU selects random move instead of most powerful
-			int val = 1 + (int)(Math.random() * ((3 - 1) + 1));
-			if (val == 1) {
-				
-				int ranMove = (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));				
+			// 33% chance CPU selects random move instead of most powerful			
+			int val = 1 + (int)(Math.random() * 4);
+			if (val == 1) {				
+				int ranMove = (int)(Math.random() * (pokemon[1].getMoveSet().size()));				
 				bestMove = pokemon[1].getMoveSet().get(ranMove);
 			}
 			else
@@ -148,13 +124,49 @@ public class BattleEngine {
 		}
 		// if list is empty, select random move
 		else {
-			int ranMove = (int)(Math.random() * (((pokemon[1].getMoveSet().size()) - 1) + 1));				
+			int ranMove = (int)(Math.random() * (pokemon[1].getMoveSet().size()));				
 			bestMove = pokemon[1].getMoveSet().get(ranMove);
 		}
 		
 		return bestMove;
 	}
 	/** END CPU SELECT MOVE METHOD **/
+	
+	/** IS CPU HEALTH LOW METHOD 
+	 * Check if CPU should use a potion
+	 * @return true if potion used, false if not
+	 **/
+	private boolean usePotion() {
+		
+		// if cpu health is low
+		boolean isHPLow = ((double) pokemon[1].getHP() / pokemon[1].getBHP() < 0.20);
+		if (isHPLow) {
+							
+			// if super potion fully heals
+			if (pokemon[1].getHP() + 60 >= pokemon[1].getBHP()) {
+				
+				// try super potion first
+				if (healCPU(60, 0)) return true;
+				if (healCPU(120, 1)) return true;
+				if (healCPU(999, 2)) return true;
+			}		
+			// if hyper potion fully heals
+			else if (pokemon[1].getHP() + 120 >= pokemon[1].getBHP()) {
+				// try hyper potion first
+				if (healCPU(120, 1)) return true;
+				if (healCPU(999, 2)) return true;
+				if (healCPU(60, 0)) return true;
+			}
+			// try full restore first
+			else {
+				if (healCPU(999, 2)) return true;
+				if (healCPU(120, 1)) return true;
+				if (healCPU(60, 0)) return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	/** HEAL CPU METHOD 
 	 * Restore health of CPU Pokemon
@@ -329,7 +341,7 @@ public class BattleEngine {
 				case "PRZ":		
 					
 					// 1/4 chance can't move due to PAR
-					val = 1 + (int)(Math.random() * ((4 - 1) + 1));
+					val = 1 + (int)(Math.random() * 4);
 					if (val == 1) {						
 						SoundCard.playStatus(pokemon[atk].getStatus().getName());
 						Sleeper.print(pokemon[atk].getName() + " is paralyzed and unable to move!", 1700);
@@ -343,7 +355,7 @@ public class BattleEngine {
 				case "FRZ":
 					
 					// 1/5 chance attacker can thaw from ice
-					val = 1 + (int)(Math.random() * ((5 - 1) + 1));
+					val = 1 + (int)(Math.random() * 5);
 					if (val == 1) {
 						Sleeper.print(pokemon[atk].getName() + " thawed from the ice!", 1700);
 						pokemon[atk].setStatus(null);
@@ -378,7 +390,7 @@ public class BattleEngine {
 		
 		// if first move under condition, set number of moves until free
 		if (pokemon[pkm].getStatusLimit() == 0) 
-			pokemon[pkm].setStatusLimit(2 + (int)(Math.random() * ((5 - 2) + 2)));	
+			pokemon[pkm].setStatusLimit(2 + (int)(Math.random() * 5));	
 		
 		// if number of moves under condition hit limit, remove condition
 		if (pokemon[pkm].getStatusCounter() >= pokemon[pkm].getStatusLimit()) {
@@ -483,7 +495,7 @@ public class BattleEngine {
 		int trg = (atk == 1) ? 0 : 1;
 		
 		// 50% chance of hurting self
-		int val = 1 + (int)(Math.random() * ((2 - 1) + 1));	
+		int val = 1 + (int)(Math.random() * 2);	
 		if (val == 1) {					
 			
 			double level = pokemon[atk].getLevel();
@@ -527,40 +539,32 @@ public class BattleEngine {
 	 **/	
 	private void useTurn(int atk, int trg, Move atkMove, Move trgMove) {
 		
-		// move is not delayed
-		if (atkMove.getTurns() == 0) {
+		Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 500);
+		
+		// if not delayed move or delayed move is ready
+		if (1 >= atkMove.getTurns()) {	
 			
-			Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 500);
 			SoundCard.play("//moves//" + atkMove.getName(), true);
 			
-			// decrease move pp
-			atkMove.setpp(atkMove.getpp() - 1);
-			
-			attack(atk, trg, atkMove, trgMove);
+			// reset turns to wait
+			atkMove.setTurns(atkMove.getNumTurns());
 		}
-		// move has delay
-		else {
+		// delayed move is used for first time
+		else if (atkMove.getTurns() == atkMove.getNumTurns()) {
+						
+			Sleeper.print(atkMove.getDelay(pokemon[atk].getName()), 1200);	
 			
-			// move is used for first time
-			if (atkMove.getTurns() == atkMove.getNumTurns()) {
-				
-				Sleeper.print(pokemon[atk].getName() + " used " + atkMove.getName() + "!", 1200);
-				Sleeper.print(atkMove.getDelay(pokemon[atk].getName()), 1200);	
-				
-				// reduce number of turns to wait
-				atkMove.setTurns(atkMove.getTurns() - 1);	
-				
-				clearContent();
-			}
-			// if delayed move is ready
-			else if (atkMove.getTurns() == 1) {
-				
-				// reset turns to wait
-				atkMove.setTurns(atkMove.getNumTurns());
-				
-				attack(atk, trg, atkMove, trgMove);
-			}
-		}			
+			// reduce number of turns to wait
+			atkMove.setTurns(atkMove.getTurns() - 1);	
+			
+			clearContent();
+			return;
+		}
+		
+		// decrease move pp
+		atkMove.setpp(atkMove.getpp() - 1);	
+		
+		attack(atk, trg, atkMove, trgMove);
 	}		
 	/** END USE TURN METHOD **/
 	

@@ -27,9 +27,11 @@ public class Battle {
 	private List<Pokemon> party1, party2;
 	private BattleEngine battle;
 	
+	private boolean battleShift;
+	
 	/** CONSTRUCTOR **/
 	public Battle(String name1, String name2, int numPlayers, 
-			List<Pokemon> party1, List<Pokemon> party2) {
+			List<Pokemon> party1, List<Pokemon> party2, boolean battleShift) {
 		
 		this.name1 = name1; this.name2 = name2;
 		
@@ -47,6 +49,8 @@ public class Battle {
 		
 		this.party1 = party1;
 		this.party2 = party2;
+		
+		this.battleShift = battleShift;
 	}
 	/** END CONSTRUCTOR **/
 	
@@ -263,7 +267,11 @@ public class Battle {
 		
 		// display all moves				
 		for (Move m : fighter.getMoveSet()) {
-			System.out.printf("[%d] %-" + (mLength + 1) + "s{ %-" + (tLength + 1) + "s| PP %2d/%2d }\n", 
+		
+			String style = m.getType().getColor();
+			
+			System.out.printf("[%d] %-" + (mLength + 1) + "s{ " + 
+				style + "%-" + (tLength + 1) + "s" + Style.END + "| PP %2d/%2d }\n", 
 				++counter, m.getName(), m.getType(), m.getpp(), m.getbpp());
 		}
 		
@@ -408,25 +416,21 @@ public class Battle {
 	  * @return Pokedex new fighter
 	  **/
 	private Pokemon swapFighter(int player) {
-		
+						
 		List<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
-		// only 1 pokemon in party
-		if (pokemonParty.size() == 1) {
-			Sleeper.print("THERE ARE NO OTHER POKEMON IN YOUR PARTY!", 1700);			
-			return null;
-		}
-		
-		System.out.println("SELECT A POKEMON TO SWAP IN:\n");
+		System.out.println("\nSELECT A POKEMON TO SWAP IN:\n");
 		
 		// skip first pokemon in party
-		int counter = 1;
-		for (Pokemon p : pokemonParty.subList(1, pokemonParty.size())) {	
+		int counter = 0;
+		for (Pokemon p : pokemonParty) {
 			
-			System.out.printf("[" + ++counter + "] " + p.getName() + 
-				" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
-				((p.getType() == null) ? p.printTypes() : p.getType().printType()) + 
-				"\n", p.getLevel());
+			System.out.printf("[%d] " + Style.BOLD + " %s Lv%d (%s) [%s]\n" + Style.END + 
+				"HP  %3d/%3d | ATTACK  %3d | DEFENSE %3d\n" + 
+				"SP. ATK %3d | SP. DEF %3d | SPEED   %3d\n\n",
+				++counter, p.getName(), p.getLevel(), ((p.getType() == null) ? p.printTypes() : p.getType().printType()),
+				p.getNature().getName(), (int)p.getHP(), (int)p.getBHP(), (int)p.getAttack(), (int)p.getDefense(), 
+				(int)p.getSpAttack(), (int)p.getSpDefense(), (int)p.getSpeed());			
 		}
 		System.out.println("\n[0] <- BACK");
 		System.out.print(">");
@@ -436,46 +440,43 @@ public class Battle {
 		while (true) {				
 			try { 
 				choice = input.nextInt(); 
+				SoundCard.play(select);
 				
 				// choice must be a number from 0 to last element in list													
 				if (1 < choice && choice <= counter) {
 															
 					Pokemon newFighter = pokemonParty.get(choice - 1);
+								
+					clearContent();
 					
-					if (newFighter.getName().equals(pokemon1.getName())) {
-						Sleeper.print(pokemon1.getName() + " is already in battle!");
-						System.out.print(">");
+					if (player == 1) {
+						Sleeper.print("(" + name1 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
+						// switch spots in party
+						Collections.swap(party1, 0, choice - 1);
+						Sleeper.print("(" + name1 + ") Go! " + newFighter.getName() + "!");
 					}
-					else {					
-						clearContent();
-						
-						if (player == 1) {
-							Sleeper.print("(" + name1 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
-							// switch spots in party
-							Collections.swap(party1, 0, choice - 1);
-							Sleeper.print("(" + name1 + ") Go! " + newFighter.getName() + "!");
-						}
-						else {
-							Sleeper.print("(" + name2 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
-							// switch spots in party
-							Collections.swap(party2, 0, choice - 1);
-							Sleeper.print("(" + name2 + ") Go! " + newFighter.getName() + "!");
-						}
-						
-						SoundCard.play("pokedex" + File.separator + newFighter.getName());
-						Sleeper.pause(1700);	
-						
-						clearContent();	
-						
-						return newFighter;	
+					else {
+						Sleeper.print("(" + name2 + ") " + pokemonParty.get(0) + ", switch out! Come back!", 1700);
+						// switch spots in party
+						Collections.swap(party2, 0, choice - 1);
+						Sleeper.print("(" + name2 + ") Go! " + newFighter.getName() + "!");
 					}
+					
+					SoundCard.play("pokedex" + File.separator + newFighter.getName());
+					Sleeper.pause(1700);	
+					
+					clearContent();	
+					
+					return newFighter;	
+				}
+				else if (choice == 1) {
+					Sleeper.print(pokemonParty.get(0).getName() + " is already in battle!");
+					System.out.print(">");
 				}
 				else if (choice == 0) {
-					SoundCard.play(select);
 					return null;			
 				}
 				else {
-					SoundCard.play(select);	
 					Sleeper.print("This is not a valid selection!");
 					System.out.print(">");
 				}
@@ -552,7 +553,7 @@ public class Battle {
 							iCount[2] -= 1;
 							
 							clearContent();
-							healFighter(999, player);		
+							healFighter(1000, player);		
 							clearContent();
 							
 							return true;
@@ -626,19 +627,11 @@ public class Battle {
 	  **/
 	public int chooseNextFighter() {
 		
-		int choice;
-		
-		// true if player2 defeated player 1
+		// true if player2 defeated player1
 		boolean playerTwoWinner = battle.getWinningPokemon().getName().equals(pokemon2.getName());
 		if (playerTwoWinner) {
-			
-			// remove from player 1 party			
-			for (Pokemon p : party1) {				
-				if (p.getIndex() == pokemon1.getIndex()) {
-					party1.remove(p);
-					break;
-				}
-			}
+						
+			party1.removeIf(obj -> obj.getIndex() == pokemon1.getIndex());
 			
 			// if no pokemon left
 			if (party1.isEmpty()) {
@@ -648,17 +641,23 @@ public class Battle {
 			else {			
 				// reset winner
 				battle.setWinningPokemon(null);
+				initiateSwap(1);			
 				
-				// ask which pokemon to sub in and swap
-				choice = listNextFighter(1);
-				pokemon1 = party1.get(choice - 1);
-				battle.swapPokemon(pokemon1, 0);
+				if (party2.size() > 1 && battleShift) {
+					if (numPlayers == 2) {
+						if (askSwap(2, name2, name1, pokemon1.getName()))
+							initiateSwap(2);
+					}
+					else 
+						pokemon2 = cpuSelectNextPokemon();
+					
+					clearContent();
+					Sleeper.print("(" + name2 + ") Go! " + pokemon2.getName() + "!");
+					SoundCard.play("pokedex" + File.separator + pokemon2.getName());
+					Sleeper.pause(1700);
+				}
 				
-				if (party1.size() > 1)
-					Collections.swap(party1, 0, choice - 1);
-				
-				clearContent();
-				
+				clearContent();				
 				Sleeper.print("(" + name1 + ") Go! " + pokemon1.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon1.getName());
 				Sleeper.pause(1700);
@@ -670,12 +669,7 @@ public class Battle {
 		else {				
 			
 			// remove from party 2
-			for (Pokemon p : party2) {				
-				if (p.getIndex() == pokemon2.getIndex()) {
-					party2.remove(p);
-					break;
-				}
-			}
+			party2.removeIf(obj -> obj.getIndex() == pokemon2.getIndex());
 			
 			// if no pokemon left
 			if (party2.isEmpty()) {
@@ -686,24 +680,25 @@ public class Battle {
 				// reset winner
 				battle.setWinningPokemon(null);
 				
-				if (numPlayers == 2) {
-					
-					// ask which pokemon to sub in and swap
-					choice = listNextFighter(2);
-					pokemon2 = party2.get(choice - 1);
-					
-					battle.swapPokemon(pokemon2, 1);
-					
-					if (party2.size() > 1)
-						Collections.swap(party2, 0, choice - 1);
-				}
+				if (numPlayers == 2)					
+					initiateSwap(2);
 				else {
 					pokemon2 = cpuSelectNextPokemon();
 					battle.swapPokemon(pokemon2, 1);
 				}
 				
+				if (party1.size() > 1 && battleShift) {
+					if (askSwap(1, name1, name2, pokemon2.getName())) {
+						initiateSwap(1);
+						
+						clearContent();
+						Sleeper.print("(" + name1 + ") Go! " + pokemon1.getName() + "!");
+						SoundCard.play("pokedex" + File.separator + pokemon1.getName());
+						Sleeper.pause(1700);
+					}
+				}
+				
 				clearContent();
-								
 				Sleeper.print("(" + name2 + ") Go! " + pokemon2.getName() + "!");
 				SoundCard.play("pokedex" + File.separator + pokemon2.getName());
 				Sleeper.pause(1700);	
@@ -713,6 +708,76 @@ public class Battle {
 		}
 	}	
 	/** END CHOOSE NEXT POKEMON METHOD **/	
+	
+	/** INITIATE SWAP METHOD
+	  * Call listNextFighter() and swap chosen pokemon
+	  * @param Integer number of player
+	  **/
+	private void initiateSwap(int player) {
+		
+		clearContent();
+		
+		if (player == 1) {
+			
+			// ask which pokemon to sub in and swap
+			int choice = listNextFighter(player);
+			pokemon1 = party1.get(choice - 1);
+			battle.swapPokemon(pokemon1, 0);
+			
+			if (party1.size() > 1)
+				Collections.swap(party1, 0, choice - 1);	
+		}
+		else {
+			
+			// ask which pokemon to sub in and swap
+			int choice = listNextFighter(player);
+			pokemon2 = party2.get(choice - 1);
+			battle.swapPokemon(pokemon2, 1);
+			
+			if (party2.size() > 1)
+				Collections.swap(party2, 0, choice - 1);	
+		}
+	}
+	/** END INITIATE SWAP METHOD **/
+	
+	/** ASK SWAP METHOD 
+	 * Ask user if they want to swap
+	 * @param Integer number of player, String player 2 name, String player 2 name, String Pokemon name
+	 * @return True if yes, False if no
+	 **/
+	private boolean askSwap(int num, String t1, String t2, String pokemon) {
+
+		clearContent();
+		Sleeper.print(t1 + ", " + t2 + " is about to send out " + pokemon + ".\n" +
+				"Will you switch out your Pokemon (Y/N)?");		
+		System.out.print(">");
+		
+		String choice;
+		
+		while (true) {				
+			try { 
+				choice = input.next().substring(0);
+				SoundCard.play(select);
+				
+				// grab "Y" if input is "Yes"
+				if (choice.substring(0, 1).toUpperCase().equals("Y"))
+					return true;
+				// grab "N" if input is "No"
+				else if (choice.substring(0, 1).toUpperCase().equals("N"))
+					return false;
+				else {
+					Sleeper.print("This is not a valid selection!"); 
+					System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				Sleeper.print("This is not a valid selection!"); 
+				System.out.print(">");
+				input.next();
+			}
+		}
+	}	
+	/** END ASK SWAP METHOD **/
 	
 	/** LIST FIGHTERS METHOD
 	  * Print out available pokemon to choose from party 
@@ -725,11 +790,14 @@ public class Battle {
 		List<Pokemon> pokemonParty = (player == 1 ) ? party1 : party2;
 		
 		int counter = 0;
-		for (Pokemon p : pokemonParty) {						
-				System.out.printf("[" + ++counter + "] " + p.getName() + 
-					" : HP " + p.getHP() + "/" + p.getBHP() + " | Lv %02d | " + 
-					((p.getType() == null) ? p.printTypes() : p.getType().printType()) + 
-					"\n", p.getLevel());	
+		for (Pokemon p : pokemonParty) {	
+			
+			System.out.printf("[%d] " + Style.BOLD + " %s Lv%d (%s)\n" + Style.END + 
+				"HP  %3d/%3d | ATTACK  %3d | DEFENSE %3d\n" + 
+				"SP. ATK %3d | SP. DEF %3d | SPEED   %3d\n\n",
+				++counter, p.getName(), p.getLevel(), ((p.getType() == null) ? p.printTypes() : p.getType().printType()),
+				(int)p.getHP(), (int)p.getBHP(), (int)p.getAttack(), (int)p.getDefense(), 
+				(int)p.getSpAttack(), (int)p.getSpDefense(), (int)p.getSpeed());
 		}
 		
 		System.out.print(">");
@@ -741,8 +809,8 @@ public class Battle {
 				choice = input.nextInt(); 
 				
 				// choice must be a number from 0 to last element in list
-				if (0 < choice && choice <= counter) 
-					return choice;									
+				if (0 < choice && choice <= counter) 					
+					return choice;	
 				else {
 					SoundCard.play(select);
 					Sleeper.print("This is not a valid selection!"); 

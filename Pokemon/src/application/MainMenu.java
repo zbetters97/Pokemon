@@ -28,6 +28,7 @@ public class MainMenu {
 	
 	static int defaultLevel, players, partySize;
 	static int cpuSelect;
+	static boolean battleShift;
 	static List<Pokemon> party1, party2;
 
 	/** LOAD METHOD
@@ -40,8 +41,9 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file = "02battle-rs-trainer";
+		file = "03battle-rs-gym";
 		cpuSelect = 0;
+		battleShift = true;
 		
 		// pull music from folder and assign to lists		
 		musicDict = new LinkedHashMap<>();
@@ -49,8 +51,8 @@ public class MainMenu {
 		grabMusic();
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
-		//menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
+		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
 		menuMusic.playMusic();	
 		
 		// players can only be set to 1 or 2
@@ -62,7 +64,7 @@ public class MainMenu {
 			name1 = "P1";
 			name2 = "P2";
 			defaultLevel = 50;
-			partySize = 1;
+			partySize = 3;
 			SoundCard.setActive(false);
 		}
 		else {	
@@ -254,9 +256,10 @@ public class MainMenu {
 				switch (choice) {
 					case 1: levelSetting(); displaySettings(); break;						
 					case 2: partySetting(); displaySettings(); break;
-					case 3: musicSetting(); displaySettings(); break;
-					case 4: soundSetting(); displaySettings(); break;
-					case 5: textSetting(); displaySettings(); break;
+					case 3: musicSetting(); displaySettings(); break;					
+					case 4: textSetting(); displaySettings(); break;
+					case 5: soundSetting(); displaySettings(); break;
+					case 6: battleSetting(); displaySettings(); break;
 					case 0: return;
 					default:
 						Sleeper.print("Input must be a menu option!"); 
@@ -278,11 +281,12 @@ public class MainMenu {
 	private static void displaySettings() {
 		printLogo();
 		System.out.println("--SETTINGS--\n\n"
-				+ "[1] LEVELS\n"
-				+ "[2] CPU\n"
-				+ "[3] MUSIC\n"
-				+ "[4] SOUNDS\n"
-				+ "[5] TEXT SPEED\n\n"
+				+ "[1] DEFAULT LEVELS\n"
+				+ "[2] CPU SELECT\n"
+				+ "[3] BATTLE MUSIC\n"
+				+ "[4] TEXT SPEED\n"
+				+ "[5] SOUND EFFECTS\n" 
+				+ "[6] BATTLE STYLE\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
 	}
@@ -478,50 +482,6 @@ public class MainMenu {
 	}	
 	/** END SELECT MUSIC METHOD **/
 	
-	/** SOUND SETTING METHOD
-	  * Prompt player to turn on or off sound effects 
-	  **/
-	private static void soundSetting() {
-				
-		printLogo();
-		System.out.println("--SOUND EFFECTS--\n\n"
-				+ "[1] ON\n"
-				+ "[2] OFF\n\n"
-				+ "[0] <- BACK");
-		System.out.print(">");
-		
-		while (true) {
-			
-			try { 
-				int choice = input.nextInt(); 
-				SoundCard.play(select);
-				
-				switch (choice) {
-					case 1:
-						SoundCard.setActive(true);
-						Sleeper.print("SOUND EFFECTS TURNED ON", 1200); 
-						return;
-					case 2:
-						SoundCard.setActive(false);
-						Sleeper.print("SOUND EFFECTS TURNED OFF", 1200); 
-						return;
-					case 0:
-						return;
-					default:
-						Sleeper.print("Input must be a menu option!");
-						System.out.print(">");
-				}
-			}
-			catch (Exception e) {
-				SoundCard.play(select);
-				Sleeper.print("Input must be a menu option!");
-				System.out.print(">");
-				input.next();
-			}
-		}	
-	}
-	/** END SOUND SETTINGS **/
-	
 	/** TEXT SPEED METHOD
 	  * Prompt player to select a new text speed for Sleeper 
 	  **/
@@ -571,6 +531,95 @@ public class MainMenu {
 		}	
 	}
 	/** END TEXT SPEED METHOD **/
+	
+	/** SOUND SETTING METHOD
+	  * Prompt player to turn on or off sound effects 
+	  **/
+	private static void soundSetting() {
+				
+		printLogo();
+		System.out.println("--SOUND EFFECTS--\n\n"
+				+ "[1] ON\n"
+				+ "[2] OFF\n\n"
+				+ "[0] <- BACK");
+		System.out.print(">");
+		
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				SoundCard.play(select);
+				
+				switch (choice) {
+					case 1:
+						SoundCard.setActive(true);
+						Sleeper.print("SOUND EFFECTS TURNED ON", 1200); 
+						return;
+					case 2:
+						SoundCard.setActive(false);
+						Sleeper.print("SOUND EFFECTS TURNED OFF", 1200); 
+						return;
+					case 0:
+						return;
+					default:
+						Sleeper.print("Input must be a menu option!");
+						System.out.print(">");
+				}
+			}
+			catch (Exception e) {
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	/** END SOUND SETTINGS **/
+	
+	/** BATTLE SETTING METHOD
+	  * Prompt player to select shift or set for battle style
+	  **/
+	private static void battleSetting() {
+				
+		printLogo();
+		System.out.println("--BATTLE STYLE--\n\n"
+				+ "[1] SHIFT\n"
+				+ "[2] SET\n\n"
+				+ "[0] <- BACK");
+		System.out.print(">");
+		
+		while (true) {
+			
+			try { 
+				int choice = input.nextInt(); 
+				SoundCard.play(select);
+				
+				switch (choice) {
+					case 1:
+						battleShift = true;
+						Sleeper.print("BATTLE STYLE SET TO SHIFT", 1200); 
+						return;
+					case 2:
+						battleShift = false;
+						Sleeper.print("BATTLE STYLE SET TO SET", 1200); 
+						return;
+					case 0:
+						return;
+					default:
+						Sleeper.print("Input must be a menu option!");
+						System.out.print(">");
+						break;
+				}
+			}
+			catch (Exception e) {
+				SoundCard.play(select);
+				Sleeper.print("Input must be a menu option!");
+				System.out.print(">");
+				input.next();
+			}
+		}	
+	}
+	/** END BATTLE STYLE METHOD **/
 		
 	/** INPUT NAME METHOD
 	  * Prompt player to input their name 
@@ -637,7 +686,6 @@ public class MainMenu {
 				
 				if (1 <= choice && choice <= 6) {
 					partySize = choice;
-					clearContent();
 					return;
 				}
 				else {
@@ -659,10 +707,12 @@ public class MainMenu {
 	  * Prompt player to select pokemon from available list
 	  **/
 	private static void selectParty() {
-		
+
 		int turn = 1, choice = 0;	
 		
 		while (turn <= (partySize * 2)) {
+			
+			clearContent();
 			
 			int counter = displayParty();
 			
@@ -684,8 +734,6 @@ public class MainMenu {
 				
 				Sleeper.pause(1700);
 				choice = cpuSelectParty(counter);
-				
-				clearContent();
 			}	
 			// cpu did not select
 			else {	
@@ -718,7 +766,7 @@ public class MainMenu {
 			}
 			
 			assignParty(choice, turn);			
-			turn++; clearContent();
+			turn++;
 		}
 	}
 	/** END SELECT PARTY METHOD **/
@@ -780,13 +828,13 @@ public class MainMenu {
 		
 		// cpu selects party at random
 		if (cpuSelect == -1) {
-			int choice = 1 + (int)(Math.random() * ((counter - 1) + 1));
+			int choice = 1 + (int)(Math.random() * counter);
 			
 			// loop until random number is valid
 			while (true) {
 				
 				if (!isValidChoice(choice))					
-					choice = 1 + (int)(Math.random() * ((counter - 1) + 1));				
+					choice = 1 + (int)(Math.random() * counter);				
 				else
 					return choice;
 			}
@@ -909,8 +957,7 @@ public class MainMenu {
 				if (1 <= choice && choice < counter) {
 							
 					// swap choice with pokemon at first slot
-					Collections.swap(party, 0, choice - 1);						
-					clearContent();
+					Collections.swap(party, 0, choice - 1);
 					return party;
 				}
 				else {
@@ -950,7 +997,7 @@ public class MainMenu {
 	  **/
 	private static void startGame() {
 		
-		Battle game = new Battle(name1, name2, players, party1, party2);
+		Battle game = new Battle(name1, name2, players, party1, party2, battleShift);
 		game.start();
 		
 		// when battle is over, stopMusic will be called

@@ -176,12 +176,12 @@ public enum Type {
     	}       
     }
     
-    public String printType() {
+    public String getColor() {
     	
     	String color = "";
     	
     	switch (this.name) {
-	    	case ("Normal"): color = Style.ITAL; break;    	
+	    	case ("Normal"): color = ""; break;    	
 	    	case ("Fire"): color = Style.RED; break;
 	    	case ("Water"): color = Style.BLUE; break;
 	    	case ("Electric"): color = Style.YELLOW; break;
@@ -190,17 +190,23 @@ public enum Type {
 	    	case ("Fighting"): color = Style.BOLD; break;
 	    	case ("Poison"): color = Style.PURPLE; break;
 	    	case ("Ground"): color = Style.GRAY; break;
-	    	case ("FLYING"): color = Style.CYAN; break;
+	    	case ("Flying"): color = Style.CYAN; break;
 	    	case ("Psychic"): color = Style.PINK; break;
 	    	case ("Bug"): color = Style.YELLOW; break;
 	    	case ("Rock"): color = Style.YELLOW; break;
 	    	case ("Ghost"): color = Style.GRAY; break;
-	    	case ("Dragon"): color = Style.BLUE; break;
+	    	case ("Dragon"): color = Style.ITAL; break;
 	    	case ("Dark"): color = Style.BLACK; break;
 	    	case ("Steel"): color = Style.WHITE; break;
 	    	case ("Fairy"): color = Style.PINK; break;
 	    }
     	
+    	return color;
+    }
+    
+    public String printType() {
+    	
+    	String color = this.getColor();    	
     	return color + this.name + Style.END;
     }
     

@@ -323,6 +323,14 @@
  * 		-Added 50/50 chance of who goes first if speeds are equal
  * 		-Changed Moves getName() to return toUpperCase()
  * 		-Cleaned up coding
+ * 4/18/2024:
+ * 		-Added Battle Shift mode
+ * 		-Added detailed Pokemon stats menu
+ * 		-Added paralyze effect for Dragon Breath
+ * 		-Added color to Move types
+ * 		-Fixed bug in delay move logic
+ * 		-Fixed bug with move Poison Powder
+ * 		-Cleaned up coding
  */	
 
 package application;

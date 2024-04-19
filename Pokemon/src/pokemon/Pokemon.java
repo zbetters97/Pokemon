@@ -41,6 +41,8 @@ public enum Pokemon {
 	GENGAR ("Gengar", 94, Arrays.asList(Type.GHOST, Type.POISON), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3),
 	HORSEA ("Horsea", 116, Type.WATER, 5, 30, 40, 70, 70, 25, 60, 32, 59, 1),
 	SEADRA ("Seadra", 117, Type.WATER, 32, 55, 65, 95, 95, 45, 85, 45, 154, 2),
+	LAPRAS ("Laparas", 131, Arrays.asList(Type.WATER, Type.ICE), 40, 130, 85, 80, 85, 95, 60, -1, 187, 2),
+	SNORLAX ("Snorlax", 143, Type.NORMAL, 45, 160, 110, 65, 65, 110, 30, -1, 189, 2),
 	KINGDRA ("Kingdra", 230, Arrays.asList(Type.WATER, Type.DRAGON), 40, 75, 95, 95, 95, 95, 85, -1, 270, 3),
 	RAIKOU ("Raikou", 243, Type.ELECTRIC, 40, 90, 85, 75, 115, 100, 115, -1, 290, 3),
 	ENTEI ("Entei", 244, Type.FIRE, 40, 115, 115, 85, 90, 75, 100, -1, 290, 3),
@@ -86,7 +88,7 @@ public enum Pokemon {
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
 		
 		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
-		this.name = name; this.index = index; this.type = type; this.level = level;
+		this.name = name.toUpperCase(); this.index = index; this.type = type; this.level = level;
 		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -123,7 +125,7 @@ public enum Pokemon {
 	Pokemon(String name, int index, List<Type> types, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
 		
-		this.name = name; this.index = index; this.types = types; this.level = level;
+		this.name = name.toUpperCase(); this.index = index; this.types = types; this.level = level;
 		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -165,27 +167,27 @@ public enum Pokemon {
 		// map of pokemon and corresponding move set
 		Map<Pokemon, List<Move>> pokeMap = new HashMap<>();
 		// set default moves for each pokemon
-        pokeMap.put(BULBASAUR, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.VINEWHIP), new Move(Moves.GROWL)));
-        pokeMap.put(IVYSAUR, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.POISONPOWDER), new Move(Moves.VINEWHIP),
-        		new Move(Moves.RAZORLEAF)));
-		pokeMap.put(VENUSAUR, Arrays.asList(new Move(Moves.TAKEDOWN), new Move(Moves.DOUBLEEDGE), new Move(Moves.PETALBLIZZARD),
-				new Move(Moves.SOLARBEAM, 2)));
+        pokeMap.put(BULBASAUR, Arrays.asList(new Move(Moves.VINEWHIP), new Move(Moves.TACKLE), new Move(Moves.GROWL)));
+        pokeMap.put(IVYSAUR, Arrays.asList(new Move(Moves.RAZORLEAF), new Move(Moves.VINEWHIP), new Move(Moves.POISONPOWDER),
+        		new Move(Moves.TACKLE)));
+		pokeMap.put(VENUSAUR, Arrays.asList(new Move(Moves.PETALBLIZZARD), new Move(Moves.SOLARBEAM, 2), new Move(Moves.TAKEDOWN), 
+				new Move(Moves.DOUBLEEDGE)));
 		
-        pokeMap.put(CHARMANDER, Arrays.asList(new Move(Moves.SCRATCH), new Move(Moves.EMBER), new Move(Moves.GROWL)));
-		pokeMap.put(CHARMELEON, Arrays.asList(new Move(Moves.SLASH), new Move(Moves.QUICKATTACK), new Move(Moves.EMBER), 
-				new Move(Moves.FIREFANG)));
-        pokeMap.put(CHARIZARD, Arrays.asList(new Move(Moves.DRAGONBREATH), new Move(Moves.FLAMETHROWER), new Move(Moves.FLAREBLITZ),
+        pokeMap.put(CHARMANDER, Arrays.asList(new Move(Moves.EMBER), new Move(Moves.SCRATCH), new Move(Moves.GROWL)));
+		pokeMap.put(CHARMELEON, Arrays.asList(new Move(Moves.FIREFANG), new Move(Moves.EMBER), new Move(Moves.SLASH), 
+				new Move(Moves.GROWL)));
+        pokeMap.put(CHARIZARD, Arrays.asList(new Move(Moves.FLAMETHROWER), new Move(Moves.FLAREBLITZ),new Move(Moves.DRAGONBREATH),
         	new Move(Moves.FLY, 2)));
         
-		pokeMap.put(SQUIRTLE, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.WATERGUN), new Move(Moves.TAILWHIP)));
-        pokeMap.put(WARTORTLE, Arrays.asList(new Move(Moves.QUICKATTACK), new Move(Moves.WATERGUN), new Move(Moves.WATERPULSE)));
-        pokeMap.put(BLASTOISE, Arrays.asList(new Move(Moves.FLASHCANNON), new Move(Moves.AQUATAIL), 
-        		new Move(Moves.WATERPULSE), new Move(Moves.HYDROPUMP)));
+		pokeMap.put(SQUIRTLE, Arrays.asList(new Move(Moves.WATERGUN), new Move(Moves.TACKLE), new Move(Moves.TAILWHIP)));
+        pokeMap.put(WARTORTLE, Arrays.asList(new Move(Moves.WATERPULSE), new Move(Moves.WATERGUN), new Move(Moves.TAILWHIP)));
+        pokeMap.put(BLASTOISE, Arrays.asList(new Move(Moves.WATERPULSE), new Move(Moves.AQUATAIL), new Move(Moves.HYDROPUMP), 
+        		new Move(Moves.FLASHCANNON)));
         
-        pokeMap.put(PIKACHU, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.THUNDERWAVE), new Move(Moves.THUNDERSHOCK),
+        pokeMap.put(PIKACHU, Arrays.asList(new Move(Moves.THUNDERWAVE), new Move(Moves.THUNDERSHOCK),new Move(Moves.TACKLE),
         		new Move(Moves.PLAYNICE)));
-        pokeMap.put(RAICHU, Arrays.asList(new Move(Moves.QUICKATTACK), new Move(Moves.SLAM), new Move(Moves.THUNDERPUNCH),
-        		new Move(Moves.THUNDERBOLT)));    
+        pokeMap.put(RAICHU, Arrays.asList(new Move(Moves.THUNDERPUNCH), new Move(Moves.THUNDERBOLT), new Move(Moves.QUICKATTACK), 
+        		new Move(Moves.SLAM)));    
         
         pokeMap.put(ABRA, Arrays.asList(new Move(Moves.TELEPORT)));
         pokeMap.put(KADABRA, Arrays.asList(new Move(Moves.CONFUSION), new Move(Moves.PSYBEAM), new Move(Moves.KINESIS)));
@@ -193,38 +195,44 @@ public enum Pokemon {
         		new Move(Moves.CALMMIND)));     
         
         pokeMap.put(MACHOP, Arrays.asList(new Move(Moves.LOWKICK), new Move(Moves.LOWSWEEP), new Move(Moves.KNOCKOFF))); 
-        pokeMap.put(MACHOKE, Arrays.asList(new Move(Moves.LOWKICK), new Move(Moves.LOWSWEEP,20), new Move(Moves.VITALTHROW),
+        pokeMap.put(MACHOKE, Arrays.asList(new Move(Moves.LOWKICK), new Move(Moves.LOWSWEEP), new Move(Moves.VITALTHROW),
         		new Move(Moves.SEISMICTOSS))); 
-        pokeMap.put(MACHAMP, Arrays.asList(new Move(Moves.SCARYFACE), new Move(Moves.SEISMICTOSS), new Move(Moves.DYNAMICPUNCH),
-        		new Move(Moves.CROSSCHOP))); 
+        pokeMap.put(MACHAMP, Arrays.asList(new Move(Moves.SEISMICTOSS), new Move(Moves.DYNAMICPUNCH), new Move(Moves.CROSSCHOP), 
+        		new Move(Moves.SCARYFACE))); 
         
-        pokeMap.put(GEODUDE, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.ROCKTHROW), new Move(Moves.DEFENSECURL)));
-        pokeMap.put(GRAVELER, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.ROCKTHROW), new Move(Moves.ROLLOUT),
+        pokeMap.put(GEODUDE, Arrays.asList(new Move(Moves.ROCKTHROW), new Move(Moves.TACKLE), new Move(Moves.DEFENSECURL)));
+        pokeMap.put(GRAVELER, Arrays.asList(new Move(Moves.ROCKTHROW), new Move(Moves.ROLLOUT), new Move(Moves.TACKLE),
         		new Move(Moves.DEFENSECURL)));
-        pokeMap.put(GOLEM, Arrays.asList(new Move(Moves.HEAVYSLAM), new Move(Moves.EARTHQUAKE), new Move(Moves.DOUBLEEDGE),
-        		new Move(Moves.DIG, 2)));
+        pokeMap.put(GOLEM, Arrays.asList(new Move(Moves.EARTHQUAKE), new Move(Moves.DIG, 2), new Move(Moves.HEAVYSLAM), 
+        		new Move(Moves.DOUBLEEDGE)));
         
         pokeMap.put(GASTLY, Arrays.asList(new Move(Moves.LICK), new Move(Moves.PAYBACK), new Move(Moves.HYPNOSIS)));   
-        pokeMap.put(HAUNTER, Arrays.asList(new Move(Moves.PAYBACK), new Move(Moves.HEX), new Move(Moves.CONFUSERAY),
-        		new Move(Moves.DARKPULSE)));   
-        pokeMap.put(GENGAR, Arrays.asList(new Move(Moves.HEX), new Move(Moves.DARKPULSE), new Move(Moves.SHADOWBALL),
-        		new Move(Moves.SHADOWPUNCH))); 
+        pokeMap.put(HAUNTER, Arrays.asList(new Move(Moves.PAYBACK), new Move(Moves.HEX), new Move(Moves.DARKPULSE), 
+        		new Move(Moves.CONFUSERAY)));   
+        pokeMap.put(GENGAR, Arrays.asList(new Move(Moves.SHADOWBALL), new Move(Moves.SHADOWPUNCH),new Move(Moves.HEX), 
+        		new Move(Moves.DARKPULSE))); 
         
-        pokeMap.put(HORSEA, Arrays.asList(new Move(Moves.BUBBLE), new Move(Moves.WATERGUN), new Move(Moves.LEER))); 
+        pokeMap.put(HORSEA, Arrays.asList(new Move(Moves.WATERGUN), new Move(Moves.BUBBLE), new Move(Moves.LEER))); 
         pokeMap.put(SEADRA, Arrays.asList(new Move(Moves.WATERGUN), new Move(Moves.TWISTER), new Move(Moves.HYDROPUMP),
         		new Move(Moves.AGILITY))); 
         pokeMap.put(KINGDRA, Arrays.asList(new Move(Moves.SURF), new Move(Moves.HYDROPUMP), new Move(Moves.DRAGONPULSE),
         		new Move(Moves.AGILITY))); 
         
-        pokeMap.put(RAIKOU, Arrays.asList(new Move(Moves.CRUNCH), new Move(Moves.THUNDERFANG), new Move(Moves.THUNDER),
+        pokeMap.put(LAPRAS, Arrays.asList(new Move(Moves.ICEBEAM), new Move(Moves.HYDROPUMP), new Move(Moves.SHEERCOLD), 
+        		new Move(Moves.CONFUSERAY)));     
+        
+        pokeMap.put(SNORLAX, Arrays.asList(new Move(Moves.BODYSLAM), new Move(Moves.ROLLOUT), new Move(Moves.CRUNCH), 
+        		new Move(Moves.YAWN)));     
+        
+        pokeMap.put(RAIKOU, Arrays.asList(new Move(Moves.THUNDERFANG), new Move(Moves.THUNDER), new Move(Moves.CRUNCH),
         		new Move(Moves.CALMMIND)));
-        pokeMap.put(ENTEI, Arrays.asList(new Move(Moves.EXTRASENSORY), new Move(Moves.FIREFANG), new Move(Moves.FLAMETHROWER),
+        pokeMap.put(ENTEI, Arrays.asList(new Move(Moves.FIREFANG), new Move(Moves.FLAMETHROWER), new Move(Moves.EXTRASENSORY),
         		new Move(Moves.CALMMIND)));
-        pokeMap.put(SUICUNE, Arrays.asList(new Move(Moves.AURORABEAM), new Move(Moves.ICEFANG), new Move(Moves.HYDROPUMP),
+        pokeMap.put(SUICUNE, Arrays.asList(new Move(Moves.ICEFANG), new Move(Moves.AURORABEAM), new Move(Moves.HYDROPUMP),
         		new Move(Moves.CALMMIND)));
         
         pokeMap.put(TREECKO, Arrays.asList(new Move(Moves.ABSORB), new Move(Moves.QUICKATTACK), new Move(Moves.LEER))); 
-        pokeMap.put(GROVYLE, Arrays.asList(new Move(Moves.QUICKATTACK), new Move(Moves.LEAFBLADE), new Move(Moves.ABSORB),
+        pokeMap.put(GROVYLE, Arrays.asList(new Move(Moves.LEAFBLADE), new Move(Moves.ABSORB), new Move(Moves.QUICKATTACK),
         		new Move(Moves.AGILITY))); 
         pokeMap.put(SCEPTILE, Arrays.asList(new Move(Moves.LEAFBLADE), new Move(Moves.LEAFSTORM), new Move(Moves.GIGADRAIN),
         		new Move(Moves.AGILITY))); 
@@ -232,21 +240,21 @@ public enum Pokemon {
         pokeMap.put(TORCHIC, Arrays.asList(new Move(Moves.EMBER), new Move(Moves.SCRATCH), new Move(Moves.GROWL))); 
         pokeMap.put(COMBUSKEN, Arrays.asList(new Move(Moves.EMBER), new Move(Moves.DOUBLEKICK), new Move(Moves.SLASH), 
         		new Move(Moves.GROWL))); 
-        pokeMap.put(BLAZIKEN, Arrays.asList(new Move(Moves.FIREPUNCH), new Move(Moves.BLAZEKICK), new Move(Moves.SKYUPPERCUT),
-        		new Move(Moves.FLAREBLITZ))); 
+        pokeMap.put(BLAZIKEN, Arrays.asList(new Move(Moves.FIREPUNCH), new Move(Moves.BLAZEKICK), new Move(Moves.FLAREBLITZ),
+        		new Move(Moves.SKYUPPERCUT))); 
         
-        pokeMap.put(MUDKIP, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.WATERGUN), new Move(Moves.GROWL))); 
-        pokeMap.put(MARSHTOMP, Arrays.asList(new Move(Moves.TACKLE), new Move(Moves.WATERGUN), new Move(Moves.MUDSHOT),
-        		new Move(Moves.MUDSLAP))); 
+        pokeMap.put(MUDKIP, Arrays.asList(new Move(Moves.WATERGUN), new Move(Moves.TACKLE), new Move(Moves.GROWL))); 
+        pokeMap.put(MARSHTOMP, Arrays.asList(new Move(Moves.WATERGUN), new Move(Moves.MUDSHOT), new Move(Moves.MUDSLAP), 
+        		new Move(Moves.TACKLE))); 
         pokeMap.put(SWAMPERT, Arrays.asList(new Move(Moves.SURF), new Move(Moves.MUDDYWATER), new Move(Moves.MUDBOMB),
         		new Move(Moves.EARTHQUAKE)));
         
         pokeMap.put(KYOGRE, Arrays.asList(new Move(Moves.SURF), new Move(Moves.HYDROPUMP), new Move(Moves.THUNDER),
         		new Move(Moves.CALMMIND)));
-        pokeMap.put(GROUDON, Arrays.asList(new Move(Moves.EARTHQUAKE), new Move(Moves.SOLARBEAM, 2), new Move(Moves.FIREFANG),
-        		new Move(Moves.DRAGONCLAW)));
-        pokeMap.put(RAYQUAZA, Arrays.asList(new Move(Moves.DRAGONCLAW), new Move(Moves.FLY, 2), new Move(Moves.EXTREMESPEED),
-        		new Move(Moves.BLIZZARD))); 
+        pokeMap.put(GROUDON, Arrays.asList(new Move(Moves.EARTHQUAKE), new Move(Moves.FIREFANG), new Move(Moves.DRAGONCLAW), 
+        		new Move(Moves.SOLARBEAM, 2)));
+        pokeMap.put(RAYQUAZA, Arrays.asList(new Move(Moves.DRAGONCLAW), new Move(Moves.EXTREMESPEED), new Move(Moves.BLIZZARD), 
+        		new Move(Moves.FLY, 2))); 
         
         // if pokemon not already mapped to moveset
         if (pokemon.getMoveSet().isEmpty()) {
@@ -368,7 +376,7 @@ public enum Pokemon {
 	/** END SET NATURE METHOD **/
 	
 	/** GETTERS AND SETTERS **/
-	public String getName() { return name.toUpperCase(); }
+	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }	
 	public int getIndex() {	return index; }
 	public void setIndex(int index) { this.index = index; }

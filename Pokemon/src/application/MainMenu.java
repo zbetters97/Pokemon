@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -28,7 +29,7 @@ public class MainMenu {
 	
 	static int defaultLevel, players, partySize;
 	static int cpuSelect;
-	static boolean battleShift;
+	static boolean battleShift, trainerRed;
 	static List<Pokemon> party1, party2;
 
 	/** LOAD METHOD
@@ -60,12 +61,23 @@ public class MainMenu {
 		
 		// debug mode
 		if (players == 5) {
-			players = 1;
+			players = 2;
 			name1 = "P1";
 			name2 = "P2";
+			battleShift = true;
 			defaultLevel = 50;
-			partySize = 3;
+			partySize = 1;
 			SoundCard.setActive(false);
+		}
+		// secret Trainer Red mode
+		else if (players == 9) {
+			trainerRed = true;
+			players = 1;
+			name1 = inputName(1);
+			name2 = "Red";
+			defaultLevel = 85;
+			partySize = 3;
+			file = "11battle-hs-red";
 		}
 		else {	
 			name1 = inputName(1);
@@ -212,6 +224,9 @@ public class MainMenu {
 					case 5:
 						clearContent();
 						return 5;
+					case 9:
+						clearContent();
+						return 9;
 					default: 
 						Sleeper.print("Input must be a menu option!"); 
 						System.out.print(">");
@@ -708,6 +723,16 @@ public class MainMenu {
 	  **/
 	private static void selectParty() {
 
+		if (trainerRed) {
+			Pokemon p1 = Pokemon.getPokemon(2);
+			Pokemon p2 = Pokemon.getPokemon(5);
+			Pokemon p3 = Pokemon.getPokemon(8);
+			Pokemon p4 = Pokemon.getPokemon(9);
+			Pokemon p5 = Pokemon.getPokemon(25);
+			Pokemon p6 = Pokemon.getPokemon(26);
+			party2.addAll(Arrays.asList(p1, p2, p3, p4, p5, p6));
+		}
+		
 		int turn = 1, choice = 0;	
 		
 		while (turn <= (partySize * 2)) {
@@ -716,8 +741,12 @@ public class MainMenu {
 			
 			int counter = displayParty();
 			
+			if (trainerRed) {
+				System.out.println("\n\n(PR. OAK) " + name1 + ", Please choose your POKEMON:");
+				System.out.print(">");
+			}			
 			// if cpu is not selecting
-			if (cpuSelect == 0 || players == 2) {
+			else if (cpuSelect == 0 || players == 2) {
 				System.out.println("\n\n(PR. OAK) " + ((turn % 2 != 0) ? name1 : name2) + 
 						", Please choose your POKEMON:");
 				System.out.print(">");
@@ -727,6 +756,7 @@ public class MainMenu {
 				System.out.println("\n\n(PR. OAK) " + name1 + ", Please choose your POKEMON:");
 				System.out.print(">");
 			}
+			
 			// if cpu is selecting
 			if (cpuSelect != 0 && turn % 2 == 0 && players == 1) {
 				System.out.println("\n\n(PR. OAK) " + name2 + ", Please choose your POKEMON:");
@@ -882,7 +912,9 @@ public class MainMenu {
 		// play pokemon cry
 		SoundCard.play("pokedex" + File.separator + selectedPokemon.getName());
 		
-		if (turn % 2 == 0) 
+		if (trainerRed)
+			party1.add(selectedPokemon);
+		else if (turn % 2 == 0) 
 			party2.add(selectedPokemon);
 		else 
 			party1.add(selectedPokemon);
@@ -931,7 +963,7 @@ public class MainMenu {
 
 		// assign temp party to player 1 or player 2 party
 		List<Pokemon> party = (player == 1) ? party1 : party2;
-		
+				
 		printOak();
 		printParty();		
 		System.out.println("\n\n(PR. OAK) " + ((player == 1) ? name1 : name2) + 

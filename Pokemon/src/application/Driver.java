@@ -331,6 +331,15 @@
  * 		-Fixed bug in delay move logic
  * 		-Fixed bug with move Poison Powder
  * 		-Cleaned up coding
+ * 4/19/2024:
+ * 		-Added hidden Trainer Red mode
+ * 		-Added the following Pokemon: Snorlax and Lapras
+ * 		-Added the following moves: Body Slam, Yawn, Ice Beam, Sheer Cold
+ * 		-Removed CPU battle shift logic
+ * 		-Reorganized Pokemon mapped moves
+ * 		-Changed Sleep wait time to 1-5 turns
+ * 		-Fixed bug in CPU swap fighter logic
+ * 		-Cleaned up battle shift coding
  */	
 
 package application;

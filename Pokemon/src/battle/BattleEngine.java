@@ -388,9 +388,9 @@ public class BattleEngine {
 		
 		String status = pokemon[pkm].getStatus().getAbreviation();		
 		
-		// if first move under condition, set number of moves until free
+		// if first move under condition, set number of moves until free (1-5)
 		if (pokemon[pkm].getStatusLimit() == 0) 
-			pokemon[pkm].setStatusLimit(2 + (int)(Math.random() * 5));	
+			pokemon[pkm].setStatusLimit((int)(Math.random() * 5));	
 		
 		// if number of moves under condition hit limit, remove condition
 		if (pokemon[pkm].getStatusCounter() >= pokemon[pkm].getStatusLimit()) {
@@ -628,6 +628,7 @@ public class BattleEngine {
 					// if damage is fatal
 					if (damage >= pokemon[trg].getHP())	{
 						dealDamage(trg, damage);
+						isRecoil(atk, trg, move, damage);
 						defeated(atk, trg, damage);
 					}						
 					// fighter survives hit

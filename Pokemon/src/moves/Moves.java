@@ -15,6 +15,7 @@ public enum Moves {
 	AURORABEAM ("Aurora Beam", "Special", Type.ICE, 20, 65, 100, "The foe is hit with a rainbow-colored beam."),
 	BLAZEKICK ("Blaze Kick", "Physical", Type.FIRE, Status.BURN, 0.10, 10, 85, 90, 1, "The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn."),
 	BLIZZARD ("Blizzard", "Special", Type.ICE, Status.FREEZE, 0.10, 5, 120, 70, "A howling blizzard is summoned to strike the foe. It may also freeze the target solid."),
+	BODYSLAM ("Body Slam", "Physical", Type.NORMAL, Status.PARALYZE, 0.10, 15, 85, 100, "The user drops onto the foe with its full body weight. It may leave the foe paralyzed."),
 	BUBBLE ("Bubble", "Special", Type.WATER, 30, 20, 100, "A spray of countless bubbles is jetted at the foe."),
 	CALMMIND ("Calm Mind", "Attribute", Type.PSYCHIC, true, 20, -1, 1, Arrays.asList("sp. attack", "sp. defense"), "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats."),
 	CONFUSERAY ("Confuse Ray", "Status", Type.GHOST, Status.CONFUSE, 10, 100, "The foe is exposed to a sinister ray that triggers confusion."),
@@ -23,7 +24,7 @@ public enum Moves {
 	CRUNCH ("Crunch", "Physical", Type.DARK, 15, 80, 100, "The user crunches up the foe with sharp fangs."),
 	DARKPULSE ("Dark Pulse", "Special", Type.DARK, 15, 80, 100, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch."),
 	DEFENSECURL ("Defense Curl", "Attribute", Type.NORMAL, true, 40, -1, 1, Arrays.asList("defense"), "The user curls up to conceal weak spots and raise its Defense stat."),
-	DIG ("Dig", "Physical", Type.GROUND, 10, 80, 100, false, "dug into the GROUND!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
+	DIG ("Dig", "Physical", Type.GROUND, 10, 80, 100, false, "dug into the ground!", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."),
 	DOUBLEEDGE ("Double Edge", "Physical", Type.STEEL, 10, 80, 100, 0.25, "A reckless, life- risking tackle. It also damages the user by a fairly large amount, however."),
 	DOUBLEKICK ("Double Kick", "Physical", Type.FIGHTING, 35, 60, 100, "The foe is quickly kicked twice in succession using both feet."),
 	DRAGONBREATH ("Dragon Breath", "Special", Type.DRAGON, Status.PARALYZE, 0.10, 20, 60, 100, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target."),
@@ -46,6 +47,7 @@ public enum Moves {
 	HEX ("Hex", "Special", Type.GHOST, 10, 95, 100, "This relentless attack does massive damage to a target affected by status conditions."),
 	HYDROPUMP ("Hydro Pump", "Special", Type.WATER, 5, 165, 80, "The foe is blasted by a huge volume of water launched under great pressure."),
 	HYPNOSIS ("Hypnosis", "Status", Type.PSYCHIC, Status.SLEEP, 20, 60, "The user employs hypnotic suggestion to make the target fall into a deep sleep."),
+	ICEBEAM ("Ice Beam", "Special", Type.ICE, Status.FREEZE, 0.10, 10, 95, 100, "The foe is struck with an icy-cold beam of energy. It may also freeze the target solid."),
 	ICEFANG ("Ice Fang", "Physical", Type.ICE, Status.FREEZE, 0.10, 15, 65, 95, "The user bites with cold-infused fangs. It may also make the foe freeze."),
 	KINESIS ("Kinesis", "Attribute", Type.PSYCHIC, false, 15, 80, -1, Arrays.asList("accuracy"), "The user distracts the foe by bending a spoon. It may lower the target's accuracy."),
 	KNOCKOFF ("Knock Off", "Physical", Type.DARK, 20, 65, 100, "The user slaps down the target's held item, preventing that item from being used in the battle."),
@@ -76,10 +78,11 @@ public enum Moves {
 	SEISMICTOSS ("Seismic Toss", "Physical", Type.FIGHTING, 20, -1, 100, "The foe is thrown using the power of gravity. It inflicts damage equal to the user's level."),
 	SHADOWBALL ("Shadow Ball", "Special", Type.GHOST, 15, 120, 100, "The user hurls a shadowy blob at the foe."),
 	SHADOWPUNCH ("Shadow Punch", "Physical", Type.GHOST, 20, 90, -1, "The user throws a punch at the foe from the shadows. The punch lands without fail."),
+	SHEERCOLD ("Sheer Cold", "Special", Type.ICE, 5, 1000, 30, "The foe is attacked with a blast of absolute-zero cold. The foe instantly faints if it hits."),
 	SKYUPPERCUT ("Sky Uppercut", "Physical", Type.FIGHTING, 15, 120, 100, "The user attacks the foe with an uppercut thrown skyward with force."),
 	SLAM ("Slam", "Physical", Type.NORMAL, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
 	SLASH ("Slash", "Physical", Type.NORMAL, 20, 70, 100, 1, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
-	SOLARBEAM ("Solar Beam", "Special", Type.GRASS, 10, 180, 100, true, "is charging Solar Beam...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
+	SOLARBEAM ("Solar Beam", "Special", Type.GRASS, 10, 180, 100, true, "is charging a light beam...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
 	SURF ("Surf", "Special", Type.WATER, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing water."),
 	TACKLE ("Tackle", "Physical", Type.NORMAL, 35, 40, 95, "A physical attack in which the user charges and slams into the foe with its whole body."),
 	TAILWHIP ("Tail Whip", "Attribute", Type.NORMAL, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),
@@ -96,7 +99,8 @@ public enum Moves {
 	VITALTHROW ("Vital Throw", "Physical", Type.FIGHTING, 10, 105, -1, "The user allows the foe to attack first. In return, this throw move is guaranteed not to miss."),
 	WATERGUN ("Water Gun", "Special", Type.WATER, 25, 60, 100, "The foe is blasted with a forceful shot of water."),
 	WATERPULSE ("Water Pulse", "Special", Type.WATER, 20, 90, 100, "The user attacks the foe with a pulsing blast of WATER. It may also confuse the foe."),
-	XSCISSOR ("X-scissor", "Physical", Type.BUG, 15, 80, 100, "The user slashes at the foe by crossing its scythes or claws as if they were a pair of scissors.");
+	XSCISSOR ("X-scissor", "Physical", Type.BUG, 15, 80, 100, "The user slashes at the foe by crossing its scythes or claws as if they were a pair of scissors."),
+	YAWN ("Yawn", "Status", Type.NORMAL, Status.SLEEP, 10, 100, "The user lets loose a huge yawn that lulls the foe into falling asleep.");
 	/** END INITIALIZE ENUMS **/
 	
 	/** INITIALIZE VALUES **/
@@ -111,7 +115,7 @@ public enum Moves {
 	
 	/** CONSTRUCTORS **/
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;
@@ -120,7 +124,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, double selfInflict, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;
@@ -130,7 +134,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, int crit, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;
@@ -140,7 +144,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, boolean goFirst, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;		
@@ -150,7 +154,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, int pp, int power, int accuracy, boolean canHit, String delay, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.pp = pp;
@@ -161,7 +165,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, Status effect, int pp, int accuracy, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.effect = effect;
@@ -170,7 +174,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, Status effect, Double probability, int pp, int power, int accuracy, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.effect = effect;
@@ -181,7 +185,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, Status effect, Double probability, int pp, int power, int accuracy, int crit, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.effect = effect;
@@ -193,7 +197,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, boolean toSelf, int pp, int accuracy, int level, List<String> stats, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();;
 		this.mtype = mtype;
 		this.type = type;
 		this.toSelf = toSelf;
@@ -204,7 +208,7 @@ public enum Moves {
 		this.info = info;
 	}	
 	Moves (String name, String mtype, Type type, boolean toSelf, Double probability, int pp, int power, int accuracy, int level, List<String> stats, String info) {
-		this.name = name;
+		this.name = name.toUpperCase();
 		this.mtype = mtype;
 		this.type = type;
 		this.toSelf = toSelf;
@@ -219,7 +223,7 @@ public enum Moves {
 	/** END CONSTRUCTORS **/
 	
 	/** GETTERS **/
-	public String getName() { return name.toUpperCase(); }
+	public String getName() { return name; }
 	public String getMType() { return mtype; }	
 	public Type getType() { return type; }
 	public int getpp() { return pp; }

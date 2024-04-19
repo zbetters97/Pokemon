@@ -83,6 +83,7 @@ public enum Moves {
 	SLAM ("Slam", "Physical", Type.NORMAL, 20, 80, 75, "The foe is slammed with a long tail, vines, etc., to inflict damage."),
 	SLASH ("Slash", "Physical", Type.NORMAL, 20, 70, 100, 1, "The foe is attacked with a slash of claws, etc. It has a high critical-hit ratio."),
 	SOLARBEAM ("Solar Beam", "Special", Type.GRASS, 10, 180, 100, true, "is charging a light beam...", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."),
+	STRUGGLE ("Struggle", "Physical", Type.NORMAL, 10, 50, 100, 0.25, "Struggles"),
 	SURF ("Surf", "Special", Type.WATER, 15, 95, 100, "It swamps the entire battlefield with a giant wave. It can also be used for crossing water."),
 	TACKLE ("Tackle", "Physical", Type.NORMAL, 35, 40, 95, "A physical attack in which the user charges and slams into the foe with its whole body."),
 	TAILWHIP ("Tail Whip", "Attribute", Type.NORMAL, false, 30, 100, -1, Arrays.asList("defense"), "The user wags its tail cutely, making the foe less wary. The target's Defense stat is lowered."),

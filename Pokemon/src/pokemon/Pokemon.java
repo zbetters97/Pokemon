@@ -41,7 +41,7 @@ public enum Pokemon {
 	GENGAR ("Gengar", 94, Arrays.asList(Type.GHOST, Type.POISON), 40, 60, 65, 60, 130, 75, 110, -1, 250, 3),
 	HORSEA ("Horsea", 116, Type.WATER, 5, 30, 40, 70, 70, 25, 60, 32, 59, 1),
 	SEADRA ("Seadra", 117, Type.WATER, 32, 55, 65, 95, 95, 45, 85, 45, 154, 2),
-	LAPRAS ("Laparas", 131, Arrays.asList(Type.WATER, Type.ICE), 40, 130, 85, 80, 85, 95, 60, -1, 187, 2),
+	LAPRAS ("Lapras", 131, Arrays.asList(Type.WATER, Type.ICE), 40, 130, 85, 80, 85, 95, 60, -1, 187, 2),
 	SNORLAX ("Snorlax", 143, Type.NORMAL, 45, 160, 110, 65, 65, 110, 30, -1, 189, 2),
 	KINGDRA ("Kingdra", 230, Arrays.asList(Type.WATER, Type.DRAGON), 40, 75, 95, 95, 95, 95, 85, -1, 270, 3),
 	RAIKOU ("Raikou", 243, Type.ELECTRIC, 40, 90, 85, 75, 115, 100, 115, -1, 290, 3),
@@ -166,6 +166,7 @@ public enum Pokemon {
 		
 		// map of pokemon and corresponding move set
 		Map<Pokemon, List<Move>> pokeMap = new HashMap<>();
+		
 		// set default moves for each pokemon
         pokeMap.put(BULBASAUR, Arrays.asList(new Move(Moves.VINEWHIP), new Move(Moves.TACKLE), new Move(Moves.GROWL)));
         pokeMap.put(IVYSAUR, Arrays.asList(new Move(Moves.RAZORLEAF), new Move(Moves.VINEWHIP), new Move(Moves.POISONPOWDER),

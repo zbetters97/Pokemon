@@ -340,6 +340,8 @@
  * 		-Changed Sleep wait time to 1-5 turns
  * 		-Fixed bug in CPU swap fighter logic
  * 		-Cleaned up battle shift coding
+ * 4/20/2024:
+ * 		-Added Struggle
  */	
 
 package application;

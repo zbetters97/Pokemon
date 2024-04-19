@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import config.*;
 import moves.Move;
+import moves.Moves;
 import pokemon.Pokemon;
 import properties.Type;
 
@@ -149,8 +150,11 @@ public class Battle {
 	  **/
 	private Move selectMove(Pokemon fighter, int player) {
 		
-		int counter = displayMove(fighter);
+		// no pp left, move is Struggle
+		if (isStruggle(fighter)) 
+			return new Move(Moves.STRUGGLE);
 		
+		int counter = displayMove(fighter);		
 		while (true) {				
 			
 			try { 
@@ -237,6 +241,24 @@ public class Battle {
 		}
 	}
 	/** END SELECT MOVE METHOD **/	
+	
+	/** IS STRUGGLE METHOD
+	  * Check if no PP left
+	  * @param Pokemon current fighter
+	  * @return true if no PP left, false if PP exist
+	  **/
+	private boolean isStruggle(Pokemon fighter) {
+		
+		int struggle = 0;
+		for (Move m : fighter.getMoveSet()) {
+			if (m.getpp() > 0) {
+				struggle++;
+				break;
+			}
+		}
+		return struggle == 0;
+	}
+	/** END IS STRUGGLE METHOD **/
 	
 	/** DISPLAY MOVES METHOD
 	  * Print out in-battle pokemon's moveset and return index of counter

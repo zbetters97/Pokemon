@@ -20,6 +20,7 @@ public class BattleEngine {
 	
 	private Pokemon winningPokemon;
 	private Pokemon[] pokemon;
+	private String name2;
 	private int[] cpuItems;
 	public boolean swap = false;
 	
@@ -31,15 +32,16 @@ public class BattleEngine {
 	/** CONSTRUCTOR 
 	 * @param trainer 1 pokemon, trainer 2 pokemon
 	 **/
-	public BattleEngine(Pokemon pokemon1, Pokemon pokemon2) {
+	public BattleEngine(Pokemon pokemon1, Pokemon pokemon2, String name2) {
 		
 		// array to hold fighting pokemon
 		pokemon = new Pokemon[12];
 		
 		pokemon[0] = pokemon1;
 		pokemon[1] = pokemon2;
+		this.name2 = name2;
 		
-		this.cpuItems = new int[]{3, 2, 1};
+		this.cpuItems = new int[]{3, 2, 1, 1};
 	}
 	/** END CONSTRUCTOR **/
 
@@ -90,6 +92,9 @@ public class BattleEngine {
 				
 		// if cpu used potion, no move is selected
 		if (usePotion())
+			return null;
+		
+		if (useHeal()) 
 			return null;
 		
 		// holds Map of Move and Damage Points
@@ -167,6 +172,7 @@ public class BattleEngine {
 		
 		return false;
 	}
+	/** END USE POTION METHOD **/
 	
 	/** HEAL CPU METHOD 
 	 * Restore health of CPU Pokemon
@@ -185,12 +191,65 @@ public class BattleEngine {
 				hp = pokemon[1].getBHP();	
 			
 			pokemon[1].setHP(hp);
+			
+			clearContent();
+			SoundCard.play("battle" + File.separator + "heal");
+			
+			if (newHP == 60) {				
+				Sleeper.print(name2 + "'s SUPER POTION restored " + 
+					pokemon[1].getName() + "'s health!", 1700);
+			}
+			else if (newHP == 120) {				
+				Sleeper.print(name2 + "'s HYPER POTION restored " + 
+					pokemon[1].getName() + "'s health!", 1700);
+			}
+			else if (newHP == 999) {				
+				Sleeper.print(name2 + "'s FULL RESTORE restored " + 
+					pokemon[1].getName() + "'s health!", 1700);
+			}
+			
 			return true;
 		}
 		else 
 			return false;
 	}
 	/** END HEAL CPU METHOD **/
+	
+	/** USE HEAL METHOD 
+	 * Check if CPU should use healing item, apply if so
+	 * @return true if heal is used, false if not
+	 **/
+	private boolean useHeal() {
+		
+		// if cpu has status
+		if (pokemon[1].getStatus() != null && cpuItems[3] != 0) {
+			
+			// if cpu has healing item
+			if (cpuItems[3] != 0) {
+				
+				cpuItems[3] -= 1;
+				
+				String status = pokemon[1].getStatus().getAbreviation();
+				
+				// only apply item for asleep or frozen
+				if (status.equals("SLP") || status.equals("FRZ")) {
+					
+					clearContent();
+					Sleeper.print(name2 + " used a FULL HEAL!", 1700);
+					Sleeper.print(pokemon[1].getName() + pokemon[1].getStatus().printRecover(), 1700);
+					
+					pokemon[1].setStatusCounter(0); pokemon[1].setStatusLimit(0);
+					pokemon[1].setStatus(null);
+					
+					// healing item used
+					return true;
+				}
+			}
+		}		
+		
+		return false;
+	}
+	/** END USE POTION METHOD **/
 	
 	/** GET DELAYED MOVE METHOD
 	 * Check if a move is waiting and return which player 
@@ -344,7 +403,7 @@ public class BattleEngine {
 					val = 1 + (int)(Math.random() * 4);
 					if (val == 1) {						
 						SoundCard.playStatus(pokemon[atk].getStatus().getName());
-						Sleeper.print(pokemon[atk].getName() + " is paralyzed and unable to move!", 1700);
+						Sleeper.print(pokemon[atk].getName() + pokemon[atk].getStatus().printStatus(), 1700);
 						clearContent();
 						
 						return false;
@@ -354,16 +413,16 @@ public class BattleEngine {
 					
 				case "FRZ":
 					
-					// 1/5 chance attacker can thaw from ice
-					val = 1 + (int)(Math.random() * 5);
+					// 1/4 chance attacker can thaw from ice
+					val = 1 + (int)(Math.random() * 4);
 					if (val == 1) {
-						Sleeper.print(pokemon[atk].getName() + " thawed from the ice!", 1700);
+						Sleeper.print(pokemon[atk].getName() + pokemon[atk].getStatus().printRecover(), 1700);
 						pokemon[atk].setStatus(null);
 						return true;
 					}
 					else {	
 						SoundCard.playStatus(pokemon[atk].getStatus().getName());
-						Sleeper.print(pokemon[atk].getName() + " is frozen solid and unable to move!", 1700);
+						Sleeper.print(pokemon[atk].getName() + pokemon[atk].getStatus().printStatus(), 1700);
 						clearContent();
 						
 						return false;						
@@ -394,15 +453,13 @@ public class BattleEngine {
 		
 		// if number of moves under condition hit limit, remove condition
 		if (pokemon[pkm].getStatusCounter() >= pokemon[pkm].getStatusLimit()) {
-			
+									
+			if (status.equals("SLP") || status.equals("CNF")) 
+				Sleeper.print(pokemon[pkm].getName() + pokemon[pkm].getStatus().printRecover(), 1700);	
+		
 			pokemon[pkm].setStatusCounter(0); pokemon[pkm].setStatusLimit(0);
 			pokemon[pkm].setStatus(null);
 			
-			if (status.equals("SLP")) 
-				Sleeper.print(pokemon[pkm].getName() + " woke up!", 1700);				
-			else if (status.equals("CNF")) 
-				Sleeper.print(pokemon[pkm].getName() + " snapped out of confusion!", 1700);						
-		
 			return true;
 		}
 		// pokemon still under status condition
@@ -411,16 +468,18 @@ public class BattleEngine {
 			// increase counter
 			pokemon[pkm].setStatusCounter(pokemon[pkm].getStatusCounter() + 1);
 			
-			if (status.equals("SLP")) {				
+			if (status.equals("SLP")) {	
+				
 				SoundCard.playStatus(pokemon[pkm].getStatus().getName());
-				Sleeper.print(pokemon[pkm].getName() + " is fast asleep!", 1700);
+				Sleeper.print(pokemon[pkm].getName() + pokemon[pkm].getStatus().printStatus(), 1700);
 				clearContent();	
 				
 				return false;
 			}
-			else if (status.equals("CNF")) {				
+			else if (status.equals("CNF")) {		
+				
 				SoundCard.playStatus(pokemon[pkm].getStatus().getName());
-				Sleeper.print(pokemon[pkm].getName() + " is confused!", 1700);
+				Sleeper.print(pokemon[pkm].getName() + pokemon[pkm].getStatus().printStatus(), 1700);
 				clearContent();
 				
 				// if pokemon hurt itself in confusion
@@ -458,8 +517,7 @@ public class BattleEngine {
 					p.setHP(newHP);			
 					
 					SoundCard.playStatus(p.getStatus().getAbreviation());
-					Sleeper.print(p.getName() + " is hurt from the " + 
-						p.getStatus().getName().toLowerCase() + "!", 1700);
+					Sleeper.print(p.getName() + p.getStatus().printStatus(), 1700);
 					
 					clearContent();	
 										
@@ -509,7 +567,7 @@ public class BattleEngine {
 				power * (A / D)) / 50)) + 2));
 		
 			SoundCard.playHit(1.0);	
-			Sleeper.print(pokemon[atk].getName() + " hurt itself in confusion!", 1700);
+			Sleeper.print(pokemon[atk].getName() + pokemon[atk].getStatus().printStatus(), 1700);
 			clearContent();
 			
 			int hp = pokemon[atk].getHP() - damage;

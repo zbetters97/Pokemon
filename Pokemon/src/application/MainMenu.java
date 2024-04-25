@@ -52,8 +52,8 @@ public class MainMenu {
 		grabMusic();
 		
 		//menuMusic = new SoundCard("menu" + File.separator + "intro-rb");
-		//menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
-		menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
+		menuMusic = new SoundCard("menu" + File.separator + "intro-rs");
+		//menuMusic = new SoundCard("menu" + File.separator + "intro-pc");
 		menuMusic.playMusic();	
 		
 		// players can only be set to 1 or 2
@@ -61,7 +61,7 @@ public class MainMenu {
 		
 		// debug mode
 		if (players == 5) {
-			players = 2;
+			players = 1;
 			name1 = "P1";
 			name2 = "P2";
 			battleShift = true;

@@ -45,8 +45,8 @@ public class Battle {
 		this.numPlayers = numPlayers;
 		
 		// arrays to track item counts
-		this.playerOneItems = new int[]{3, 2, 1};
-		this.playerTwoItems = new int[]{3, 2, 1};
+		this.playerOneItems = new int[]{3, 2, 1, 1};
+		this.playerTwoItems = new int[]{3, 2, 1, 1};
 		
 		this.party1 = party1;
 		this.party2 = party2;
@@ -63,7 +63,7 @@ public class Battle {
 		pokemon1 = party1.get(0); 
 		pokemon2 = party2.get(0);
 						
-		battle = new BattleEngine(pokemon1, pokemon2);
+		battle = new BattleEngine(pokemon1, pokemon2, name2);
 				
 		turn();
 	}
@@ -86,15 +86,7 @@ public class Battle {
 				
 				if (numPlayers == 1) {			
 					move1 = selectMove(pokemon1, 1);					
-					move2 = battle.cpuSelectMove();	
-					
-					// if cpu used hyper potion
-					if (move2 == null) {
-						clearContent();
-						SoundCard.play("battle" + File.separator + "heal");
-						Sleeper.print(name2+ "'s POTION restored " + 
-							pokemon2.getName() + "'s health!", 1700);
-					}
+					move2 = battle.cpuSelectMove();
 				}
 				else {
 					move1 = selectMove(pokemon1, 1);				
@@ -106,17 +98,8 @@ public class Battle {
 				// if player 1 is waiting for move, skip and get cpu or player 2 move
 				if (delayedMove == 1) {
 					
-					if (numPlayers == 1) {
-						
+					if (numPlayers == 1)
 						move2 = battle.cpuSelectMove();	
-						
-						// if cpu used hyper potion
-						if (move2 == null) {							
-							clearContent();
-							Sleeper.print(name2+ "'s POTION restored " + 
-								pokemon2.getName() + "'s health!", 1700);
-						}
-					}
 					else
 						move2 = selectMove(pokemon2, 2);
 				}				
@@ -524,7 +507,8 @@ public class Battle {
 		System.out.println("SELECT AN ITEM TO USE ON " + fighter.getName() + ":\n");
 		System.out.println("[1] POTION (x" + iCount[0] + ")\n"
 				+ "[2] HYPER POTION (x" + iCount[1] + ")\n"
-				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n\n"
+				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n"
+				+ "[4] FULL HEAL (x" + iCount[3] + ")\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
 		
@@ -581,6 +565,29 @@ public class Battle {
 							System.out.print(">");
 						}
 						break;
+					case 4: 						
+						if (iCount[3] != 0) {
+							
+							if (fighter.getStatus() == null) {
+								Sleeper.print(fighter.getName() + " is not under a status condition!"); 
+								System.out.print(">");
+							}
+							else {
+							
+								iCount[3] -= 1;
+								
+								clearContent();
+								statusHeal(player);		
+								clearContent();
+								
+								return true;
+							}
+						}
+						else {
+							Sleeper.print("THERE ARE NO FULL HEALS LEFT!"); 
+							System.out.print(">");
+						}
+						break;
 					case 0: 
 						return false;
 					default:
@@ -595,7 +602,7 @@ public class Battle {
 			}
 			catch (Exception e) {
 				SoundCard.play(select);	
-				Sleeper.print("This is not a valid selection!"); 
+				Sleeper.print("This is not a valid selection!" + e); 
 				System.out.print(">");
 				input.next();
 			}
@@ -638,6 +645,20 @@ public class Battle {
 		}
 	}
 	/** END HEAL FIGHTER METHOD **/
+	
+	/** STATUS HEAL METHOD
+	  * Cures selected Pokemon of any status condition
+	  * @param int player
+	  **/
+	private void statusHeal(int player) {
+		
+		Pokemon fighter = (player == 1) ? pokemon1 : pokemon2;
+				
+		Sleeper.print(fighter.getName() + fighter.getStatus().printRecover(), 1700);
+		fighter.setStatusCounter(0); fighter.setStatusLimit(0);
+		fighter.setStatus(null);
+	}
+	/** END STATUS HEAL METHOD **/
 	
 	/** CHOOSE NEXT FIGHTER METHOD
 	  * Announce winner if party empty, get next fighter if not

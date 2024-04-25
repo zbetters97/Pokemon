@@ -42,5 +42,33 @@ public enum Status {
 		return color + this.abr + Style.END; 
 	}
 	/** END GETTERS **/
+	
+	public String printStatus() {
+		String status = "";
+		
+		switch (this.abr) {  	
+			case ("PRZ"): status = " is paralyzed and unable to move!"; break;
+	    	case ("PSN"): status = " is hurt from the poison!"; break;
+	    	case ("CNF"): status = " hurt itself in confusion!"; break;
+	    	case ("BRN"): status = " is hurt from the burn!"; break;
+	    	case ("FRZ"): status = " is frozen solid!"; break;
+	    	case ("SLP"): status = " is fast asleep!"; break;
+		}			
+		return status; 
+	}
+	
+	public String printRecover() {
+		String recover = "";
+		
+		switch (this.abr) {  	
+			case ("PRZ"): recover = " healed from paralysis!"; break;
+			case ("PSN"): recover = " healed from the poison!"; break;
+	    	case ("CNF"): recover = " snapped out of confusion!"; break;
+	    	case ("BRN"): recover = " healed from the burn!"; break;
+	    	case ("FRZ"): recover = " thawed from the ice!"; break;
+	    	case ("SLP"): recover = " woke up!"; break;
+		}		
+		return recover; 
+	}
 }
 /*** END STATUS CLASS ***/

@@ -342,6 +342,10 @@
  * 		-Cleaned up battle shift coding
  * 4/20/2024:
  * 		-Added Struggle
+ * 4/25/2024:
+ * 		-Added Full Heal item option for player and CPU
+ * 		-Fixed bug in status in-battle logic
+ * 		-Cleaned up coding in Status class
  */	
 
 package application;

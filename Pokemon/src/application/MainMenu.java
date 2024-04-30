@@ -42,7 +42,7 @@ public class MainMenu {
 		
 		// setting defaults
 		defaultLevel = -1;
-		file = "03battle-rs-gym";
+		file = "02battle-rs-trainer";
 		cpuSelect = 0;
 		battleShift = true;
 		

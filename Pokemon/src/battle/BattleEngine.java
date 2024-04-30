@@ -196,7 +196,7 @@ public class BattleEngine {
 			SoundCard.play("battle" + File.separator + "heal");
 			
 			if (newHP == 60) {				
-				Sleeper.print(name2 + "'s SUPER POTION restored " + 
+				Sleeper.print(name2 + "'s POTION restored " + 
 					pokemon[1].getName() + "'s health!", 1700);
 			}
 			else if (newHP == 120) {				
@@ -397,7 +397,7 @@ public class BattleEngine {
 			// check which status
 			switch (pokemon[atk].getStatus().getAbreviation()) {
 			
-				case "PRZ":		
+				case "PAR":		
 					
 					// 1/4 chance can't move due to PAR
 					val = 1 + (int)(Math.random() * 4);
@@ -802,7 +802,7 @@ public class BattleEngine {
 		if (move.getCrit() == 1) 
 			chance = 4;
 		
-		Random r = new Random();
+		Random r = new Random();		
 		return (r.nextFloat() <= ((float) chance / 25)) ? 1.5 : 1;
 	}
 	/** END IS CRITICAL METHOD **/

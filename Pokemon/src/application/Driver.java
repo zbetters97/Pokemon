@@ -346,6 +346,11 @@
  * 		-Added Full Heal item option for player and CPU
  * 		-Fixed bug in status in-battle logic
  * 		-Cleaned up coding in Status class
+ * 4/30/2024:
+ * 		-Added gender to Pokemon
+ * 		-Cleaned up battle menu
+ * 		-Cleaned up item select menu
+ * 		-Cleaned up move info menu
  */	
 
 package application;

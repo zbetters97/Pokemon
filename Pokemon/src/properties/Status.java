@@ -6,7 +6,7 @@ import config.Style;
 public enum Status {
 	/*** STATUS CHART REFERENCE: https://pokemon.fandom.com/wiki/Status_Effects ***/
 	
-	PARALYZE ("Paralyze", "paralyzed", "PRZ"),
+	PARALYZE ("Paralyze", "paralyzed", "PAR"),
 	POISON ("Poison", "poisoned", "PSN"),
 	CONFUSE ("Confuse", "confused", "CNF"),
 	BURN ("Burn", "burned", "BRN"),
@@ -32,7 +32,7 @@ public enum Status {
 		String color = "";
 		
 		switch (this.abr) {  	
-	    	case ("PRZ"): color = Style.YELLOW; break;
+	    	case ("PAR"): color = Style.YELLOW; break;
 	    	case ("PSN"): color = Style.PURPLE; break;
 	    	case ("CNF"): color = Style.PINK; break;
 	    	case ("BRN"): color = Style.RED; break;
@@ -47,7 +47,7 @@ public enum Status {
 		String status = "";
 		
 		switch (this.abr) {  	
-			case ("PRZ"): status = " is paralyzed and unable to move!"; break;
+			case ("PAR"): status = " is paralyzed and unable to move!"; break;
 	    	case ("PSN"): status = " is hurt from the poison!"; break;
 	    	case ("CNF"): status = " hurt itself in confusion!"; break;
 	    	case ("BRN"): status = " is hurt from the burn!"; break;
@@ -61,7 +61,7 @@ public enum Status {
 		String recover = "";
 		
 		switch (this.abr) {  	
-			case ("PRZ"): recover = " healed from paralysis!"; break;
+			case ("PAR"): recover = " healed from paralysis!"; break;
 			case ("PSN"): recover = " healed from the poison!"; break;
 	    	case ("CNF"): recover = " snapped out of confusion!"; break;
 	    	case ("BRN"): recover = " healed from the burn!"; break;

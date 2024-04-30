@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import config.Sleeper;
+import config.Style;
 import moves.*;
 import properties.*;
 
@@ -64,6 +65,7 @@ public enum Pokemon {
 	/** INITIALIZE VALUES**/
 	private String name;
 	private int index;
+	private char sex;
 	private Type type;
 	private Nature nature;
 	private List<Type> types;
@@ -88,7 +90,12 @@ public enum Pokemon {
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {	
 		
 		// hp calculation reference (GEN IV): https://pokemon.fandom.com/wiki/Individual_Values
-		this.name = name.toUpperCase(); this.index = index; this.type = type; this.level = level;
+		this.name = name.toUpperCase(); this.index = index; 
+		
+		// coin flip for Pokemon gender
+		this.sex = Math.random() > 0.5 ? '♂' : '♀';
+		this.type = type; this.level = level;
+		
 		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -125,7 +132,12 @@ public enum Pokemon {
 	Pokemon(String name, int index, List<Type> types, int level, int hp, int attack, int defense, 
 			int spAttack, int spDefense, int speed, int evLevel, int xp, int ev) {			
 		
-		this.name = name.toUpperCase(); this.index = index; this.types = types; this.level = level;
+		this.name = name.toUpperCase(); this.index = index; 
+		
+		// coin flip for Pokemon gender
+		this.sex = Math.random() > 0.5 ? '♂' : '♀';		
+		this.types = types; this.level = level;
+		
 		this.iv = 1 + (int)(Math.random() * ((31 - 1) + 1));							
 		this.hp = (int)(Math.floor(((2 * hp + iv + Math.floor(ev / 4)) * level) / 100) + level + 10);
 		this.bhp = this.hp;
@@ -381,6 +393,12 @@ public enum Pokemon {
 	public void setName(String name) { this.name = name; }	
 	public int getIndex() {	return index; }
 	public void setIndex(int index) { this.index = index; }
+	public char getSex() { return sex; }
+	public String printSex() { 		
+		String style = this.sex == '♂' ? Style.BLUE : Style.RED;		
+		return style + this.sex + Style.END; 
+	}
+	public void setSex(char sex) { this.sex = sex; }
 
 	public Type getType() { return type; }
 	public void setType(Type type) { this.type = type; }	

@@ -275,9 +275,8 @@ public class Battle {
 		
 			String style = m.getType().getColor();
 			
-			System.out.printf("[%d] %-" + (mLength + 1) + "s{ " + 
-				style + "%-" + (tLength + 1) + "s" + Style.END + "| PP %2d/%2d }\n", 
-				++counter, m.getName(), m.getType(), m.getpp(), m.getbpp());
+			System.out.printf("[%d] " + style + "%-" + (mLength + 1) + "s" + Style.END + "{ PP %2d/%2d }\n", 
+				++counter, m.getName(), m.getpp(), m.getbpp());
 		}
 		
 		System.out.println("\n[" + ++counter + "] INFO");
@@ -302,24 +301,25 @@ public class Battle {
 			String color;
 			
 			// display party
-			System.out.print("\n" + name + "'s PARTY: ");			
+			System.out.print("\n" + Style.ITAL + name + Style.END + "\n");			
 			for (int i = 0; i < 6; i++) {
 				if (i < size) color = Style.RED;
 				else color = Style.GRAY;
 				System.out.print(color + "○ " + Style.END);
 			}	
-			
+						
 			// display attributes
-			System.out.print("\n" + Style.BOLD + pokemon.getName() + Style.END +
-				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().printName() + ")" : "") + 
-				" : HP " + pokemon.getHP() + "/" + pokemon.getBHP() + " | Lv " + pokemon.getLevel() + 
-				" | " + ((pokemon.getTypes() == null) ? pokemon.getType().printType() : pokemon.printTypes()));	
+			System.out.print("\n" + Style.BOLD + pokemon.getName() + Style.END + " " + pokemon.printSex() + 
+				"Lv " + pokemon.getLevel() + " [" + 
+				((pokemon.getTypes() == null) ? pokemon.getType().printType() : pokemon.printTypes()) + "]" +
+				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().printName() + ")" : ""));	
 			
 			// display HP
+			System.out.print(Style.YELLOW + "\nHP" + Style.END);
 			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();			
 			for (int i = 0; i < pokemon.getBHP(); i++) {
 				
-				if (i % 50 == 0) System.out.println();
+				if (i % 43 == 0 && i != 0) System.out.print("\n  ");
 				
 				if (i < pokemon.getHP()) {
 					
@@ -330,7 +330,8 @@ public class Battle {
 				}
 				else color = Style.BLACK;
 				
-				System.out.print(color + "." + Style.END);
+				System.out.print(color + "-" + Style.END);
+				//System.out.print(i);
 			}
 			System.out.println();
 		};
@@ -383,7 +384,7 @@ public class Battle {
 					" | TYPE " + move.getType().printType() +
 					(move.getEffect() == null ? "" : " | STA " + move.getEffect().printName()));
 			
-			System.out.println("\t\"" + info.toString() + "\"\n");
+			System.out.println("\t" + Style.ITAL + info.toString() + Style.END + "\n");
 		}
 		
 		System.out.println("[0] <- BACK");
@@ -426,10 +427,12 @@ public class Battle {
 		int counter = 0;
 		for (Pokemon p : pokemonParty) {
 			
-			System.out.printf("[%d] " + Style.BOLD + " %s Lv%d (%s) [%s]\n" + Style.END + 
-				"HP  %3d/%3d | ATTACK  %3d | DEFENSE %3d\n" + 
+			String style = p.getSex() == '♂' ? Style.RED : Style.BLUE;
+						
+			System.out.printf("[%d] " + Style.BOLD + " %s " + style + "%c" + Style.END + 
+				"Lv%d [%s] (%s)\n" + Style.END + "HP  %3d/%3d | ATTACK  %3d | DEFENSE %3d\n" + 
 				"SP. ATK %3d | SP. DEF %3d | SPEED   %3d\n\n",
-				++counter, p.getName(), p.getLevel(), ((p.getType() == null) ? p.printTypes() : p.getType().printType()),
+				++counter, p.getName(), p.getSex(), p.getLevel(), ((p.getType() == null) ? p.printTypes() : p.getType().printType()),
 				p.getNature().getName(), (int)p.getHP(), (int)p.getBHP(), (int)p.getAttack(), (int)p.getDefense(), 
 				(int)p.getSpAttack(), (int)p.getSpDefense(), (int)p.getSpeed());			
 		}
@@ -505,10 +508,10 @@ public class Battle {
 		else iCount = playerTwoItems;
 		
 		System.out.println("SELECT AN ITEM TO USE ON " + fighter.getName() + ":\n");
-		System.out.println("[1] POTION (x" + iCount[0] + ")\n"
+		System.out.println("[1] POTION\t (x" + iCount[0] + ")\n"
 				+ "[2] HYPER POTION (x" + iCount[1] + ")\n"
 				+ "[3] FULL RESTORE (x" + iCount[2] + ")\n"
-				+ "[4] FULL HEAL (x" + iCount[3] + ")\n\n"
+				+ "[4] FULL HEAL\t (x" + iCount[3] + ")\n\n"
 				+ "[0] <- BACK");
 		System.out.print(">");
 		
@@ -521,14 +524,17 @@ public class Battle {
 				SoundCard.play(select);
 				
 				switch (choice) {
-					case 1: 												
+					case 1: 													
 						if (iCount[0] != 0) {
-							iCount[0] -= 1;
-						
-							clearContent(); 
-							healFighter(20, player);
-							
-							return true;
+							if (fighter.getHP() == fighter.getBHP()) {
+								Sleeper.print(fighter.getName() + " already has full HP!"); 
+								System.out.print(">");
+							}
+							else {
+								iCount[0] -= 1;
+								healFighter(20, player);
+								return true;
+							}							
 						}
 						else {
 							Sleeper.print("THERE ARE NO POTIONS LEFT!"); 
@@ -537,13 +543,15 @@ public class Battle {
 						break;						
 					case 2: 						
 						if (iCount[1] != 0) {
-							iCount[1] -= 1;
-							
-							clearContent(); 
-							healFighter(120, player);						
-							clearContent();	
-							
-							return true;
+							if (fighter.getHP() == fighter.getBHP()) {
+								Sleeper.print(fighter.getName() + " already has full HP!"); 
+								System.out.print(">");
+							}
+							else {
+								iCount[1] -= 1;
+								healFighter(120, player);		
+								return true;
+							}
 						}
 						else {
 							Sleeper.print("THERE ARE NO HYPER POTIONS LEFT!"); 
@@ -552,13 +560,15 @@ public class Battle {
 						break;
 					case 3: 						
 						if (iCount[2] != 0) {
-							iCount[2] -= 1;
-							
-							clearContent();
-							healFighter(1000, player);		
-							clearContent();
-							
-							return true;
+							if (fighter.getHP() == fighter.getBHP()) {
+								Sleeper.print(fighter.getName() + " already has full HP!"); 
+								System.out.print(">");
+							}
+							else {
+								iCount[2] -= 1;
+								healFighter(1000, player);								
+								return true;
+							}
 						}
 						else {
 							Sleeper.print("THERE ARE NO FULL RESTORES LEFT!"); 
@@ -572,14 +582,9 @@ public class Battle {
 								Sleeper.print(fighter.getName() + " is not under a status condition!"); 
 								System.out.print(">");
 							}
-							else {
-							
-								iCount[3] -= 1;
-								
-								clearContent();
-								statusHeal(player);		
-								clearContent();
-								
+							else {							
+								iCount[3] -= 1;								
+								statusHeal(player);									
 								return true;
 							}
 						}
@@ -616,6 +621,8 @@ public class Battle {
 	  **/
 	private void healFighter(int heal, int player) {
 		
+		clearContent();
+		
 		Pokemon fighter = (player == 1) ? pokemon1 : pokemon2;
 		
 		int newHP = fighter.getHP() + heal;
@@ -643,6 +650,8 @@ public class Battle {
 			default:
 				break;
 		}
+		
+		clearContent();
 	}
 	/** END HEAL FIGHTER METHOD **/
 	
@@ -652,11 +661,15 @@ public class Battle {
 	  **/
 	private void statusHeal(int player) {
 		
+		clearContent();
+		
 		Pokemon fighter = (player == 1) ? pokemon1 : pokemon2;
 				
 		Sleeper.print(fighter.getName() + fighter.getStatus().printRecover(), 1700);
 		fighter.setStatusCounter(0); fighter.setStatusLimit(0);
 		fighter.setStatus(null);
+		
+		clearContent();
 	}
 	/** END STATUS HEAL METHOD **/
 	

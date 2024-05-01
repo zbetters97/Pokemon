@@ -159,7 +159,7 @@ public class Battle {
 				else if (choice == counter - 3) {
 					clearContent();
 					
-					displayInfo(fighter);					
+					displayMovesInfo(fighter);					
 					displayMove(fighter);
 				}
 				// display items
@@ -275,8 +275,9 @@ public class Battle {
 		
 			String style = m.getType().getColor();
 			
-			System.out.printf("[%d] " + style + "%-" + (mLength + 1) + "s" + Style.END + "{ PP %2d/%2d }\n", 
-				++counter, m.getName(), m.getpp(), m.getbpp());
+			System.out.printf("[%d] %-" + (mLength + 1) + "s" + style + "{ " + 
+					"%-" + (tLength + 1) + "s| PP %2d/%2d }" + Style.END + "\n", 
+					++counter, m.getName(), m.getType(), m.getpp(), m.getbpp());
 		}
 		
 		System.out.println("\n[" + ++counter + "] INFO");
@@ -301,7 +302,7 @@ public class Battle {
 			String color;
 			
 			// display party
-			System.out.print("\n" + Style.ITAL + name + Style.END + "\n");			
+			System.out.print("\n" + Style.ITAL + name + Style.END + "\t");			
 			for (int i = 0; i < 6; i++) {
 				if (i < size) color = Style.RED;
 				else color = Style.GRAY;
@@ -310,16 +311,21 @@ public class Battle {
 						
 			// display attributes
 			System.out.print("\n" + Style.BOLD + pokemon.getName() + Style.END + " " + pokemon.printSex() + 
-				"Lv " + pokemon.getLevel() + " [" + 
+				"Lv" + pokemon.getLevel() + " [" + 
 				((pokemon.getTypes() == null) ? pokemon.getType().printType() : pokemon.printTypes()) + "]" +
 				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().printName() + ")" : ""));	
-			
-			// display HP
+						
+			// display HP	
+			int c = 0;
 			System.out.print(Style.YELLOW + "\nHP" + Style.END);
-			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();			
+			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();				
 			for (int i = 0; i < pokemon.getBHP(); i++) {
 				
-				if (i % 43 == 0 && i != 0) System.out.print("\n  ");
+				// print out formatted to accommodate for String "HP"
+				// c keeps track of position of health bar
+				if (i == 38) c = 0; 
+				else c++;
+				if (c % 40 == 0) System.out.println();
 				
 				if (i < pokemon.getHP()) {
 					
@@ -331,7 +337,6 @@ public class Battle {
 				else color = Style.BLACK;
 				
 				System.out.print(color + "-" + Style.END);
-				//System.out.print(i);
 			}
 			System.out.println();
 		};
@@ -364,7 +369,7 @@ public class Battle {
 	  * Print out description of each move in moveset 
 	  * @param Pokemon current fighter
 	  **/
-	private void displayInfo(Pokemon fighter) {	
+	private void displayMovesInfo(Pokemon fighter) {	
 				
 		System.out.println("MOVE DESCRIPTIONS:\n");
 		

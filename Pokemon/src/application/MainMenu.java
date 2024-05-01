@@ -65,7 +65,7 @@ public class MainMenu {
 			name1 = "P1";
 			name2 = "P2";
 			battleShift = true;
-			defaultLevel = 50;
+			//defaultLevel = 50;
 			partySize = 1;
 			SoundCard.setActive(false);
 		}
@@ -822,9 +822,9 @@ public class MainMenu {
 			}
 			
 			// if pokemon has multiple types
-			System.out.printf("[%02d] " + p.getName() + "\tLVL: %02d | TYPE: " + 
+			System.out.printf("[%02d] " + p.getName() + "\tLv%02d [" + 
 					((p.getTypes() == null) ? p.getType().printType() : p.printTypes()) + 
-					"\n", ++counter, p.getLevel());	
+					"]\n", ++counter, p.getLevel());	
 		}
 		
 		printParty();

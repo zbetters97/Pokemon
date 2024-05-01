@@ -351,6 +351,10 @@
  * 		-Cleaned up battle menu
  * 		-Cleaned up item select menu
  * 		-Cleaned up move info menu
+ * 5/1/2024:
+ * 		-Changed Type Dragon color from ITAL to BLUE
+ * 		-Reformatted battle menu
+ * 		-Reformatted moves menu
  */	
 
 package application;

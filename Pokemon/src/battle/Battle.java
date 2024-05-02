@@ -315,30 +315,25 @@ public class Battle {
 				((pokemon.getTypes() == null) ? pokemon.getType().printType() : pokemon.printTypes()) + "]" +
 				((pokemon.getStatus() != null) ? " (" + pokemon.getStatus().printName() + ")" : ""));	
 						
-			// display HP	
-			int c = 0;
+			// display HP (always length 40)
 			System.out.print(Style.YELLOW + "\nHP" + Style.END);
-			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();				
-			for (int i = 0; i < pokemon.getBHP(); i++) {
+			double remainHP = (double)pokemon.getHP() / (double)pokemon.getBHP();			
+			for (int i = 0; i < 40; i++) {
+						
+				color = Style.BLACK;
 				
-				// print out formatted to accommodate for String "HP"
-				// c keeps track of position of health bar
-				if (i == 38) c = 0; 
-				else c++;
-				if (c % 40 == 0) System.out.println();
-				
-				if (i < pokemon.getHP()) {
+				// color of HP based on percentage remaining
+				if (i < remainHP * 40) {
 					
 					// change color of hp based on percentage remaining
-					if (remainHP > .50) color = Style.GREEN;
-					else if (remainHP > .25) color = Style.YELLOW;
+					if (remainHP >= .50) color = Style.GREEN;
+					else if (remainHP >= .25) color = Style.YELLOW;
 					else color = Style.RED;		
 				}
-				else color = Style.BLACK;
 				
 				System.out.print(color + "-" + Style.END);
 			}
-			System.out.println();
+			System.out.println("\n  " + pokemon.getHP() + " / " + pokemon.getBHP());
 		};
 		
 		printHP.print(name1, pokemon1, party1.size());

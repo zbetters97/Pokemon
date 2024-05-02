@@ -792,7 +792,7 @@ public class BattleEngine {
 	/** END ATTRIBUTE MOVE METHOD **/
 	
 	/** IS CRITICAL METHOD 
-	 * Returns value of critical (1 / 255 chance)
+	 * Returns value of critical
 	 * @return critical value
 	 **/
 	private double isCritical(Move move) {			

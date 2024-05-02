@@ -654,24 +654,30 @@ public class MainMenu {
 				String name = input.next(); 
 				SoundCard.play(select);
 				
-				String greeting;
-				
-				// hidden greetings based on player name
-				if (name.equals("Ash"))
-					greeting = "(PR. OAK) Ash! Good to see you again :)";
-				else if (name.equals("Oak"))
-					greeting = "(PR. OAK) Would you happen to also be a professor?";
-				else if (name.equals("Zachary")) 
-					greeting = "(PR. OAK) Woah! I am honored to be in the presense of my creator!";
-				else if (name.equals("Jenna"))
-					greeting = "(PR. OAK) What a lovely sounding name!";
-				else 
-					greeting = "(PR. OAK) Welcome to the world of POKEMON, " + name + "!";									
-				
-				printOak();
-				Sleeper.print(greeting, 1200);
-				
-				return name;
+				if (name.length() > 12) {
+					Sleeper.print("I'm sorry, but that name is too long. I would prefer a shorter version!");
+					System.out.print(">");
+				}
+				else {				
+					String greeting;
+					
+					// hidden greetings based on player name
+					if (name.equals("Ash"))
+						greeting = "(PR. OAK) Ash! Good to see you again :)";
+					else if (name.equals("Oak"))
+						greeting = "(PR. OAK) Would you happen to also be a professor?";
+					else if (name.equals("Zachary")) 
+						greeting = "(PR. OAK) Woah! I am honored to be in the presense of my creator!";
+					else if (name.equals("Jenna"))
+						greeting = "(PR. OAK) What a lovely sounding name!";
+					else 
+						greeting = "(PR. OAK) Welcome to the world of POKEMON, " + name + "!";									
+					
+					printOak();
+					Sleeper.print(greeting, 1200);
+					
+					return name;
+				}
 			}
 			catch (Exception e) {
 				SoundCard.play(select);

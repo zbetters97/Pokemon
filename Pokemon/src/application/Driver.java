@@ -355,6 +355,9 @@
  * 		-Changed Type Dragon color from ITAL to BLUE
  * 		-Reformatted battle menu
  * 		-Reformatted moves menu
+ * 5/2/2024:
+ * 		-Reformatted HP bar to always be length 40
+ * 		-Added 12 character limit to player name input
  */	
 
 package application;
